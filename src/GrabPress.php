@@ -2,8 +2,8 @@
 /*
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com
-Description: Configure Grab Media's Autoposter software to deliver fresh video to your Blog. Requires a Grab Media Publisher account.
-Version: 0.0.1
+Description: Configure Grab Media's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
+Version: 0.0.0
 Author: Grab Media
 Author URI: http://www.grab-media.com/publisher/solutions/autoposter
 License: GPL2
@@ -92,7 +92,7 @@ if( ! class_exists( 'GrabPress') ) {
 						connector_type_id => $connector_type_id,
 						destination_name => get_bloginfo('name'),
 						destination_address => $rpc_url,
-						username=>$user_login,
+						username=>'grabpress',
 						password=>self::$api_key,
 						custom_options => array(
 							blog_id=>$blog_id
@@ -109,14 +109,12 @@ if( ! class_exists( 'GrabPress') ) {
 		static $feed_message = 'Fields marked with a * are required.';
 		static function create_feed(){
 			if( self::validate_key() ) {
+				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.rawurlencode($_POST['keyword']).'&categories='.rawurlencode($_POST['category']);
 				$post_data = array(
 					feed => array (
 						name => $_POST['channel'],
 						posts_per_update => $_POST['limit'],
-						url => 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$_POST['keyword'],
-						embed_id => 123456,
-						embed_width => 400,
-						embed_height => 300,
+						url => $url,
 						custom_options => array(
 							category => get_cat_name( $_POST[ 'category' ] ),
 							publish => (bool)( $_POST[ 'publish' ] )
@@ -130,7 +128,7 @@ if( ! class_exists( 'GrabPress') ) {
 				$response_json = self::post_request($post_url, $post_json);
 				$response_data = json_decode($response_json);
 				if( $response_data -> feed -> active == true){
-					self::$feed_message = 'Grab yourself a coffee. Your videos are on their way!';
+					self::$feed_message = 'Grab yourself a coffee. Your videos are on the way!';
 				}else{
 					self::$feed_message = 'Something went wrong grabbing your feed. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
 				}
@@ -181,7 +179,7 @@ if( ! class_exists( 'GrabPress') ) {
 			}
             //keep user up-to-date
 			$description = 'Proxy user account to allow GrabPress to automatically post new videos to your blog';
-			$role = 'contributor';// auto-publish (contributor) or manual publish (author)
+			$role = 'author';// minimum for auto-publish (author)
 	        $user_data = get_userdatabylogin($user_login);
 	        if ($user_data){// user exists, hash password to keep data up-to-date
               $msg = 'User Exists ('.$user_login.'): '.$user_data->ID;
@@ -254,8 +252,8 @@ if( ! class_exists( 'GrabPress') ) {
 					(function (global, $) {
 						global.previewVideos = function () {
 							console.log('preview');
-							var keywords =  escape($( '#keyword-input' ).val()) ;
-							var category =  escape($( '#channel-select').val()) ;
+							var keywords =  $( '#keyword-input' ).val();
+							var category =  $( '#channel-select').val();
 							var limit =  $( '#limit-select').val() ; 
 							window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category + '&limit=' + limit );	
 						}	
