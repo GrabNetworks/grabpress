@@ -129,12 +129,20 @@ if( ! class_exists( 'GrabPress') ) {
 			$response_json = self::post_request($post_url, $post_json);
 			$response_data = json_decode($response_json);
 			if( $response_data -> feed -> active == true){
-				self::$feed_message = 'Grab yourself a coffee. Your videos are on their way! <img valign="middle" src="'.plugin_dir_url( __FILE__ ).'g.png"/>';
+				self::$feed_message = 'Grab yourself a coffee. Your videos are on their way!';
 			}else{
 				self::$feed_message = 'Something went wrong grabbing your feed. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
 			}
 		}
-		static function create_connection(){
+		static function validate_key() {
+			if( self::$api_key){
+				$validate_json = self::get_request('http://74.10.95.28/user/validate?api_key='.self::$api_key);
+				$validate_data = json_decode($validate_json);
+				return (! $validate_data -> error );
+			}
+			return false;
+		}
+		static function authorize_user(){
 			$user_url = get_bloginfo( 'url' );
 			$user_nicename = 'grabpress';
 	        $user_login = $user_nicename;
@@ -146,22 +154,24 @@ if( ! class_exists( 'GrabPress') ) {
 			$nickname 	= 'GrabPress';
 			$first_name 	= 'Grab';
 			$last_name	= 'Press';
-			$post_data = array( 'user' => array(
-								'first_name' => $first_name,
-								'last_name' => $last_name,
-								'email' => $user_email
-								) );
-            $post_json = json_encode($post_data);
-			$user_json = self::post_request('http://74.10.95.28/user', $post_json, 'Content-type: application/json\r\n');
-			$json_data = json_decode( $user_json );
-            
-            $api_key = $json_data -> user -> access_key;
-          
-            if ( $api_key ) {//store api key
-              update_option( 'grabpress_key', $api_key );
-            }
-            self::$api_key = get_option( 'grabpress_key' );
+			if(! self::validate_key() ){
+				$post_data = array( 'user' => array(
+									'first_name' => $first_name,
+									'last_name' => $last_name,
+									'email' => $user_email
+									) );
 			
+	            $post_json = json_encode($post_data);
+				$user_json = self::post_request('http://74.10.95.28/user', $post_json, 'Content-type: application/json\r\n');
+				$json_data = json_decode( $user_json );
+            
+	            $api_key = $json_data -> user -> access_key;
+          
+	            if ( $api_key ) {//store api key
+	              update_option( 'grabpress_key', $api_key );
+	            }
+	            self::$api_key = get_option( 'grabpress_key' );
+			}
 			if(! isset( self::$api_key ) ){
 				self::abort('Error retrieving API Key');
 			}
@@ -218,10 +228,10 @@ if( ! class_exists( 'GrabPress') ) {
 			register_setting( 'grab_press', 'access_key' );
 		}
 		static function setup(){
-			self::create_connection();
+			self::authorize_user();
 			self::enable_xmlrpc();
 		}
-		static function validate(){
+		static function validate_form(){
 			if (self::$invalid){
 				echo 'style="border:1px dashed red;" ';
 			};
@@ -264,7 +274,7 @@ if( ! class_exists( 'GrabPress') ) {
 						<tr>
 							<th scope="row">Video channel</th>
 							<td >
-									<select  <?php GrabPress::validate() ?> name="channel" id="channel-select">
+									<select  <?php GrabPress::validate_form() ?> name="channel" id="channel-select">
 										<option selected = "selected" value = "">Choose One</option>
 										<?php 	
 											$json = file_get_contents('http://catalog.grabnetworks.com/catalogs/1/categories');
@@ -282,7 +292,7 @@ if( ! class_exists( 'GrabPress') ) {
 		        		<tr valign="top">
 							<th scope="row">Keywords</th>
 		        		           	<td >
-								<input <?php GrabPress::validate() ?>type="text" name="keyword" id="keyword-input" /> *
+								<input <?php GrabPress::validate_form() ?>type="text" name="keyword" id="keyword-input" /> *
 								<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
 							</td>
 		        		        </tr>
@@ -345,7 +355,7 @@ if( ! class_exists( 'GrabPress') ) {
 								<input type="submit" class="button-primary" value="<?php _e('Grab Videos') ?>" />
 							</td>
 							<td>
-								<span class="description" <?php GrabPress::validate() ?> style='color:red'>
+								<span class="description" <?php GrabPress::validate_form() ?> style='color:red'>
 								<?php 
 										echo GrabPress::$feed_message; 
 									?>
@@ -362,10 +372,9 @@ if( ! class_exists( 'GrabPress') ) {
 GrabPress::$api_key = get_option('grabpress_key');
 GrabPress::$invalid = false;
 if(isset ( $_POST) ){
-	die($_POST['channel'] .':::'. && $_POST['keyword']  );
 	if(isset(GrabPress::$api_key) && $_POST['channel'] != '' && $_POST['keyword'] != ''){
 		GrabPress::create_feed();
-	}else{
+	}else if( isset( $_POST['limit'] ) ) {
 		GrabPress::$invalid = true;
 	}
 }
