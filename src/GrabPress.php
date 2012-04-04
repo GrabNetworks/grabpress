@@ -109,7 +109,9 @@ if( ! class_exists( 'GrabPress') ) {
 		static $feed_message = 'Fields marked with a * are required.';
 		static function create_feed(){
 			if( self::validate_key() ) {
-				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.rawurlencode($_POST['keyword']).'&categories='.rawurlencode($_POST['category']);
+				$categories = rawurlencode($_POST['category']);
+				$keywords_and = rawurlencode($_POST['keyword']);
+				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at';
 				$post_data = array(
 					feed => array (
 						name => $_POST['channel'],
