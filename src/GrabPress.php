@@ -108,30 +108,34 @@ if( ! class_exists( 'GrabPress') ) {
 		}
 		static $feed_message = 'Fields marked with a * are required.';
 		static function create_feed(){
-			$post_data = array(
-				feed => array (
-					name => $_POST['channel'],
-					posts_per_update => $_POST['limit'],
-					url => 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$_POST['keyword'],
-					embed_id => 123456,
-					embed_width => 400,
-					embed_height => 300,
-					custom_options => array(
-						category => get_cat_name( $_POST[ 'category' ] ),
-						publish => (bool)( $_POST[ 'publish' ] )
-					),
-					update_frequency => 60 * 60 * $_POST[ 'schedule' ]
-				)
-			);
-			$connector_id = self::get_connector_id();
-			$post_json = json_encode( $post_data );
-			$post_url = 'http://74.10.95.28/connectors/'.$connector_id.'/feeds/?api_key='.self::$api_key;
-			$response_json = self::post_request($post_url, $post_json);
-			$response_data = json_decode($response_json);
-			if( $response_data -> feed -> active == true){
-				self::$feed_message = 'Grab yourself a coffee. Your videos are on their way!';
+			if( self::validate_key() ) {
+				$post_data = array(
+					feed => array (
+						name => $_POST['channel'],
+						posts_per_update => $_POST['limit'],
+						url => 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$_POST['keyword'],
+						embed_id => 123456,
+						embed_width => 400,
+						embed_height => 300,
+						custom_options => array(
+							category => get_cat_name( $_POST[ 'category' ] ),
+							publish => (bool)( $_POST[ 'publish' ] )
+						),
+						update_frequency => 60 * 60 * $_POST[ 'schedule' ]
+					)
+				);
+				$connector_id = self::get_connector_id();
+				$post_json = json_encode( $post_data );
+				$post_url = 'http://74.10.95.28/connectors/'.$connector_id.'/feeds/?api_key='.self::$api_key;
+				$response_json = self::post_request($post_url, $post_json);
+				$response_data = json_decode($response_json);
+				if( $response_data -> feed -> active == true){
+					self::$feed_message = 'Grab yourself a coffee. Your videos are on their way!';
+				}else{
+					self::$feed_message = 'Something went wrong grabbing your feed. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
+				}
 			}else{
-				self::$feed_message = 'Something went wrong grabbing your feed. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
+				self::$feed_message = 'Your API key is no longer valid. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
 			}
 		}
 		static function validate_key() {
