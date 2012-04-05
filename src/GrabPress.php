@@ -168,7 +168,7 @@ if( ! class_exists( 'GrabPress') ) {
 		}
 		static function authorize_user(){
 			$user_url = get_site_url();
-			$user_nicename = 'grabpress'.rand();
+			$user_nicename = 'grabpress';
 	        $user_login = $user_nicename;
 		$url_array = explode(  '/', $user_url );
 		$email_host =  $url_array[ 2 ];
