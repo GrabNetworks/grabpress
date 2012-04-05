@@ -31,7 +31,8 @@ if( ! class_exists( 'GrabPress') ) {
 		static function abort( $message ) {
 			die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
 		}
-		static function allow_tags( $allowedposttags ) {
+		static function allow_tags( ) {
+			global $allowedposttags;
 			if(! isset( $allowedposttags[ 'div' ] ) ) {
 				$allowedposttags[ 'div' ] = array();
 			}
@@ -406,5 +407,5 @@ if(! function_exists( 'grabpress_plugin_menu')){
 	}
 }
 add_action('admin_menu', 'grabpress_plugin_menu' );
-add_filter( 'edit_allowedposttags', array(GrabPress, 'allow_tags') );
+GrabPress::allow_tags();
 ?>
