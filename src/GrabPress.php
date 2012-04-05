@@ -147,8 +147,6 @@ if( ! class_exists( 'GrabPress') ) {
 					)
 				);
 				$post_url = 'http://74.10.95.28/connectors/'.$connector_id.'/feeds/?api_key='.self::$api_key;
-				var_dump( $post_url );
-				self::abort( json_encode( $post_data ) );
 				$response_json = self::post_json( $post_url, $post_data );
 				$response_data = json_decode( $response_json );
 				if( $response_data -> feed -> active == true ){
