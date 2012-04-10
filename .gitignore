@@ -1,1 +1,8 @@
-bin*/
+# binary output (.zips, etc.)
+#############################
+bin/
+*.zip
+
+#emacs temp files
+############################
+*~

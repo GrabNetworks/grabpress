@@ -86,46 +86,50 @@ if( ! class_exists( 'GrabPress') ) {
 			return $response;
 		}
 		static function get_connector_id(){
-			$rpc_url = get_bloginfo('url').'/xmlrpc.php';
-			$connectors_json = self::get_json( 'http://74.10.95.28/connectors?api_key='.self::$api_key );
-			$connectors_data = json_decode( $connectors_json );
-			for( $n = 0; $n < count( $connectors_data ); $n++ ) {
-				$connector = $connectors_data[$n]->connector;
-				if( $connector -> destination_address == $rpc_url ) {
-					$connector_id = $connector -> id;
-				}
-			}
-			if(! $connector_id) {//create connector
-				$connector_types_json = self::get_json('http://74.10.95.28/connector_types?api_key='.self::$api_key);
-				$connector_types = json_decode( $connector_types_json );
-				for ( $n = 0; $n < count( $connector_types ); $n++ ) {
-					$connector_type = $connector_types[$n] -> connector_type;
-					if( $connector_type -> name =='wordpress' ) {
-						$connector_type_id = $connector_type -> id;
+			if( self::validate_key() ) {
+				$rpc_url = get_bloginfo('url').'/xmlrpc.php';
+				$connectors_json = self::get_json( 'http://74.10.95.28/connectors?api_key='.self::$api_key );
+				$connectors_data = json_decode( $connectors_json );
+				for( $n = 0; $n < count( $connectors_data ); $n++ ) {
+					$connector = $connectors_data[$n]->connector;
+					if( $connector -> destination_address == $rpc_url ) {
+						$connector_id = $connector -> id;
 					}
 				}
-				if(! $connector_type_id ){
-					self::abort( 'Error retrieving Autoposter id for connector name "wordpress"' );
-				}
-				$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
-				global $blog_id;
-				$connector_post = array(
-					connector => array(
-						connector_type_id => $connector_type_id,
-						destination_name => get_bloginfo( 'name' ),
-						destination_address => $rpc_url,
-						username =>'grabpress',
-						password => self::$api_key,
-						custom_options => array(
-							blog_id => $blog_id
+				if(! $connector_id) {//create connector
+					$connector_types_json = self::get_json('http://74.10.95.28/connector_types?api_key='.self::$api_key);
+					$connector_types = json_decode( $connector_types_json );
+					for ( $n = 0; $n < count( $connector_types ); $n++ ) {
+						$connector_type = $connector_types[$n] -> connector_type;
+						if( $connector_type -> name =='wordpress' ) {
+							$connector_type_id = $connector_type -> id;
+						}
+					}
+					if(! $connector_type_id ){
+						self::abort( 'Error retrieving Autoposter id for connector name "wordpress"' );
+					}
+					global $blog_id;
+					$connector_post = array(
+						connector => array(
+							connector_type_id => $connector_type_id,
+							destination_name => get_bloginfo( 'name' ),
+							destination_address => $rpc_url,
+							username =>'grabpress',
+							password => self::$api_key,
+							custom_options => array(
+								blog_id => $blog_id
+							)
 						)
-					)
-				);
-				$connector_json = self::post_json( 'http://74.10.95.28/connectors?api_key='.self::$api_key, $connector_post, 'Content-type: application/json\r\n' );
-				$connector_data = json_decode( $connector_json );
-				$connector_id = $connector_result -> connector -> id;
+					);
+					$connector_json = self::post_json( 'http://74.10.95.28/connectors?api_key='.self::$api_key, $connector_post, 'Content-type: application/json\r\n' );
+					$connector_data = json_decode( $connector_json );
+					$connector_id = $connector_result -> connector -> id;
+				}
+				return $connector_id;
+			}else{
+				self::$feed_message = 'Your API key is no longer valid. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
+				return false;
 			}
-			return $connector_id;
 		}
 		static $feed_message = 'Fields marked with a * are required.';
 		static function create_feed(){
@@ -159,43 +163,49 @@ if( ! class_exists( 'GrabPress') ) {
 			}
 		}
 		static function validate_key() {
-			if( self::$api_key){
-				$validate_json = self::get_json( 'http://74.10.95.28/user/validate?api_key='.self::$api_key );
+			$api_key = get_option('grabpress_key');
+			if( $api_key != '' ){
+				$url = 'http://74.10.95.28/user/validate?api_key='.$api_key;
+				$validate_json = self::get_json( $url );
 				$validate_data = json_decode( $validate_json );
-				return (! $validate_data -> error );
+				if (  $validate_data -> error ) {
+					return self::create_API_connection();
+				}else {
+					self::$api_key = $api_key;
+					return true;
+				}
+			}else{
+				return self::create_API_connection();
 			}
 			return false;
 		}
-		static function authorize_user(){
+		static function create_API_connection(){
 			$user_url = get_site_url();
-			$user_nicename = 'grabpress'.rand();
+			$user_nicename = 'grabpress';
 	        $user_login = $user_nicename;
 		$url_array = explode(  '/', $user_url );
 		$email_host =  $url_array[ 2 ];
 		$email_dir = $url_array[ 3 ];
-	        $user_email = $user_nicename.'.'.$email_dir.'@'.$email_host;
-			$display_name	= 'GrabPress';
-			$nickname 	= 'GrabPress';
-			$first_name 	= 'Grab';
-			$last_name	= 'Press';
-			if(! self::validate_key() ){
-				$post_data = array( 
-					'user' => array(
-							'first_name' => $first_name,
-						'last_name' => $last_name,
-						'email' => $user_email
-					)
-				);
-				$user_json = self::post_json('http://74.10.95.28/user', $post_data, 'Content-type: application/json\r\n');
-				$user_data = json_decode( $user_json );
-            
-			$api_key = $user_data -> user -> access_key;
-          
-			if ( $api_key ) {//store api key
-				update_option( 'grabpress_key', $api_key );
-			}
-			self::$api_key = get_option( 'grabpress_key' );
+	        $user_email = $user_nicename.'.'.$email_dir.'@'.$email_host;//rand().
+		$display_name	= 'GrabPress';
+		$nickname 	= 'GrabPress';
+		$first_name 	= 'Grab';
+		$last_name	= 'Press';
+			$post_data = array( 
+				'user' => array(
+						'first_name' => $first_name,
+					'last_name' => $last_name,
+					'email' => $user_email
+				)
+			);
+			$user_json = self::post_json('http://74.10.95.28/user', $post_data, 'Content-type: application/json\r\n');
+			$user_data = json_decode( $user_json );
+           
+		$api_key = $user_data -> user -> access_key;
+		if ( $api_key ) {//store api key
+			update_option( 'grabpress_key', $api_key );
 		}
+		self::$api_key = get_option( 'grabpress_key' );
 		if(! isset( self::$api_key ) ){
 			self::abort('Error retrieving API Key');
 		}
@@ -239,6 +249,7 @@ if( ! class_exists( 'GrabPress') ) {
 		if(! isset($user_id) ){
 			self::abort('Error creating user.');
 		}
+		return true;
 	}
  
 	static function enable_xmlrpc(){
@@ -251,8 +262,11 @@ if( ! class_exists( 'GrabPress') ) {
 		register_setting( 'grab_press', 'access_key' );
 	}
 	static function setup(){
-		self::authorize_user();
+		self::validate_key();
 		self::enable_xmlrpc();
+	}
+	static function cleanup(){
+		// delete_option('grabpress_key');
 	}
 	static function outline_invalid(){
 		if (self::$invalid){
@@ -316,7 +330,7 @@ if( ! class_exists( 'GrabPress') ) {
 							<th scope="row">Keywords</th>
 		        		           	<td >
 								<input style="<?php GrabPress::outline_invalid() ?>" type="text" name="keyword" id="keyword-input" /> *
-								<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
+								<span class="description">Enter search keywords (e.g. <b>Dexter blood spatter</b>)</span>
 							</td>
 		        		        </tr>
 		        		        <tr valign="top">
@@ -392,15 +406,15 @@ if( ! class_exists( 'GrabPress') ) {
 		}//if
 	}//class
 }
-GrabPress::$api_key = get_option( 'grabpress_key' );
 GrabPress::$invalid = false;
-if( isset ( $_POST) ) {
-	if( isset( GrabPress::$api_key ) && $_POST[ 'channel' ] != '' && $_POST[ 'keyword' ] != '' ) {
+if( count($_POST) > 0 ) {
+	if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'keyword' ] != '' ) {
 		GrabPress::create_feed();
 	} else if( isset( $_POST['limit'] ) ) {
 		GrabPress::$invalid = true;
 	}
 }
+register_deactivation_hook(__FILE__, array( GrabPress, 'cleanup') );
 register_activation_hook( __FILE__, array( GrabPress, 'setup') );
 if(! function_exists( 'grabpress_plugin_menu')){
 	function grabpress_plugin_menu() {

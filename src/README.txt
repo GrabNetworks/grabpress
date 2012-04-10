@@ -1,97 +1,54 @@
-=== GrabPress ===
-Contributors: grabmedia (this account should be created on wordpress.org, and this comment removed)
-Tags: video, grab, autoposter
-Requires at least: X.X.X
-Tested up to: X.X
-Stable tag: X.X
+=== GrabPress ===  
+Contributors: grabmedia (this account should be created on wordpress.org, and this comment removed)  
+Tags: video, grab, autoposter  
+Requires at least: X.X.X  
+Tested up to: X.X  
+Stable tag: X.X  
 
-Configure Grab Media's Autoposter software to deliver fresh video to your Blog. Requires a Grab Media Publisher account.
+Grab Media provides the easiest way to bring ad-supported, professionally produced video content to your Wordpress blog.  
 
-== Description ==
+== Description ==  
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+GrabPress is Grab Media's WordPress plugin, which enables members of our publisher network to use our innovative software products to improve their workflow and enrich the experience for their audience. Better content means more site visitors and longer site visits. Grab makes it easy to get the best video content brought directly to your blog via our Autoposter technology, either as a draft or a published post.
+Its the first of many of our product offerings enabled by GrabPress plug-in. Keep GrabPress up-to-date to see the new features we add to make your life as a publisher easier, and help you bring the most relevant multimedia content to your readers.  
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+== Installation ==  
 
-A few notes about the sections above:
+1.  Download grabutoposter-plugin.zip from http://providelinkhere and save to your hard drive  
+2.  Login to your WordPress dashboard  
+3.  Click 'Plugins' from your left side navigation menu  
+4.  Click 'Add New' at the top of the screen  
+5.  Click 'Upload' from the top navigation menu  
+6.  Click the 'Browse…' button and select the zip file you downloaded in step 1 and click the 'Install Now' button  
+7.  You should see the following message on your screen when the plugin has been installed successfully.  
+	Unpacking the package…  
+	Installing the plugin…  
+	Plugin installed successfully.  
+8.  Click 'Activate Plugin' link > The GrabPress menu item should now appear in the left side navigation menu  
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+To create an active Grab Autoposter feed to your blog using the GrabPress menu of your WordPress dashboard.  
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+1.  Select a video channel from the Video Channel drop down menu  
+2.  Enter keywords in the Keywords field, separated by spaces  
+3.  Select Max Results from the drop down menu  
+4.  Select an increment of time (15m - 24hrs) from the Schedule drop down menu 
+5.  If you want to moderate autoposts before they go live, check the Publish checkbox 
+6.  Select your Post Category from the drop down menu 
+7.  Click 'Preview Videos'  
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
 
-== Installation ==
+== Frequently Asked Questions ==  
 
-This section describes how to install the plugin and get it working.
+= Why did Grab create the GrabPress plugin. =  
 
-e.g.
+    Because we love our publishers. And we love WordPress. That means we love you.
 
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
 
-== Frequently Asked Questions ==
+== Screenshots ==  
 
-= A question that someone might have =
+1.  The Grab Autoposter feed creation screen  
 
-An answer to that question.
+== Changelog ==  
 
-= What about foo bar? =
-
-Answer to foo bar dilemma.
-
-== Screenshots ==
-
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the directory of the stable readme.txt, so in this case, `/tags/4.3/screenshot-1.png` (or jpg, jpeg, gif)
-2. This is the second screen shot
-
-== Changelog ==
-
-= 0.0 =
-A Plugin is Born
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+= 0.0.0 =  
+    A Plugin is Born  
