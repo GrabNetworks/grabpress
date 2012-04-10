@@ -6,3 +6,7 @@ bin/
 #emacs temp files
 ############################
 *~
+
+# system garbage
+###########################
+.DS_Store*
