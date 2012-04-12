@@ -428,6 +428,9 @@ register_activation_hook( __FILE__, array( GrabPress, 'setup') );
 if(! function_exists( 'grabpress_plugin_menu')){
 	function grabpress_plugin_menu() {
 		add_menu_page('GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( GrabPress, 'grabpress_plugin_options' ), plugin_dir_url( __FILE__ ).'g.png', 10 );
+		add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( GrabPress, 'grabpress_plugin_options' ));
+		global $submenu;
+		unset($submenu['grabpress'][0]);
 	}
 }
 add_action('admin_menu', 'grabpress_plugin_menu' );
