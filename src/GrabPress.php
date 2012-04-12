@@ -31,7 +31,8 @@ if( ! class_exists( 'GrabPress') ) {
 		static function abort( $message ) {
 			die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
 		}
-		static function allow_tags( $allowedposttags ) {
+		static function allow_tags() {
+			global $allowedposttags;
 			if(! isset( $allowedposttags[ 'div' ] ) ) {
 				$allowedposttags[ 'div' ] = array();
 			}
@@ -53,8 +54,6 @@ if( ! class_exists( 'GrabPress') ) {
 			}            			
 			$allowedposttags[ 'param' ][ 'name' ] = array();      			
 			$allowedposttags[ 'param' ][ 'value' ] = array(); 
-			
-			return $allowedposttags;
 		}
 		static function get_json( $url, $optional_headers = null) {
 			$ch = curl_init();
@@ -134,8 +133,18 @@ if( ! class_exists( 'GrabPress') ) {
 		static $feed_message = 'Fields marked with a * are required.';
 		static function create_feed(){
 			if( self::validate_key() ) {
-				$categories = rawurlencode($_POST['channel']);
-				$keywords_and = rawurlencode($_POST['keyword']);
+				$categories = rawurlencode( $_POST[ 'channel' ] );
+				$keywords_and = rawurlencode( $_POST[ 'keyword' ] );
+				$json = GrabPress::get_json( 'http://catalog.grabnetworks.com/catalogs/1/categories' );
+				$list = json_decode( $json );
+				foreach ( $list as $record ) {
+			   		$category = $record -> category;
+					$name = $category -> name;
+					$id = $category -> id;
+					if($name == $_POST['channel']){
+						$cat_id = $id;
+					}
+				}
 				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at';
 				$connector_id = self::get_connector_id();
 				$post_data = array(
@@ -313,13 +322,13 @@ if( ! class_exists( 'GrabPress') ) {
 								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select">
 									<option selected = "selected" value = "">Choose One</option>
 									<?php 	
-										$json = file_get_contents('http://catalog.grabnetworks.com/catalogs/1/categories');
+										$json = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/categories');
 										$list = json_decode($json);
 										foreach ($list as $record) {
 									   		$category = $record -> category;
 											$name = $category -> name;
 											$id = $category -> id;
-									   		echo '<option value = "'.$id.'">'.$name.'</option>\n';
+									   		echo '<option value = "'.$name.'">'.$name.'</option>\n';
 										} 
 									?>
 								</select> *
@@ -422,5 +431,5 @@ if(! function_exists( 'grabpress_plugin_menu')){
 	}
 }
 add_action('admin_menu', 'grabpress_plugin_menu' );
-add_filter( 'edit_allowedposttags', array(GrabPress, 'allow_tags') );
+GrabPress::allow_tags();
 ?>
