@@ -444,7 +444,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 		<?php
 		$feeds = GrabPress::get_feeds();
 		$num_feeds = count($feeds);
-		GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' feeds');
+		if( $num_feeds > 0 ) {
+			GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' feeds');
+		}
 /* End HTML */
 		}//if
 	}//class
