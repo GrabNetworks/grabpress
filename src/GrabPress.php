@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com
 Description: Configure Grab's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
-Version: 0.0.1b1
+Version: 0.0.1b2
 Author: Grab Media
 Author URI: http://www.grab-media.com/publisher/solutions/autoposter
 License: GPL2
@@ -47,7 +47,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				echo '<div id="message" class="updated fade">';
 			}
 			$icon_src = plugin_dir_url( __FILE__ ).'g.png';
-			echo '<p><img src="'.$icon_src.'"/>'.$message.'</p></div>';
+			echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$message.'</p></div>';
 		}    
 		static function abort( $message ) {
 			die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
@@ -210,10 +210,14 @@ if( ! class_exists( 'GrabPress' ) ) {
 			return false;
 		}
 		static function get_feeds(){
-			$connector_id = self::get_connector_id();
-			$url = 'http://74.10.95.28/connectors/'.$cconnector_id.'/feeds';
-			$feeds_json = self::get_json( $url );
-			return json_decode( $feeds_json );
+			if(self::validate_key()){
+				$connector_id = self::get_connector_id();
+				$url = 'http://74.10.95.28/connectors/'.$connector_id.'/feeds?api_key='.self::$api_key;
+				$feeds_json = self::get_json( $url );
+				return json_decode( $feeds_json );
+			}else{
+				self::abort('no valid key');
+			}
 		}
 		static function create_API_connection(){
 			$user_url = get_site_url();
@@ -438,6 +442,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 			</form>
 		</div>
 		<?php
+		$feeds = GrabPress::get_feeds();
+		$num_feeds = count($feeds);
+		GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' feeds');
 /* End HTML */
 		}//if
 	}//class
@@ -470,7 +477,7 @@ if(! function_exists( 'grabpress_plugin_menu')){
 				$admin_link = 'here';
 			}
 
-			GrabPress::showMessage('Thank you for activating Grab Autoposter. Get started by creating your first feed '.$admin_link.'.');
+			GrabPress::showMessage('Thank you for activating Grab Autoposter. Try creating your first feed '.$admin_link.'.('.$num_feeds.')');
 		}
 	}
 }
