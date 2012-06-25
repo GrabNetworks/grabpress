@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com
 Description: Configure Grab's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
-Version: 0.0.0
+Version: 0.0.1b1
 Author: Grab Media
 Author URI: http://www.grab-media.com/publisher/solutions/autoposter
 License: GPL2
@@ -24,10 +24,31 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-if( ! class_exists( 'GrabPress') ) {
+if( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress{
 		static $api_key;
 		static $invalid = false;
+		/**
+ * Generic function to show a message to the user using WP's 
+ * standard CSS classes to make use of the already-defined
+ * message colour scheme.
+ *
+ * @param $message The message you want to tell the user.
+ * @param $errormsg If true, the message is an error, so use 
+ * the red message style. If false, the message is a status 
+  * message, so use the yellow information message style.
+ */
+		static function showMessage($message, $errormsg = false)
+		{
+			if ($errormsg) {
+				echo '<div id="message" class="error">';
+			}
+			else {
+				echo '<div id="message" class="updated fade">';
+			}
+			$icon_src = plugin_dir_url( __FILE__ ).'g.png';
+			echo '<p><img src="'.$icon_src.'"/>'.$message.'</p></div>';
+		}    
 		static function abort( $message ) {
 			die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
 		}
@@ -187,6 +208,12 @@ if( ! class_exists( 'GrabPress') ) {
 				return self::create_API_connection();
 			}
 			return false;
+		}
+		static function get_feeds(){
+			$connector_id = self::get_connector_id();
+			$url = 'http://74.10.95.28/connectors/'.$cconnector_id.'/feeds';
+			$feeds_json = self::get_json( $url );
+			return json_decode( $feeds_json );
 		}
 		static function create_API_connection(){
 			$user_url = get_site_url();
@@ -431,6 +458,20 @@ if(! function_exists( 'grabpress_plugin_menu')){
 		add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( GrabPress, 'grabpress_plugin_options' ));
 		global $submenu;
 		unset($submenu['grabpress'][0]);
+		$feeds = GrabPress::get_feeds();
+		$num_feeds = count($feeds);
+		if( $num_feeds == 0){
+			$admin = get_admin_url();
+			$admin_page = $admin.'admin.php?page=autoposter';
+			$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+			if( $current_page != $admin_page){
+				$admin_link = '<a href="'.$admin_page.'">here</a>';
+			}else{
+				$admin_link = 'here';
+			}
+
+			GrabPress::showMessage('Thank you for activating Grab Autoposter. Get started by creating your first feed '.$admin_link.'.');
+		}
 	}
 }
 add_action('admin_menu', 'grabpress_plugin_menu' );
