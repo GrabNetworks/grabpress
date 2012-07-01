@@ -322,7 +322,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 		<div class="wrap">
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Autopost videos by Channel and Tag</h2>
-			<p>Configure Grab Media's Autoposter software to deliver fresh video to your Blog </p>
+			<p>New video content delivered fresh to your blog.</p>
+			<h3>Create Feed</h3>
 			<script language = "JavaScript" type = "text/javascript">
 				( function ( global, $ ) {
 					global.previewVideos = function () {
@@ -439,7 +440,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 							</span>
 						</td>
 					</tr>		
-				<table>
+				</table>
 			</form>
 		</div>
 		
@@ -454,6 +455,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' '.$noun.'.');
 			?>
 			<div>
+				<h3>Manage Feeds</h3>
 				<table>
 					<tr>
 						<th>Active</th>
@@ -464,6 +466,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<th>Max Results</th>
 						<th>Publish</th>
 						<th>Post Category</th>
+						<th>Delete</th>
 					</tr>
 				<?php for ($n = 0; $n < $num_feeds; $n++ ) { 
 					$feed = $feeds[$n]->feed;
@@ -471,7 +474,11 @@ if( ! class_exists( 'GrabPress' ) ) {
 					parse_str( parse_url($feed->url, PHP_URL_QUERY), $url);
 				?>
 					<tr>
-						<td><?php echo $feed->active ? '√' : 'X'; ?></td>
+						<td>
+							<?php 
+								$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
+							echo '<input '.$checked.' type="checkbox" value="1" name="active" id="active-check"/>'
+							?>
 						<td>
 							<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select">
 								<?php 	
@@ -503,9 +510,36 @@ if( ! class_exists( 'GrabPress' ) ) {
 							</select>
 						</td>
 
-						<td><?php echo $feed-> posts_per_update; ?></td>
-						<td><?php echo $feed->custom_options->publish ? '√' : 'X'; ?></td>
-						<td><?php echo $feed->custom_options->category; ?></td>
+						<td>
+							<select name="limit" id="limit-select">
+									<?php for ($o = 1; $o < 6; $o++) {
+										$selected = ( $o == $feed->posts_per_update )? 'selected = "selected"' : '';
+										echo '<option '.$selected.' value = "'.$o.'">'.$o.'</option>\n';
+									 } ?>
+							</select>
+						</td>
+						<td>
+							<?php 
+								$checked = ( $feed->custom_options->publish  ) ? ' checked = "checked"' : '';
+								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check"/>';
+							?>
+						</td>
+						<td>
+							<?php 
+								$category = get_term_by('name', $feed->custom_options->category, 'category');
+								$selected = $category->term_id;
+								$args = array(	'hide_empty' => 0, 
+	  								'child_of' => 0,
+	  								'hierarchical' => 1, 
+	  								'name' => 'category',
+	  								'id' => 'category-select',
+									'selected' => $selected );
+								wp_dropdown_categories( $args ); 
+							?>
+						</td>
+						<td>
+							<input type="submit" class="button-primary" value="<?php _e('X') ?>" />
+						</td>
 					</tr>
 				<?php } ?>
 
