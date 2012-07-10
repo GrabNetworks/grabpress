@@ -331,7 +331,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						var keywords =  $( '#keyword-input' ).val();
 						var category =  $( '#channel-select').val();
 						var limit =  $( '#limit-select').val() ; 
-						window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category + '&limit=' + limit );	
+						window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );	
 					}	
 				} )( window, jQuery );
 			</script>
