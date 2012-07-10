@@ -371,7 +371,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			        		<tr valign="top">
 							<th scope="row">Keywords</th>
 		        		           	<td >
-								<input style="<?php GrabPress::outline_invalid() ?>" type="text" name="keyword" id="keyword-input" /> *
+								<input type="text" name="keyword" id="keyword-input" /> *
 								<span class="description">Enter search keywords (e.g. <b>Dexter blood spatter</b>)</span>
 							</td>
 		        		        </tr>
@@ -553,7 +553,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 }
 GrabPress::$invalid = false;
 if( count($_POST) > 0 ) {
-	if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'keyword' ] != '' ) {
+	if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' ) {
 		GrabPress::create_feed();
 	} else if( isset( $_POST['limit'] ) ) {
 		GrabPress::$invalid = true;
