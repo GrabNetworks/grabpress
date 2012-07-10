@@ -321,7 +321,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 /* Start HTML */ ?>
 		<div class="wrap">
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
-			<h2>GrabPress: Autopost videos by Channel and Tag</h2>
+			<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 			<p>New video content delivered fresh to your blog.</p>
 			<h3>Create Feed</h3>
 			<script language = "JavaScript" type = "text/javascript">
@@ -350,7 +350,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						</td>
 					</tr>
 						<tr>
-							<th scope="row">Video channel</th>
+							<th scope="row">Video Channel</th>
 							<td>
 								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select">
 									<option selected = "selected" value = "">Choose One</option>
