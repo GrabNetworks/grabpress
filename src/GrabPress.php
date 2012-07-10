@@ -371,7 +371,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			        		<tr valign="top">
 							<th scope="row">Keywords</th>
 		        		           	<td >
-								<input type="text" name="keyword" id="keyword-input" /> *
+								<input type="text" name="keyword" id="keyword-input" /> 
 								<span class="description">Enter search keywords (e.g. <b>Dexter blood spatter</b>)</span>
 							</td>
 		        		        </tr>
