@@ -50,7 +50,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$message.'</p></div>';
 		}    
 		static function abort( $message ) {
-			die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
+			//die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
 		}
 		static function allow_tags() {
 			global $allowedposttags;
@@ -214,7 +214,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 				$connector_id = self::get_connector_id();
 				$url = 'http://74.10.95.28/connectors/'.$connector_id.'/feeds?api_key='.self::$api_key;
 				$feeds_json = self::get_json( $url );
-				return json_decode( $feeds_json );
+				$feeds_data = json_decode( $feeds_json );
+				return $feeds_data;
 			}else{
 				self::abort('no valid key');
 			}
@@ -320,8 +321,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 /* Start HTML */ ?>
 		<div class="wrap">
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
-			<h2>GrabPress: Autopost videos by Channel and Tag</h2>
-			<p>Configure Grab Media's Autoposter software to deliver fresh video to your Blog </p>
+			<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
+			<p>New video content delivered fresh to your blog.</p>
+			<h3>Create Feed</h3>
 			<script language = "JavaScript" type = "text/javascript">
 				( function ( global, $ ) {
 					global.previewVideos = function () {
@@ -329,7 +331,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						var keywords =  $( '#keyword-input' ).val();
 						var category =  $( '#channel-select').val();
 						var limit =  $( '#limit-select').val() ; 
-						window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category + '&limit=' + limit );	
+						window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );	
 					}	
 				} )( window, jQuery );
 			</script>
@@ -348,7 +350,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						</td>
 					</tr>
 						<tr>
-							<th scope="row">Video channel</th>
+							<th scope="row">Video Channel</th>
 							<td>
 								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select">
 									<option selected = "selected" value = "">Choose One</option>
@@ -369,7 +371,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			        		<tr valign="top">
 							<th scope="row">Keywords</th>
 		        		           	<td >
-								<input style="<?php GrabPress::outline_invalid() ?>" type="text" name="keyword" id="keyword-input" /> *
+								<input type="text" name="keyword" id="keyword-input" /> *
 								<span class="description">Enter search keywords (e.g. <b>Dexter blood spatter</b>)</span>
 							</td>
 		        		        </tr>
@@ -438,9 +440,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 							</span>
 						</td>
 					</tr>		
-				<table>
+				</table>
 			</form>
 		</div>
+		
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count($feeds);
@@ -450,14 +453,107 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$noun.='s';
 				}
 				GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' '.$noun.'.');
-			}
+			?>
+			<div>
+				<h3>Manage Feeds</h3>
+				<table>
+					<tr>
+						<th>Active</th>
+						<th>Video Channel</th>
+						<th>Keywords</th>
+						<th>Schedule</th>
+						
+						<th>Max Results</th>
+						<th>Publish</th>
+						<th>Post Category</th>
+						<th>Delete</th>
+					</tr>
+				<?php for ($n = 0; $n < $num_feeds; $n++ ) { 
+					$feed = $feeds[$n]->feed;
+					$url = array();
+					parse_str( parse_url($feed->url, PHP_URL_QUERY), $url);
+				?>
+					<tr>
+						<td>
+							<?php 
+								$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
+							echo '<input '.$checked.' type="checkbox" value="1" name="active" id="active-check"/>'
+							?>
+						<td>
+							<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select">
+								<?php 	
+									$json = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/categories');
+									$list = json_decode($json);
+									foreach ($list as $record) {
+								   		$category = $record -> category;
+										$name = $category -> name;
+										$id = $category -> id;
+										$selected = ( $name == $url['categories'] )  ? 'selected = "selected"' : '';
+								   		echo '<option '.$selected.' value = "'.$name.'">'.$name.'</option>\n';
+									} 
+								?>
+								</select>
+						</td>
+						<td><input type="text" value="<?php echo $url['keywords_and']; ?>"/></td>
+						<td>
+							<select name="schedule" id="schedule-select">
+								<?php 
+									$times = array( '15m', '30m', '45m', '1h', '2h',  '6h', '12h', '24h' );
+									$values = array(  15,  30,  45, 60, 120, 360, 720, 1440 );
+									for ( $o = 0; $o < count( $times ); $o++ ) {
+										$time = $times[$o];
+										$value = $values[$o];
+										$selected = ( $value == $feed->update_frequency ) ? ' selected="selected"' : '';
+										echo '<option'.$selected.' value="'.$time.'">'.$time.'</option>\n';
+								 	} 
+								?>
+							</select>
+						</td>
+
+						<td>
+							<select name="limit" id="limit-select">
+									<?php for ($o = 1; $o < 6; $o++) {
+										$selected = ( $o == $feed->posts_per_update )? 'selected = "selected"' : '';
+										echo '<option '.$selected.' value = "'.$o.'">'.$o.'</option>\n';
+									 } ?>
+							</select>
+						</td>
+						<td>
+							<?php 
+								$checked = ( $feed->custom_options->publish  ) ? ' checked = "checked"' : '';
+								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check"/>';
+							?>
+						</td>
+						<td>
+							<?php 
+								$category = get_term_by('name', $feed->custom_options->category, 'category');
+								$selected = $category->term_id;
+								$args = array(	'hide_empty' => 0, 
+	  								'child_of' => 0,
+	  								'hierarchical' => 1, 
+	  								'name' => 'category',
+	  								'id' => 'category-select',
+									'selected' => $selected );
+								wp_dropdown_categories( $args ); 
+							?>
+						</td>
+						<td>
+							<input type="submit" class="button-primary" value="<?php _e('X') ?>" />
+						</td>
+					</tr>
+				<?php } ?>
+
+				</table>
+			</div>
+
+<?php			}
 /* End HTML */
 		}//if
 	}//class
 }
 GrabPress::$invalid = false;
 if( count($_POST) > 0 ) {
-	if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'keyword' ] != '' ) {
+	if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' ) {
 		GrabPress::create_feed();
 	} else if( isset( $_POST['limit'] ) ) {
 		GrabPress::$invalid = true;
@@ -478,12 +574,12 @@ if(! function_exists( 'grabpress_plugin_menu')){
 			$admin_page = $admin.'admin.php?page=autoposter';
 			$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 			if( $current_page != $admin_page){
-				$admin_link = '<a href="'.$admin_page.'">here</a>';
+				$here = '<a href="'.$admin_page.'">here</a>';
 			}else{
-				$admin_link = 'here';
+				$here = 'here';
 			}
 
-			GrabPress::showMessage('Thank you for activating Grab Autoposter. Try creating your first feed '.$admin_link.'.('.$num_feeds.')');
+			GrabPress::showMessage('Thank you for activating Grab Autoposter. Try creating your first feed '.$here.'.');
 		}
 	}
 }
