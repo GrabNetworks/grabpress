@@ -314,6 +314,23 @@ if( ! class_exists( 'GrabPress' ) ) {
 			echo 'border:1px dashed red;';
 		};
 	}
+	static function delete_json( $data ) {
+		if( self::validate_key() ) {
+			$connector_id = self::get_connector_id();
+			$feed_id = $data;
+			$url = 'http://74.10.95.28/connectors/'.$connector_id.'/feeds/'.$feed_id.'?api_key='.self::$api_key;			
+			$json = json_encode( $data );
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+			$response = curl_exec( $ch ); 
+			curl_close($ch);		
+			return $response;					
+		}else{
+			self::abort('no valid key');
+		}
+	}
 	static function grabpress_plugin_options() {	
 		if (!current_user_can('manage_options'))  {
 			wp_die( __('You do not have sufficient permissions to access this page.') );
@@ -538,7 +555,13 @@ if( ! class_exists( 'GrabPress' ) ) {
 							?>
 						</td>
 						<td>
-							<input type="submit" class="button-primary" value="<?php _e('X') ?>" />
+							<?php $feedId = $feed->id; ?>
+							<form action=""  method="post">
+								<input type="hidden" name="action" value="delete" />
+								<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />
+								<input type="hidden" name="urlDelete" value="<?php echo $urlDelete; ?>" />								
+								<input  type="submit" class="button-primary" value="<?php _e('X') ?>"  />
+							</form>
 						</td>
 					</tr>
 				<?php } ?>
@@ -553,11 +576,16 @@ if( ! class_exists( 'GrabPress' ) ) {
 }
 GrabPress::$invalid = false;
 if( count($_POST) > 0 ) {
-	if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' ) {
-		GrabPress::create_feed();
-	} else if( isset( $_POST['limit'] ) ) {
-		GrabPress::$invalid = true;
-	}
+	if($_POST["action"] == "form"){ 
+		if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' ) {
+			GrabPress::create_feed();
+		} else if( isset( $_POST['limit'] ) ) {
+			GrabPress::$invalid = true;
+		}
+	}else if($_POST["action"] == "delete"){	
+		$feedId = $_POST["feed_id"];
+		GrabPress::delete_json($feedId, 'Content-type: application/json\r\n');
+	}	
 }
 register_deactivation_hook(__FILE__, array( GrabPress, 'cleanup') );
 register_activation_hook( __FILE__, array( GrabPress, 'setup') );
