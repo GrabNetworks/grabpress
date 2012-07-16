@@ -574,6 +574,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		}//if
 	}//class
 }
+$params = $_REQUEST;
 GrabPress::$invalid = false;
 if( count($_POST) > 0 ) {
 	if($_POST["action"] == "form"){ 
