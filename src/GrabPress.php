@@ -577,7 +577,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 $params = $_REQUEST;
 GrabPress::$invalid = false;
 if( count($_POST) > 0 ) {
-	if($_POST["action"] == "form"){ 
+	if($_POST["action"] == "update"){ 
 		if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' ) {
 			GrabPress::create_feed();
 		} else if( isset( $_POST['limit'] ) ) {
