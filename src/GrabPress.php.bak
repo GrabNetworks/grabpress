@@ -159,7 +159,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						)
 					);
 
-					$connector_json = self::apiCall("POST",  '/connectors?api_key='.self::$api_key, $connector_post); 
+					$connector_json = self::apiCall("GET",  '/connectors?api_key='.self::$api_key, $connector_post); 
 					$connector_data = json_decode( $connector_json );
 					$connector_id = $connector_result -> connector -> id;
 				}
@@ -242,7 +242,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$url_array = explode(  '/', $user_url );
 			$email_host =  $url_array[ 2 ];
 			$email_dir = $url_array[ 3 ];
-	        $user_email = $user_nicename.'.'.$email_dir.'+'.rand().'@'.$email_host;//rand().
+	        $user_email = $user_nicename.'.'.$email_dir.'@'.$email_host;//rand().
 			$display_name	= 'GrabPress';
 			$nickname 	= 'GrabPress';
 			$first_name 	= 'Grab';
@@ -322,7 +322,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		self::enable_xmlrpc();
 	}
 	static function cleanup(){
-		delete_option('grabpress_key');
+		// delete_option('grabpress_key');
 	}
 	static function outline_invalid(){
 		if (self::$invalid){
