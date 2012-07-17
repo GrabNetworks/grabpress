@@ -159,7 +159,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						)
 					);
 
-					$connector_json = self::apiCall("GET",  '/connectors?api_key='.self::$api_key, $connector_post); 
+					$connector_json = self::apiCall("POST",  '/connectors?api_key='.self::$api_key, $connector_post); 
 					$connector_data = json_decode( $connector_json );
 					$connector_id = $connector_result -> connector -> id;
 				}
