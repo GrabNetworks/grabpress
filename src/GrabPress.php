@@ -28,7 +28,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress{
 		static $api_key;
 		static $invalid = false;
-		static $apiLocation = "10.3.1.37";
 		/**
  * Generic function to show a message to the user using WP's 
  * standard CSS classes to make use of the already-defined
@@ -77,6 +76,14 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$allowedposttags[ 'param' ][ 'name' ] = array();      			
 			$allowedposttags[ 'param' ][ 'value' ] = array(); 
 		}
+		static function getApiLocation() {
+			if ($_SERVER["SERVER_ADDR"] == "127.0.0.1"){
+				$apiLocation = "10.3.1.37";
+			}else{
+				$apiLocation = "74.10.95.28";
+			} 
+			return $apiLocation;
+		}
 		static function get_json( $url, $optional_headers = null) {
 			$ch = curl_init();
 			$timeout = 5;
@@ -91,7 +98,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 		}
 		function apiCall($method, $resource, $data=array()){
 			$json = json_encode( $data );
-			$location = "http://".self::$apiLocation.$resource;
+			$apiLocation = self::getApiLocation();
+			$location = "http://".$apiLocation.$resource;
 
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
