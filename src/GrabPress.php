@@ -28,7 +28,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress{
 		static $api_key;
 		static $invalid = false;
-		static $apiLocation = "10.3.1.37";
+		static $apiLocation = "74.10.95.28";
 		/**
  * Generic function to show a message to the user using WP's 
  * standard CSS classes to make use of the already-defined
@@ -437,7 +437,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					</tr>
 					<tr valign="top">
 						<td>
-							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Videos') ?>" />
+							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Feed') ?>" />
 						</td>
 						<td>
 							<span class="description">Click to preview which videos will be autoposted on next grab (mrss feed.)</span>
