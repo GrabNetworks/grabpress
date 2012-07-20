@@ -537,7 +537,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 								</select>
 						</td>
 						<td>	
-								<input type="text" name="keywords_and" onchange="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
+								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
 						</td>
 						<td>
 							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)">
