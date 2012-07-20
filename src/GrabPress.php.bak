@@ -462,7 +462,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					</tr>
 					<tr valign="top">
 						<td>
-							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Feed') ?>" />
+							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Videos') ?>" />
 						</td>
 						<td>
 							<span class="description">Click to preview which videos will be autoposted on next grab (mrss feed.)</span>
@@ -513,8 +513,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 					parse_str( parse_url($feed->url, PHP_URL_QUERY), $url);
 					$feedId = $feed->id;
 				?>
-				<form id="form-<?php echo $feedId; ?>" action=""  method="post">		
-					<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
+				<form id="form-<?=$feedId?>" action=""  method="post">		
+					<input type="hidden" id="action-<?=$feedId?>" name="action" value="" />
 					<tr>											
 						<td>
 								<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />	
