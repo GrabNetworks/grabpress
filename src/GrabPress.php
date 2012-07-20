@@ -100,7 +100,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$json = json_encode( $data );
 			$apiLocation = self::getApiLocation();
 			$location = "http://".$apiLocation.$resource;
-
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -520,10 +519,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 								<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />	
 								<?php 
 									$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-									echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
+									echo '<input '.$checked.' type="checkbox" onchange="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
 								?>
 						<td>
-							<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" >
+							<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" onchange="toggleButton(<?php echo $feedId; ?>)" >
 								<?php 	
 									$json = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/categories');
 									$list = json_decode($json);
@@ -531,17 +530,17 @@ if( ! class_exists( 'GrabPress' ) ) {
 								   		$category = $record -> category;
 										$name = $category -> name;
 										$id = $category -> id;
-										$selected = ( $name == $url['categories'] )  ? 'selected = "selected"' : '';
+										$selected = ( $name == $feed->name )  ? 'selected = "selected"' : '';
 								   		echo '<option '.$selected.' value = "'.$name.'">'.$name.'</option>\n';
 									} 
 								?>
 								</select>
 						</td>
 						<td>	
-								<input type="text" name="keywords_and" onblur="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
+								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
 						</td>
 						<td>
-							<select name="schedule" id="schedule-select">
+							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)">
 								<?php 
 									$times = array( '15m', '30m', '45m', '1h', '2h',  '6h', '12h', '24h' );
 									$values = array(  15,  30,  45, 60, 120, 360, 720, 1440 );
@@ -556,7 +555,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						</td>
 
 						<td>
-							<select name="limit" id="limit-select">
+							<select name="limit" id="limit-select" onchange="toggleButton(<?php echo $feedId; ?>)">
 									<?php for ($o = 1; $o < 6; $o++) {
 										$selected = ( $o == $feed->posts_per_update )? 'selected = "selected"' : '';
 										echo '<option '.$selected.' value = "'.$o.'">'.$o.'</option>\n';
@@ -566,7 +565,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<td>
 							<?php 
 								$checked = ( $feed->custom_options->publish  ) ? ' checked = "checked"' : '';
-								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check"/>';
+								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check" onchange="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>
@@ -583,8 +582,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 								wp_dropdown_categories( $args );
 								?>
 								<script language="javascript">
-									jQuery("#category-select-<?=$feed->id?>").change(function(){
-										toggleButton(<?=$feed->id?>);
+									jQuery("#category-select-<?php echo $feedId; ?>").change(function(){
+										toggleButton(<?php echo $feedId; ?>);
 									});
 								</script>
 						</td>						
@@ -640,7 +639,7 @@ function dispatcher($params){
 							),
 							update_frequency => 60 * $_POST[ 'schedule' ]
 						)
-					);				
+					);		
 					GrabPress::apiCall("PUT", "/connectors/" . $connector_id . "/feeds/".$feed_id."?api_key=".GrabPress::$api_key, $post_data);	
 					break;				
 		}
