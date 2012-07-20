@@ -513,8 +513,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 					parse_str( parse_url($feed->url, PHP_URL_QUERY), $url);
 					$feedId = $feed->id;
 				?>
-				<form id="form-<?=$feedId?>" action=""  method="post">		
-					<input type="hidden" id="action-<?=$feedId?>" name="action" value="" />
+				<form id="form-<?php echo $feedId; ?>" action=""  method="post">		
+					<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
 					<tr>											
 						<td>
 								<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />	
@@ -589,10 +589,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 								</script>
 						</td>						
 						<td>
-							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?=$feedId?>);" />
+							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 						</td>
 						<td>	
-							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" onclick="updateFeed(<?=$feedId?>);">update</button>					 
+							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" onclick="updateFeed(<?php echo $feedId; ?>);">update</button>					 
 						</td>
 
 					</tr>	

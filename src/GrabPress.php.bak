@@ -372,7 +372,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 					var action = jQuery('#action-'+id);
 					action.val("modify");
 					form.submit();
-				}
+				}							
+				
 			</script>
 			<?php 
 				$rpc_url = get_bloginfo('url').'/xmlrpc.php';
@@ -576,16 +577,22 @@ if( ! class_exists( 'GrabPress' ) ) {
 	  								'child_of' => 0,
 	  								'hierarchical' => 1, 
 	  								'name' => 'category',
-	  								'id' => 'category-select',
-									'selected' => $selected );
-								wp_dropdown_categories( $args ); 
-							?>							
+	  								'id' => 'category-select-'.$feed->id,  								
+									'selected' => $selected ,
+									"class" => 'category-select');
+								wp_dropdown_categories( $args );
+								?>
+								<script language="javascript">
+									jQuery("#category-select-<?=$feed->id?>").change(function(){
+										toggleButton(<?=$feed->id?>);
+									});
+								</script>
 						</td>						
 						<td>
-							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?=$feedId?>);" />
+							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 						</td>
 						<td>	
-							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" onclick="updateFeed(<?=$feedId?>);">update</button>					 
+							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" onclick="updateFeed(<?php echo $feedId; ?>);">update</button>					 
 						</td>
 
 					</tr>	
@@ -616,15 +623,26 @@ function dispatcher($params){
 					break;	
 			case 'modify':
 					$feed_id = $_POST["feed_id"];
-					$connector_id = GrabPress::get_connector_id();					
-					$active	= (bool)$_POST["active"];
-					$post_data = array( 
-								'feed' => array(
-									'active' => $active
-								)
-					);
-					GrabPress::apiCall("PUT", "/connectors/" . $connector_id . "/feeds/".$feed_id."?api_key=".GrabPress::$api_key, $post_data);
-					break;			
+					$keywords_and = htmlspecialchars($_POST["keywords_and"]);
+					$category = get_cat_name($_POST["category"]);
+					$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$category.'&order=DESC&order_by=created_at';
+					$connector_id = GrabPress::get_connector_id();	
+					$active	= (bool)$_POST["active"];				
+					$post_data = array(
+						feed => array(
+							active => $active,
+							name => $_POST[ 'channel' ],
+							posts_per_update => $_POST[ 'limit' ],
+							url => $url,
+							custom_options => array(
+								category => get_cat_name( $_POST[ 'category' ] ),
+								publish => (bool)( $_POST[ 'publish' ] )
+							),
+							update_frequency => 60 * $_POST[ 'schedule' ]
+						)
+					);				
+					GrabPress::apiCall("PUT", "/connectors/" . $connector_id . "/feeds/".$feed_id."?api_key=".GrabPress::$api_key, $post_data);	
+					break;				
 		}
 	}
 }
