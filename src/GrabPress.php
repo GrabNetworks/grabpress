@@ -589,10 +589,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 								</script>
 						</td>						
 						<td>
-							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?=$feedId?>);" />
+							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 						</td>
 						<td>	
-							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" onclick="updateFeed(<?=$feedId?>);">update</button>					 
+							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" onclick="updateFeed(<?php echo $feedId; ?>);">update</button>					 
 						</td>
 
 					</tr>	
