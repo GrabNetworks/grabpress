@@ -24,6 +24,11 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+if(!function_exists("get_userdatabylogin")){
+       function get_userdatabylogin($login){
+               return get_user_by("login", $login);
+       }
+}
 if( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress{
 		static $api_key;
@@ -565,7 +570,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
-				<table style="margin-bottom:215px;">
+				<table>
 					<tr>
 						<th>Active</th>
 						<th>Video Channel</th>
