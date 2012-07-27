@@ -98,9 +98,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 		}
 		function apiCall($method, $resource, $data=array()){
 			$json = json_encode( $data );
-			$apiLocation = self::getApiLocation();
-			$location = "http://".$apiLocation.$resource;
-
+			$apiLocation = self::getApiLocation();			
+			$location = "http://".$apiLocation.$resource;			
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -191,8 +190,15 @@ if( ! class_exists( 'GrabPress' ) ) {
 					if($name == $_POST['channel']){
 						$cat_id = $id;
 					}
+				}				
+				$providers = $_POST['provider'];
+				$providersList = implode(",", $providers); 
+				$providersListTotal = count($providers); // Total providers chosen by the user
+				$providers_total = $_POST['providers_total']; // Total providers from the catalog list
+				if($providersListTotal == $providers_total){
+					$providersList = "";
 				}
-				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at';
+				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 				$connector_id = self::get_connector_id();
 				$post_data = array(
 					feed => array(
@@ -332,6 +338,11 @@ if( ! class_exists( 'GrabPress' ) ) {
 	static function cleanup(){
 		delete_option('grabpress_key');
 	}
+	static function delete_connector(){
+		$connector_id = self::get_connector_id();
+		$response = self::apiCall("PUT", "/connectors/" . $connector_id . "/deactivate?api_key=".GrabPress::$api_key);
+		delete_option('grabpress_key');
+	}
 	static function outline_invalid(){
 		if (self::$invalid){
 			echo 'border:1px dashed red;';
@@ -347,6 +358,12 @@ if( ! class_exists( 'GrabPress' ) ) {
 			<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 			<p>New video content delivered fresh to your blog.</p>
 			<h3>Create Feed</h3>
+			<?php 				
+				// List of all providers
+				$json_provider = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/providers?limit=-1');
+				$list_provider = json_decode($json_provider);
+				$providers_total = count($list_provider);
+			?>
 			<script language = "JavaScript" type = "text/javascript">
 				( function ( global, $ ) {
 					global.previewVideos = function () {
@@ -356,28 +373,75 @@ if( ! class_exists( 'GrabPress' ) ) {
 						var limit =  $( '#limit-select').val() ; 
 						window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );	
 					}	
-				} )( window, jQuery );		
+				} )( window, jQuery );	
 
 			    function toggleButton(feedId) {
 					jQuery('#btn-update-' + feedId).css({"visibility":"visible"});
 				}
+
 				function deleteFeed(id){
 					var form = jQuery('#form-'+id);
 					var action = jQuery('#action-'+id);
 					action.val("delete");
 					form.submit();
 				}
-				function updateFeed(id){
+
+				var multiSelectOptions = {
+				  	 noneSelectedText:"Select providers",
+				  	 selectedText:function(selectedCount, totalCount){
+						if (totalCount==selectedCount){
+				  	 		return "All providers selected";
+				  	 	}else{
+				  	 		return selectedCount + " providers selected of " + totalCount;
+				  	 	}
+				  	 }
+				};
+
+				jQuery(function(){
+				  jQuery('#provider-select option').attr('selected', 'selected');
+
+				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();
+
+				  jQuery(".provider-select-update").multiselect(multiSelectOptions, {
+				  	 /*selectedText: "# of # providers selected",*/
+				  	 uncheckAll: function(e, ui){
+				  	 	item = jQuery(this).attr('id');
+				  	 	id = item.replace('provider-select-update-',''); 	 	
+				  	 	toggleButton(id);      
+					 },
+					 checkAll: function(e, ui){
+				  	 	item = jQuery(this).attr('id');
+				  	 	id = item.replace('provider-select-update-',''); 	 	
+				  	 	toggleButton(id);      
+					 }
+				   }).multiselectfilter();
+
+				  jQuery('#create-feed-btn').bind('click', function(e){					  
+					if(jQuery("#provider-select :selected").length == 0){						
+						alert("Please select at least one provider");					  
+						e.preventDefault();
+					}
+				  });
+
+				  jQuery('.btn-update').bind('click', function(e){
+				    id = jQuery(this).attr('name');		  
 					var form = jQuery('#form-'+id);
 					var action = jQuery('#action-'+id);
-					action.val("modify");
-					form.submit();
-				}							
+					if(jQuery("#provider-select-update-" + id + " :selected").length == 0){						
+						alert("Please select at least one provider");					  
+						e.preventDefault();
+					}else{
+						action.val("modify");
+						form.submit();
+					}
+				  });
+  
+				});
 				
 			</script>
 			<?php 
 				$rpc_url = get_bloginfo('url').'/xmlrpc.php';
-				$connector_id = GrabPress::get_connector_id();
+				$connector_id = GrabPress::get_connector_id();		
 			?>
 			<form method="post" action="">
 	            		<?php settings_fields('grab_press');//XXX: Do we need this? ?>
@@ -460,6 +524,25 @@ if( ! class_exists( 'GrabPress' ) ) {
 							<span class="description">Select a category for your autoposts</span>
 						</td>
 					</tr>
+					</tr>
+		        		<tr valign="top">
+						<th scope="row">Providers</th>
+						<td>
+							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" />	
+							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" >
+								<!--<option selected="selected" value = "">Choose One</option>-->
+								<?php
+									foreach ($list_provider as $record_provider) {
+								   		$provider = $record_provider->provider;
+										$provider_name = $provider->name;
+										$provider_id = $provider->id;
+								   		echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+									} 
+								?>
+							</select>
+							<span class="description">Select providers for your autoposts</span>
+						</td>
+					</tr>
 					<tr valign="top">
 						<td>
 							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Videos') ?>" />
@@ -470,7 +553,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					</tr>
 					<tr valign="top">
 						<td>
-							<input type="submit" class="button-primary" value="<?php _e('Grab Videos') ?>" />
+							<input type="submit" class="button-primary" value="<?php _e('Grab Videos') ?>" id="create-feed-btn" />
 						</td>
 						<td>
 							<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
@@ -496,7 +579,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
-				<table>
+				<table style="margin-bottom:215px;">
 					<tr>
 						<th>Active</th>
 						<th>Video Channel</th>
@@ -505,13 +588,15 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<th>Max Results</th>
 						<th>Publish</th>
 						<th>Post Category</th>
+						<th>Providers</th>
 						<th>Delete</th>
 					</tr>
 				<?php for ($n = 0; $n < $num_feeds; $n++ ) { 
 					$feed = $feeds[$n]->feed;
 					$url = array();
-					parse_str( parse_url($feed->url, PHP_URL_QUERY), $url);
+					parse_str( parse_url($feed->url, PHP_URL_QUERY), $url);					
 					$feedId = $feed->id;
+					$providers = explode(",", $url["providers"]); // providers chosen by the user
 				?>
 				<form id="form-<?php echo $feedId; ?>" action=""  method="post">		
 					<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
@@ -523,7 +608,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 									echo '<input '.$checked.' type="checkbox" onchange="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
 								?>
 						<td>
-							<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" onchange="toggleButton(<?php echo $feedId; ?>)" >
+							<select  name="channel" id="channel-select" onchange="toggleButton(<?php echo $feedId; ?>)" >
 								<?php 	
 									$json = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/categories');
 									$list = json_decode($json);
@@ -538,7 +623,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 								</select>
 						</td>
 						<td>	
-								<input type="text" name="keywords_and" onchange="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
+								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
 						</td>
 						<td>
 							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)">
@@ -587,12 +672,35 @@ if( ! class_exists( 'GrabPress' ) ) {
 										toggleButton(<?php echo $feedId; ?>);
 									});
 								</script>
-						</td>						
+						</td>	
+
+						<td>
+							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" />
+							<select name="provider[]" class="provider-select-update multiselect" id="provider-select-update-<?php echo $feedId; ?>" multiple="multiple" onchange="toggleButton(<?php echo $feedId; ?>);" >
+								<!--<option selected="selected" value = "">Choose One</option>-->
+								<?php
+									foreach ($list_provider as $record_provider) {
+								   		$provider = $record_provider->provider;
+										$provider_name = $provider->name;
+										$provider_id = $provider->id;
+										$selected = in_array($provider_id, $providers)  ? 'selected = "selected"' : '';
+										if(in_array("", $providers)){ 
+											echo '<option selected = "selected" value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										}else{
+											echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										}
+								   		
+									}
+ 
+								?>
+							</select>
+						</td>
+
 						<td>
 							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 						</td>
 						<td>	
-							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" onclick="updateFeed(<?php echo $feedId; ?>);">update</button>					 
+							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" name="<?php echo $feedId; ?>" >update</button>					 
 						</td>
 
 					</tr>	
@@ -606,12 +714,12 @@ if( ! class_exists( 'GrabPress' ) ) {
 		}//if
 	}//class
 }
-function dispatcher($params){	
+function dispatcher($params){
 	if( count($_POST) > 0 ) {
 		switch ($params['action']){
 			case 'update':
 					if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' ) {
-						GrabPress::create_feed();
+							GrabPress::create_feed();					
 					} else if( isset( $_POST['limit'] ) ) {
 						GrabPress::$invalid = true;
 					}
@@ -625,7 +733,14 @@ function dispatcher($params){
 					$feed_id = $_POST["feed_id"];
 					$keywords_and = htmlspecialchars($_POST["keywords_and"]);
 					$category = get_cat_name($_POST["category"]);
-					$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$category.'&order=DESC&order_by=created_at';
+					$providers = $_POST['provider'];
+					$providersList = implode(",", $providers);
+					$providersListTotal = count($providers); // Total providers chosen by the user
+					$providers_total = $_POST['providers_total']; // Total providers from the catalog list
+					if($providersListTotal == $providers_total){
+						$providersList = "";
+					}
+					$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$category.'&order=DESC&order_by=created_at&providers='.$providersList;
 					$connector_id = GrabPress::get_connector_id();	
 					$active	= (bool)$_POST["active"];				
 					$post_data = array(
@@ -648,6 +763,34 @@ function dispatcher($params){
 }
 
 dispatcher($_REQUEST);
+
+add_action('admin_print_styles', 'WPWall_StylesAction');
+function WPWall_StylesAction()
+{
+	// Plugin url
+	$wp_wall_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
+
+	// CSS files
+	wp_enqueue_style('jquery-ui-custom', $wp_wall_plugin_url.'/jquery.multiselect.css');
+	wp_enqueue_style('jquery-ui-style', $wp_wall_plugin_url.'/assets/style.css');
+	wp_enqueue_style('jquery-ui-custom-prettify', $wp_wall_plugin_url.'/assets/prettify.css');
+	wp_enqueue_style('jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" ');
+	wp_enqueue_style('jquery-ui-custom-filter', $wp_wall_plugin_url.'/jquery.multiselect.filter.css');
+}
+
+add_action('wp_print_scripts', 'WPWall_ScriptsAction');
+function WPWall_ScriptsAction()
+{
+	// Plugin url
+	$wp_wall_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
+
+	// jQuery files
+	wp_enqueue_script("jquery-ui","https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"); 
+	wp_enqueue_script('jquery-ui-filter', $wp_wall_plugin_url.'/src/jquery.multiselect.filter.min.js');	
+	wp_enqueue_script('jquery-prettify', $wp_wall_plugin_url.'/src/assets/prettify.js');
+	wp_enqueue_script('jquery-ui-multiselect', $wp_wall_plugin_url.'/src/jquery.multiselect.min.js');
+}
+
 register_deactivation_hook(__FILE__, array( GrabPress, 'cleanup') );
 register_activation_hook( __FILE__, array( GrabPress, 'setup') );
 if(! function_exists( 'grabpress_plugin_menu')){
