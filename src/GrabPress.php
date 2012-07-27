@@ -381,15 +381,24 @@ if( ! class_exists( 'GrabPress' ) ) {
 					form.submit();
 				}
 
+				var multiSelectOptions = {
+				  	 noneSelectedText:"Select providers",
+				  	 selectedText:function(selectedCount, totalCount){
+						if (totalCount==selectedCount){
+				  	 		return "All providers selected";
+				  	 	}else{
+				  	 		return selectedCount + " providers selected of " + totalCount;
+				  	 	}
+				  	 }
+				};
+
 				jQuery(function(){
 				  jQuery('#provider-select option').attr('selected', 'selected');
 
-				  jQuery("#provider-select").multiselect({
-				  	 selectedText: "# of # selected"
-				   }).multiselectfilter();
+				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();
 
-				  jQuery(".provider-select-update").multiselect({
-				  	 selectedText: "# of # selected",
+				  jQuery(".provider-select-update").multiselect(multiSelectOptions, {
+				  	 /*selectedText: "# of # providers selected",*/
 				  	 uncheckAll: function(e, ui){
 				  	 	item = jQuery(this).attr('id');
 				  	 	id = item.replace('provider-select-update-',''); 	 	
@@ -404,7 +413,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 
 				  jQuery('#create-feed-btn').bind('click', function(e){					  
 					if(jQuery("#provider-select :selected").length == 0){						
-						alert("Please Select Providers");					  
+						alert("Please select at least one provider");					  
 						e.preventDefault();
 					}
 				  });
@@ -414,7 +423,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					var form = jQuery('#form-'+id);
 					var action = jQuery('#action-'+id);
 					if(jQuery("#provider-select-update-" + id + " :selected").length == 0){						
-						alert("Please Select Providers");					  
+						alert("Please select at least one provider");					  
 						e.preventDefault();
 					}else{
 						action.val("modify");
