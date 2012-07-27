@@ -338,6 +338,11 @@ if( ! class_exists( 'GrabPress' ) ) {
 	static function cleanup(){
 		delete_option('grabpress_key');
 	}
+	static function delete_connector(){
+		$connector_id = self::get_connector_id();
+		$response = self::apiCall("PUT", "/connectors/" . $connector_id . "/deactivate?api_key=".GrabPress::$api_key);
+		delete_option('grabpress_key');
+	}
 	static function outline_invalid(){
 		if (self::$invalid){
 			echo 'border:1px dashed red;';
@@ -413,7 +418,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 
 				  jQuery('#create-feed-btn').bind('click', function(e){					  
 					if(jQuery("#provider-select :selected").length == 0){						
-						alert("Please Select Providers");					  
+						alert("Please select at least one provider");					  
 						e.preventDefault();
 					}
 				  });
@@ -423,7 +428,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					var form = jQuery('#form-'+id);
 					var action = jQuery('#action-'+id);
 					if(jQuery("#provider-select-update-" + id + " :selected").length == 0){						
-						alert("Please Select Providers");					  
+						alert("Please select at least one provider");					  
 						e.preventDefault();
 					}else{
 						action.val("modify");
