@@ -335,7 +335,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 		self::validate_key();
 		self::enable_xmlrpc();
 	}
-	static function cleanup(){
+	static function delete_connector(){
+		$connector_id = self::get_connector_id();
+		$response = self::apiCall("PUT", "/connectors/" . $connector_id . "/deactivate?api_key=".GrabPress::$api_key);
 		delete_option('grabpress_key');
 	}
 	static function outline_invalid(){
@@ -381,15 +383,24 @@ if( ! class_exists( 'GrabPress' ) ) {
 					form.submit();
 				}
 
+				var multiSelectOptions = {
+				  	 noneSelectedText:"Select providers",
+				  	 selectedText:function(selectedCount, totalCount){
+						if (totalCount==selectedCount){
+				  	 		return "All providers selected";
+				  	 	}else{
+				  	 		return selectedCount + " providers selected of " + totalCount;
+				  	 	}
+				  	 }
+				};
+
 				jQuery(function(){
 				  jQuery('#provider-select option').attr('selected', 'selected');
 
-				  jQuery("#provider-select").multiselect({
-				  	 selectedText: "# of # selected"
-				   }).multiselectfilter();
+				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();
 
-				  jQuery(".provider-select-update").multiselect({
-				  	 selectedText: "# of # selected",
+				  jQuery(".provider-select-update").multiselect(multiSelectOptions, {
+				  	 /*selectedText: "# of # providers selected",*/
 				  	 uncheckAll: function(e, ui){
 				  	 	item = jQuery(this).attr('id');
 				  	 	id = item.replace('provider-select-update-',''); 	 	
@@ -404,7 +415,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 
 				  jQuery('#create-feed-btn').bind('click', function(e){					  
 					if(jQuery("#provider-select :selected").length == 0){						
-						alert("Please Select Providers");					  
+						alert("Please select at least one provider");					  
 						e.preventDefault();
 					}
 				  });
@@ -414,7 +425,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					var form = jQuery('#form-'+id);
 					var action = jQuery('#action-'+id);
 					if(jQuery("#provider-select-update-" + id + " :selected").length == 0){						
-						alert("Please Select Providers");					  
+						alert("Please select at least one provider");					  
 						e.preventDefault();
 					}else{
 						action.val("modify");
@@ -777,8 +788,8 @@ function WPWall_ScriptsAction()
 	wp_enqueue_script('jquery-ui-multiselect', $wp_wall_plugin_url.'/src/jquery.multiselect.min.js');
 }
 
-register_deactivation_hook(__FILE__, array( GrabPress, 'cleanup') );
 register_activation_hook( __FILE__, array( GrabPress, 'setup') );
+register_uninstall_hook(__FILE__, array( GrabPress, 'delete_connector') );
 if(! function_exists( 'grabpress_plugin_menu')){
 	function grabpress_plugin_menu() {
 		add_menu_page('GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( GrabPress, 'grabpress_plugin_options' ), plugin_dir_url( __FILE__ ).'g.png', 10 );
