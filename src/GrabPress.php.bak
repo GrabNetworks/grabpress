@@ -335,9 +335,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 		self::validate_key();
 		self::enable_xmlrpc();
 	}
-	static function cleanup(){
-		delete_option('grabpress_key');
-	}
 	static function delete_connector(){
 		$connector_id = self::get_connector_id();
 		$response = self::apiCall("PUT", "/connectors/" . $connector_id . "/deactivate?api_key=".GrabPress::$api_key);
@@ -791,8 +788,8 @@ function WPWall_ScriptsAction()
 	wp_enqueue_script('jquery-ui-multiselect', $wp_wall_plugin_url.'/src/jquery.multiselect.min.js');
 }
 
-register_deactivation_hook(__FILE__, array( GrabPress, 'cleanup') );
 register_activation_hook( __FILE__, array( GrabPress, 'setup') );
+register_uninstall_hook(__FILE__, array( GrabPress, 'delete_connector') );
 if(! function_exists( 'grabpress_plugin_menu')){
 	function grabpress_plugin_menu() {
 		add_menu_page('GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( GrabPress, 'grabpress_plugin_options' ), plugin_dir_url( __FILE__ ).'g.png', 10 );
