@@ -800,7 +800,6 @@ function dispatcher($params){
 							posts_per_update => $_POST[ 'limit' ],
 							url => $url,
 							custom_options => array(
-								//category => get_cat_name( $_POST[ 'category' ] ),
 								category => $category,
 								publish => (bool)( $_POST[ 'publish' ] )
 							),
