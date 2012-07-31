@@ -199,14 +199,23 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$providersList = "";
 				}
 				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
-				$connector_id = self::get_connector_id();
+				$connector_id = self::get_connector_id();			
+				$category_list = $_POST[ 'category' ];
+				if(isset($category_list)){	
+					foreach ($category_list as $cat) {
+						$cats[] = get_cat_name($cat);
+					}
+					$category = json_encode($cats);				
+				}else{
+					$category = "";
+				}				
 				$post_data = array(
 					feed => array(
 						name => $_POST[ 'channel' ],
 						posts_per_update => $_POST[ 'limit' ],
 						url => $url,
 						custom_options => array(
-							category => get_cat_name( $_POST[ 'category' ] ),
+							category => $category,
 							publish => (bool)( $_POST[ 'publish' ] )
 						),
 						update_frequency => 60 * $_POST[ 'schedule' ]
@@ -397,18 +406,15 @@ if( ! class_exists( 'GrabPress' ) ) {
 				jQuery(function(){
 				  jQuery('#provider-select option').attr('selected', 'selected');
 
-				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();
+				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();				  		  
 
 				  jQuery(".provider-select-update").multiselect(multiSelectOptions, {
-				  	 /*selectedText: "# of # providers selected",*/
 				  	 uncheckAll: function(e, ui){
-				  	 	item = jQuery(this).attr('id');
-				  	 	id = item.replace('provider-select-update-',''); 	 	
+				  	 	id = this.id.replace('provider-select-update-',''); 	 	
 				  	 	toggleButton(id);      
 					 },
 					 checkAll: function(e, ui){
-				  	 	item = jQuery(this).attr('id');
-				  	 	id = item.replace('provider-select-update-',''); 	 	
+				  	 	id = this.id.replace('provider-select-update-','');	
 				  	 	toggleButton(id);      
 					 }
 				   }).multiselectfilter();
@@ -432,7 +438,31 @@ if( ! class_exists( 'GrabPress' ) ) {
 						form.submit();
 					}
 				  });
-  
+
+				  	var multiSelectOptionsCategories = {
+					  	 noneSelectedText:"Select categories",
+					  	 selectedText:function(selectedCount, totalCount){
+							if (totalCount==selectedCount){
+					  	 		return "All categories selected";
+					  	 	}else{
+					  	 		return selectedCount + " categories selected of " + totalCount;
+					  	 	}
+					  	 }
+					};
+
+				  jQuery("#cat").multiselect(multiSelectOptionsCategories).multiselectfilter();
+
+				  jQuery(".postcats").multiselect(multiSelectOptionsCategories, {
+				  	uncheckAll: function(e, ui){
+				  	 	id = this.id.replace('postcats-','');	
+				  	 	toggleButton(id);      
+					 },
+					 checkAll: function(e, ui){
+				  	 	id = this.id.replace('postcats-','');
+				  	 	toggleButton(id);      
+					 }
+				  }).multiselectfilter();
+				    
 				});
 				
 			</script>
@@ -511,12 +541,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 		        		<tr valign="top">
 						<th scope="row">Post Category</th>
 						<td>
-							<?php 	$args = array(	'hide_empty' => 0, 
-	  										'child_of' => 0,
-	  										'hierarchical' => 1, 
-	  										'name' => 'category',
-	  										'id' => 'category-select');
-										wp_dropdown_categories( $args ); 
+							<?php 							
+								$select_cats = wp_dropdown_categories( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 ) );
+								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
+								echo $select_cats; 							
 							?>
 							<span class="description">Select a category for your autoposts</span>
 						</td>
@@ -652,24 +680,39 @@ if( ! class_exists( 'GrabPress' ) ) {
 							?>
 						</td>
 						<td>
-							<?php 
-								$category = get_term_by('name', $feed->custom_options->category, 'category');
-								$selected = $category->term_id;
-								$args = array(	'hide_empty' => 0, 
-	  								'child_of' => 0,
-	  								'hierarchical' => 1, 
-	  								'name' => 'category',
-	  								'id' => 'category-select-'.$feed->id,  								
-									'selected' => $selected ,
-									"class" => 'category-select');
-								wp_dropdown_categories( $args );
-								?>
-								<script language="javascript">
-									jQuery("#category-select-<?php echo $feedId; ?>").change(function(){
-										toggleButton(<?php echo $feedId; ?>);
-									});
-								</script>
-						</td>	
+							<?php 		
+								if($feed->custom_options->category != ""){
+									$category_list = json_decode($feed->custom_options->category);
+								}else{
+									$category_list = "";
+								}								
+								$category_ids = get_all_category_ids();
+								$args = array( 'echo' => 0, 
+										'taxonomy' => 'category', 
+										'hide_empty' => 0, 
+										'id' => 'category-select-'.$feed->id,
+										'class' => 'category-select' );								
+								$cats = wp_dropdown_categories($args);
+								$cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $cats );
+                                $cats = str_replace("\n", "", $cats);
+                                $cats = str_replace("\t", "", $cats);
+                                $cats = str_replace("<select name='cat' id='cat' class='postform' ><option class=\"level-0\" value=\"", "", $cats);
+                                $cats = str_replace("\">", "-", $select_cats);
+                                $cats = str_replace("</option><option class=\"level-0\" value=\"", "_", $cats);
+                                $cats = str_replace("</option></select>", "", $cats);
+                                                                
+                                echo "<select multiple='multiple' class=\"postcats\" name=\"category[]\" id=\"postcats-".$feedId."\" onchange=\"toggleButton(".$feedId.");\" >\n";
+				                                foreach($category_ids as $cat_id) {	
+                                                        $cat_name = get_cat_name($cat_id);
+                                                        $sel= "";
+                                                        $sel = in_array($cat_name, $category_list)  ? 'selected = "selected"' : '';
+                                                        echo "<option ". $sel ." value=\"$cat_id\">";
+                                                                echo $cat_name;
+                                                        echo "</option>\n";
+                                                }                                                
+                                echo "</select>";				
+							?>
+						</td>
 
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" />
@@ -729,7 +772,7 @@ function dispatcher($params){
 			case 'modify':
 					$feed_id = $_POST["feed_id"];
 					$keywords_and = htmlspecialchars($_POST["keywords_and"]);
-					$category = get_cat_name($_POST["category"]);
+					$categories = rawurlencode($_POST[ 'channel' ]);
 					$providers = $_POST['provider'];
 					$providersList = implode(",", $providers);
 					$providersListTotal = count($providers); // Total providers chosen by the user
@@ -737,9 +780,19 @@ function dispatcher($params){
 					if($providersListTotal == $providers_total){
 						$providersList = "";
 					}
-					$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$category.'&order=DESC&order_by=created_at&providers='.$providersList;
+					$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 					$connector_id = GrabPress::get_connector_id();	
-					$active	= (bool)$_POST["active"];				
+					$active	= (bool)$_POST['active'];
+
+					$category_list = $_POST[ 'category' ];
+					if(isset($category_list)){	
+						foreach ($category_list as $cat) {
+							$cats[] = get_cat_name($cat);
+						}	
+						$category = json_encode($cats);				
+					}else{
+						$category = "";
+					}			
 					$post_data = array(
 						feed => array(
 							active => $active,
@@ -747,7 +800,8 @@ function dispatcher($params){
 							posts_per_update => $_POST[ 'limit' ],
 							url => $url,
 							custom_options => array(
-								category => get_cat_name( $_POST[ 'category' ] ),
+								//category => get_cat_name( $_POST[ 'category' ] ),
+								category => $category,
 								publish => (bool)( $_POST[ 'publish' ] )
 							),
 							update_frequency => 60 * $_POST[ 'schedule' ]
