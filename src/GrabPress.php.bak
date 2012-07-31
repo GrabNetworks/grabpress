@@ -179,7 +179,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		static $feed_message = 'Fields marked with a * are required.';
 		static function create_feed(){
 			if( self::validate_key() ) {
-				$categories = rawurlencode( $_POST[ 'channel' ] );
+				$categories = rawurlencode($_POST[ 'channel' ]);
 				$keywords_and = rawurlencode( $_POST[ 'keyword' ] );
 				$json = GrabPress::get_json( 'http://catalog.grabnetworks.com/catalogs/1/categories' );
 				$list = json_decode( $json );
@@ -190,7 +190,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					if($name == $_POST['channel']){
 						$cat_id = $id;
 					}
-				}				
+				}		
 				$providers = $_POST['provider'];
 				$providersList = implode(",", $providers); 
 				$providersListTotal = count($providers); // Total providers chosen by the user

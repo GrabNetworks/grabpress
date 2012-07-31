@@ -179,7 +179,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		static $feed_message = 'Fields marked with a * are required.';
 		static function create_feed(){
 			if( self::validate_key() ) {
-				$categories = get_cat_name($_POST[ 'category' ]);
+				$categories = rawurlencode($_POST[ 'channel' ]);
 				$keywords_and = rawurlencode( $_POST[ 'keyword' ] );
 				$json = GrabPress::get_json( 'http://catalog.grabnetworks.com/catalogs/1/categories' );
 				$list = json_decode( $json );
@@ -190,7 +190,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					if($name == $_POST['channel']){
 						$cat_id = $id;
 					}
-				}				
+				}		
 				$providers = $_POST['provider'];
 				$providersList = implode(",", $providers); 
 				$providersListTotal = count($providers); // Total providers chosen by the user
@@ -729,7 +729,7 @@ function dispatcher($params){
 			case 'modify':
 					$feed_id = $_POST["feed_id"];
 					$keywords_and = htmlspecialchars($_POST["keywords_and"]);
-					$category = get_cat_name($_POST["category"]);
+					$categories = rawurlencode($_POST[ 'channel' ]);
 					$providers = $_POST['provider'];
 					$providersList = implode(",", $providers);
 					$providersListTotal = count($providers); // Total providers chosen by the user
@@ -737,7 +737,7 @@ function dispatcher($params){
 					if($providersListTotal == $providers_total){
 						$providersList = "";
 					}
-					$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$category.'&order=DESC&order_by=created_at&providers='.$providersList;
+					$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 					$connector_id = GrabPress::get_connector_id();	
 					$active	= (bool)$_POST["active"];				
 					$post_data = array(
