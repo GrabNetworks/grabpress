@@ -867,4 +867,7 @@ if(! function_exists( 'grabpress_plugin_menu')){
 }
 add_action('admin_menu', 'grabpress_plugin_menu' );
 GrabPress::allow_tags();
-
+if(! isset( $allowedposttags[ 'script' ] ) ) { $allowedposttags[ 'script' ] = array(); }
+$allowedposttags[ 'script' ][ 'type' ] = array();
+$allowedposttags[ 'script' ][ 'language' ] = array();
+$allowedposttags[ 'script' ][ 'src' ] = array();

@@ -462,7 +462,11 @@ if( ! class_exists( 'GrabPress' ) ) {
 				  	 	toggleButton(id);      
 					 }
 				  }).multiselectfilter();
-				    
+				  
+				  jQuery(".channel-select").selectmenu();
+				  jQuery(".schedule-select").selectmenu();
+				  jQuery(".limit-select").selectmenu();
+				
 				});
 				
 			</script>
@@ -483,7 +487,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<tr>
 							<th scope="row">Video Channel</th>
 							<td>
-								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select">
+								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select">
 									<option selected = "selected" value = "">Choose One</option>
 									<?php 	
 										$json = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/categories');
@@ -509,7 +513,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		        		        <tr valign="top">
 							<th scope="row">Max Results</th>
 		        		           	<td>
-								<select name="limit" id="limit-select">
+								<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
 									<?php for ($o = 1; $o < 6; $o++) {
 										echo "<option value = \"$o\">$o</option>\n";
 									 } ?>
@@ -520,7 +524,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		        		        <tr valign="top">
 							<th scope="row">Schedule</th>
 		        		           	<td>
-								<select name="schedule" id="schedule-select">
+								<select name="schedule" id="schedule-select" class="schedule-select" style="width:60px;" >
 									<?php $times = array( '15m', '30m', '45m', '1h', '2h', '6h', '12h', '24h' );
 										for ($o = 0; $o < count( $times ); $o++) {
 											$time = $times[$o];
@@ -633,7 +637,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 									echo '<input '.$checked.' type="checkbox" onchange="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
 								?>
 						<td>
-							<select  name="channel" id="channel-select" onchange="toggleButton(<?php echo $feedId; ?>)" >
+							<select  name="channel" id="channel-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="channel-select" >
 								<?php 	
 									$json = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/categories');
 									$list = json_decode($json);
@@ -651,7 +655,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
 						</td>
 						<td>
-							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)">
+							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:60px;">
 								<?php 
 									$times = array( '15m', '30m', '45m', '1h', '2h',  '6h', '12h', '24h' );
 									$values = array(  15,  30,  45, 60, 120, 360, 720, 1440 );
@@ -666,7 +670,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						</td>
 
 						<td>
-							<select name="limit" id="limit-select" onchange="toggleButton(<?php echo $feedId; ?>)">
+							<select name="limit" id="limit-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="limit-select" style="width:60px;" >
 									<?php for ($o = 1; $o < 6; $o++) {
 										$selected = ( $o == $feed->posts_per_update )? 'selected = "selected"' : '';
 										echo '<option '.$selected.' value = "'.$o.'">'.$o.'</option>\n';
@@ -826,6 +830,10 @@ function WPWall_StylesAction()
 	wp_enqueue_style('jquery-ui-custom-prettify', $wp_wall_plugin_url.'/assets/prettify.css');
 	wp_enqueue_style('jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" ');
 	wp_enqueue_style('jquery-ui-custom-filter', $wp_wall_plugin_url.'/jquery.multiselect.filter.css');
+
+	wp_enqueue_style('jquery-uicorecss', $wp_wall_plugin_url.'/themes/base/jquery.ui.core.css');
+	//wp_enqueue_style('jquery-uithemecss', $wp_wall_plugin_url.'/themes/base/jquery.ui.theme.css');
+	wp_enqueue_style('jquery-uiselectmenucss', $wp_wall_plugin_url.'/themes/base/jquery.ui.selectmenu.css');
 }
 
 add_action('wp_print_scripts', 'WPWall_ScriptsAction');
@@ -839,6 +847,12 @@ function WPWall_ScriptsAction()
 	wp_enqueue_script('jquery-ui-filter', $wp_wall_plugin_url.'/src/jquery.multiselect.filter.min.js');	
 	wp_enqueue_script('jquery-prettify', $wp_wall_plugin_url.'/src/assets/prettify.js');
 	wp_enqueue_script('jquery-ui-multiselect', $wp_wall_plugin_url.'/src/jquery.multiselect.min.js');
+
+	wp_enqueue_script('jquery-uicore', $wp_wall_plugin_url.'/ui/jquery.ui.core.js');
+	wp_enqueue_script('jquery-uiwidget', $wp_wall_plugin_url.'/ui/jquery.ui.widget.js');
+	wp_enqueue_script('jquery-uiposition', $wp_wall_plugin_url.'/ui/jquery.ui.position.js');
+
+	wp_enqueue_script('jquery-ui-selectmenu', $wp_wall_plugin_url.'/ui/jquery.ui.selectmenu.js');
 }
 
 register_activation_hook( __FILE__, array( GrabPress, 'setup') );
