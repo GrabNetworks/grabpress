@@ -373,7 +373,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 			<script language = "JavaScript" type = "text/javascript">
 				( function ( global, $ ) {
 					global.previewVideos = function () {
-						console.log('preview');
 						var keywords =  $( '#keyword-input' ).val();
 						var category =  $( '#channel-select').val();
 						var limit =  $( '#limit-select').val() ; 
