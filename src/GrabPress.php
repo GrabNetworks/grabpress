@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com
 Description: Configure Grab's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
-Version: 0.0.1b2
+Version: 0.0.1b3
 Author: Grab Media
 Author URI: http://www.grab-media.com/publisher/solutions/autoposter
 License: GPL2
@@ -75,6 +75,17 @@ if( ! class_exists( 'GrabPress' ) ) {
 			}            			
 			$allowedposttags[ 'param' ][ 'name' ] = array();      			
 			$allowedposttags[ 'param' ][ 'value' ] = array(); 
+			
+			if(! isset( $allowedposttags[ 'script' ] ) ) { 
+				$allowedposttags[ 'script' ] = array(); 
+			}
+			$allowedposttags[ 'script' ][ 'type' ] = array();
+			$allowedposttags[ 'script' ][ 'language' ] = array();
+			$allowedposttags[ 'script' ][ 'src' ] = array();
+			
+			if(! isset( $allowedposttags[ 'style' ] ) ) {
+				 $allowedposttags[ 'script' ] = array(); 
+			}
 		}
 		static function getApiLocation() {
 			if ($_SERVER["SERVER_ADDR"] == "127.0.0.1"){
@@ -237,7 +248,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			if( $api_key != '' ){
 				$validate_json = self::apiCall("GET", "/user/validate?api_key=".$api_key);
 				$validate_data = json_decode( $validate_json );
-				if (  $validate_data -> error ) {
+				if (  isset( $validate_data -> error ) ) {
 					return self::create_API_connection();
 				}else {
 					self::$api_key = $api_key;
@@ -263,16 +274,17 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$user_nicename = 'grabpress';
 	        $user_login = $user_nicename;
 			$url_array = explode(  '/', $user_url );
-			$email_host =  $url_array[ 2 ];
+			$email_host =  substr( $url_array[ 2 ], 4, 13);
+			var_dump($email_host);
 			$email_dir = $url_array[ 3 ];
-	        $user_email = $user_nicename.'.'.$email_dir.'+'.rand().'@'.$email_host;//rand().
+	        $user_email = $email_dir.'+'.rand().'@'.$email_host;//rand().
 			$display_name	= 'GrabPress';
 			$nickname 	= 'GrabPress';
 			$first_name 	= 'Grab';
 			$last_name	= 'Press';
 			$post_data = array( 
 				'user' => array(
-						'first_name' => $first_name,
+					'first_name' => $first_name,
 					'last_name' => $last_name,
 					'email' => $user_email
 				)
@@ -281,17 +293,25 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$user_data = json_decode( $user_json );
            
 		$api_key = $user_data -> user -> access_key;
-		if ( $api_key ) {//store api key
-			update_option( 'grabpress_key', $api_key );
+		if ( $api_key ) {
+			update_option( 'grabpress_key', $api_key );//store api key
 		}
-		self::$api_key = get_option( 'grabpress_key' );
 		if(! isset( self::$api_key ) ){
-			self::abort('Error retrieving API Key');
+			self::abort('Error retrieving API Key');//unless storing failed
 		}
-		//keep user up-to-date
+		self::$api_key = get_option( 'grabpress_key' );//retreive api key from storage
+		/*
+		 * Keep user up to date with API info
+		 */
 		$description = 'Bringing you the best media on the Web.';
 		$role = 'author';// minimum for auto-publish (author)
-		$user_data = get_userdatabylogin($user_login);
+		if( function_exists( get_user_by ) ){
+			get_user_by( 'login', $user_login );
+		}else if ( function_exists( get_userbylogin ) ){
+			get_userbylogin( $user_login );
+		}else{
+			self::abort('No get_user function.');
+		}
 		if ($user_data){// user exists, hash password to keep data up-to-date
 			$msg = 'User Exists ('.$user_login.'): '.$user_data->ID;
 			$user = array(
@@ -308,11 +328,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 				description => $description,
 				role => $role
 			);
-			$user_id = @wp_update_user($user);
-	        }else{// user doesnt exist, store password with new data.
+	    }else{// user doesnt exist, store password with new data.
 			$user = array(
-                		user_login => $user_login,
-	                	user_nicename => $user_nicename,
+               	user_login => $user_login,
+	            user_nicename => $user_nicename,
 				user_url => $user_url,
 				user_email => $user_email,
 				display_name => $display_name,
@@ -323,8 +342,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 				description => $description,
 				role => $role
 			);
-			$user_id = @wp_insert_user( $user );
 		}
+		$user_id = wp_update_user($user);
 		if(! isset($user_id) ){
 			self::abort('Error creating user.');
 		}
@@ -854,12 +873,12 @@ function WPWall_ScriptsAction()
 	wp_enqueue_script('jquery-ui-selectmenu', $wp_wall_plugin_url.'/ui/jquery.ui.selectmenu.js');
 }
 
-register_activation_hook( __FILE__, array( GrabPress, 'setup') );
-register_uninstall_hook(__FILE__, array( GrabPress, 'delete_connector') );
+register_activation_hook( __FILE__, array( 'GrabPress', 'setup') );
+register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector') );
 if(! function_exists( 'grabpress_plugin_menu')){
 	function grabpress_plugin_menu() {
-		add_menu_page('GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( GrabPress, 'grabpress_plugin_options' ), plugin_dir_url( __FILE__ ).'g.png', 10 );
-		add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( GrabPress, 'grabpress_plugin_options' ));
+		add_menu_page('GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'grabpress_plugin_options' ), plugin_dir_url( __FILE__ ).'g.png', 10 );
+		add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'grabpress_plugin_options' ));
 		global $submenu;
 		unset($submenu['grabpress'][0]);
 		$feeds = GrabPress::get_feeds();
@@ -880,7 +899,3 @@ if(! function_exists( 'grabpress_plugin_menu')){
 }
 add_action('admin_menu', 'grabpress_plugin_menu' );
 GrabPress::allow_tags();
-if(! isset( $allowedposttags[ 'script' ] ) ) { $allowedposttags[ 'script' ] = array(); }
-$allowedposttags[ 'script' ][ 'type' ] = array();
-$allowedposttags[ 'script' ][ 'language' ] = array();
-$allowedposttags[ 'script' ][ 'src' ] = array();
