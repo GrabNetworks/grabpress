@@ -421,15 +421,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 				  	 }
 				};
 
-				var multiSelectOptionsCategories = {
-				  	 noneSelectedText:"Select categories",
-				  	 selectedText: "# of # selected"
-				};
-
 				jQuery(function(){
 				  jQuery('#provider-select option').attr('selected', 'selected');
 
-				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();	  		  
+				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();				  		  
 
 				  jQuery(".provider-select-update").multiselect(multiSelectOptions, {
 				  	 uncheckAll: function(e, ui){
@@ -462,13 +457,20 @@ if( ! class_exists( 'GrabPress' ) ) {
 					}
 				  });
 
-				  jQuery("#cat").multiselect(multiSelectOptionsCategories,
-				  {
-				  	header:false
-				  });
+				  	var multiSelectOptionsCategories = {
+					  	 noneSelectedText:"Select categories",
+					  	 selectedText:function(selectedCount, totalCount){
+							if (totalCount==selectedCount){
+					  	 		return "All categories selected";
+					  	 	}else{
+					  	 		return selectedCount + " categories selected of " + totalCount;
+					  	 	}
+					  	 }
+					};
+
+				  jQuery("#cat").multiselect(multiSelectOptionsCategories).multiselectfilter();
 
 				  jQuery(".postcats").multiselect(multiSelectOptionsCategories, {
-				  	header:false,
 				  	uncheckAll: function(e, ui){
 				  	 	id = this.id.replace('postcats-','');	
 				  	 	toggleButton(id);      
