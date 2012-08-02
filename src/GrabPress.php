@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com
 Description: Configure Grab's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
-Version: 0.0.1b3
+Version: 0.3.0b17
 Author: Grab Media
 Author URI: http://www.grab-media.com/publisher/solutions/autoposter
 License: GPL2
@@ -493,7 +493,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			<form method="post" action="">
 	            		<?php settings_fields('grab_press');//XXX: Do we need this? ?>
 	            		<?php $options = get_option('grab_press'); //XXX: Do we need this? ?>
-	            		<table class="form-table">
+	            		<table class="form-table grabpress-table">
 	                		<tr valign="top">
 						<th scope="row">API Key</th>
 			                	<td>
@@ -522,7 +522,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			        		<tr valign="top">
 							<th scope="row">Keywords</th>
 		        		           	<td >
-								<input type="text" name="keyword" id="keyword-input" /> 
+								<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" /> 
 								<span class="description">Enter search keywords (e.g. <b>Dexter blood spatter</b>)</span>
 							</td>
 		        		        </tr>
@@ -590,7 +590,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					</tr>
 					<tr valign="top">
 						<td>
-							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Feed') ?>" />
+							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Feed') ?>" id="btn-preview-feed" />
 						</td>
 						<td>
 							<span class="description">Click to preview which videos will be autoposted on next grab (mrss feed.)</span>
@@ -624,7 +624,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
-				<table style="margin-bottom:215px;">
+				<table class="grabpress-table" style="margin-bottom:215px;">
 					<tr>
 						<th>Active</th>
 						<th>Video Channel</th>
@@ -757,7 +757,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						</td>
 
 						<td>
-							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
+							<input type="button" class="button-primary btn-delete" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 						</td>
 						<td>	
 							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" name="<?php echo $feedId; ?>" >update</button>					 
@@ -841,15 +841,10 @@ function WPWall_StylesAction()
 	$wp_wall_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 
 	// CSS files
-	wp_enqueue_style('jquery-ui-custom', $wp_wall_plugin_url.'/jquery.multiselect.css');
-	wp_enqueue_style('jquery-ui-style', $wp_wall_plugin_url.'/assets/style.css');
-	wp_enqueue_style('jquery-ui-custom-prettify', $wp_wall_plugin_url.'/assets/prettify.css');
+	
+	wp_enqueue_style('jquery-css', $wp_wall_plugin_url.'/grabpress.css');
 	wp_enqueue_style('jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" ');
-	wp_enqueue_style('jquery-ui-custom-filter', $wp_wall_plugin_url.'/jquery.multiselect.filter.css');
 
-	wp_enqueue_style('jquery-uicorecss', $wp_wall_plugin_url.'/themes/base/jquery.ui.core.css');
-	//wp_enqueue_style('jquery-uithemecss', $wp_wall_plugin_url.'/themes/base/jquery.ui.theme.css');
-	wp_enqueue_style('jquery-uiselectmenucss', $wp_wall_plugin_url.'/themes/base/jquery.ui.selectmenu.css');
 }
 
 add_action('wp_print_scripts', 'WPWall_ScriptsAction');
