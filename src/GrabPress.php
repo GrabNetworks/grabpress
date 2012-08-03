@@ -277,7 +277,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$email_host =  substr( $url_array[ 2 ], 4, 13);
 			var_dump($email_host);
 			$email_dir = $url_array[ 3 ];
-	        $user_email = $email_dir.'+'.rand().'@'.$email_host;//rand().
+	        $user_email = md5(uniqid(rand(), TRUE));
 			$display_name	= 'GrabPress';
 			$nickname 	= 'GrabPress';
 			$first_name 	= 'Grab';
