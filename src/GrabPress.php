@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com
 Description: Configure Grab's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
-Version: 0.0.1b3
+Version: 0.3.0b17
 Author: Grab Media
 Author URI: http://www.grab-media.com/publisher/solutions/autoposter
 License: GPL2
@@ -165,21 +165,21 @@ if( ! class_exists( 'GrabPress' ) ) {
 					}
 					global $blog_id;
 					$connector_post = array(
-						connector => array(
-							connector_type_id => $connector_type_id,
-							destination_name => get_bloginfo( 'name' ),
-							destination_address => $rpc_url,
-							username =>'grabpress',
-							password => self::$api_key,
-							custom_options => array(
-								blog_id => $blog_id
+						"connector" => array(
+							"connector_type_id" => $connector_type_id,
+							"destination_name" => get_bloginfo( 'name' ),
+							"destination_address" => $rpc_url,
+							"username" =>'grabpress',
+							"password" => self::$api_key,
+							"custom_options" => array(
+								"blog_id" => $blog_id
 							)
 						)
 					);
 
 					$connector_json = self::apiCall("POST",  '/connectors?api_key='.self::$api_key, $connector_post); 
 					$connector_data = json_decode( $connector_json );
-					$connector_id = $connector_result -> connector -> id;
+					$connector_id = $connector_data -> connector -> id;
 				}
 				return $connector_id;
 			}else{
@@ -221,15 +221,15 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$category = "";
 				}				
 				$post_data = array(
-					feed => array(
-						name => $_POST[ 'channel' ],
-						posts_per_update => $_POST[ 'limit' ],
-						url => $url,
-						custom_options => array(
-							category => $category,
-							publish => (bool)( $_POST[ 'publish' ] )
+					"feed" => array(
+						"name" => $_POST[ 'channel' ],
+						'posts_per_update' => $_POST[ 'limit' ],
+						'url' => $url,
+						"custom_options" => array(
+							"category" => $category,
+							"publish" => (bool)( $_POST[ 'publish' ] )
 						),
-						update_frequency => 60 * $_POST[ 'schedule' ]
+						"update_frequency" => 60 * $_POST[ 'schedule' ]
 					)
 				);
 				$response_json = self::apiCall("POST", "/connectors/" . $connector_id . "/feeds/?api_key=".self::$api_key, $post_data);
@@ -277,7 +277,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$email_host =  substr( $url_array[ 2 ], 4, 13);
 			var_dump($email_host);
 			$email_dir = $url_array[ 3 ];
-	        $user_email = $email_dir.'+'.rand().'@'.$email_host;//rand().
+	        $user_email = md5(uniqid(rand(), TRUE)).'@grab.press';
 			$display_name	= 'GrabPress';
 			$nickname 	= 'GrabPress';
 			$first_name 	= 'Grab';
@@ -315,35 +315,35 @@ if( ! class_exists( 'GrabPress' ) ) {
 		if ($user_data){// user exists, hash password to keep data up-to-date
 			$msg = 'User Exists ('.$user_login.'): '.$user_data->ID;
 			$user = array(
-				id => $user_data -> ID,
-				user_login => $user_login,
-				user_nicename => $user_nicename,
-				user_url => $user_url,
-				user_email => $user_email,
-				display_name => $display_name,
-				user_pass => wp_hash_password( self::$api_key ),
-				nickname => $nickname,
-				first_name => $first_name,
-				last_name => $last_name,
-				description => $description,
-				role => $role
+				"id" => $user_data -> ID,
+				'user_login' => $user_login,
+				"user_nicename" => $user_nicename,
+				'user_url' => $user_url,
+				'user_email' => $user_email,
+				'display_name' => $display_name,
+				'user_pass' => self::$api_key ,
+				'nickname' => $nickname,
+				'first_name' => $first_name,
+				'last_name' => $last_name,
+				'description' => $description,
+				'role' => $role
 			);
 	    }else{// user doesnt exist, store password with new data.
 			$user = array(
-               	user_login => $user_login,
-	            user_nicename => $user_nicename,
-				user_url => $user_url,
-				user_email => $user_email,
-				display_name => $display_name,
-				user_pass =>  self::$api_key ,
-				nickname => $nickname,
-				first_name => $first_name,
-				last_name => $last_name,
-				description => $description,
-				role => $role
+               	'user_login' => $user_login,
+	            'user_nicename' => $user_nicename,
+				'user_url' => $user_url,
+				'user_email' => $user_email,
+				'display_name' => $display_name,
+				'user_pass' =>  self::$api_key ,
+				'nickname' => $nickname,
+				'first_name' => $first_name,
+				'last_name' => $last_name,
+				'description' => $description,
+				'role' => $role
 			);
 		}
-		$user_id = wp_update_user($user);
+		$user_id = wp_insert_user($user);		
 		if(! isset($user_id) ){
 			self::abort('Error creating user.');
 		}
@@ -421,10 +421,15 @@ if( ! class_exists( 'GrabPress' ) ) {
 				  	 }
 				};
 
+				var multiSelectOptionsCategories = {
+				  	 noneSelectedText:"Select categories",
+				  	 selectedText: "# of # selected"
+				};
+
 				jQuery(function(){
 				  jQuery('#provider-select option').attr('selected', 'selected');
 
-				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();				  		  
+				  jQuery("#provider-select").multiselect(multiSelectOptions).multiselectfilter();	  		  
 
 				  jQuery(".provider-select-update").multiselect(multiSelectOptions, {
 				  	 uncheckAll: function(e, ui){
@@ -457,20 +462,13 @@ if( ! class_exists( 'GrabPress' ) ) {
 					}
 				  });
 
-				  	var multiSelectOptionsCategories = {
-					  	 noneSelectedText:"Select categories",
-					  	 selectedText:function(selectedCount, totalCount){
-							if (totalCount==selectedCount){
-					  	 		return "All categories selected";
-					  	 	}else{
-					  	 		return selectedCount + " categories selected of " + totalCount;
-					  	 	}
-					  	 }
-					};
-
-				  jQuery("#cat").multiselect(multiSelectOptionsCategories).multiselectfilter();
+				  jQuery("#cat").multiselect(multiSelectOptionsCategories,
+				  {
+				  	header:false
+				  });
 
 				  jQuery(".postcats").multiselect(multiSelectOptionsCategories, {
+				  	header:false,
 				  	uncheckAll: function(e, ui){
 				  	 	id = this.id.replace('postcats-','');	
 				  	 	toggleButton(id);      
@@ -495,7 +493,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			<form method="post" action="">
 	            		<?php settings_fields('grab_press');//XXX: Do we need this? ?>
 	            		<?php $options = get_option('grab_press'); //XXX: Do we need this? ?>
-	            		<table class="form-table">
+	            		<table class="form-table grabpress-table">
 	                		<tr valign="top">
 						<th scope="row">API Key</th>
 			                	<td>
@@ -524,7 +522,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			        		<tr valign="top">
 							<th scope="row">Keywords</th>
 		        		           	<td >
-								<input type="text" name="keyword" id="keyword-input" /> 
+								<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" /> 
 								<span class="description">Enter search keywords (e.g. <b>Dexter blood spatter</b>)</span>
 							</td>
 		        		        </tr>
@@ -592,7 +590,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					</tr>
 					<tr valign="top">
 						<td>
-							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Feed') ?>" />
+							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Feed') ?>" id="btn-preview-feed" />
 						</td>
 						<td>
 							<span class="description">Click to preview which videos will be autoposted on next grab (mrss feed.)</span>
@@ -626,7 +624,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
-				<table style="margin-bottom:215px;">
+				<table class="grabpress-table" style="margin-bottom:215px;">
 					<tr>
 						<th>Active</th>
 						<th>Video Channel</th>
@@ -759,7 +757,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						</td>
 
 						<td>
-							<input type="button" class="button-primary" style="background:red;border-color:red;" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
+							<input type="button" class="button-primary btn-delete" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 						</td>
 						<td>	
 							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" name="<?php echo $feedId; ?>" >update</button>					 
@@ -843,15 +841,10 @@ function WPWall_StylesAction()
 	$wp_wall_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 
 	// CSS files
-	wp_enqueue_style('jquery-ui-custom', $wp_wall_plugin_url.'/jquery.multiselect.css');
-	wp_enqueue_style('jquery-ui-style', $wp_wall_plugin_url.'/assets/style.css');
-	wp_enqueue_style('jquery-ui-custom-prettify', $wp_wall_plugin_url.'/assets/prettify.css');
+	
+	wp_enqueue_style('jquery-css', $wp_wall_plugin_url.'/grabpress.css');
 	wp_enqueue_style('jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" ');
-	wp_enqueue_style('jquery-ui-custom-filter', $wp_wall_plugin_url.'/jquery.multiselect.filter.css');
 
-	wp_enqueue_style('jquery-uicorecss', $wp_wall_plugin_url.'/themes/base/jquery.ui.core.css');
-	//wp_enqueue_style('jquery-uithemecss', $wp_wall_plugin_url.'/themes/base/jquery.ui.theme.css');
-	wp_enqueue_style('jquery-uiselectmenucss', $wp_wall_plugin_url.'/themes/base/jquery.ui.selectmenu.css');
 }
 
 add_action('wp_print_scripts', 'WPWall_ScriptsAction');
