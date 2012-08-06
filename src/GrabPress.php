@@ -406,8 +406,13 @@ if( ! class_exists( 'GrabPress' ) ) {
 				function deleteFeed(id){
 					var form = jQuery('#form-'+id);
 					var action = jQuery('#action-'+id);
-					action.val("delete");
-					form.submit();
+					var answer = confirm('Are you sure you want to delete the feed? You will no longer receive automatic posts with the specified settings.');
+  					if(answer){
+  						action.val("delete");
+						form.submit();
+  					} else{
+  						return false;
+  					}
 				}
 
 				var multiSelectOptions = {
