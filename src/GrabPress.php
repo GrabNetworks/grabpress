@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: GrabPress
-Plugin URI: http://www.grab-media.com
-Description: Configure Grab's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
-Version: 0.3.0b21.1
+Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
+Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
+Version: 0.4.0b21.1
 Author: Grab Media
-Author URI: http://www.grab-media.com/publisher/solutions/autoposter
+Author URI: http://www.grab-media.com
 License: GPL2
 */
 /*  Copyright 2012  Grab Networks Holdings, Inc.  (email : licensing@grab-media.com)
@@ -187,7 +187,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				return false;
 			}
 		}
-		static $feed_message = 'Fields marked with a * are required.';
+		static $feed_message = 'Fields marked with an asterisk * are required.';
 		static function create_feed(){
 			if( self::validate_key() ) {
 				$categories = rawurlencode($_POST[ 'channel' ]);
@@ -528,7 +528,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 							<th scope="row">Keywords</th>
 		        		           	<td >
 								<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" /> 
-								<span class="description">Enter search keywords (e.g. <b>Dexter blood spatter</b>)</span>
+								<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
 							</td>
 		        		        </tr>
 		        		        <tr valign="top">
@@ -598,12 +598,12 @@ if( ! class_exists( 'GrabPress' ) ) {
 							<input type="button" onclick="previewVideos()" class="button-secondary" value="<?php _e('Preview Feed') ?>" id="btn-preview-feed" />
 						</td>
 						<td>
-							<span class="description">Click to preview which videos will be autoposted on next grab (mrss feed.)</span>
+							<span class="description">Click to preview which videos will be autoposted from this feed</span>
 						</td>
 					</tr>
 					<tr valign="top">
 						<td>
-							<input type="submit" class="button-primary" value="<?php _e('Grab Videos') ?>" id="create-feed-btn" />
+							<input type="submit" class="button-primary" value="<?php _e('Create Feed') ?>" id="create-feed-btn" />
 						</td>
 						<td>
 							<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
