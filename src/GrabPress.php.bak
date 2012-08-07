@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com
 Description: Configure Grab's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
-Version: 0.0.1b3
+Version: 0.3.0b21.1
 Author: Grab Media
 Author URI: http://www.grab-media.com/publisher/solutions/autoposter
 License: GPL2
@@ -84,7 +84,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$allowedposttags[ 'script' ][ 'src' ] = array();
 			
 			if(! isset( $allowedposttags[ 'style' ] ) ) {
-				 $allowedposttags[ 'script' ] = array(); 
+				 $allowedposttags[ 'style' ] = array(); 
 			}
 		}
 		static function getApiLocation() {
@@ -165,21 +165,21 @@ if( ! class_exists( 'GrabPress' ) ) {
 					}
 					global $blog_id;
 					$connector_post = array(
-						connector => array(
-							connector_type_id => $connector_type_id,
-							destination_name => get_bloginfo( 'name' ),
-							destination_address => $rpc_url,
-							username =>'grabpress',
-							password => self::$api_key,
-							custom_options => array(
-								blog_id => $blog_id
+						"connector" => array(
+							"connector_type_id" => $connector_type_id,
+							"destination_name" => get_bloginfo( 'name' ),
+							"destination_address" => $rpc_url,
+							"username" =>'grabpress',
+							"password" => self::$api_key,
+							"custom_options" => array(
+								"blog_id" => $blog_id
 							)
 						)
 					);
 
 					$connector_json = self::apiCall("POST",  '/connectors?api_key='.self::$api_key, $connector_post); 
 					$connector_data = json_decode( $connector_json );
-					$connector_id = $connector_result -> connector -> id;
+					$connector_id = $connector_data -> connector -> id;
 				}
 				return $connector_id;
 			}else{
@@ -221,15 +221,15 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$category = "";
 				}				
 				$post_data = array(
-					feed => array(
-						name => $_POST[ 'channel' ],
-						posts_per_update => $_POST[ 'limit' ],
-						url => $url,
-						custom_options => array(
-							category => $category,
-							publish => (bool)( $_POST[ 'publish' ] )
+					"feed" => array(
+						"name" => $_POST[ 'channel' ],
+						'posts_per_update' => $_POST[ 'limit' ],
+						'url' => $url,
+						"custom_options" => array(
+							"category" => $category,
+							"publish" => (bool)( $_POST[ 'publish' ] )
 						),
-						update_frequency => 60 * $_POST[ 'schedule' ]
+						"update_frequency" => 60 * $_POST[ 'schedule' ]
 					)
 				);
 				$response_json = self::apiCall("POST", "/connectors/" . $connector_id . "/feeds/?api_key=".self::$api_key, $post_data);
@@ -277,7 +277,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			$email_host =  substr( $url_array[ 2 ], 4, 13);
 			var_dump($email_host);
 			$email_dir = $url_array[ 3 ];
-	        $user_email = $email_dir.'+'.rand().'@'.$email_host;//rand().
+	        $user_email = md5(uniqid(rand(), TRUE)).'@grab.press';
 			$display_name	= 'GrabPress';
 			$nickname 	= 'GrabPress';
 			$first_name 	= 'Grab';
@@ -315,35 +315,35 @@ if( ! class_exists( 'GrabPress' ) ) {
 		if ($user_data){// user exists, hash password to keep data up-to-date
 			$msg = 'User Exists ('.$user_login.'): '.$user_data->ID;
 			$user = array(
-				id => $user_data -> ID,
-				user_login => $user_login,
-				user_nicename => $user_nicename,
-				user_url => $user_url,
-				user_email => $user_email,
-				display_name => $display_name,
-				user_pass => wp_hash_password( self::$api_key ),
-				nickname => $nickname,
-				first_name => $first_name,
-				last_name => $last_name,
-				description => $description,
-				role => $role
+				"id" => $user_data -> ID,
+				'user_login' => $user_login,
+				"user_nicename" => $user_nicename,
+				'user_url' => $user_url,
+				'user_email' => $user_email,
+				'display_name' => $display_name,
+				'user_pass' => self::$api_key ,
+				'nickname' => $nickname,
+				'first_name' => $first_name,
+				'last_name' => $last_name,
+				'description' => $description,
+				'role' => $role
 			);
 	    }else{// user doesnt exist, store password with new data.
 			$user = array(
-               	user_login => $user_login,
-	            user_nicename => $user_nicename,
-				user_url => $user_url,
-				user_email => $user_email,
-				display_name => $display_name,
-				user_pass =>  self::$api_key ,
-				nickname => $nickname,
-				first_name => $first_name,
-				last_name => $last_name,
-				description => $description,
-				role => $role
+               	'user_login' => $user_login,
+	            'user_nicename' => $user_nicename,
+				'user_url' => $user_url,
+				'user_email' => $user_email,
+				'display_name' => $display_name,
+				'user_pass' =>  self::$api_key ,
+				'nickname' => $nickname,
+				'first_name' => $first_name,
+				'last_name' => $last_name,
+				'description' => $description,
+				'role' => $role
 			);
 		}
-		$user_id = wp_update_user($user);
+		$user_id = wp_insert_user($user);		
 		if(! isset($user_id) ){
 			self::abort('Error creating user.');
 		}
@@ -841,6 +841,8 @@ function WPWall_StylesAction()
 	$wp_wall_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 
 	// CSS files
+	
+	wp_enqueue_style('jquery-css', $wp_wall_plugin_url.'/grabpress.css');
 	wp_enqueue_style('jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" ');
 
 }
