@@ -211,22 +211,26 @@ if( ! class_exists( 'GrabPress' ) ) {
 				}
 				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 				$connector_id = self::get_connector_id();			
-				$category_list = $_POST[ 'category' ];
-				if(isset($category_list)){	
+				$category_list = $_POST[ 'category' ];	
+				$category_length = count($category_list);
+				if(isset($category_list)){						
 					foreach ($category_list as $cat) {
-						$cats[] = get_cat_name($cat);
-					}
-					$category = json_encode($cats);				
+						if($category_length == 1){
+							$cats = get_cat_name($cat);
+						}else{
+							$cats[] = get_cat_name($cat);
+						}			
+					}				
 				}else{
-					$category = "";
-				}				
+					$cats = "Uncategorized";
+				}	
 				$post_data = array(
 					"feed" => array(
 						"name" => $_POST[ 'channel' ],
 						'posts_per_update' => $_POST[ 'limit' ],
 						'url' => $url,
 						"custom_options" => array(
-							"category" => $category,
+							"category" => $cats,
 							"publish" => (bool)( $_POST[ 'publish' ] )
 						),
 						"update_frequency" => 60 * $_POST[ 'schedule' ]
@@ -275,7 +279,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 	        $user_login = $user_nicename;
 			$url_array = explode(  '/', $user_url );
 			$email_host =  substr( $url_array[ 2 ], 4, 13);
-			var_dump($email_host);
 			$email_dir = $url_array[ 3 ];
 	        $user_email = md5(uniqid(rand(), TRUE)).'@grab.press';
 			$display_name	= 'GrabPress';
@@ -476,7 +479,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 				  jQuery('#create-feed-btn').bind('click', function(e){
 				  	var isValid = validateRequiredFields();
 				  	var form = jQuery('#form-create-feed');
-				  	alert(isValid);
 					if(isValid){				
 						form.submit();
 					}else{
@@ -736,11 +738,16 @@ if( ! class_exists( 'GrabPress' ) ) {
 						</td>
 						<td>
 							<?php 		
-								if($feed->custom_options->category != ""){
-									$category_list = json_decode($feed->custom_options->category);
+								$category_list_length = count($feed->custom_options->category);
+								if(isset($feed->custom_options->category)){
+									if($category_list_length == 1){
+										$category_list = explode("\\r\\n", $feed->custom_options->category);									
+									}else{
+										$category_list = $feed->custom_options->category;
+									}									
 								}else{
-									$category_list = "";
-								}								
+									$category_list = str_split("Uncategorized");
+								}														
 								$category_ids = get_all_category_ids();
 								$args = array( 'echo' => 0, 
 										'taxonomy' => 'category', 
@@ -840,14 +847,20 @@ function dispatcher($params){
 					$active	= (bool)$_POST['active'];
 
 					$category_list = $_POST[ 'category' ];
-					if(isset($category_list)){	
+
+					$category_length = count($category_list);
+					if(isset($category_list)){						
 						foreach ($category_list as $cat) {
-							$cats[] = get_cat_name($cat);
-						}	
-						$category = json_encode($cats);				
+							if($category_length == 1){
+								$cats = get_cat_name($cat);
+							}else{
+								$cats[] = get_cat_name($cat);
+							}			
+						}				
 					}else{
-						$category = "";
-					}			
+						$cats = "Uncategorized";
+					}
+
 					$post_data = array(
 						feed => array(
 							active => $active,
@@ -855,7 +868,7 @@ function dispatcher($params){
 							posts_per_update => $_POST[ 'limit' ],
 							url => $url,
 							custom_options => array(
-								category => $category,
+								category => $cats,
 								publish => (bool)( $_POST[ 'publish' ] )
 							),
 							update_frequency => 60 * $_POST[ 'schedule' ]
