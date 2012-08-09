@@ -432,6 +432,12 @@ if( ! class_exists( 'GrabPress' ) ) {
   						return false;
   					}
 				}
+				
+				function previewFeed(id) {
+					var keywords =  jQuery( '#keywords_and_'+id ).val();
+					var category =  jQuery( '#channel-select-'+id).val();				
+					window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );											
+				}
 
 				var multiSelectOptions = {
 				  	 noneSelectedText:"Select providers",
@@ -672,6 +678,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<th>Post Category</th>
 						<th>Providers</th>
 						<th>Delete</th>
+						<th>Preview Feed</th>
+						<th></th>						
 					</tr>
 				<?php for ($n = 0; $n < $num_feeds; $n++ ) { 
 					$feed = $feeds[$n]->feed;
@@ -705,7 +713,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 								</select>
 						</td>
 						<td>	
-								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
+								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>		
 						</td>
 						<td>
 							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:60px;">
@@ -801,7 +809,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<td>
 							<input type="button" class="button-primary btn-delete" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 						</td>
-						<td>	
+						<td>								
+							<input type="button" onclick="previewFeed(<?php echo $feedId; ?>)" class="button-secondary" value="<?php _e('View Feed') ?>" id="btn-preview-feed" />
+						</td>
+						<td>
 							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" name="<?php echo $feedId; ?>" >update</button>					 
 						</td>
 
