@@ -635,7 +635,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					</tr>
 					<tr valign="top">
 						<td>
-							<input type="submit" class="button-primary" value="<?php _e('Create Feed') ?>" id="create-feed-btn" />
+							<input type="submit" class="button-primary hide" value="<?php _e('Create Feed') ?>" id="create-feed-btn" />
 						</td>
 						<td>
 							<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
