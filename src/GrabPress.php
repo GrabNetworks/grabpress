@@ -896,6 +896,7 @@ function dispatcher($params){
 					}else{
 						$cats = "Uncategorized";
 					}
+					$schedule = $_POST['schedule'];
 					if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
 						$update_frequency = 60 * $schedule;
 					}else{
