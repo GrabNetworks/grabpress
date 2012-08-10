@@ -28,6 +28,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress{
 		static $api_key;
 		static $invalid = false;
+		static $environment = 'grabnetworks'; // or 'grabqa'
 		/**
  * Generic function to show a message to the user using WP's 
  * standard CSS classes to make use of the already-defined
@@ -37,7 +38,7 @@ if( ! class_exists( 'GrabPress' ) ) {
  * @param $errormsg If true, the message is an error, so use 
  * the red message style. If false, the message is a status 
   * message, so use the yellow information message style.
- */
+ */	
 		static function showMessage($message, $errormsg = false)
 		{
 			if ($errormsg) {
@@ -192,7 +193,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			if( self::validate_key() ) {
 				$categories = rawurlencode($_POST[ 'channel' ]);
 				$keywords_and = rawurlencode( $_POST[ 'keyword' ] );
-				$json = GrabPress::get_json( 'http://catalog.grabnetworks.com/catalogs/1/categories' );
+				$json = GrabPress::get_json( 'http://catalog.'.self::$environment.'.com/catalogs/1/categories' );
 				$list = json_decode( $json );
 				foreach ( $list as $record ) {
 			   		$category = $record -> category;
@@ -209,7 +210,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				if($providersListTotal == $providers_total){
 					$providersList = "";
 				}
-				$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+				$url = 'http://catalog.'.self::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 				$connector_id = self::get_connector_id();			
 				$category_list = $_POST[ 'category' ];	
 				$category_length = count($category_list);
@@ -394,7 +395,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			<h3>Create Feed</h3>
 			<?php 				
 				// List of all providers
-				$json_provider = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/providers?limit=-1');
+				$json_provider = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1');
 				$list_provider = json_decode($json_provider);
 				$providers_total = count($list_provider);
 			?>
@@ -418,7 +419,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						var limit =  $( '#limit-select').val();
 						var isValid = validateRequiredFields();
 						if(isValid){
-							window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );						
+							window.open( 'http://catalog.'+<?php echo GrabPress::$environment; ?>+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );						
 						}						
 					}	
 				} )( window, jQuery );	
@@ -442,7 +443,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				function previewFeed(id) {
 					var keywords =  jQuery( '#keywords_and_'+id ).val();
 					var category =  jQuery( '#channel-select-'+id).val();				
-					window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );											
+					window.open( 'http://catalog.'+<?php echo GrabPress::$environment; ?>+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );											
 				}
 
 				var multiSelectOptions = {
@@ -555,7 +556,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" onchange="showButtons()">
 									<option selected = "selected" value = "">Choose One</option>
 									<?php 	
-										$json = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/categories');
+										$json = GrabPress::get_json('http://catalog.'.self::$environment.'.com/catalogs/1/categories');
 										$list = json_decode($json);
 										foreach ($list as $record) {
 									   		$category = $record -> category;
@@ -706,7 +707,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<td>
 							<select  name="channel" id="channel-select-<?php echo $feedId; ?>" onchange="toggleButton(<?php echo $feedId; ?>)" class="channel-select" >
 								<?php 	
-									$json = GrabPress::get_json('http://catalog.grabnetworks.com/catalogs/1/categories');
+									$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');
 									$list = json_decode($json);
 									foreach ($list as $record) {
 								   		$category = $record -> category;
@@ -858,7 +859,7 @@ function dispatcher($params){
 					if($providersListTotal == $providers_total){
 						$providersList = "";
 					}
-					$url = 'http://catalog.grabnetworks.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 					$connector_id = GrabPress::get_connector_id();	
 					$active	= (bool)$_POST['active'];
 
