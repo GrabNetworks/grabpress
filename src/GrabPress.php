@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: GrabPress
-Plugin URI: http://www.grab-media.com
-Description: Configure Grab's Autoposter software to deliver fresh video direct to your Blog. Requires a Grab Media Publisher account.
-Version: 0.3.0b22
+Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
+Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
+Version: 0.4.0b28
 Author: Grab Media
-Author URI: http://www.grab-media.com/publisher/solutions/autoposter
+Author URI: http://www.grab-media.com
 License: GPL2
 */
 /*  Copyright 2012  Grab Networks Holdings, Inc.  (email : licensing@grab-media.com)
@@ -110,7 +110,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		function apiCall($method, $resource, $data=array()){
 			$json = json_encode( $data );
 			$apiLocation = self::getApiLocation();			
-			$location = "http://".$apiLocation.$resource;			
+			$location = "http://".$apiLocation.$resource;
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -187,7 +187,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				return false;
 			}
 		}
-		static $feed_message = 'Fields marked with a * are required.';
+		static $feed_message = 'Fields marked with an asterisk * are required.';
 		static function create_feed(){
 			if( self::validate_key() ) {
 				$categories = rawurlencode($_POST[ 'channel' ]);
@@ -223,7 +223,13 @@ if( ! class_exists( 'GrabPress' ) ) {
 					}				
 				}else{
 					$cats = "Uncategorized";
-				}	
+				}					
+				$schedule = $_POST['schedule'];
+				if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
+					$update_frequency = 60 * $schedule;
+				}else{
+					$update_frequency = $schedule;
+				}				
 				$post_data = array(
 					"feed" => array(
 						"name" => $_POST[ 'channel' ],
@@ -233,7 +239,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 							"category" => $cats,
 							"publish" => (bool)( $_POST[ 'publish' ] )
 						),
-						"update_frequency" => 60 * $_POST[ 'schedule' ]
+						"update_frequency" => $update_frequency
 					)
 				);
 				$response_json = self::apiCall("POST", "/connectors/" . $connector_id . "/feeds/?api_key=".self::$api_key, $post_data);
@@ -432,6 +438,12 @@ if( ! class_exists( 'GrabPress' ) ) {
   						return false;
   					}
 				}
+				
+				function previewFeed(id) {
+					var keywords =  jQuery( '#keywords_and_'+id ).val();
+					var category =  jQuery( '#channel-select-'+id).val();				
+					window.open( 'http://catalog.grabnetworks.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );											
+				}
 
 				var multiSelectOptions = {
 				  	 noneSelectedText:"Select providers",
@@ -560,7 +572,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 							<th scope="row">Keywords</th>
 		        		           	<td >
 								<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" /> 
-								<span class="description">Enter search keywords (e.g. <b>Dexter blood spatter</b>)</span>
+								<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
 							</td>
 		        		        </tr>
 		        		        <tr valign="top">
@@ -630,12 +642,12 @@ if( ! class_exists( 'GrabPress' ) ) {
 							<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e('Preview Feed') ?>" id="btn-preview-feed" />
 						</td>
 						<td>
-							<span class="description hide">Click to preview which videos will be autoposted on next grab (mrss feed.)</span>
+							<span class="description">Click to preview which videos will be autoposted from this feed</span>
 						</td>
 					</tr>
 					<tr valign="top">
 						<td>
-							<input type="button" class="button-primary hide" value="<?php _e('Grab Videos') ?>" id="create-feed-btn" />
+							<input type="submit" class="button-primary hide" value="<?php _e('Create Feed') ?>" id="create-feed-btn" />
 						</td>
 						<td>
 							<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
@@ -672,6 +684,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<th>Post Category</th>
 						<th>Providers</th>
 						<th>Delete</th>
+						<th>Preview Feed</th>
+						<th></th>						
 					</tr>
 				<?php for ($n = 0; $n < $num_feeds; $n++ ) { 
 					$feed = $feeds[$n]->feed;
@@ -705,7 +719,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 								</select>
 						</td>
 						<td>	
-								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and"/>		
+								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>		
 						</td>
 						<td>
 							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:60px;">
@@ -801,10 +815,12 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<td>
 							<input type="button" class="button-primary btn-delete" value="<?php _e('X') ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 						</td>
-						<td>	
+						<td>								
+							<input type="button" onclick="previewFeed(<?php echo $feedId; ?>)" class="button-secondary" value="<?php _e('View Feed') ?>" id="btn-preview-feed" />
+						</td>
+						<td>
 							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" name="<?php echo $feedId; ?>" >update</button>					 
 						</td>
-
 					</tr>	
 					</form>				
 				<?php } ?>				
@@ -860,7 +876,11 @@ function dispatcher($params){
 					}else{
 						$cats = "Uncategorized";
 					}
-
+					if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
+						$update_frequency = 60 * $schedule;
+					}else{
+						$update_frequency = $schedule;
+					}	
 					$post_data = array(
 						feed => array(
 							active => $active,
@@ -871,7 +891,7 @@ function dispatcher($params){
 								category => $cats,
 								publish => (bool)( $_POST[ 'publish' ] )
 							),
-							update_frequency => 60 * $_POST[ 'schedule' ]
+							update_frequency => $update_frequency
 						)
 					);		
 					GrabPress::apiCall("PUT", "/connectors/" . $connector_id . "/feeds/".$feed_id."?api_key=".GrabPress::$api_key, $post_data);	
@@ -888,11 +908,9 @@ function WPWall_StylesAction()
 	// Plugin url
 	$wp_wall_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 
-	// CSS files
-	
+	// CSS files	
 	wp_enqueue_style('jquery-css', $wp_wall_plugin_url.'/grabpress.css');
 	wp_enqueue_style('jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" ');
-
 }
 
 add_action('wp_print_scripts', 'WPWall_ScriptsAction');
@@ -906,11 +924,9 @@ function WPWall_ScriptsAction()
 	wp_enqueue_script('jquery-ui-filter', $wp_wall_plugin_url.'/src/jquery.multiselect.filter.min.js');	
 	wp_enqueue_script('jquery-prettify', $wp_wall_plugin_url.'/src/assets/prettify.js');
 	wp_enqueue_script('jquery-ui-multiselect', $wp_wall_plugin_url.'/src/jquery.multiselect.min.js');
-
 	wp_enqueue_script('jquery-uicore', $wp_wall_plugin_url.'/ui/jquery.ui.core.js');
 	wp_enqueue_script('jquery-uiwidget', $wp_wall_plugin_url.'/ui/jquery.ui.widget.js');
 	wp_enqueue_script('jquery-uiposition', $wp_wall_plugin_url.'/ui/jquery.ui.position.js');
-
 	wp_enqueue_script('jquery-ui-selectmenu', $wp_wall_plugin_url.'/ui/jquery.ui.selectmenu.js');
 }
 
