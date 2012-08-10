@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.4.0b27
+Version: 0.4.0b28
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -110,7 +110,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		function apiCall($method, $resource, $data=array()){
 			$json = json_encode( $data );
 			$apiLocation = self::getApiLocation();			
-			$location = "http://".$apiLocation.$resource;			
+			$location = "http://".$apiLocation.$resource;
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -223,7 +223,13 @@ if( ! class_exists( 'GrabPress' ) ) {
 					}				
 				}else{
 					$cats = "Uncategorized";
-				}	
+				}					
+				$schedule = $_POST['schedule'];
+				if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
+					$update_frequency = 60 * $schedule;
+				}else{
+					$update_frequency = $schedule;
+				}				
 				$post_data = array(
 					"feed" => array(
 						"name" => $_POST[ 'channel' ],
@@ -233,7 +239,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 							"category" => $cats,
 							"publish" => (bool)( $_POST[ 'publish' ] )
 						),
-						"update_frequency" => 60 * $_POST[ 'schedule' ]
+						"update_frequency" => $update_frequency
 					)
 				);
 				$response_json = self::apiCall("POST", "/connectors/" . $connector_id . "/feeds/?api_key=".self::$api_key, $post_data);
@@ -815,7 +821,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<td>
 							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" name="<?php echo $feedId; ?>" >update</button>					 
 						</td>
-
 					</tr>	
 					</form>				
 				<?php } ?>				
@@ -871,7 +876,11 @@ function dispatcher($params){
 					}else{
 						$cats = "Uncategorized";
 					}
-
+					if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
+						$update_frequency = 60 * $schedule;
+					}else{
+						$update_frequency = $schedule;
+					}	
 					$post_data = array(
 						feed => array(
 							active => $active,
@@ -882,7 +891,7 @@ function dispatcher($params){
 								category => $cats,
 								publish => (bool)( $_POST[ 'publish' ] )
 							),
-							update_frequency => 60 * $_POST[ 'schedule' ]
+							update_frequency => $update_frequency
 						)
 					);		
 					GrabPress::apiCall("PUT", "/connectors/" . $connector_id . "/feeds/".$feed_id."?api_key=".GrabPress::$api_key, $post_data);	
@@ -899,11 +908,9 @@ function WPWall_StylesAction()
 	// Plugin url
 	$wp_wall_plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 
-	// CSS files
-	
+	// CSS files	
 	wp_enqueue_style('jquery-css', $wp_wall_plugin_url.'/grabpress.css');
 	wp_enqueue_style('jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" ');
-
 }
 
 add_action('wp_print_scripts', 'WPWall_ScriptsAction');
@@ -917,11 +924,9 @@ function WPWall_ScriptsAction()
 	wp_enqueue_script('jquery-ui-filter', $wp_wall_plugin_url.'/src/jquery.multiselect.filter.min.js');	
 	wp_enqueue_script('jquery-prettify', $wp_wall_plugin_url.'/src/assets/prettify.js');
 	wp_enqueue_script('jquery-ui-multiselect', $wp_wall_plugin_url.'/src/jquery.multiselect.min.js');
-
 	wp_enqueue_script('jquery-uicore', $wp_wall_plugin_url.'/ui/jquery.ui.core.js');
 	wp_enqueue_script('jquery-uiwidget', $wp_wall_plugin_url.'/ui/jquery.ui.widget.js');
 	wp_enqueue_script('jquery-uiposition', $wp_wall_plugin_url.'/ui/jquery.ui.position.js');
-
 	wp_enqueue_script('jquery-ui-selectmenu', $wp_wall_plugin_url.'/ui/jquery.ui.selectmenu.js');
 }
 
