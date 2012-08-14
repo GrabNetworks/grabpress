@@ -424,8 +424,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 						var category =  $( '#channel-select').val();
 						var limit =  $( '#limit-select').val();
 						var isValid = validateRequiredFields();
-						if(isValid){
-							window.open( 'http://catalog.'+<?php echo GrabPress::$environment; ?>+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );						
+						var environment = "<?php echo GrabPress::$environment; ?>";
+						if(isValid){							
+							window.open( 'http://catalog.'+environment+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );						
 						}						
 					}	
 				} )( window, jQuery );	
@@ -448,8 +449,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 				
 				function previewFeed(id) {
 					var keywords =  jQuery( '#keywords_and_'+id ).val();
-					var category =  jQuery( '#channel-select-'+id).val();				
-					window.open( 'http://catalog.'+<?php echo GrabPress::$environment; ?>+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );											
+					var category =  jQuery( '#channel-select-'+id).val();
+					var environment = "<?php echo GrabPress::$environment; ?>";										
+					window.open( 'http://catalog.'+environment+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );										
 				}
 
 				var multiSelectOptions = {
