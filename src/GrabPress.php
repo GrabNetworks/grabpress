@@ -236,6 +236,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 				}else{
 					$auto_play = $_POST['click-to-play'];
 				}
+
+				$author_id = (int)$_POST['author'];	
+
 				$post_data = array(
 					"feed" => array(
 						"name" => $_POST[ 'channel' ],
@@ -243,7 +246,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 						"url" => $url,
 						"custom_options" => array(
 							"category" => $cats,
-							"publish" => (bool)( $_POST[ 'publish' ] )
+							"publish" => (bool)( $_POST[ 'publish' ] ),
+							"author_id" => $author_id
 						),						
 						"update_frequency" => $update_frequency,
 						"auto_play" => $auto_play
@@ -404,6 +408,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				$json_provider = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1');
 				$list_provider = json_decode($json_provider);
 				$providers_total = count($list_provider);
+				$blogusers = get_users();
 			?>
 			<script language = "JavaScript" type = "text/javascript">
 				function validateRequiredFields() {					
@@ -449,9 +454,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 				
 				function previewFeed(id) {
 					var keywords =  jQuery( '#keywords_and_'+id ).val();
-					var category =  jQuery( '#channel-select-'+id).val();
-					var environment = "<?php echo GrabPress::$environment; ?>";										
-					window.open( 'http://catalog.'+environment+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );										
+					var category =  jQuery( '#channel-select-'+id).val();	
+					var environment = "<?php echo GrabPress::$environment; ?>";
+					window.open( 'http://catalog.'+environment+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );																				
 				}
 
 				var multiSelectOptions = {
@@ -539,7 +544,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 				  
 				  jQuery(".channel-select").selectmenu();
 				  jQuery(".schedule-select").selectmenu();
-				  jQuery(".limit-select").selectmenu();			
+				  jQuery(".limit-select").selectmenu();
+				  jQuery(".author-select").selectmenu();			
 				
 				});
 				
@@ -635,6 +641,23 @@ if( ! class_exists( 'GrabPress' ) ) {
 					</tr>
 					</tr>
 		        		<tr valign="top">
+						<th scope="row">Post Author</th>
+						<td>
+							<select name="author" id="author_id" class="author-select" >
+								<!--<option selected="selected" value = "">Choose One</option>-->
+								<?php
+									foreach ($blogusers as $user) {
+										$author_name = $user->display_name;
+										$author_id = $user->ID;										
+								   		echo '<option value = "'.$author_id.'">'.$author_name.'</option>\n';
+									} 
+								?>
+							</select>
+							<span class="description">Select the default Wordpress user to credit as author of the posts from this feed</span>
+						</td>
+					</tr>
+					</tr>
+		        		<tr valign="top">
 						<th scope="row">Providers</th>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" />	
@@ -697,7 +720,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 						<th>Max Results</th>
 						<th>Publish</th>
 						<th>Click to Play</th>
-						<th>Post Category</th>
+						<th>Post Categories</th>
+						<th>Author</th>
 						<th>Providers</th>
 						<th>Delete</th>
 						<th>Preview Feed</th>
@@ -811,7 +835,20 @@ if( ! class_exists( 'GrabPress' ) ) {
                                 echo "</select>";				
 							?>
 						</td>
-
+						<td>
+							<select name="author" id="author-<?php echo $feedId; ?>" onchange="toggleButton(<?php echo $feedId; ?>);" class="author-select" >
+								<!--<option selected="selected" value = "">Choose One</option>-->
+								<?php
+									foreach ($blogusers as $user) {
+										$author_name = $user->display_name;
+										$author_id = $user->ID;
+										echo "CUSTOM OPTIONS ID: "; var_dump($feed->custom_options->author_id);
+										$selected = ($author_id == $feed->custom_options->author_id)  ? 'selected = "selected"' : '';									
+								   		echo '<option '.$selected.' value = "'.$author_id.'">'.$author_name.'</option>\n';
+									} 
+								?>
+							</select>
+						</td>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" />
 							<select name="provider[]" class="provider-select-update multiselect" id="provider-select-update-<?php echo $feedId; ?>" multiple="multiple" onchange="toggleButton(<?php echo $feedId; ?>);" >
@@ -909,6 +946,9 @@ function dispatcher($params){
 					}else{
 						$auto_play = $_POST['click-to-play'];
 					}
+
+					$author_id = (int)$_POST['author'];
+
 					$post_data = array(
 						"feed" => array(
 							"active" => $active,
@@ -917,12 +957,12 @@ function dispatcher($params){
 							"url" => $url,
 							"custom_options" => array(
 								"category" => $cats,
-								"publish" => (bool)( $_POST[ 'publish' ] )
+								"publish" => (bool)( $_POST[ 'publish' ] ),
+								"author_id" => $author_id
 							),
 							"auto_play" => (bool)( $_POST['auto_play'] ),
 							"update_frequency" => $update_frequency,
-							"auto_play" => $auto_play
-							
+							"auto_play" => $auto_play							
 						)
 					);	
 
