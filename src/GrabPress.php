@@ -28,7 +28,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress{
 		static $api_key;
 		static $invalid = false;
-		static $environment = 'grabnetworks'; // or 'grabqa'
+		static $environment = 'grabqa'; // or 'grabqa'
 		/**
  * Generic function to show a message to the user using WP's 
  * standard CSS classes to make use of the already-defined
