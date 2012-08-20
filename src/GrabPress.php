@@ -324,7 +324,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		 * Keep user up to date with API info
 		 */
 		$description = 'Bringing you the best media on the Web.';
-		$role = 'author';// minimum for auto-publish (author)
+		$role = 'editor';// minimum for auto-publish (author)
 		if( function_exists( get_user_by ) ){
 			get_user_by( 'login', $user_login );
 		}else if ( function_exists( get_userbylogin ) ){
