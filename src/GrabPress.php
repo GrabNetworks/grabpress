@@ -710,7 +710,7 @@ if( ! class_exists( 'GrabPress' ) ) {
                         }	
 			if( $active_feeds > 0 || $num_feeds > 0 ) {
 				$noun = 'feed';
-				if($active_feeds > 1 || $active_feeds == 1){
+				if($active_feeds > 1 || $active_feeds == 0){
 					$noun.='s';
 				}
 				GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
