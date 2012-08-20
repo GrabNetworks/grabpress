@@ -232,9 +232,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$update_frequency = $schedule;
 				}					
 				if($_POST['click-to-play'] === null){
-					$auto_play = "0";
+					$auto_play = "1";
 				}else{
-					$auto_play = $_POST['click-to-play'];
+					$auto_play = "0";	
 				}
 
 				$author_id = (int)$_POST['author'];	
@@ -792,8 +792,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 						</td>
 						<td>
 							<?php 
-								$checked = ( $feed->auto_play  ) ? ' checked = "checked"' : '';
-								echo '<input'.$checked.' type="checkbox" value="1" name="click-to-play" id="click-to-play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
+								$checked = ( $feed->auto_play  ) ? '' : ' checked = "checked"';
+								echo '<input'.$checked.' type="checkbox" value="0" name="click-to-play" id="click-to-play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>
@@ -942,9 +942,9 @@ function dispatcher($params){
 						$update_frequency = $schedule;
 					}	
 					if($_POST['click-to-play'] === null){
-						$auto_play = "0";
+						$auto_play = "1";
 					}else{
-						$auto_play = $_POST['click-to-play'];
+					        $auto_play = "0";	
 					}
 
 					$author_id = (int)$_POST['author'];
