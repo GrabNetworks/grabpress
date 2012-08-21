@@ -226,10 +226,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$cats = "Uncategorized";
 				}					
 				$schedule = $_POST['schedule'];
-				if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
+				if($schedule == "12 hrs"){
 					$update_frequency = 60 * $schedule;
 				}else{
-					$update_frequency = $schedule;
+					$update_frequency = 60 * 24 * $schedule;
 				}					
 				if($_POST['click-to-play'] === null){
 					$auto_play = "1";
@@ -604,8 +604,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 		        		        <tr valign="top">
 							<th scope="row">Schedule</th>
 		        		           	<td>
-								<select name="schedule" id="schedule-select" class="schedule-select" style="width:60px;" >
-									<?php $times = array( '15m', '30m', '45m', '1h', '2h', '6h', '12h', '24h' );
+								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
+									<?php $times = array( '12 hrs', '01 day', '02 days', '03 days');
 										for ($o = 0; $o < count( $times ); $o++) {
 											$time = $times[$o];
 											echo "<option value = \"$time\">$time</option>\n";
@@ -768,10 +768,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>		
 						</td>
 						<td>
-							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:60px;">
+							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:90px;">
 								<?php 
-									$times = array( '15m', '30m', '45m', '1h', '2h',  '6h', '12h', '24h' );
-									$values = array(  15,  30,  45, 60, 120, 360, 720, 1440 );
+									$times = array( '12 hrs', '01 day', '02 days', '03 days' );
+									$values = array(  720, 1440, 2880, 4320 );
 									for ( $o = 0; $o < count( $times ); $o++ ) {
 										$time = $times[$o];
 										$value = $values[$o];
@@ -942,10 +942,10 @@ function dispatcher($params){
 						$cats = "Uncategorized";
 					}
 					$schedule = $_POST['schedule'];
-					if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
+					if($schedule == "12 hrs"){
 						$update_frequency = 60 * $schedule;
 					}else{
-						$update_frequency = $schedule;
+						$update_frequency = 60 * 24 * $schedule;
 					}	
 					if($_POST['click-to-play'] === null){
 						$auto_play = "1";
