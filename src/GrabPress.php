@@ -4,7 +4,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.4.0b30
+Version: 0.4.1b30
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -242,15 +242,15 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$cats = "Uncategorized";
 				}					
 				$schedule = $_POST['schedule'];
-				if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
+				if($schedule == "12 hrs"){
 					$update_frequency = 60 * $schedule;
 				}else{
-					$update_frequency = $schedule;
+					$update_frequency = 60 * 24 * $schedule;
 				}					
 				if($_POST['click-to-play'] === null){
-					$auto_play = "0";
+					$auto_play = "1";
 				}else{
-					$auto_play = $_POST['click-to-play'];
+					$auto_play = "0";	
 				}
 
 				$author_id = (int)$_POST['author'];	
@@ -340,7 +340,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		 * Keep user up to date with API info
 		 */
 		$description = 'Bringing you the best media on the Web.';
-		$role = 'author';// minimum for auto-publish (author)
+		$role = 'editor';// minimum for auto-publish (author)
 		if( function_exists( get_user_by ) ){
 			get_user_by( 'login', $user_login );
 		}else if ( function_exists( get_userbylogin ) ){
@@ -417,6 +417,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 	}
 }//class
 }//ifndefclass
+
 function dispatcher($params){
 	if( count($_POST) > 0 ) {
 		switch ($params['action']){
@@ -462,15 +463,15 @@ function dispatcher($params){
 						$cats = "Uncategorized";
 					}
 					$schedule = $_POST['schedule'];
-					if(($schedule != "15m") && ($schedule != "30m") && ($schedule != "45m")){
+					if($schedule == "12 hrs"){
 						$update_frequency = 60 * $schedule;
 					}else{
-						$update_frequency = $schedule;
+						$update_frequency = 60 * 24 * $schedule;
 					}	
 					if($_POST['click-to-play'] === null){
-						$auto_play = "0";
+						$auto_play = "1";
 					}else{
-						$auto_play = $_POST['click-to-play'];
+					        $auto_play = "0";	
 					}
 
 					$author_id = (int)$_POST['author'];
