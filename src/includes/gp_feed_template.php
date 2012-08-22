@@ -205,8 +205,15 @@
 		        		        <tr valign="top">
 							<th scope="row">Schedule</th>
 		        		           	<td>
-								<select name="schedule" id="schedule-select" class="schedule-select" style="width:60px;" >
-									<?php $times = array( '15m', '30m', '45m', '1h', '2h', '6h', '12h', '24h' );
+								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
+									<?php 
+
+if(GrabPress::$environment == 'grabqa'){
+ $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+}
+else{
+ $times = array( '12 hrs', '01 day', '02 days', '03 days');
+}
 										for ($o = 0; $o < count( $times ); $o++) {
 											$time = $times[$o];
 											echo "<option value = \"$time\">$time</option>\n";
@@ -303,12 +310,22 @@
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count($feeds);
-			if( $num_feeds > 0 ) {
-				$noun = 'feed';
-				if($num_feeds > 1){
-					$noun.='s';
-				}
-				GrabPress::show_message('GrabPress Autoposter active with '.$num_feeds.' '.$noun.'.');
+		  	$active_feeds = 0;
+			for ($i=0; $i < $num_feeds; $i++){
+			 if($feeds[$i]->feed->active > 0){
+			  $active_feeds++; 
+			 }	
+			}
+			if( $active_feeds > 0 || $num_feeds > 0 ){
+			 $noun = 'feed';	
+			if( $active_feeds > 1 || $active_feeds == 0 ){
+			 $noun .= 's';
+			}		
+			if(GrabPress::$environment == 'grabqa'){		
+		GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);}
+			else{
+		GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
+			}
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
@@ -363,10 +380,17 @@
 								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>		
 						</td>
 						<td>
-							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:60px;">
+							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:90px;">
 								<?php 
-									$times = array( '15m', '30m', '45m', '1h', '2h',  '6h', '12h', '24h' );
-									$values = array(  15,  30,  45, 60, 120, 360, 720, 1440 );
+if(GrabPress::$environment == 'grabqa'){
+ $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+ $values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
+}
+else{
+ $times = array( '12 hrs', '01 day', '02 days', '03 days');
+ $values = array( 720, 1440, 2880, 4320 );
+}								
+
 									for ( $o = 0; $o < count( $times ); $o++ ) {
 										$time = $times[$o];
 										$value = $values[$o];
@@ -393,8 +417,8 @@
 						</td>
 						<td>
 							<?php 
-								$checked = ( $feed->auto_play  ) ? ' checked = "checked"' : '';
-								echo '<input'.$checked.' type="checkbox" value="1" name="click-to-play" id="click-to-play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
+								$checked = ( $feed->auto_play  ) ? '' : ' checked = "checked"';
+								echo '<input'.$checked.' type="checkbox" value="0" name="click-to-play" id="click-to-play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>

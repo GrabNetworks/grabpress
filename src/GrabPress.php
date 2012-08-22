@@ -159,7 +159,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						$connector_id = $connector -> id;
 					}
 				}
-				if(! $connector_id) {//create connector
+				if(! isset($connector_id)) {//create connector
 					$connector_types_json = self::api_call('GET',  '/connector_types?api_key='.self::$api_key );
 					$connector_types = json_decode( $connector_types_json );
 					for ( $n = 0; $n < count( $connector_types ); $n++ ) {
