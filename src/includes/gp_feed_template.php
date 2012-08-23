@@ -74,16 +74,23 @@
 				var multiSelectOptionsCategories = {
 				  	 noneSelectedText:"Select categories",
 				  	 selectedText: "# of # selected"
-				};			
-
-				function showButtons() {
-					var isValid = validateRequiredFields();
-					if(isValid){
-						jQuery('.hide').show();	
-					}								
-				}
+				};	
 
 				jQuery(function(){
+				   // Show "Preview Feed" and "Create Feed" buttons
+				   jQuery("#form-create-feed").bind("change", function() { 
+					   	if((jQuery('#channel-select').val() != '') && (jQuery("#provider-select :selected").length != 0)){
+							jQuery('.hide').show();
+						}else{
+							e.preventDefault();
+						}
+				   });
+				   jQuery("#form-create-feed input").keypress(function(e) {
+					    if(e.which == 13) {
+					        e.preventDefault();
+					    }
+					});
+
 				  jQuery('#provider-select option').attr('selected', 'selected');
 
 				  jQuery("#provider-select").multiselect(multiSelectOptions, {
@@ -168,7 +175,7 @@
 						<tr>
 							<th scope="row">Video Channel</th>
 							<td>
-								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" onchange="showButtons()">
+								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select">
 									<option selected = "selected" value = "">Choose One</option>
 									<?php 	
 										$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');
@@ -269,7 +276,7 @@ else{
 						<th scope="row">Providers</th>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" />	
-							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="showButtons()" >
+							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" >
 								<!--<option selected="selected" value = "">Choose One</option>-->
 								<?php
 									foreach ($list_provider as $record_provider) {
@@ -321,11 +328,13 @@ else{
 			if( $active_feeds > 1 || $active_feeds == 0 ){
 			 $noun .= 's';
 			}		
+			
 			if(GrabPress::$environment == 'grabqa'){		
-		GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);}
+				GrabPress::show_message('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);}
 			else{
-		GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
+				GrabPress::show_message('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
 			}
+			
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
