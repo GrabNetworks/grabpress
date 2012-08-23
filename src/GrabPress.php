@@ -421,10 +421,18 @@ if( ! class_exists( 'GrabPress' ) ) {
 		}
 	}
     static function render_feed_management(){
-  //   	if (!current_user_can('manage_options'))  {
+  		//if (!current_user_can('manage_options'))  {
 		// 	wp_die( __('You do not have sufficient permissions to access this page.') );
 		// }
 		print self::fetch('includes/gp_feed_template.php');
+	}
+	static function grabpress_preview_videos() {	
+		/*
+		if (!current_user_can('manage_options'))  {
+			wp_die( __('You do not have sufficient permissions to access this page.') );
+		}
+		*/
+		print self::fetch("includes/gp_preview_template.php", $_POST);
 	}
 	static function fetch($file = null, $data = array()) {
 		if(!$file) $file = $this->file;
@@ -515,6 +523,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 					self::apiCall('PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data);	
 					GrabPress::render_feed_management();
 					break;
+			     case 'preview-feed':
+                   GrabPress::grabpress_preview_videos();
+                   break;                          
+
 			default:
 				GrabPress::render_feed_management();
 				break;
