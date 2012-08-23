@@ -330,9 +330,9 @@ else{
 			}		
 			
 			if(GrabPress::$environment == 'grabqa'){		
-				GrabPress::show_message('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);}
+				GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);}
 			else{
-				GrabPress::show_message('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
+				GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
 			}
 			
 			?>
