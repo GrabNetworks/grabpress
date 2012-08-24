@@ -204,8 +204,14 @@
 		        		        <tr valign="top">
 							<th scope="row">Schedule</th>
 		        		           	<td>
-								<select name="schedule" id="schedule-select" class="schedule-select" style="width:60px;" >
-									<?php $times = array( '15m', '30m', '45m', '1h', '2h', '6h', '12h', '24h' );
+								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
+									<?php
+if(GrabPress::$environment == 'grabqa'){
+ $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+}
+else{
+ $times = array( '12 hrs', '01 day', '02 days', '03 days');
+} 
 										for ($o = 0; $o < count( $times ); $o++) {
 											$time = $times[$o];
 											echo "<option value = \"$time\">$time</option>\n";

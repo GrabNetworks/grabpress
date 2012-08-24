@@ -233,7 +233,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$cats = 'Uncategorized';
 				}					
 				$schedule = $_POST['schedule'];
-				if($schedule == '12 hrs'){
+				if(preg_match("/m/", $schedule)){
+					$update_frequency = $schedule;
+				}	
+				elseif(preg_match("/h/", $schedule)){
 					$update_frequency = 60 * $schedule;
 				}else{
 					$update_frequency = 60 * 24 * $schedule;
@@ -480,11 +483,15 @@ if( ! class_exists( 'GrabPress' ) ) {
 								$cats = 'Uncategorized';
 							}
 							$schedule = $_POST['schedule'];
-							if($schedule == '12 hrs'){
-								$update_frequency = 60 * $schedule;
-							}else{
-								$update_frequency = 60 * 24 * $schedule;
-							}	
+			                                if(preg_match("/m/", $schedule)){
+                        		                 $update_frequency = $schedule;
+                                			}
+                                			elseif(preg_match("/h/", $schedule)){
+                                        		 $update_frequency = 60 * $schedule;
+                                			}
+							else{
+                                        		 $update_frequency = 60 * 24 * $schedule;
+                                			}	
 							if($_POST['click-to-play$'] === null){
 								$auto_play = "1";
 							}else{
