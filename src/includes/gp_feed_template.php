@@ -375,10 +375,16 @@ else{
 								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>		
 						</td>
 						<td>
-							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:60px;">
+							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:90px;">
 								<?php 
-									$times = array( '15m', '30m', '45m', '1h', '2h',  '6h', '12h', '24h' );
-									$values = array(  15,  30,  45, 60, 120, 360, 720, 1440 );
+if(GrabPress::$environment == 'grabqa'){
+ $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+ $values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
+}
+else{
+ $times = array( '12 hrs', '01 day', '02 days', '03 days');
+ $values = array( 720, 1440, 2880, 4320 );
+} 
 									for ( $o = 0; $o < count( $times ); $o++ ) {
 										$time = $times[$o];
 										$value = $values[$o];
