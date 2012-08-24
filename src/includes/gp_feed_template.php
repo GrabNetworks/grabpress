@@ -1,65 +1,63 @@
-		<div class="wrap">
+<div class="wrap">
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 			<p>New video content delivered fresh to your blog.</p>
 			<h3>Create Feed</h3>
-			<?php
+			<?php 				
+
 				// List of all providers
 				$json_provider = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1');
 				$list_provider = json_decode($json_provider);
 				$providers_total = count($list_provider);
 				$blogusers = get_users();
 			?>
-			<script language = "JavaScript" type = "text/javascript">
-				function validateRequiredFields() {					
-					var category =  jQuery('#channel-select').val();
-					if(category == ''){						
-						alert("Please select at least one video channel");					  
-						e.preventDefault();
-					}else if(jQuery("#provider-select :selected").length == 0){						
-						alert("Please select at least one provider");					  
-						e.preventDefault();
-					}else {
-						return true;
-					}				
-				}
+			<script type="text/javascript">
 				( function ( global, $ ) {
+					global.hasValidationErrors = function () {
+						var category =  $('#channel-select').val();
+						if(category == ''){						
+							return "Please select at least one video channel";
+						}else if($("#provider-select :selected").length == 0){						
+							return "Please select at least one provider";					  
+						}else {
+							return false;
+						}
+					}
+
 					global.previewVideos = function () {
-						var keywords =  $( '#keyword-input' ).val();
-						var category =  $( '#channel-select').val();
-						var limit =  $( '#limit-select').val();
-						var isValid = validateRequiredFields();
+						var errors = hasValidationErrors();						
+						if(!errors){						
+							$("#form-create-feed input[name=action]").val("preview-feed");						
+							$("#form-create-feed").submit();
+						}else{
+							alert(errors);
+						}
+					}
 
-						var environment = "<?php echo GrabPress::$environment; ?>";
-						if(isValid){							
-							window.open( 'http://catalog.'+environment+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );						
-						}						
-					}	
-				} )( window, jQuery );	
+					global.toggleButton = function (feedId) {
+						$('#btn-update-' + feedId).css({"visibility":"visible"});
+					}
+		
+					global.deleteFeed = function(id){
+						var form = $('#form-'+id);
+						var action = $('#action-'+id);
+						var answer = confirm('Are you sure you want to delete the feed? You will no longer receive automatic posts with the specified settings.');
+	  					if(answer){
+	  						action.val("delete");
+							form.submit();
+	  					} else{
+	  						return false;
+	  					}
+					}
 
-			    function toggleButton(feedId) {
-					jQuery('#btn-update-' + feedId).css({"visibility":"visible"});
-				}
-
-				function deleteFeed(id){
-					var form = jQuery('#form-'+id);
-					var action = jQuery('#action-'+id);
-					var answer = confirm('Are you sure you want to delete the feed? You will no longer receive automatic posts with the specified settings.');
-  					if(answer){
-  						action.val("delete");
+					global.previewFeed = function(id) {			
+						var form = jQuery('#form-'+id);
+						var action = jQuery('#action-'+id);
+						action.val("preview-feed");
 						form.submit();
-  					} else{
-  						return false;
-  					}
-				}
-				
-				function previewFeed(id) {
-					var keywords =  jQuery( '#keywords_and_'+id ).val();
-					var category =  jQuery( '#channel-select-'+id).val();	
-					var environment = "<?php echo GrabPress::$environment; ?>";
-					window.open( 'http://catalog.'+environment+'.com/catalogs/1/videos/search.mrss?keywords_and=' + keywords + '&categories=' + category );																				
-				}
+					}
 
+				} )( window, jQuery );
 				var multiSelectOptions = {
 				  	 noneSelectedText:"Select providers",
 				  	 selectedText:function(selectedCount, totalCount){
@@ -74,88 +72,101 @@
 				var multiSelectOptionsCategories = {
 				  	 noneSelectedText:"Select categories",
 				  	 selectedText: "# of # selected"
-				};	
+				};			
 
-				jQuery(function(){
-				   // Show "Preview Feed" and "Create Feed" buttons
-				   jQuery("#form-create-feed").bind("change", function() { 
-					   	if((jQuery('#channel-select').val() != '') && (jQuery("#provider-select :selected").length != 0)){
-							jQuery('.hide').show();
+				function showButtons() {
+					//alert("entro a showButtons");
+					var errors = hasValidationErrors();
+					if(!errors){
+						jQuery('.hide').show();	
+					}else{
+						jQuery('.hide').hide();	
+					}
+				}
+				
+				jQuery(function($){
+					   $("#form-create-feed input[name=action]").val("update");	
+					   // Show "Preview Feed" and "Create Feed" buttons
+					   $("#form-create-feed").bind("change", function(e) { 
+						   	if(!hasValidationErrors()){
+								$('.hide').show();
+							}else{
+								e.preventDefault();
+								return false;
+							}
+					   });
+					   showButtons();
+					   $("#form-create-feed input").keypress(function(e) {
+						    if(e.which == 13) {
+						        e.preventDefault();
+						        return false;
+						    }
+						});
+
+					  $('#provider-select option').attr('selected', 'selected');
+					  $("#provider-select").multiselect(multiSelectOptions, {
+						 checkAll: function(e, ui){
+					  	 	//showButtons();      
+						 }
+					  }).multiselectfilter();	  		  
+
+					  $(".provider-select-update").multiselect(multiSelectOptions, {
+					  	 uncheckAll: function(e, ui){
+					  	 	id = this.id.replace('provider-select-update-',''); 	 	
+					  	 	toggleButton(id);      
+						 },
+						 checkAll: function(e, ui){
+					  	 	id = this.id.replace('provider-select-update-','');	
+					  	 	toggleButton(id);      
+						 }
+					   }).multiselectfilter();
+
+					  $('#create-feed-btn').bind('click', function(e){
+					  	var isValid = validateRequiredFields();
+					  	var form = $('#form-create-feed');
+						if(isValid){				
+							form.submit();
 						}else{
 							e.preventDefault();
 						}
-				   });
-				   jQuery("#form-create-feed input").keypress(function(e) {
-					    if(e.which == 13) {
-					        e.preventDefault();
-					    }
-					});
+					  });
 
-				  jQuery('#provider-select option').attr('selected', 'selected');
+					  $('.btn-update').bind('click', function(e){
+					    id = $(this).attr('name');		  
+						var form = $('#form-'+id);
+						var action = $('#action-'+id);
+						if($("#provider-select-update-" + id + " :selected").length == 0){						
+							alert("Please select at least one provider");					  
+							e.preventDefault();
+						}else{
+							action.val("modify");
+							form.submit();
+						}
+					  });
 
-				  jQuery("#provider-select").multiselect(multiSelectOptions, {
-					 checkAll: function(e, ui){
-				  	 	showButtons();      
-					 }
-				  }).multiselectfilter();	  		  
+					  $("#cat").multiselect(multiSelectOptionsCategories,
+					  {
+					  	header:false
+					  });
 
-				  jQuery(".provider-select-update").multiselect(multiSelectOptions, {
-				  	 uncheckAll: function(e, ui){
-				  	 	id = this.id.replace('provider-select-update-',''); 	 	
-				  	 	toggleButton(id);      
-					 },
-					 checkAll: function(e, ui){
-				  	 	id = this.id.replace('provider-select-update-','');	
-				  	 	toggleButton(id);      
-					 }
-				   }).multiselectfilter();
-
-				  jQuery('#create-feed-btn').bind('click', function(e){
-				  	var isValid = validateRequiredFields();
-				  	var form = jQuery('#form-create-feed');
-					if(isValid){				
-						form.submit();
-					}else{
-						e.preventDefault();
-					}
-				  });
-
-				  jQuery('.btn-update').bind('click', function(e){
-				    id = jQuery(this).attr('name');		  
-					var form = jQuery('#form-'+id);
-					var action = jQuery('#action-'+id);
-					if(jQuery("#provider-select-update-" + id + " :selected").length == 0){						
-						alert("Please select at least one provider");					  
-						e.preventDefault();
-					}else{
-						action.val("modify");
-						form.submit();
-					}
-				  });
-
-				  jQuery("#cat").multiselect(multiSelectOptionsCategories,
-				  {
-				  	header:false
-				  });
-
-				  jQuery(".postcats").multiselect(multiSelectOptionsCategories, {
-				  	header:false,
-				  	uncheckAll: function(e, ui){
-				  	 	id = this.id.replace('postcats-','');	
-				  	 	toggleButton(id);      
-					 },
-					 checkAll: function(e, ui){
-				  	 	id = this.id.replace('postcats-','');
-				  	 	toggleButton(id);      
-					 }
-				  }).multiselectfilter();
-				  
-				  jQuery(".channel-select").selectmenu();
-				  jQuery(".schedule-select").selectmenu();
-				  jQuery(".limit-select").selectmenu();
-				  jQuery(".author-select").selectmenu();			
-				
+					  $(".postcats").multiselect(multiSelectOptionsCategories, {
+					  	header:false,
+					  	uncheckAll: function(e, ui){
+					  	 	id = this.id.replace('postcats-','');	
+					  	 	toggleButton(id);      
+						 },
+						 checkAll: function(e, ui){
+					  	 	id = this.id.replace('postcats-','');
+					  	 	toggleButton(id);      
+						 }
+					  }).multiselectfilter();
+					  
+					  $(".channel-select").selectmenu();
+					  $(".schedule-select").selectmenu();
+					  $(".limit-select").selectmenu();
+					  $(".author-select").selectmenu();			
 				});
+		
 				
 			</script>
 			<?php 
@@ -163,6 +174,7 @@
 				$connector_id = GrabPress::get_connector_id();		
 			?>
 			<form method="post" action="" id="form-create-feed">
+				<input type="hidden"  name="action" value="update" />
 	            		<?php settings_fields('grab_press');//XXX: Do we need this? ?>
 	            		<?php $options = get_option('grab_press'); //XXX: Do we need this? ?>
 	            		<table class="form-table grabpress-table">
@@ -213,14 +225,14 @@
 							<th scope="row">Schedule</th>
 		        		           	<td>
 								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
-									<?php 
-
+<?php
 if(GrabPress::$environment == 'grabqa'){
  $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
 }
 else{
  $times = array( '12 hrs', '01 day', '02 days', '03 days');
 }
+
 										for ($o = 0; $o < count( $times ); $o++) {
 											$time = $times[$o];
 											echo "<option value = \"$time\">$time</option>\n";
@@ -237,9 +249,9 @@ else{
 							<span class="description">Leave this unchecked to moderate autoposts before they go live</span>
 						</td>
 						<tr valign="top">
-						<th scope="row">Click-to-Play Video</th>
+						<th scope="row">Click-to-play Video</th>
 						<td>
-							<input type="checkbox" value="1" name="click-to-play" id="click-to-play" />
+							<input type="checkbox" value="1" name="click_to_play" id="click_to_play" />
 							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#">learn more</a></span>
 						</td>
 					</tr>
@@ -259,7 +271,6 @@ else{
 						<th scope="row">Post Author</th>
 						<td>
 							<select name="author" id="author_id" class="author-select" >
-								<!--<option selected="selected" value = "">Choose One</option>-->
 								<?php
 									foreach ($blogusers as $user) {
 										$author_name = $user->display_name;
@@ -275,9 +286,8 @@ else{
 		        		<tr valign="top">
 						<th scope="row">Providers</th>
 						<td>
-							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" />	
-							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" >
-								<!--<option selected="selected" value = "">Choose One</option>-->
+							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" class="providers_total" />	
+							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="showButtons()" >
 								<?php
 									foreach ($list_provider as $record_provider) {
 								   		$provider = $record_provider->provider;
@@ -317,24 +327,12 @@ else{
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count($feeds);
-		  	$active_feeds = 0;
-			for ($i=0; $i < $num_feeds; $i++){
-			 if($feeds[$i]->feed->active > 0){
-			  $active_feeds++; 
-			 }	
-			}
-			if( $active_feeds > 0 || $num_feeds > 0 ){
-			 $noun = 'feed';	
-			if( $active_feeds > 1 || $active_feeds == 0 ){
-			 $noun .= 's';
-			}		
-			
-			if(GrabPress::$environment == 'grabqa'){		
-				GrabPress::show_message('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);}
-			else{
-				GrabPress::show_message('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
-			}
-			
+			if( $num_feeds > 0 ) {
+				$noun = 'feed';
+				if($num_feeds > 1){
+					$noun.='s';
+				}
+				GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' '.$noun.'.');
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
@@ -398,8 +396,7 @@ if(GrabPress::$environment == 'grabqa'){
 else{
  $times = array( '12 hrs', '01 day', '02 days', '03 days');
  $values = array( 720, 1440, 2880, 4320 );
-}								
-
+} 
 									for ( $o = 0; $o < count( $times ); $o++ ) {
 										$time = $times[$o];
 										$value = $values[$o];
@@ -426,8 +423,8 @@ else{
 						</td>
 						<td>
 							<?php 
-								$checked = ( $feed->auto_play  ) ? '' : ' checked = "checked"';
-								echo '<input'.$checked.' type="checkbox" value="0" name="click-to-play" id="click-to-play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
+								$checked = ( $feed->auto_play  ) ? ' checked = "checked"' : '';
+								echo '<input'.$checked.' type="checkbox" value="1" name="click_to_play" id="click_to_play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>
@@ -484,7 +481,7 @@ else{
 							</select>
 						</td>
 						<td>
-							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" />
+							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" />
 							<select name="provider[]" class="provider-select-update multiselect" id="provider-select-update-<?php echo $feedId; ?>" multiple="multiple" onchange="toggleButton(<?php echo $feedId; ?>);" >
 								<!--<option selected="selected" value = "">Choose One</option>-->
 								<?php
@@ -519,4 +516,5 @@ else{
 				<?php } ?>				
 				</table>
 			</div>
-		<?php } ?>
+			<div class="result"> </div>
+<?php } ?>
