@@ -242,7 +242,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				}else{
 					$update_frequency = 60 * 24 * $schedule;
 				}					
-				if($_POST['click-to-play'] === null){
+				if($_POST['click_to_play'] === null){
 					$auto_play = '1';
 				}else{
 					$auto_play = '0';	
@@ -501,7 +501,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					}else{
 						$update_frequency = 60 * 24 * $schedule;
 					}  
-					if($_POST['click-to-play$'] === null){
+					if($_POST['click_to_play'] === null){
 						$auto_play = "1";
 					}else{
 					    $auto_play = "0";

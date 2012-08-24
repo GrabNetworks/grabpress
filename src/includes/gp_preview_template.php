@@ -46,8 +46,8 @@
 </div>
 <script type="text/javascript">
 	jQuery(function(){
-		jQuery("#close-preview").click(function() {
-		  window.history.back();
+		jQuery("#close-preview").click(function() {		  
+		  window.history.back();		  	
 	  	});
 	});
 </script>

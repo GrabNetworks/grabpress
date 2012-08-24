@@ -11,54 +11,53 @@
 				$providers_total = count($list_provider);
 				$blogusers = get_users();
 			?>
-			<script type = "text/javascript">
-				function hasValidationErrors() {
-					var category =  jQuery('#channel-select').val();
-					if(category == ''){						
-						return "Please select at least one video channel";
-					}else if(jQuery("#provider-select :selected").length == 0){						
-						return "Please select at least one provider";					  
-					}else {
-						return false;
-					}				
-				}
+			<script type="text/javascript">
 				( function ( global, $ ) {
-					global.previewVideos = function () {
-						
-						var errors = hasValidationErrors();						
+					global.hasValidationErrors = function () {
+						var category =  $('#channel-select').val();
+						if(category == ''){						
+							return "Please select at least one video channel";
+						}else if($("#provider-select :selected").length == 0){						
+							return "Please select at least one provider";					  
+						}else {
+							return false;
+						}
+					}
 
+					global.previewVideos = function () {
+						var errors = hasValidationErrors();						
 						if(!errors){						
-							jQuery("#form-create-feed input[name=action]").val("preview-feed");
-							jQuery("#form-create-feed").submit();
+							$("#form-create-feed input[name=action]").val("preview-feed");						
+							$("#form-create-feed").submit();
 						}else{
 							alert(errors);
 						}
-					}	
-				} )( window, jQuery );	
+					}
 
-			    function toggleButton(feedId) {
-					jQuery('#btn-update-' + feedId).css({"visibility":"visible"});
-				}
+					global.toggleButton = function (feedId) {
+						$('#btn-update-' + feedId).css({"visibility":"visible"});
+					}
+		
+					global.deleteFeed = function(id){
+						var form = $('#form-'+id);
+						var action = $('#action-'+id);
+						var answer = confirm('Are you sure you want to delete the feed? You will no longer receive automatic posts with the specified settings.');
+	  					if(answer){
+	  						action.val("delete");
+							form.submit();
+	  					} else{
+	  						return false;
+	  					}
+					}
 
-				function deleteFeed(id){
-					var form = jQuery('#form-'+id);
-					var action = jQuery('#action-'+id);
-					var answer = confirm('Are you sure you want to delete the feed? You will no longer receive automatic posts with the specified settings.');
-  					if(answer){
-  						action.val("delete");
+					global.previewFeed = function(id) {			
+						var form = jQuery('#form-'+id);
+						var action = jQuery('#action-'+id);
+						action.val("preview-feed");
 						form.submit();
-  					} else{
-  						return false;
-  					}
-				}
-				
-				function previewFeed(id) {			
-					var form = jQuery('#form-'+id);
-					var action = jQuery('#action-'+id);
-					action.val("preview-feed");
-					form.submit();
-				}
+					}
 
+				} )( window, jQuery );
 				var multiSelectOptions = {
 				  	 noneSelectedText:"Select providers",
 				  	 selectedText:function(selectedCount, totalCount){
@@ -76,6 +75,7 @@
 				};			
 
 				function showButtons() {
+					//alert("entro a showButtons");
 					var errors = hasValidationErrors();
 					if(!errors){
 						jQuery('.hide').show();	
@@ -83,78 +83,90 @@
 						jQuery('.hide').hide();	
 					}
 				}
+				
+				jQuery(function($){
+					   $("#form-create-feed input[name=action]").val("update");	
+					   // Show "Preview Feed" and "Create Feed" buttons
+					   $("#form-create-feed").bind("change", function(e) { 
+						   	if(!hasValidationErrors()){
+								$('.hide').show();
+							}else{
+								e.preventDefault();
+								return false;
+							}
+					   });
+					   showButtons();
+					   $("#form-create-feed input").keypress(function(e) {
+						    if(e.which == 13) {
+						        e.preventDefault();
+						        return false;
+						    }
+						});
 
-				jQuery(function(){
-				  jQuery('#provider-select option').attr('selected', 'selected');
+					  $('#provider-select option').attr('selected', 'selected');
+					  $("#provider-select").multiselect(multiSelectOptions, {
+						 checkAll: function(e, ui){
+					  	 	//showButtons();      
+						 }
+					  }).multiselectfilter();	  		  
 
-				  jQuery("#provider-select").multiselect(multiSelectOptions, {
-					 checkAll: function(e, ui){
-				  	 	showButtons();      
-					 }
-				  }).multiselectfilter();	  		  
+					  $(".provider-select-update").multiselect(multiSelectOptions, {
+					  	 uncheckAll: function(e, ui){
+					  	 	id = this.id.replace('provider-select-update-',''); 	 	
+					  	 	toggleButton(id);      
+						 },
+						 checkAll: function(e, ui){
+					  	 	id = this.id.replace('provider-select-update-','');	
+					  	 	toggleButton(id);      
+						 }
+					   }).multiselectfilter();
 
-				  jQuery(".provider-select-update").multiselect(multiSelectOptions, {
-				  	 uncheckAll: function(e, ui){
-				  	 	id = this.id.replace('provider-select-update-',''); 	 	
-				  	 	toggleButton(id);      
-					 },
-					 checkAll: function(e, ui){
-				  	 	id = this.id.replace('provider-select-update-','');	
-				  	 	toggleButton(id);      
-					 }
-				   }).multiselectfilter();
+					  $('#create-feed-btn').bind('click', function(e){
+					  	var isValid = validateRequiredFields();
+					  	var form = $('#form-create-feed');
+						if(isValid){				
+							form.submit();
+						}else{
+							e.preventDefault();
+						}
+					  });
 
-				  jQuery('#create-feed-btn').bind('click', function(e){
-				  	var isValid = validateRequiredFields();
-				  	var form = jQuery('#form-create-feed');
-					if(isValid){				
-						form.submit();
-					}else{
-						e.preventDefault();
-					}
-				  });
+					  $('.btn-update').bind('click', function(e){
+					    id = $(this).attr('name');		  
+						var form = $('#form-'+id);
+						var action = $('#action-'+id);
+						if($("#provider-select-update-" + id + " :selected").length == 0){						
+							alert("Please select at least one provider");					  
+							e.preventDefault();
+						}else{
+							action.val("modify");
+							form.submit();
+						}
+					  });
 
-				  jQuery('.btn-update').bind('click', function(e){
-				    id = jQuery(this).attr('name');		  
-					var form = jQuery('#form-'+id);
-					var action = jQuery('#action-'+id);
-					if(jQuery("#provider-select-update-" + id + " :selected").length == 0){						
-						alert("Please select at least one provider");					  
-						e.preventDefault();
-					}else{
-						action.val("modify");
-						form.submit();
-					}
-				  });
+					  $("#cat").multiselect(multiSelectOptionsCategories,
+					  {
+					  	header:false
+					  });
 
-				  jQuery("#cat").multiselect(multiSelectOptionsCategories,
-				  {
-				  	header:false
-				  });
-
-				  jQuery(".postcats").multiselect(multiSelectOptionsCategories, {
-				  	header:false,
-				  	uncheckAll: function(e, ui){
-				  	 	id = this.id.replace('postcats-','');	
-				  	 	toggleButton(id);      
-					 },
-					 checkAll: function(e, ui){
-				  	 	id = this.id.replace('postcats-','');
-				  	 	toggleButton(id);      
-					 }
-				  }).multiselectfilter();
-				  
-				  jQuery(".channel-select").selectmenu();
-				  jQuery(".schedule-select").selectmenu();
-				  jQuery(".limit-select").selectmenu();
-				  jQuery(".author-select").selectmenu();
-
-				  //attach event to show preview/submit buttons.
-				  jQuery("#form-create-feed").bind("change", function(ev){
-				  	showButtons();
-				  });
-				  showButtons();//if we're entering this through history.back
+					  $(".postcats").multiselect(multiSelectOptionsCategories, {
+					  	header:false,
+					  	uncheckAll: function(e, ui){
+					  	 	id = this.id.replace('postcats-','');	
+					  	 	toggleButton(id);      
+						 },
+						 checkAll: function(e, ui){
+					  	 	id = this.id.replace('postcats-','');
+					  	 	toggleButton(id);      
+						 }
+					  }).multiselectfilter();
+					  
+					  $(".channel-select").selectmenu();
+					  $(".schedule-select").selectmenu();
+					  $(".limit-select").selectmenu();
+					  $(".author-select").selectmenu();			
 				});
+		
 				
 			</script>
 			<?php 
