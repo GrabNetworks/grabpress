@@ -434,7 +434,7 @@ else{
 						</td>
 						<td>
 							<?php 
-								$checked = ( $feed->auto_play  ) ? ' checked = "checked"' : '';
+								$checked = ( $feed->auto_play  ) ? '' : ' checked = "checked"';
 								echo '<input'.$checked.' type="checkbox" value="1" name="click_to_play" id="click_to_play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
 							?>
 						</td>
