@@ -500,11 +500,11 @@ if( ! class_exists( 'GrabPress' ) ) {
 					}else{
 						$update_frequency = 60 * 24 * $schedule;
 					}  
-					if($_POST['click_to_play'] === 1){
-					    $auto_play = "0";
-					}else{
-						$auto_play = "1";
-					}
+                                	if($_POST['click_to_play'] === null){
+                                       		 $auto_play = '1';
+                               		}else{
+                                        	$auto_play = '0';
+                                	}
 					$author_id = (int)$_POST['author'];
 
 					$post_data = array(
