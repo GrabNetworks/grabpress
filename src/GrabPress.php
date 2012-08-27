@@ -520,7 +520,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 								'publish' => (bool)( $_POST[ 'publish' ] ),
 								'author_id' => $author_id
 							),
-							'auto_play' => (bool)( $_POST['auto_play'] ),
 							'update_frequency' => $update_frequency,
 							'auto_play' => $auto_play							
 						)
