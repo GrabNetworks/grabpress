@@ -493,17 +493,20 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$category_list = $_POST[ 'category' ];
 
 					$category_length = count($category_list);
-					if(isset($category_list)){						
+
+					$cats = array();
+					if(is_array($category_list)){
 						foreach ($category_list as $cat) {
 							if($category_length == 1){
-								$cats = get_cat_name($cat);
+								$cats[] = get_cat_name($cat);
 							}else{
 								$cats[] = get_cat_name($cat);
 							}			
 						}				
 					}else{
-						$cats = 'Uncategorized';
-					}
+						$cats[] = 'Uncategorized';
+					}	
+
 					$schedule = $_POST['schedule'];
 					if(preg_match("/m/", $schedule)){
 						$update_frequency = $schedule;
@@ -531,7 +534,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 								'publish' => (bool)( $_POST[ 'publish' ] ),
 								'author_id' => $author_id
 							),
-							'auto_play' => (bool)( $_POST['auto_play'] ),
+							'auto_play' => $auto_play,
 							'update_frequency' => $update_frequency,
 							'auto_play' => $auto_play							
 						)
