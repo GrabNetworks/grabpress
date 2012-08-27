@@ -435,84 +435,94 @@ if( ! class_exists( 'GrabPress' ) ) {
 		ob_end_clean(); // End buffering and discard
 		return $contents; // Return the contents
 	}
-	static function dispatcher($params){//TODO: make this a static property of GrabPress
-			if( count($_POST) > 0 ) {
-				switch ($params['action']){
-					case 'update':
-							if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
-									GrabPress::create_feed();					
-							}else {
-								GrabPress::$invalid = true;
-							}
-							break;
-					case 'delete':
-							$feed_id = $_POST['feed_id'];
-							$connector_id = GrabPress::get_connector_id();
-							GrabPress::api_call('DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id);
-							break;	
-					case 'modify':
-							$feed_id = $_POST['feed_id'];
-							$keywords_and = htmlspecialchars($_POST['keywords_and']);
-							$categories = rawurlencode($_POST[ 'channel' ]);
-							$providers = $_POST['provider'];
-							$providersList = implode(',', $providers);
-							$providersListTotal = count($providers); // Total providers chosen by the user
-							$providers_total = $_POST['providers_total']; // Total providers from the catalog list
-							if($providersListTotal == $providers_total){
-								$providersList = '';
-							}
-							$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
-							$connector_id = GrabPress::get_connector_id();	
-							$active	= (bool)$_POST['active'];
-		
-							$category_list = $_POST[ 'category' ];
-		
-							$category_length = count($category_list);
-							if(isset($category_list)){						
-								foreach ($category_list as $cat) {
-									if($category_length == 1){
-										$cats = get_cat_name($cat);
-									}else{
-										$cats[] = get_cat_name($cat);
-									}			
-								}				
-							}else{
-								$cats = 'Uncategorized';
-							}
-							$schedule = $_POST['schedule'];
-							if($schedule == '12 hrs'){
-								$update_frequency = 60 * $schedule;
-							}else{
-								$update_frequency = 60 * 24 * $schedule;
-							}	
-							if($_POST['click-to-play$'] === null){
-								$auto_play = "1";
-							}else{
-							        $auto_play = "0";	
-							}
-		
-							$author_id = (int)$_POST['author'];
-		
-							$post_data = array(
-								'feed' => array(
-									'active' => $active,
-									'name' => $_POST[ 'channel' ],
-									'posts_per_update' => $_POST[ 'limit' ],
-									'url' => $url,
-									'custom_options' => array(
-										'category' => $cats,
-										'publish' => (bool)( $_POST[ 'publish' ] ),
-										'author_id' => $author_id
-									),
-									'auto_play' => (bool)( $_POST['auto_play'] ),
-									'update_frequency' => $update_frequency,
-									'auto_play' => $auto_play							
-								)
-							);	
-		
-							self::api_call('PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data);	
-							break;				
-				}
+	static function dispatcher(){
+		$params = $_REQUEST;
+		if( isset($params['action']) ){
+			switch ($params['action']){
+				case 'update':
+						if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
+								GrabPress::create_feed();					
+						}else {
+							GrabPress::$invalid = true;
+						}
+						GrabPress::render_feed_management();
+						break;
+				case 'delete':
+						$feed_id = $_POST['feed_id'];
+						$connector_id = GrabPress::get_connector_id();
+						GrabPress::apiCall('DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id);
+						GrabPress::render_feed_management();
+						break;	
+				case 'modify':
+						$feed_id = $_POST['feed_id'];
+						$keywords_and = htmlspecialchars($_POST['keywords_and']);
+						$categories = rawurlencode($_POST[ 'channel' ]);
+						$providers = $_POST['provider'];
+						$providersList = implode(',', $providers);
+						$providersListTotal = count($providers); // Total providers chosen by the user
+						$providers_total = $_POST['providers_total']; // Total providers from the catalog list
+						if($providersListTotal == $providers_total){
+							$providersList = '';
+						}
+						$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+						$connector_id = GrabPress::get_connector_id();	
+						$active	= (bool)$_POST['active'];
+	
+						$category_list = $_POST[ 'category' ];
+	
+						$category_length = count($category_list);
+						if(isset($category_list)){						
+							foreach ($category_list as $cat) {
+								if($category_length == 1){
+									$cats = get_cat_name($cat);
+								}else{
+									$cats[] = get_cat_name($cat);
+								}			
+							}				
+						}else{
+							$cats = 'Uncategorized';
+						}
+						$schedule = $_POST['schedule'];
+						if(preg_match("/m/", $schedule)){
+							$update_frequency = $schedule;
+						}elseif(preg_match("/h/", $schedule)){
+							$update_frequency = 60 * $schedule;
+						}else{
+							$update_frequency = 60 * 24 * $schedule;
+						}  
+	                                	if($_POST['click_to_play'] === null){
+	                                       		 $auto_play = '1';
+	                               		}else{
+	                                        	$auto_play = '0';
+	                                	}
+						$author_id = (int)$_POST['author'];
+	
+						$post_data = array(
+							'feed' => array(
+								'active' => $active,
+								'name' => $_POST[ 'channel' ],
+								'posts_per_update' => $_POST[ 'limit' ],
+								'url' => $url,
+								'custom_options' => array(
+									'category' => $cats,
+									'publish' => (bool)( $_POST[ 'publish' ] ),
+									'author_id' => $author_id
+								),
+								'update_frequency' => $update_frequency,
+								'auto_play' => $auto_play							
+							)
+						);	
+	
+						self::apiCall('PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data);	
+						GrabPress::render_feed_management();
+						break;
+				     case 'preview-feed':
+	                   GrabPress::grabpress_preview_videos();
+	                   break;                          
+	
+				default:
+					GrabPress::render_feed_management();
+					break;
 			}
 		}
 		static function print_scripts()
