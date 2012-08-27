@@ -243,9 +243,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$update_frequency = 60 * 24 * $schedule;
 				}					
 				if($_POST['click_to_play'] === null){
-					$auto_play = '1';
+					$auto_play = "1";
 				}else{
-					$auto_play = '0';	
+					$auto_play = "0";	
 				}
 
 				$author_id = (int)$_POST['author'];	
@@ -261,6 +261,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 							'author_id' => $author_id
 						),						
 						'update_frequency' => $update_frequency,
+						'auto_play' => $auto_play
 						 
 					)
 				);
@@ -515,12 +516,13 @@ if( ! class_exists( 'GrabPress' ) ) {
 						$update_frequency = 60 * $schedule;
 					}else{
 						$update_frequency = 60 * 24 * $schedule;
-					}  
-                	if($_POST['click_to_play'] === null){
+					} 
+                	if( ! $_POST['click_to_play']){//defaults to false
                        		 $auto_play = '1';
                		}else{
                         	$auto_play = '0';
                 	}
+
 					$author_id = (int)$_POST['author'];
 
 					$post_data = array(

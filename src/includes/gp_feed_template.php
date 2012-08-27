@@ -177,8 +177,6 @@
 			?>
 			<form method="post" action="" id="form-create-feed">
 				<input type="hidden"  name="action" value="update" />
-	            		<?php settings_fields('grab_press');//XXX: Do we need this? ?>
-	            		<?php $options = get_option('grab_press'); //XXX: Do we need this? ?>
 	            		<table class="form-table grabpress-table">
 	                		<tr valign="top">
 						<th scope="row">API Key</th>
