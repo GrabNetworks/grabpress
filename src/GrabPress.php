@@ -544,7 +544,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 		$plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 	
 		// jQuery files
-	
+
+		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui','https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js'); 
 		wp_enqueue_script('jquery-ui-filter', $plugin_url.'/js/ui/multi/jquery.multiselect.filter.min.js');
 		wp_enqueue_script('jquery-ui-multiselect', $plugin_url.'/js/ui/multi/jquery.multiselect.min.js');

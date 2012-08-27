@@ -13,7 +13,7 @@
 			?>
 			<script type="text/javascript">
 				( function ( global, $ ) {
-					global.hasValidationErrors = function () {
+					global.hasValidationErrors = function () {						
 						var category =  $('#channel-select').val();
 						if(category == ''){						
 							return "Please select at least one video channel";
@@ -122,12 +122,13 @@
 					   }).multiselectfilter();
 
 					  $('#create-feed-btn').bind('click', function(e){
-					  	var isValid = validateRequiredFields();
+					  	var errors = hasValidationErrors();
 					  	var form = $('#form-create-feed');
-						if(isValid){				
+						if(!errors){				
 							form.submit();
 						}else{
 							e.preventDefault();
+							return false;
 						}
 					  });
 
