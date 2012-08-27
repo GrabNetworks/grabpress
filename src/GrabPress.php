@@ -221,16 +221,17 @@ if( ! class_exists( 'GrabPress' ) ) {
 				$connector_id = self::get_connector_id();			
 				$category_list = $_POST[ 'category' ];	
 				$category_length = count($category_list);
-				if(isset($category_list)){						
+				$cats = array();
+				if(is_array($category_list)){
 					foreach ($category_list as $cat) {
 						if($category_length == 1){
-							$cats = get_cat_name($cat);
+							$cats[] = get_cat_name($cat);
 						}else{
 							$cats[] = get_cat_name($cat);
 						}			
 					}				
 				}else{
-					$cats = 'Uncategorized';
+					$cats[] = 'Uncategorized';
 				}					
 				$schedule = $_POST['schedule'];
 
@@ -447,8 +448,18 @@ if( ! class_exists( 'GrabPress' ) ) {
 		ob_end_clean(); // End buffering and discard
 		return $contents; // Return the contents
 	}
+	static function formDefaultValues($params){
+		$defaults = array("publish" => false, "click_to_play" => false, "category" => array(),"action" =>"default");
+		foreach ($defaults as $key => $value) {
+			if(!array_key_exists($key,$params)){
+				$params[$key] = $value;
+			}
+		}
+		return $params;
+	}
 	static function dispatcher(){
-		$params = $_REQUEST;
+		$_POST = GrabPress::formDefaultValues($_POST);
+		$params = $_POST;
 		switch ($params['action']){
 			case 'update':
 					if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
@@ -532,7 +543,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			     case 'preview-feed':
                    GrabPress::grabpress_preview_videos();
                    break;                          
-
+            case 'default':
 			default:
 				GrabPress::render_feed_management();
 				break;

@@ -127,6 +127,7 @@
 						if(!errors){				
 							form.submit();
 						}else{
+							alert(errors);
 							e.preventDefault();
 							return false;
 						}
@@ -188,7 +189,7 @@
 						<tr>
 							<th scope="row">Video Channel</th>
 							<td>
-								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select">
+								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px">
 									<option selected = "selected" value = "">Choose One</option>
 									<?php 	
 										$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');
