@@ -242,9 +242,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$update_frequency = 60 * 24 * $schedule;
 				}					
 				if($_POST['click_to_play'] === null){
-					$auto_play = '1';
+					$auto_play = "1";
 				}else{
-					$auto_play = '0';	
+					$auto_play = "0";	
 				}
 
 				$author_id = (int)$_POST['author'];	
@@ -260,6 +260,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 							'author_id' => $author_id
 						),						
 						'update_frequency' => $update_frequency,
+						'auto_play' => $auto_play
 						 
 					)
 				);
@@ -501,9 +502,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 						$update_frequency = 60 * 24 * $schedule;
 					}  
                                 	if($_POST['click_to_play'] === null){
-                                       		 $auto_play = '1';
+                                       		 $auto_play = "1";
                                		}else{
-                                        	$auto_play = '0';
+                                        	$auto_play = "0";
                                 	}
 					$author_id = (int)$_POST['author'];
 
@@ -572,4 +573,3 @@ register_activation_hook( __FILE__, array( 'GrabPress', 'setup') );
 register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector') );
 add_action('admin_menu', array('GrabPress', 'grabpress_plugin_menu' ) );
 GrabPress::allow_tags();
-GrabPress::dispatcher($_REQUEST);
