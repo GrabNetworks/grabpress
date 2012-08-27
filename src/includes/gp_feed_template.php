@@ -327,12 +327,23 @@ else{
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count($feeds);
-			if( $num_feeds > 0 ) {
-				$noun = 'feed';
-				if($num_feeds > 1){
-					$noun.='s';
-				}
-				GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' '.$noun.'.');
+			$active_feeds = 0;
+			for ($i=0; $i < $num_feeds; $i++){
+ 			 if($feeds[$i]->feed->active > 0){
+  			  $active_feeds++; 
+ 			 }  
+			}
+			if( $active_feeds > 0 || $num_feeds > 0 ){
+ 			 $noun = 'feed';  
+ 			 if( $active_feeds > 1 || $active_feeds == 0 ){
+  		   	  $noun .= 's';
+			 }    
+			if (GrabPress::$environment == "grabqa"){
+ GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);
+}
+else{
+ GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
+}			
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
