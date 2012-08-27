@@ -442,12 +442,8 @@ else{
 						<td>
 							<?php 		
 								$category_list_length = count($feed->custom_options->category);
-								if(isset($feed->custom_options->category)){
-									if($category_list_length == 1){
-										$category_list = explode("\\r\\n", $feed->custom_options->category);									
-									}else{
-										$category_list = $feed->custom_options->category;
-									}									
+								if(isset($feed->custom_options->category)){	
+									$category_list = $feed->custom_options->category;								
 								}else{
 									$category_list = str_split("Uncategorized");
 								}														
