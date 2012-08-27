@@ -13,7 +13,7 @@
 			?>
 			<script type="text/javascript">
 				( function ( global, $ ) {
-					global.hasValidationErrors = function () {
+					global.hasValidationErrors = function () {						
 						var category =  $('#channel-select').val();
 						if(category == ''){						
 							return "Please select at least one video channel";
@@ -122,12 +122,14 @@
 					   }).multiselectfilter();
 
 					  $('#create-feed-btn').bind('click', function(e){
-					  	var isValid = validateRequiredFields();
+					  	var errors = hasValidationErrors();
 					  	var form = $('#form-create-feed');
-						if(isValid){				
+						if(!errors){				
 							form.submit();
 						}else{
+							alert(errors);
 							e.preventDefault();
+							return false;
 						}
 					  });
 
@@ -187,7 +189,7 @@
 						<tr>
 							<th scope="row">Video Channel</th>
 							<td>
-								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select">
+								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px">
 									<option selected = "selected" value = "">Choose One</option>
 									<?php 	
 										$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');
@@ -327,12 +329,22 @@ else{
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count($feeds);
-			if( $num_feeds > 0 ) {
-				$noun = 'feed';
-				if($num_feeds > 1){
-					$noun.='s';
-				}
-				GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' '.$noun.'.');
+			$active_feeds = 0;
+			for ($i=0; $i < $num_feeds; $i++){
+ 			 if($feeds[$i]->feed->active > 0){
+  			  $active_feeds++; 
+ 			 }  
+			}
+			if( $active_feeds > 0 || $num_feeds > 0 ){
+ 			 $noun = 'feed';  
+ 			 if( $active_feeds > 1 || $active_feeds == 0 ){
+  		   	  $noun .= 's';
+			 }    
+			if (GrabPress::$environment == "grabqa"){
+				GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);
+			}else{
+				GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
+			}			
 			?>
 			<div>
 				<h3>Manage Feeds</h3>
