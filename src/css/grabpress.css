@@ -215,3 +215,17 @@ legend {
 .preview-text {
 	display: block;
 }
+#account-chooser {
+	margin-bottom: 10px;
+}
+#account-chooser td {
+	font-size: 14px;
+}
+#account-chooser input {
+	margin: 0 5px 5px 0;
+	
+}
+.account-help {
+	font-size: 10px;
+/*	margin: 4px 0*/
+}
