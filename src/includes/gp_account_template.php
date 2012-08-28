@@ -2,8 +2,9 @@
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Earn money with a Grab Publisher Account</h2>
 			<?php
-			$linked = FALSE;
-			echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php') : GrabPress::fetch('includes/account/chooser/unlinked.php');
+				$user = GrabPress::get_connector_user();
+				$linked = isset( $user->email);
+				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php') : GrabPress::fetch('includes/account/chooser/unlinked.php');
 			?>
 			<script>
 				(function( $ ){

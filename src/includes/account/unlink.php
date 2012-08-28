@@ -1,10 +1,17 @@
-<fieldset id = "existing-account">
+<fieldset id = "account">
 	<legend>Are You Sure?</legend>
 	<form id="unlink" method="post" action="">
 		<table>
-			<tr><td>Email address<input type="text"/></td></tr>
-			<tr><td>Password<input type="password"/></td></tr>
-			<tr><td class = "account-help"><a>I don't remember my password</a><input type="button" class="button-primary" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/><input type="button" class="button-secondary" value="<?php _e('Cancel') ?>"/>
+			<tr><td><b>WARNING:</b> You will no longer earn money using GrabPress on this site!</td></tr>
+			<tr><td id="acknowledge" class="account-help">I understand and still want to unlink my Publisher account<input type="checkbox"/></td></tr>
+			<tr><td class="account-help"><input type="button" class="button-primary" value="Unlink Account"/><input type="button" class="button-secondary" value="<?php _e('Cancel') ?>"/>
 		</table>
 	</form>
 </fieldset>
+	<script>
+		(function($){
+			$('#unlink input.button-primary').click(function(){
+				$('#unlink').submit();
+			})
+		})( jQuery )
+	</script>

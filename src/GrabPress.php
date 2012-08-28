@@ -57,7 +57,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$message.'</p></div>';
 		}    
 		static function abort( $message ) {
-			//die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
+			die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
 		}
 		static function allow_tags() {
 			global $allowedposttags;
@@ -114,7 +114,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			
 			return $response;
 		}
-		function apiCall($method, $resource, $data=array()){
+		function apiCall($method, $resource, $data=array(), $return_status=FALSE){
 			$json = json_encode( $data );
 			$apiLocation = self::get_api_location();			
 			$location = 'http://'.$apiLocation.$resource;
@@ -143,14 +143,20 @@ if( ! class_exists( 'GrabPress' ) ) {
 					break;
 			}
 			$response = curl_exec( $ch ); 
+			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 			curl_close($ch);
-			return $response;
+			return ($return_status) ?  $status==200 : $response;
 		}
-
+		static function get_connector_user(){
+			$id = self::get_connector_id();
+			$user_json = self::apiCall('GET',  '/connectors/'.$id.'/user?api_key='.self::$api_key);
+			$user_data = json_decode( $user_json );
+			return $user_data;
+		}
 		static function get_connector_id(){
 			if( self::validate_key() ) {
 				$rpc_url = get_bloginfo('url').'/xmlrpc.php';
-				$connectors_json = self::apiCall('GET',  '/connectors?api_key='.self::$api_key );
+				$connectors_json =  self::apiCall('GET',  '/connectors?api_key='.self::$api_key );
 				$connectors_data = json_decode( $connectors_json );
 				for( $n = 0; $n < count( $connectors_data ); $n++ ) {
 					$connector = $connectors_data[$n]->connector;
@@ -554,6 +560,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 							GrabPress::render_feed_management();
 							break;
 					     case 'preview-feed':
+							 var_dump($_POST);
+							 die;
 		                   GrabPress::grabpress_preview_videos();
 		                   break;                          
 		            case 'default':
@@ -563,6 +571,20 @@ if( ! class_exists( 'GrabPress' ) ) {
 				}
 				break;
 		case 'account':
+			switch( $_POST[ 'action' ] ){
+				case 'link-user' :
+					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
+						$credentials = array( 'email' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
+						$user_exists = self::apiCall('POST', '/user/validate?api_key='.self::$api_key, $credentials, TRUE);
+						if( $user_exists ){
+							$connector_data = array( 'user_id' => $_POST[ 'email' ]);
+							self::apiCall('POST','/connectors/'.self::get_connector_id().'?api_key='.self::$api_key, $connector_data);
+							$_POST[ 'action' ] = 'default';
+						}
+					}else{
+						self::abort('Attempt to link user with incomplete form data.');
+					}
+			}
 			GrabPress::render_account_management();
 			break;
 		}

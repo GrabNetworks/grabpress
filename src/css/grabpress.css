@@ -231,7 +231,7 @@ legend {
 	font-size: 10px;
 }
 
-input[ type="button" ], input[ type="checkbox"], select{
+input[ type="button" ], #account input[ type="checkbox"], select{
 	margin: 0 5px;
 	float: right;
 }
@@ -240,21 +240,26 @@ input[ type="button" ], input[ type="checkbox"], select{
 	float: right;
 }
 
-#link-existing td, #create-account td {
+#link-existing td, #create-account td, #unlink td {
 	width: 480px;
 	height: 16px;
+}
+td * {
 	vertical-align: bottom;
 }
-#existing-account {
+#account {
 	width: 500px;
 }
-#create-account {
+#account.create {
 	width: 650px;
 }
-#create-account td, #create-account input[type='text'], #create-account input[type='password']{
+#account.create td, #account.create input[type='text'], #account.create input[type='password']{
 	width: 310px;
 }
-#buttons, #tos{
+#buttons, #tos {
 	text-align: right;
 	padding: 5px 0;
+}
+#acknowledge input {
+	float: none;
 }
