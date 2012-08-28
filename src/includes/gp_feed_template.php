@@ -91,6 +91,7 @@
 						   	if(!hasValidationErrors()){
 								$('.hide').show();
 							}else{
+								$('.hide').hide();
 								e.preventDefault();
 								return false;
 							}
@@ -105,8 +106,19 @@
 
 					  $('#provider-select option').attr('selected', 'selected');
 					  $("#provider-select").multiselect(multiSelectOptions, {
+					  	 uncheckAll: function(e, ui){ 
+					  	 	$('.hide').hide();
+						 },
 						 checkAll: function(e, ui){
-					  	 	//showButtons();      
+						 	/*
+						 	if($("#provider-select :selected").length != 0){						
+								$('.hide').show();					  
+							}
+							*/
+							var errors = hasValidationErrors();
+							if(!errors){				
+								$('.hide').show();
+							}
 						 }
 					  }).multiselectfilter();	  		  
 
@@ -305,7 +317,7 @@ else{
 							<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e('Preview Feed') ?>" id="btn-preview-feed" />
 						</td>
 						<td>
-							<span class="description">Click to preview which videos will be autoposted from this feed</span>
+							<span class="description hide">Click to preview which videos will be autoposted from this feed</span>
 						</td>
 					</tr>
 					<tr valign="top">
