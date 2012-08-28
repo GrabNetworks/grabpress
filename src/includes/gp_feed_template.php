@@ -91,6 +91,7 @@
 						   	if(!hasValidationErrors()){
 								$('.hide').show();
 							}else{
+								$('.hide').hide();
 								e.preventDefault();
 								return false;
 							}
@@ -105,8 +106,19 @@
 
 					  $('#provider-select option').attr('selected', 'selected');
 					  $("#provider-select").multiselect(multiSelectOptions, {
+					  	 uncheckAll: function(e, ui){ 
+					  	 	$('.hide').hide();
+						 },
 						 checkAll: function(e, ui){
-					  	 	//showButtons();      
+						 	/*
+						 	if($("#provider-select :selected").length != 0){						
+								$('.hide').show();					  
+							}
+							*/
+							var errors = hasValidationErrors();
+							if(!errors){				
+								$('.hide').show();
+							}
 						 }
 					  }).multiselectfilter();	  		  
 
