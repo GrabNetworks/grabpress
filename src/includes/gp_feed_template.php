@@ -91,6 +91,7 @@
 						   	if(!hasValidationErrors()){
 								$('.hide').show();
 							}else{
+								$('.hide').hide();
 								e.preventDefault();
 								return false;
 							}
@@ -105,8 +106,19 @@
 
 					  $('#provider-select option').attr('selected', 'selected');
 					  $("#provider-select").multiselect(multiSelectOptions, {
+					  	 uncheckAll: function(e, ui){ 
+					  	 	$('.hide').hide();
+						 },
 						 checkAll: function(e, ui){
-					  	 	//showButtons();      
+						 	/*
+						 	if($("#provider-select :selected").length != 0){						
+								$('.hide').show();					  
+							}
+							*/
+							var errors = hasValidationErrors();
+							if(!errors){				
+								$('.hide').show();
+							}
 						 }
 					  }).multiselectfilter();	  		  
 
@@ -177,8 +189,6 @@
 			?>
 			<form method="post" action="" id="form-create-feed">
 				<input type="hidden"  name="action" value="update" />
-	            		<?php settings_fields('grab_press');//XXX: Do we need this? ?>
-	            		<?php $options = get_option('grab_press'); //XXX: Do we need this? ?>
 	            		<table class="form-table grabpress-table">
 	                		<tr valign="top">
 						<th scope="row">API Key</th>
@@ -307,7 +317,7 @@ else{
 							<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e('Preview Feed') ?>" id="btn-preview-feed" />
 						</td>
 						<td>
-							<span class="description">Click to preview which videos will be autoposted from this feed</span>
+							<span class="description hide">Click to preview which videos will be autoposted from this feed</span>
 						</td>
 					</tr>
 					<tr valign="top">
@@ -435,7 +445,7 @@ else{
 						</td>
 						<td>
 							<?php 
-								$checked = ( $feed->auto_play  ) ? ' checked = "checked"' : '';
+								$checked = ( $feed->auto_play  ) ? '' : ' checked = "checked"';
 								echo '<input'.$checked.' type="checkbox" value="1" name="click_to_play" id="click_to_play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
 							?>
 						</td>

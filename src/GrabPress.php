@@ -1,10 +1,9 @@
 <?php
-
 /*
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.4.1b34
+Version: 0.4.1b36
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -242,11 +241,12 @@ if( ! class_exists( 'GrabPress' ) ) {
 					$update_frequency = 60 * $schedule;
 				}else{
 					$update_frequency = 60 * 24 * $schedule;
-				}					
-				if($_POST['click_to_play'] === null){
-					$auto_play = '1';
+				}	
+				if(! $_POST['click_to_play']){
+
+					$auto_play = "1";
 				}else{
-					$auto_play = '0';	
+					$auto_play = "0";	
 				}
 
 				$author_id = (int)$_POST['author'];	
@@ -263,6 +263,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						),						
 						'update_frequency' => $update_frequency,
 						'auto_play' => $auto_play
+						 
 					)
 				);
 				$response_json = self::apiCall('POST', '/connectors/' . $connector_id . '/feeds/?api_key='.self::$api_key, $post_data);
@@ -448,6 +449,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		ob_end_clean(); // End buffering and discard
 		return $contents; // Return the contents
 	}
+
 	static function formDefaultValues($params){
 		$defaults = array("publish" => false, "click_to_play" => false, "category" => array(),"action" =>"default");
 		foreach ($defaults as $key => $value) {
@@ -460,6 +462,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 	static function dispatcher(){
 		$_POST = GrabPress::formDefaultValues($_POST);
 		$params = $_POST;
+		
 		switch ($params['action']){
 			case 'update':
 					if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
@@ -514,12 +517,12 @@ if( ! class_exists( 'GrabPress' ) ) {
 						$update_frequency = 60 * $schedule;
 					}else{
 						$update_frequency = 60 * 24 * $schedule;
-					}  
-					if($_POST['click_to_play'] === null){
-						$auto_play = "1";
-					}else{
-					    $auto_play = "0";
-					}
+					} 
+                	if( ! $_POST['click_to_play']){//defaults to false
+                       		 $auto_play = '1';
+               		}else{
+                        	$auto_play = '0';
+                	}
 
 					$author_id = (int)$_POST['author'];
 
@@ -534,7 +537,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 								'publish' => (bool)( $_POST[ 'publish' ] ),
 								'author_id' => $author_id
 							),
-							'auto_play' => $auto_play,
 							'update_frequency' => $update_frequency,
 							'auto_play' => $auto_play							
 						)
