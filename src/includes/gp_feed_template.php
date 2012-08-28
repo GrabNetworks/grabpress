@@ -317,7 +317,7 @@ else{
 							<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e('Preview Feed') ?>" id="btn-preview-feed" />
 						</td>
 						<td>
-							<span class="description">Click to preview which videos will be autoposted from this feed</span>
+							<span class="description hide">Click to preview which videos will be autoposted from this feed</span>
 						</td>
 					</tr>
 					<tr valign="top">
