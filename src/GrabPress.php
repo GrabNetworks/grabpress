@@ -560,8 +560,6 @@ if( ! class_exists( 'GrabPress' ) ) {
 							GrabPress::render_feed_management();
 							break;
 					     case 'preview-feed':
-							 var_dump($_POST);
-							 die;
 		                   GrabPress::grabpress_preview_videos();
 		                   break;                          
 		            case 'default':
