@@ -11,7 +11,7 @@
 	$list_feeds = json_decode($json_preview, true);	
 ?>
 
-<fieldset>
+<fieldset id="preview-feed">
 	<legend>Preview Feed</legend>
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview">
 		<span class="preview-text"><b><?php echo "Video Channel: "; ?></b><?php echo $category; ?></span><br/>

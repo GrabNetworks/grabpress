@@ -15,7 +15,7 @@
 				( function ( global, $ ) {
 					global.hasValidationErrors = function () {						
 						var category =  $('#channel-select').val();
-						if(category == ''){						
+						if(category == ''){
 							return "Please select at least one video channel";
 						}else if($("#provider-select :selected").length == 0){						
 							return "Please select at least one provider";					  

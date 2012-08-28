@@ -1,5 +1,5 @@
-			<p>This installation is linked to jduquette@grab-media.com</p>
-			<p>From here you can:</p>
+			<p class="account-help">This installation is linked to jduquette@grab-media.com</p>
+			<p class="account-help">From here you can:</p>
 			<form method="post" action="" id="account-chooser">
 				<table>
 					<tr>

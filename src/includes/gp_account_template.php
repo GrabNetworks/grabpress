@@ -3,14 +3,6 @@
 			<h2>GrabPress: Earn money with a Grab Publisher Account</h2>
 			<?php
 			$linked = FALSE;
-			$action = 'continue';
-			if ( isset( $_POST[ 'action' ] ) ){
-				$action = $_POST[ 'action' ];	
-			}
-			switch( $action ) {
-				case 'continue' : ?>
-			<?php		
-			} 
 			echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php') : GrabPress::fetch('includes/account/chooser/unlinked.php');
 			?>
 			<script>
@@ -20,3 +12,17 @@
 					})
 				})( jQuery )
 			</script>
+			
+			<?php switch( $_POST[ 'action' ] ){
+					case 'link':
+					case 'switch':
+						echo GrabPress::fetch('includes/account/link.php');
+						break;
+					case 'create':
+						echo GrabPress::fetch('includes/account/create.php');
+						break;
+					case 'unlink':
+						echo GrabPress::fetch('includes/account/unlink.php');
+						break;
+				}
+			?>
