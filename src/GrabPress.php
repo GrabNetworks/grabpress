@@ -43,18 +43,23 @@ if( ! class_exists( 'GrabPress' ) ) {
 		}
 		static function showMessage(){
 			GrabPress::log();
+			$show = false;
 			if (self::$error) {
+				$show = self::$error;
 				echo '<div id="message" class="error">';
 			}
 			else if (self::$message){
+				$show = self::$message;
 				echo '<div id="message" class="updated fade">';
 			}
-			$icon_src = plugin_dir_url( __FILE__ ).'g.png';
-			echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.self::$message.'</p></div>';
+			if($show){
+				$icon_src = plugin_dir_url( __FILE__ ).'g.png';
+				echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$show.'</p></div>';
+			}
 		}    
 		static function abort( $message ) {
 			GrabPress::log();
-			die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a><br/>Debug Info:</br>'.debug_backtrace() );
+			// die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a><br/>Debug Info:</br>'.debug_backtrace() );
 		}
 		static function allow_tags() {
 			GrabPress::log();

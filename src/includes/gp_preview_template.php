@@ -6,7 +6,7 @@
 	$providers = join($provider, ",");
 
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and
+		.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords
 		.'&categories='.$channel.'&order=DESC&order_by=created_at&providers='.$providers);
 	$list_feeds = json_decode($json_preview, true);	
 ?>
@@ -15,9 +15,9 @@
 	<legend>Preview Feed</legend>
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview">
 		<span class="preview-text"><b><?php echo "Video Channel: "; ?></b><?php echo $channel; ?></span><br/>
-		<span class="preview-text"><b><?php echo "Keywords: "; ?></b><?php echo $keywords_and; ?></span><br/>
+		<span class="preview-text"><b><?php echo "Keywords: "; ?></b><?php echo $keyword; ?></span><br/>
 		<span class="preview-text"><b><?php echo "Providers: "; ?></b><?php // $providersNames; ?></span><br/>
-	<?php		  	
+	<?php
 		foreach ($list_feeds["results"] as $result) {
 	?>
 	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">

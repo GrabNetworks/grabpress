@@ -240,6 +240,9 @@ input[ type="button" ], #account input[ type="checkbox"], select{
 	width:250px;
 	float: right;
 }
+.grabpress-table input[ type="button" ]{
+	float: none;
+}
 
 #link-existing td, #create-account td, #unlink td {
 	width: 480px;
