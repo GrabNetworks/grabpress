@@ -208,6 +208,8 @@ h2.video_title {
 fieldset {
     padding: 10px;
     border: 1px solid black;
+}
+#preview-feed {
     width: 850px;
 }
 legend {
@@ -223,10 +225,43 @@ legend {
 	font-size: 14px;
 }
 #account-chooser input {
-	margin: 0 5px 5px 0;
+	margin: 0 5px 5px 10px;
 	
 }
 .account-help {
 	font-size: 10px;
-/*	margin: 4px 0*/
 }
+
+input[ type="button" ], #account input[ type="checkbox"], select{
+	margin: 0 5px;
+	float: right;
+}
+#link-existing input[type='text'], #link-existing input[type='password']{
+	width:250px;
+	float: right;
+}
+
+#link-existing td, #create-account td, #unlink td {
+	width: 480px;
+	height: 16px;
+}
+td * {
+	vertical-align: bottom;
+}
+#account {
+	width: 500px;
+}
+#account.create {
+	width: 650px;
+}
+#account.create td, #account.create input[type='text'], #account.create input[type='password']{
+	width: 310px;
+}
+#buttons, #tos {
+	text-align: right;
+	padding: 5px 0;
+}
+#acknowledge input {
+	float: none;
+}
+
