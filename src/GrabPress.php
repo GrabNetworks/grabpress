@@ -443,7 +443,7 @@ if( ! class_exists( 'GrabPress' ) ) {
   		//if (!current_user_can('manage_options'))  {
 		// 	wp_die( __('You do not have sufficient permissions to access this page.') );
 		// }
-		print self::fetch('includes/gp_feed_template.php');
+		print self::fetch('includes/gp_feed_template.php', $_POST);
 	}
 	static function grabpress_preview_videos() {	
 		/*
