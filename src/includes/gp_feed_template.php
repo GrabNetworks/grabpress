@@ -178,7 +178,14 @@
 					  $(".channel-select").selectmenu();
 					  $(".schedule-select").selectmenu();
 					  $(".limit-select").selectmenu();
-					  $(".author-select").selectmenu();			
+					  $(".author-select").selectmenu();					  
+
+					  $("#learn-more").simpletip({
+					  	 content: 'Please be aware that selecting a click-to-play player can negatively impact your revenue, <br />as not all users will generate an ad impression. If you are looking to optimize revenue <br />through Grabpress, all feeds should be set to autoplay. ', 
+					  	 fixed: true, 
+					  	 position: 'bottom'
+					  });
+
 				});
 		
 				
@@ -264,7 +271,7 @@ else{
 						<th scope="row">Click-to-play Video</th>
 						<td>
 							<input type="checkbox" value="1" name="click_to_play" id="click_to_play" />
-							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#">learn more</a></span>
+							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#" onclick='return false;' id="learn-more">learn more</a></span>
 						</td>
 					</tr>
 		        		<tr valign="top">
@@ -305,7 +312,11 @@ else{
 								   		$provider = $record_provider->provider;
 										$provider_name = $provider->name;
 										$provider_id = $provider->id;
-								   		echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										$provider_opt_out = $provider->opt_out;
+										if($provider_opt_out == false){
+											echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										}										
+								   		
 									} 
 								?>
 							</select> *
@@ -388,7 +399,7 @@ else{
 								<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />	
 								<?php 
 									$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-									echo '<input '.$checked.' type="checkbox" onchange="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
+									echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
 								?>
 						<td>
 							<select  name="channel" id="channel-select-<?php echo $feedId; ?>" onchange="toggleButton(<?php echo $feedId; ?>)" class="channel-select" >
@@ -440,13 +451,13 @@ else{
 						<td>
 							<?php 
 								$checked = ( $feed->custom_options->publish  ) ? ' checked = "checked"' : '';
-								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check" onchange="toggleButton('.$feedId.')" />';
+								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check" onclick="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>
 							<?php 
 								$checked = ( $feed->auto_play  ) ? '' : ' checked = "checked"';
-								echo '<input'.$checked.' type="checkbox" value="1" name="click_to_play" id="click_to_play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
+								echo '<input'.$checked.' type="checkbox" value="1" name="click_to_play" id="click_to_play-<?php echo $feedId; ?>" onclick="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>
@@ -491,7 +502,6 @@ else{
 									foreach ($blogusers as $user) {
 										$author_name = $user->display_name;
 										$author_id = $user->ID;
-										echo "CUSTOM OPTIONS ID: "; var_dump($feed->custom_options->author_id);
 										$selected = ($author_id == $feed->custom_options->author_id)  ? 'selected = "selected"' : '';									
 								   		echo '<option '.$selected.' value = "'.$author_id.'">'.$author_name.'</option>\n';
 									} 
@@ -507,11 +517,14 @@ else{
 								   		$provider = $record_provider->provider;
 										$provider_name = $provider->name;
 										$provider_id = $provider->id;
+										$provider_opt_out = $provider->opt_out;									
 										$selected = in_array($provider_id, $providers)  ? 'selected = "selected"' : '';
-										if(in_array("", $providers)){ 
-											echo '<option selected = "selected" value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-										}else{
-											echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										if($provider_opt_out == false){
+											if(in_array("", $providers)){ 
+												echo '<option selected = "selected" value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+											}else{
+												echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+											}
 										}
 								   		
 									}
