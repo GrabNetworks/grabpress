@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.4.2b39
+Version: 0.4.2b41
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -23,43 +23,46 @@ License: GPL2
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-/**
-* Open, parse, and return the template file.
-*
-* @param $file string the template file name
-*/
-
 if( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress{
 		static $api_key;
 		static $invalid = false;
 		static $environment = 'grabqa'; // or 'grabnetworks'
-		/**
-		 * Generic function to show a message to the user using WP's 
-		 * standard CSS classes to make use of the already-defined
-		 * message colour scheme.
-		 *
-		 * @param $message The message you want to tell the user.
-		 * @param $errormsg If true, the message is an error, so use 
-		 * the red message style. If false, the message is a status 
-		  * message, so use the yellow information message style.
-		 */	
-		static function showMessage($message, $errormsg = false)
-		{
-			if ($errormsg) {
+		static $debug = true;
+		static $message = false;
+		static $error = false;
+		static function log( $message = false){
+			if(self::$debug){
+				if(!$message){
+					$stack = debug_backtrace();
+					$caller = $stack[1];
+					@$message = 'GrabPress:<line '.$caller['line'].'>'.$caller['class'].$caller['type'].$caller['function'].'('.implode(', ',$caller['args']).')';
+				}
+				error_log($message);
+			}
+		}
+		static function showMessage(){
+			GrabPress::log();
+			$show = false;
+			if (self::$error) {
+				$show = self::$error;
 				echo '<div id="message" class="error">';
 			}
-			else {
+			else if (self::$message){
+				$show = self::$message;
 				echo '<div id="message" class="updated fade">';
 			}
-			$icon_src = plugin_dir_url( __FILE__ ).'g.png';
-			echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$message.'</p></div>';
+			if($show){
+				$icon_src = plugin_dir_url( __FILE__ ).'g.png';
+				echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$show.'</p></div>';
+			}
 		}    
 		static function abort( $message ) {
-			die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a>');
+			GrabPress::log();
+			// die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a><br/>Debug Info:</br>'.debug_backtrace() );
 		}
 		static function allow_tags() {
+			GrabPress::log();
 			global $allowedposttags;
 			if(! isset( $allowedposttags[ 'div' ] ) ) {
 				$allowedposttags[ 'div' ] = array();
@@ -95,6 +98,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 		static function get_api_location() {
+			GrabPress::log();
 			if ($_SERVER['SERVER_ADDR'] == '127.0.0.1'){
 				$apiLocation = '10.3.1.37';
 			}else{
@@ -103,6 +107,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			return $apiLocation;
 		}
 		static function get_json( $url, $optional_headers = null) {
+			GrabPress::log();
 			$ch = curl_init();
 			$timeout = 5;
 			curl_setopt( $ch, CURLOPT_URL, $url );
@@ -115,6 +120,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			return $response;
 		}
 		function apiCall($method, $resource, $data=array(), $return_status=FALSE){
+			GrabPress::log();
 			$json = json_encode( $data );
 			$apiLocation = self::get_api_location();			
 			$location = 'http://'.$apiLocation.$resource;
@@ -148,12 +154,14 @@ if( ! class_exists( 'GrabPress' ) ) {
 			return ($return_status) ?  $status==200 : $response;
 		}
 		static function get_connector_user(){
+			GrabPress::log();
 			$id = self::get_connector_id();
 			$user_json = self::apiCall('GET',  '/connectors/'.$id.'/user?api_key='.self::$api_key);
 			$user_data = json_decode( $user_json );
 			return $user_data;
 		}
 		static function get_connector_id(){
+			GrabPress::log();
 			if( self::validate_key() ) {
 				$rpc_url = get_bloginfo('url').'/xmlrpc.php';
 				$connectors_json =  self::apiCall('GET',  '/connectors?api_key='.self::$api_key );
@@ -202,6 +210,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		}
 		static $feed_message = 'Fields marked with an asterisk * are required.';
 		static function create_feed(){
+			GrabPress::log();
 			if( self::validate_key() ) {
 				$categories = rawurlencode($_POST[ 'channel' ]);
 				$keywords_and = rawurlencode( $_POST[ 'keyword' ] );
@@ -284,6 +293,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 		static function validate_key() {
+			GrabPress::log();
 			$api_key = get_option('grabpress_key');
 			if( $api_key != '' ){
 				$validate_json = self::apiCall('GET', '/user/validate?api_key='.$api_key);
@@ -300,6 +310,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			return false;
 		}
 		static function get_feeds(){
+			GrabPress::log();
 			if(self::validate_key()){
 				$connector_id = self::get_connector_id();
 				$feeds_json = self::apiCall('GET', '/connectors/'.$connector_id.'/feeds?api_key='.self::$api_key);
@@ -310,6 +321,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 		static function create_API_connection(){
+			GrabPress::log();
 			$user_url = get_site_url();
 			$user_nicename = 'grabpress';
 	        $user_login = $user_nicename;
@@ -390,29 +402,35 @@ if( ! class_exists( 'GrabPress' ) ) {
 	}
  
 	static function enable_xmlrpc(){
+		GrabPress::log();
 		update_option( 'enable_xmlrpc', 1 );
 		if (! get_option( 'enable_xmlrpc') ){
 			self::abort('Error enabling XML-RPC.');
 		}
 	}
 	static function register_settings(){
+		GrabPress::log();
 		register_setting( 'grab_press', 'access_key' );
 	}
 	static function setup(){
+		GrabPress::log();
 		self::validate_key();
 		self::enable_xmlrpc();
 	}
 	static function delete_connector(){
+		GrabPress::log();
 		$connector_id = self::get_connector_id();
 		$response = self::apiCall('PUT', '/connectors/' . $connector_id . '/deactivate?api_key='.GrabPress::$api_key);
 		delete_option('grabpress_key');
 	}
 	static function outline_invalid(){
+		GrabPress::log();
 		if (self::$invalid){
 			echo 'border:1px dashed red;';
 		};
 	}
 	static function grabpress_plugin_menu() {
+		GrabPress::log();
 		add_menu_page('GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), plugin_dir_url( __FILE__ ).'g.png', 10 );
 		add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ));
 		add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ));
@@ -430,22 +448,25 @@ if( ! class_exists( 'GrabPress' ) ) {
 				$here = 'here';
 			}
 
-			GrabPress::showMessage('Thank you for activating Grab Autoposter. Try creating your first feed '.$here.'.');
+			self::$message = 'Thank you for activating Grab Autoposter. Try creating your first feed '.$here.'.';
 		}
 	}
     static function render_account_management(){
+		GrabPress::log();
   		//if (!current_user_can('manage_options'))  {
 		// 	wp_die( __('You do not have sufficient permissions to access this page.') );
 		// }
 		print self::fetch('includes/gp_account_template.php');
 	}
     static function render_feed_management(){
+		GrabPress::log();
   		//if (!current_user_can('manage_options'))  {
 		// 	wp_die( __('You do not have sufficient permissions to access this page.') );
 		// }
 		print self::fetch('includes/gp_feed_template.php');
 	}
-	static function grabpress_preview_videos() {	
+	static function grabpress_preview_videos() {
+		GrabPress::log();	
 		/*
 		if (!current_user_can('manage_options'))  {
 			wp_die( __('You do not have sufficient permissions to access this page.') );
@@ -454,6 +475,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		print self::fetch("includes/gp_preview_template.php", $_POST);
 	}
 	static function fetch($file = null, $data = array()) {
+		GrabPress::log();
 		if(!$file) $file = $this->file;
 		extract($data); // Extract the vars to local namespace
 		ob_start(); // Start output buffering
@@ -461,9 +483,11 @@ if( ! class_exists( 'GrabPress' ) ) {
 		$contents = ob_get_contents(); // Get the contents of the buffer
 		ob_end_clean(); // End buffering and discard
 		return $contents; // Return the contents
+		self::showMessage();
 	}
 
 	static function formDefaultValues($params){
+		GrabPress::log();
 		$defaults = array("publish" => false, "click_to_play" => false, "category" => array(),"action" =>"default");
 		foreach ($defaults as $key => $value) {
 			if(!array_key_exists($key,$params)){
@@ -473,6 +497,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		return $params;
 	}
 	static function dispatcher(){
+		GrabPress::log();
 		$_POST = GrabPress::formDefaultValues($_POST);
 		$params = $_POST;
 		switch ($_GET[ 'page' ]){
@@ -587,8 +612,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 			break;
 		}
 	}
-	static function print_scripts()
-	{
+	static function print_scripts(){
+		GrabPress::log();
 		// Plugin url
 		$plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 	
@@ -604,9 +629,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 		wp_enqueue_script('jquery-uiposition', $plugin_url.'/js/ui/jquery.ui.position.js');
 	
 		wp_enqueue_script('jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js');
+		wp_enqueue_script('jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js');		
 	}
-	static function print_styles()
-	{
+	static function print_styles(){
+		GrabPress::log();
 		// Plugin url
 		$plugin_url = trailingslashit( get_bloginfo('wpurl') ).PLUGINDIR.'/'. dirname( plugin_basename(__FILE__) );
 	
@@ -618,10 +644,11 @@ if( ! class_exists( 'GrabPress' ) ) {
 	}
 	}//class	
 }//ifndefclass
-
+GrabPress::log('-------------------------------------------------------');
 add_action('admin_print_styles',array('GrabPress', 'print_styles') );
-add_action('wp_print_scripts', array('GrabPress', 'print_scripts') );
+add_action('admin_print_scripts', array('GrabPress', 'print_scripts') );
 register_activation_hook( __FILE__, array( 'GrabPress', 'setup') );
 register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector') );
 add_action('admin_menu', array('GrabPress', 'grabpress_plugin_menu' ) );
+add_action('admin_footer', array('GrabPress', 'showMessage' ) );
 GrabPress::allow_tags();
