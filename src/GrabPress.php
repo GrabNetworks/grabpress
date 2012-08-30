@@ -58,7 +58,8 @@ if( ! class_exists( 'GrabPress' ) ) {
 			}
 		}    
 		static function abort( $message ) {
-			GrabPress::log();
+			GrabPress::log( 'abort:'.$message );
+			
 			// die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a><br/>Debug Info:</br>'.debug_backtrace() );
 		}
 		static function allow_tags() {
@@ -98,7 +99,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 		static function get_api_location() {
-			GrabPress::log();
+			// GrabPress::log();
 			if ($_SERVER['SERVER_ADDR'] == '127.0.0.1'){
 				$apiLocation = '10.3.1.37';
 			}else{
@@ -119,7 +120,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			
 			return $response;
 		}
-		function apiCall($method, $resource, $data=array(), $return_status=FALSE){
+		function apiCall($method, $resource, $data=array()){
 			GrabPress::log();
 			$json = json_encode( $data );
 			$apiLocation = self::get_api_location();			
@@ -150,13 +151,14 @@ if( ! class_exists( 'GrabPress' ) ) {
 			}
 			$response = curl_exec( $ch ); 
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-			curl_close($ch);
-			return ($return_status) ?  $status==200 : $response;
+			curl_close( $ch );
+			GrabPress::log( 'status = ' . $status . ', response =' . $response );
+			return $response;
 		}
 		static function get_connector_user(){
 			GrabPress::log();
 			$id = self::get_connector_id();
-			$user_json = self::apiCall('GET',  '/connectors/'.$id.'/user?api_key='.self::$api_key);
+			$user_json = self::apiCall( 'GET', '/connectors/' . $id . '/user?api_key=' . self::$api_key );
 			$user_data = json_decode( $user_json );
 			return $user_data;
 		}
@@ -281,7 +283,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 						 
 					)
 				);
-				$response_json = self::apiCall('POST', '/connectors/' . $connector_id . '/feeds/?api_key='.self::$api_key, $post_data);
+				$response_json = self::apiCall( 'POST', '/connectors/' . $connector_id . '/feeds/?api_key=' . self::$api_key, $post_data );
 				$response_data = json_decode( $response_json );
 				if( $response_data -> feed -> active == true ){
 					self::$feed_message = 'Grab yourself a coffee. Your videos are on the way!';
@@ -499,6 +501,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 	static function dispatcher(){
 		GrabPress::log();
 		$_POST = GrabPress::formDefaultValues($_POST);
+		GrabPress::log($_GET[ 'page' ].','.$_POST[ 'action']);
 		$params = $_POST;
 		switch ($_GET[ 'page' ]){
 			case 'autoposter':
@@ -598,14 +601,35 @@ if( ! class_exists( 'GrabPress' ) ) {
 				case 'link-user' :
 					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
 						$credentials = array( 'email' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
-						$user_exists = self::apiCall('POST', '/user/validate?api_key='.self::$api_key, $credentials, TRUE);
-						if( $user_exists ){
-							$connector_data = array( 'user_id' => $_POST[ 'email' ]);
-							self::apiCall('POST','/connectors/'.self::get_connector_id().'?api_key='.self::$api_key, $connector_data);
+						$user_json = self::apiCall( 'GET', '/user/validate?api_key=' . self::$api_key, $credentials );
+						$user_data = json_decode( $user_json );
+						if( isset( $user_data -> user ) ){
+							$user = $user_data -> user;
+							$connector_data = array(
+							 	'user_id' 	=> $user -> id,
+								'email' 	=> $user -> email
+							);
+							GrabPress::log( 'PUTting to connector ' . self::get_connector_id() . ':' . $user -> id );
+							$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
 							$_POST[ 'action' ] = 'default';
+						}else{
+							GrabPress::$error = 'No user with the email' . $_POST[ 'email' ] . 'exists in our system.';
+							$_POST[ 'action' ] = 'link';
 						}
 					}else{
 						self::abort('Attempt to link user with incomplete form data.');
+					}
+					break;
+				case 'unlink-user' :
+					if( isset( $_POST[ 'confirm' ]) ){
+						$user = get_user_by( 'slug', 'grabpress');
+						$connector_data = array(
+						 	'user_id' 	=> null,
+							'email' 	=> $user -> email
+						);
+						GrabPress::log( 'PUTting to connector ' . self::get_connector_id() . ':' . $user -> ID );
+						$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
+						$_POST[ 'action' ] = 'default';
 					}
 			}
 			GrabPress::render_account_management();
