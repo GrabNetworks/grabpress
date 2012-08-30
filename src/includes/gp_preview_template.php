@@ -11,8 +11,6 @@
 		.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords
 		.'&categories='.$channel.'&order=DESC&order_by=created_at&providers='.$providers);
 	$list_feeds = json_decode($json_preview, true);	
-	var_dump($_POST);
-	//$publish = bool($publish);
 ?>
 
 <fieldset id="preview-feed">
@@ -23,9 +21,17 @@
 		<input type="hidden" name="schedule" value="<?php echo $schedule; ?>" id="schedule" />
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
 		<input type="hidden" name="click_to_play" value="<?php echo $click_to_play; ?>" id="click_to_play" />
-		<input type="hidden" name="category" value="<?php echo $category; ?>" id="category" />
 		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />	
-		<input type="hidden" name="provider" value="<?php echo $provider; ?>" id="provider" />
+		<select name="category[]" style="display:none;" multiple="multiple	">
+			<?php foreach($category as $cat){ ?>
+				<option value="<?php echo $cat;?>" selected="selected"/>
+			<?php } ?>
+		</select>
+		<select name="provider[]" style="display:none;" multiple="multiple	">
+			<?php foreach($provider as $prov){ ?>
+				<option value="<?php echo $prov;?>" selected="selected"/>
+			<?php } ?>
+		</select>
 		
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview" >
 		<span class="preview-text"><b><?php echo "Video Channel: "; ?></b><?php echo $channel; ?></span><br/>

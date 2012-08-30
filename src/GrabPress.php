@@ -463,7 +463,15 @@ if( ! class_exists( 'GrabPress' ) ) {
   		//if (!current_user_can('manage_options'))  {
 		// 	wp_die( __('You do not have sufficient permissions to access this page.') );
 		// }
-		print self::fetch('includes/gp_feed_template.php', $_POST);
+		$json_provider = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1');
+		$list_provider = json_decode($json_provider);
+		$providers_total = count($list_provider);
+		$blogusers = get_users();
+		print self::fetch('includes/gp_feed_template.php', 
+			array("form" => $_POST,
+			"list_provider" => $list_provider,
+			"providers_total" => $providers_total,
+			"blogusers" => $blogusers));
 	}
 	static function grabpress_preview_videos() {
 		GrabPress::log();	
@@ -505,7 +513,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				switch ($params['action']){
 					case 'update':
 							if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
-									GrabPress::create_feed();					
+								GrabPress::create_feed();					
 							}else {
 								GrabPress::$invalid = true;
 							}

@@ -3,15 +3,6 @@
 			<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 			<p>New video content delivered fresh to your blog.</p>
 			<h3>Create Feed</h3>
-			<?php 				
-
-				// List of all providers
-				$json_provider = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1');
-				$list_provider = json_decode($json_provider);
-				$providers_total = count($list_provider);
-				$blogusers = get_users();			
-				var_dump($_POST);
-			?>
 			<script type="text/javascript">
 				( function ( global, $ ) {
 				    $("#form-create-feed input[name=action]").val("update");	
@@ -106,8 +97,10 @@
 						    }
 						});
 
-					  $('#provider-select option').attr('selected', 'selected');
-					  $("#provider-select").multiselect(multiSelectOptions, {
+						if($('#provider-select option:selected').length == 0){
+							$('#provider-select option').attr('selected', 'selected');
+						}
+						$("#provider-select").multiselect(multiSelectOptions, {
 					  	 uncheckAll: function(e, ui){ 
 					  	 	$('.hide').hide();
 						 },
@@ -202,7 +195,7 @@
 							<th scope="row">Video Channel</th>
 							<td>
 								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px" >
-									<option selected = "selected" value = "">Choose One</option>
+									<option <?php  (!array_key_exists("channel", $form) || !$form["channel"])?'selected="selected"':"";?> value="">Choose One</option>
 									<?php 	
 										$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');
 										$list = json_decode($json);
@@ -210,8 +203,8 @@
 									   		$category = $record -> category;
 											$name = $category -> name;
 											$id = $category -> id;
-											$selected = (in_array($id, $_POST["channel"]))?'selected="selected"':"";
-									   		echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>\n';
+											$selected = ($id == $form["channel"])?'selected="selected"':"";
+									   		echo '<option value = "'.$id.'" '.$selected.'>'.$name.'</option>\n';
 										} 
 									?>
 								</select> *
@@ -221,7 +214,7 @@
 			        		<tr valign="top">
 							<th scope="row">Keywords</th>
 		        		           	<td >
-								<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $_POST["keyword"];?>"/> 
+								<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keyword"];?>"/> 
 								<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
 							</td>
 		        		        </tr>
@@ -230,7 +223,8 @@
 		        		           	<td>
 								<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
 									<?php for ($o = 1; $o < 6; $o++) {
-										echo "<option value = \"$o\">$o</option>\n";
+										$selected = ($o == $form["limit"])?'selected="selected"':"";
+										echo "<option value = \"$o\" $selected>$o</option>\n";
 									 } ?>
 								</select>
 								<span class="description">Indicate the maximum number of videos to grab at a time</span>
@@ -250,7 +244,8 @@ else{
 
 										for ($o = 0; $o < count( $times ); $o++) {
 											$time = $times[$o];
-											echo "<option value = \"$time\">$time</option>\n";
+											$selected = ($time == $form["schedule"])?'selected="selected"':"";
+											echo "<option value = \"$time\" $selected >$time</option>\n";
 									 	} 
 									?>
 								</select>
@@ -260,21 +255,15 @@ else{
 		        		<tr valign="top">
 						<th scope="row">Publish</th>
 						<td>
-							<?php
-							 	if(isset($_POST["publish"])){
-							 		$value_publish = $_POST["publish"];
-							 	}else{
-							 		$value_publish = "1";
-							 	}
-							 	echo "VALUE PUBLISH: "; var_dump($value_publish); echo "<br/><br/>";
-							 ?>
-							<input type="checkbox" value="<?php echo $value_publish;?>" name="publish" id="publish-check"/>
+							<?php $publish_checked = ($form["publish"]==1)?'checked="checked"':"";?>
+							<input type="checkbox" value="1" name="publish" id="publish-check" <?php echo $publish_checked;?> />
 							<span class="description">Leave this unchecked to moderate autoposts before they go live</span>
 						</td>
 						<tr valign="top">
 						<th scope="row">Click-to-play Video</th>
 						<td>
-							<input type="checkbox" value="1" value="<?php echo $_POST["click_to_play"];?>"  name="click_to_play" id="click_to_play" />
+							<?php $ctp_checked = ($form["click_to_play"]==1)?'checked="checked"':"";?>
+							<input type="checkbox" value="1" <?php echo $ctp_checked;?>  name="click_to_play" id="click_to_play" />
 							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#">learn more</a></span>
 						</td>
 					</tr>
@@ -282,23 +271,24 @@ else{
 						<th scope="row">Post Category</th>
 						<td>
 							<?php 							
-								$select_cats = wp_dropdown_categories( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 ) );
+								$select_cats = wp_dropdown_categories		( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 ) );
 								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
-								echo $select_cats; 							
+								echo $select_cats;//TODO: select categories
 							?>
 							<span class="description">Select a category for your autoposts</span>
 						</td>
 					</tr>
 					</tr>
-		        		<tr valign="top">
+						<tr valign="top">
 						<th scope="row">Post Author</th>
 						<td>
 							<select name="author" id="author_id" class="author-select" >
 								<?php
 									foreach ($blogusers as $user) {
 										$author_name = $user->display_name;
-										$author_id = $user->ID;										
-								   		echo '<option value = "'.$author_id.'">'.$author_name.'</option>\n';
+										$author_id = $user->ID;
+										$selected = ($form["author"]==$author_id)?'selected="selected"':"";
+										echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
 									} 
 								?>
 							</select>
@@ -317,8 +307,10 @@ else{
 										$provider_name = $provider->name;
 										$provider_id = $provider->id;
 										$provider_opt_out = $provider->opt_out;
-										if($provider_opt_out == false){
-											echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+
+										if(!$provider_opt_out){
+											$provider_selected = (in_array($provider_id, $form["provider"]))?'selected="selected"':"";
+											echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
 										}										
 								   		
 									} 
@@ -371,7 +363,7 @@ else{
 				GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
 			}			
 			?>
-			<div>
+			<div>	
 				<h3>Manage Feeds</h3>
 				<table class="grabpress-table" style="margin-bottom:215px;">
 					<tr>
@@ -454,8 +446,8 @@ else{
 						</td>
 						<td>
 							<?php 
-								$checked = ( $feed->custom_options->publish  ) ? ' checked = "checked"' : '';
-								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check" onclick="toggleButton('.$feedId.')" />';
+								$checked = ($feed->custom_options->publish)?'checked="checked"':'';
+								echo '<input '.$checked.' type="checkbox" value="1" name="publish" id="publish-check" onclick="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>
@@ -531,7 +523,6 @@ else{
 												echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
 											}
 										}
-								   		
 									}
  
 								?>
