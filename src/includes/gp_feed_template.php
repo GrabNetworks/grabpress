@@ -15,7 +15,7 @@
 				( function ( global, $ ) {
 					global.hasValidationErrors = function () {						
 						var category =  $('#channel-select').val();
-						if(category == ''){						
+						if(category == ''){
 							return "Please select at least one video channel";
 						}else if($("#provider-select :selected").length == 0){						
 							return "Please select at least one provider";					  
@@ -305,7 +305,11 @@ else{
 								   		$provider = $record_provider->provider;
 										$provider_name = $provider->name;
 										$provider_id = $provider->id;
-								   		echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										$provider_opt_out = $provider->opt_out;
+										if($provider_opt_out == false){
+											echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										}										
+								   		
 									} 
 								?>
 							</select> *
@@ -388,7 +392,7 @@ else{
 								<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />	
 								<?php 
 									$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-									echo '<input '.$checked.' type="checkbox" onchange="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
+									echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
 								?>
 						<td>
 							<select  name="channel" id="channel-select-<?php echo $feedId; ?>" onchange="toggleButton(<?php echo $feedId; ?>)" class="channel-select" >
@@ -440,13 +444,13 @@ else{
 						<td>
 							<?php 
 								$checked = ( $feed->custom_options->publish  ) ? ' checked = "checked"' : '';
-								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check" onchange="toggleButton('.$feedId.')" />';
+								echo '<input'.$checked.' type="checkbox" value="1" name="publish" id="publish-check" onclick="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>
 							<?php 
 								$checked = ( $feed->auto_play  ) ? '' : ' checked = "checked"';
-								echo '<input'.$checked.' type="checkbox" value="1" name="click_to_play" id="click_to_play-<?php echo $feedId; ?>" onchange="toggleButton('.$feedId.')" />';
+								echo '<input'.$checked.' type="checkbox" value="1" name="click_to_play" id="click_to_play-<?php echo $feedId; ?>" onclick="toggleButton('.$feedId.')" />';
 							?>
 						</td>
 						<td>
@@ -507,11 +511,14 @@ else{
 								   		$provider = $record_provider->provider;
 										$provider_name = $provider->name;
 										$provider_id = $provider->id;
+										$provider_opt_out = $provider->opt_out;									
 										$selected = in_array($provider_id, $providers)  ? 'selected = "selected"' : '';
-										if(in_array("", $providers)){ 
-											echo '<option selected = "selected" value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-										}else{
-											echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										if($provider_opt_out == false){
+											if(in_array("", $providers)){ 
+												echo '<option selected = "selected" value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+											}else{
+												echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+											}
 										}
 								   		
 									}

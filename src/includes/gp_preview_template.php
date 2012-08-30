@@ -6,17 +6,17 @@
 	$providers = join($provider, ",");
 
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.$keyword
+		.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and
 		.'&categories='.$channel.'&order=DESC&order_by=created_at&providers='.$providers);
 	$list_feeds = json_decode($json_preview, true);	
 ?>
 
-<fieldset>
+<fieldset id="preview-feed">
 	<legend>Preview Feed</legend>
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview">
-		<span class="preview-text"><b><?php echo "Video Channel: "; ?></b><?php echo $category; ?></span><br/>
-		<span class="preview-text"><b><?php echo "Keywords: "; ?></b><?php echo $keyword; ?></span><br/>
-		<span class="preview-text"><b><?php echo "Providers: "; ?></b><?php //echo $providersNames; ?></span><br/>
+		<span class="preview-text"><b><?php echo "Video Channel: "; ?></b><?php echo $channel; ?></span><br/>
+		<span class="preview-text"><b><?php echo "Keywords: "; ?></b><?php echo $keywords_and; ?></span><br/>
+		<span class="preview-text"><b><?php echo "Providers: "; ?></b><?php // $providersNames; ?></span><br/>
 	<?php		  	
 		foreach ($list_feeds["results"] as $result) {
 	?>
