@@ -9,10 +9,12 @@
 				$json_provider = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1');
 				$list_provider = json_decode($json_provider);
 				$providers_total = count($list_provider);
-				$blogusers = get_users();
+				$blogusers = get_users();			
+				var_dump($_POST);
 			?>
 			<script type="text/javascript">
 				( function ( global, $ ) {
+				    $("#form-create-feed input[name=action]").val("update");	
 					global.hasValidationErrors = function () {						
 						var category =  $('#channel-select').val();
 						if(category == ''){
@@ -84,7 +86,7 @@
 					}
 				}
 				
-				jQuery(function($){
+				jQuery(function($){						
 					   $("#form-create-feed input[name=action]").val("update");	
 					   // Show "Preview Feed" and "Create Feed" buttons
 					   $("#form-create-feed").bind("change", function(e) { 
@@ -199,7 +201,7 @@
 						<tr>
 							<th scope="row">Video Channel</th>
 							<td>
-								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px">
+								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px" >
 									<option selected = "selected" value = "">Choose One</option>
 									<?php 	
 										$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');
@@ -208,7 +210,8 @@
 									   		$category = $record -> category;
 											$name = $category -> name;
 											$id = $category -> id;
-									   		echo '<option value = "'.$name.'">'.$name.'</option>\n';
+											$selected = (in_array($id, $_POST["channel"]))?'selected="selected"':"";
+									   		echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>\n';
 										} 
 									?>
 								</select> *
@@ -218,7 +221,7 @@
 			        		<tr valign="top">
 							<th scope="row">Keywords</th>
 		        		           	<td >
-								<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" /> 
+								<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $_POST["keyword"];?>"/> 
 								<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
 							</td>
 		        		        </tr>
@@ -257,13 +260,21 @@ else{
 		        		<tr valign="top">
 						<th scope="row">Publish</th>
 						<td>
-							<input type="checkbox" value="1" name="publish" id="publish-check"/>
+							<?php
+							 	if(isset($_POST["publish"])){
+							 		$value_publish = $_POST["publish"];
+							 	}else{
+							 		$value_publish = "1";
+							 	}
+							 	echo "VALUE PUBLISH: "; var_dump($value_publish); echo "<br/><br/>";
+							 ?>
+							<input type="checkbox" value="<?php echo $value_publish;?>" name="publish" id="publish-check"/>
 							<span class="description">Leave this unchecked to moderate autoposts before they go live</span>
 						</td>
 						<tr valign="top">
 						<th scope="row">Click-to-play Video</th>
 						<td>
-							<input type="checkbox" value="1" name="click_to_play" id="click_to_play" />
+							<input type="checkbox" value="1" value="<?php echo $_POST["click_to_play"];?>"  name="click_to_play" id="click_to_play" />
 							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#">learn more</a></span>
 						</td>
 					</tr>
@@ -298,7 +309,7 @@ else{
 		        		<tr valign="top">
 						<th scope="row">Providers</th>
 						<td>
-							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" class="providers_total" />	
+							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />	
 							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="showButtons()" >
 								<?php
 									foreach ($list_provider as $record_provider) {
