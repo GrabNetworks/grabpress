@@ -642,6 +642,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		wp_enqueue_script('jquery-uiposition', $plugin_url.'/js/ui/jquery.ui.position.js');
 	
 		wp_enqueue_script('jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js');
+		wp_enqueue_script('jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js');		
 	}
 	static function print_styles(){
 		GrabPress::log();
