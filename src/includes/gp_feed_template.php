@@ -178,7 +178,14 @@
 					  $(".channel-select").selectmenu();
 					  $(".schedule-select").selectmenu();
 					  $(".limit-select").selectmenu();
-					  $(".author-select").selectmenu();			
+					  $(".author-select").selectmenu();					  
+
+					  $("#learn-more").simpletip({
+					  	 content: 'Please be aware that selecting a click-to-play player can negatively impact your revenue, <br />as not all users will generate an ad impression. If you are looking to optimize revenue <br />through Grabpress, all feeds should be set to autoplay. ', 
+					  	 fixed: true, 
+					  	 position: 'bottom'
+					  });
+
 				});
 		
 				
@@ -264,7 +271,7 @@ else{
 						<th scope="row">Click-to-play Video</th>
 						<td>
 							<input type="checkbox" value="1" name="click_to_play" id="click_to_play" />
-							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#">learn more</a></span>
+							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#" onclick='return false;' id="learn-more">learn more</a></span>
 						</td>
 					</tr>
 		        		<tr valign="top">
@@ -495,7 +502,6 @@ else{
 									foreach ($blogusers as $user) {
 										$author_name = $user->display_name;
 										$author_id = $user->ID;
-										echo "CUSTOM OPTIONS ID: "; var_dump($feed->custom_options->author_id);
 										$selected = ($author_id == $feed->custom_options->author_id)  ? 'selected = "selected"' : '';									
 								   		echo '<option '.$selected.' value = "'.$author_id.'">'.$author_name.'</option>\n';
 									} 
