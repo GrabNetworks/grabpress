@@ -58,7 +58,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 			}
 		}    
 		static function abort( $message ) {
-			GrabPress::log( 'abort:'.$message );
+			GrabPress::log( '<><><> "FATAL" ERROR. YOU SHOULD NEVER SEE THIS MESSAGE <><><>:'.$message );
+			
+			//TDDO: please root out the reason this is being triggered and fix the code so it doesn't get called, rather than commenting out its effects. silencing errors is not good practice.
 			
 			// die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a><br/>Debug Info:</br>'.debug_backtrace() );
 		}
