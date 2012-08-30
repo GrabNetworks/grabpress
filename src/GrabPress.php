@@ -28,6 +28,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		static $api_key;
 		static $invalid = false;
 		static $environment = 'grabqa'; // or 'grabnetworks'
+
 		static $debug = true;
 		static $message = false;
 		static $error = false;
@@ -56,11 +57,13 @@ if( ! class_exists( 'GrabPress' ) ) {
 				$icon_src = plugin_dir_url( __FILE__ ).'g.png';
 				echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$show.'</p></div>';
 			}
-		}    
+		}
+
 		static function abort( $message ) {
 			GrabPress::log();
 			// die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a><br/>Debug Info:</br>'.debug_backtrace() );
 		}
+
 		static function allow_tags() {
 			GrabPress::log();
 			global $allowedposttags;
@@ -496,7 +499,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 
 	static function formDefaultValues($params){
 		GrabPress::log();
-		$defaults = array("publish" => false, "click_to_play" => false, "category" => array(),"action" =>"default");
+		$defaults = array("publish" => false, "click_to_play" => false, "category" => array(),"action" =>"default","provider"=>array());
 		foreach ($defaults as $key => $value) {
 			if(!array_key_exists($key,$params)){
 				$params[$key] = $value;
@@ -513,7 +516,9 @@ if( ! class_exists( 'GrabPress' ) ) {
 				switch ($params['action']){
 					case 'update':
 							if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
-								GrabPress::create_feed();					
+								GrabPress::create_feed();
+								echo '<script type="text/javascript">window.location="admin.php?page=autoposter";</script>';
+								exit;
 							}else {
 								GrabPress::$invalid = true;
 							}

@@ -203,8 +203,8 @@
 									   		$category = $record -> category;
 											$name = $category -> name;
 											$id = $category -> id;
-											$selected = ($id == $form["channel"])?'selected="selected"':"";
-									   		echo '<option value = "'.$id.'" '.$selected.'>'.$name.'</option>\n';
+											$selected = ($name == $form["channel"])?'selected="selected"':"";
+									   		echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>\n';
 										} 
 									?>
 								</select> *
@@ -311,8 +311,7 @@ else{
 										if(!$provider_opt_out){
 											$provider_selected = (in_array($provider_id, $form["provider"]))?'selected="selected"':"";
 											echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-										}										
-								   		
+										}
 									} 
 								?>
 							</select> *
@@ -381,7 +380,11 @@ else{
 						<th>Preview Feed</th>
 						<th></th>						
 					</tr>
-				<?php for ($n = 0; $n < $num_feeds; $n++ ) { 
+				<?php 
+					$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');
+					$categories_list = json_decode($json);
+
+				for ($n = 0; $n < $num_feeds; $n++ ) { 
 					$feed = $feeds[$n]->feed;
 					$url = array();
 					parse_str( parse_url($feed->url, PHP_URL_QUERY), $url);					
@@ -400,9 +403,8 @@ else{
 						<td>
 							<select  name="channel" id="channel-select-<?php echo $feedId; ?>" onchange="toggleButton(<?php echo $feedId; ?>)" class="channel-select" >
 								<?php 	
-									$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');
-									$list = json_decode($json);
-									foreach ($list as $record) {
+									
+									foreach ($categories_list as $record) {
 								   		$category = $record -> category;
 										$name = $category -> name;
 										$id = $category -> id;
