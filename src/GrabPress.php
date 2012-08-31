@@ -504,7 +504,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 		self::showMessage();
 	}
 
-	static function formDefaultValues($params){
+	static function formDefaultValues($params = array()){
 		GrabPress::log();
 		$defaults = array("publish" => false, "click_to_play" => false, "category" => array(),"action" =>"default","provider"=>array());
 		foreach ($defaults as $key => $value) {
@@ -524,8 +524,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 					case 'update':
 							if( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
 								GrabPress::create_feed();
-								echo '<script type="text/javascript">window.location="admin.php?page=autoposter";</script>';
-								exit;
+								$_POST = GrabPress::formDefaultValues();
 							}else {
 								GrabPress::$invalid = true;
 							}
