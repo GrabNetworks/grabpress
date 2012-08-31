@@ -276,7 +276,7 @@ else{
 							<span class="description">Leave this unchecked to moderate autoposts before they go live</span>
 						</td>
 						<tr valign="top">
-						<th scope="row">Click-to-play Video</th>
+						<th scope="row">Click-to-play Video (CTP)</th>
 						<td>
 							<?php $ctp_checked = ($form["click_to_play"]==1)?'checked="checked"':"";?>
 							<input type="checkbox" value="1" <?php echo $ctp_checked;?>  name="click_to_play" id="click_to_play" />
@@ -384,7 +384,7 @@ else{
 						<th>Schedule</th>
 						<th>Max Results</th>
 						<th>Publish</th>
-						<th>Click to Play</th>
+						<th>CTP</th>
 						<th>Post Categories</th>
 						<th>Author</th>
 						<th>Providers</th>
