@@ -1,19 +1,23 @@
+<?php 
+	$providers = join($provider, ",");
+	$provider_total = count(GrabPress::getProviders());
+	if($provider_total == count($provider)){
+		$provider_text = "All Providers";
+	}else{
+		$provider_text = count($provider)." of ".$provider_total." selected";
+	}
+	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
+		.'.com/catalogs/1/videos/search.json?keywords_and='.$keyword
+		.'&categories='.$channel.'&order=DESC&order_by=created_at&providers='.$providers);
+	$list_feeds = json_decode($json_preview, true);
+?>
 <form method="post" action="" id="preview-feed">
 	<input type="hidden" id="action-preview-feed" name="action" value="" />
 <div class="wrap">
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
-<?php 
-	$providers = join($provider, ",");
-	
-	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.$keyword
-		.'&categories='.$channel.'&order=DESC&order_by=created_at&providers='.$providers);
-	$list_feeds = json_decode($json_preview, true);
-?>
-
-<fieldset id="preview-feed">
+	<fieldset id="preview-feed">
 	<legend>Preview Feed</legend>
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
 		<input type="hidden" name="keyword" value="<?php echo $keyword; ?>" id="keyword" />	
@@ -34,9 +38,9 @@
 		</select>
 		
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview" >
-		<span class="preview-text"><b><?php echo "Video Channel: "; ?></b><?php echo $channel; ?></span><br/>
-		<span class="preview-text"><b><?php echo "Keywords: "; ?></b><?php echo $keyword; ?></span><br/>
-		<span class="preview-text"><b><?php echo "Providers: "; ?></b><?php // $providersNames; ?></span><br/>
+		<span class="preview-text"><b>Video Channel: </b><?php echo $channel; ?></span><br/>
+		<span class="preview-text"><b>Keywords: </b><?php echo $keyword; ?></span><br/>
+		<span class="preview-text"><b>Providers: </b><?php echo $provider_text; ?></span><br/>
 	<?php
 		foreach ($list_feeds["results"] as $result) {
 	?>

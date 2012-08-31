@@ -321,12 +321,8 @@ else{
 								   		$provider = $record_provider->provider;
 										$provider_name = $provider->name;
 										$provider_id = $provider->id;
-										$provider_opt_out = $provider->opt_out;
-
-										if(!$provider_opt_out){
-											$provider_selected = (in_array($provider_id, $form["provider"]))?'selected="selected"':"";
-											echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-										}
+										$provider_selected = (in_array($provider_id, $form["provider"]))?'selected="selected"':"";
+										echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
 									} 
 								?>
 							</select> *
@@ -530,14 +526,11 @@ else{
 								   		$provider = $record_provider->provider;
 										$provider_name = $provider->name;
 										$provider_id = $provider->id;
-										$provider_opt_out = $provider->opt_out;									
 										$selected = in_array($provider_id, $providers)  ? 'selected = "selected"' : '';
-										if($provider_opt_out == false){
-											if(in_array("", $providers)){ 
-												echo '<option selected = "selected" value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-											}else{
-												echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-											}
+										if(in_array("", $providers)){ 
+											echo '<option selected = "selected" value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+										}else{
+											echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
 										}
 									}
  

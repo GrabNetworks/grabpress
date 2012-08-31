@@ -461,13 +461,20 @@ if( ! class_exists( 'GrabPress' ) ) {
 		// }
 		print self::fetch('includes/gp_account_template.php');
 	}
+	static function _filterProviders($x){
+		return !$x->provider->opt_out;
+	}
+	static function getProviders(){
+		$json_provider = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1');
+		$list = json_decode($json_provider);
+		return array_filter($list, array("GrabPress", "_filterProviders"));
+	}
     static function render_feed_management(){
 		GrabPress::log();
   		//if (!current_user_can('manage_options'))  {
 		// 	wp_die( __('You do not have sufficient permissions to access this page.') );
 		// }
-		$json_provider = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1');
-		$list_provider = json_decode($json_provider);
+		$list_provider = GrabPress::getProviders();
 		$providers_total = count($list_provider);
 		$blogusers = get_users();
 		print self::fetch('includes/gp_feed_template.php', 
