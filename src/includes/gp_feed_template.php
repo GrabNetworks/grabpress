@@ -103,8 +103,8 @@
 					}
 					var category_options = $('#cat option');
 					for(var i=0;i<category_options.length; i++){
-						if($.inArray($(category_options).val(),selectedCategories)>-1){
-							$(category_options).attr("selected", "selected");
+						if($.inArray($(category_options[i]).val(),selectedCategories)>-1){
+							$(category_options[i]).attr("selected", "selected");
 						}
 					}
 
