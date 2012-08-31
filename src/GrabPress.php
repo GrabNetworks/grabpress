@@ -122,7 +122,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			
 			return $response;
 		}
-		function apiCall($method, $resource, $data=array()){
+		function apiCall($method, $resource, $data=array(), $auth=FALSE){
 			GrabPress::log();
 			$json = json_encode( $data );
 			$apiLocation = self::get_api_location();			
@@ -134,9 +134,20 @@ if( ! class_exists( 'GrabPress' ) ) {
 			curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
 				'Content-type: application/json'
 			) );
+			$params = '';
+			if( $auth ){
+				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
+			}else{
+				$params = strstr($resource, '?') ? '&' : '?';
+				foreach ($data as $key => $value) {
+					$params .=$key.'='.$value.'&';
+				}
+				$params = substr($params, 0, -1);
+			}
 			switch($method){
 				case 'GET':					
 					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
+					$location.=$params;
 					break;
 				case 'POST';
 					curl_setopt( $ch, CURLOPT_POST, true );
@@ -602,8 +613,10 @@ if( ! class_exists( 'GrabPress' ) ) {
 			switch( $_POST[ 'action' ] ){
 				case 'link-user' :
 					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
-						$credentials = array( 'email' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
-						$user_json = self::apiCall( 'GET', '/user/validate?api_key=' . self::$api_key, $credentials );
+						$credentials = array( 'user' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
+						var_dump( $credentials );
+						$user_json = self::apiCall( 'GET', '/user/validate', $credentials, TRUE );
+						var_dump( $user_json );
 						$user_data = json_decode( $user_json );
 						if( isset( $user_data -> user ) ){
 							$user = $user_data -> user;
@@ -615,7 +628,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 							$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
 							$_POST[ 'action' ] = 'default';
 						}else{
-							GrabPress::$error = 'No user with the email' . $_POST[ 'email' ] . 'exists in our system.';
+							GrabPress::$error = 'No user with the email ' . $_POST[ 'email' ] . ' exists in our system.';
 							$_POST[ 'action' ] = 'link';
 						}
 					}else{
