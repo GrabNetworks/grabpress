@@ -1,4 +1,4 @@
-<?php 
+	<?php 
 	$providers = join($provider, ",");
 	$provider_total = count(GrabPress::getProviders());
 	if($provider_total == count($provider)){
@@ -7,7 +7,7 @@
 		$provider_text = count($provider)." of ".$provider_total." selected";
 	}
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.$keyword
+		.'.com/catalogs/1/videos/search.json?keywords_and='.$keyword.$keywords_and
 		.'&categories='.$channel.'&order=DESC&order_by=created_at&providers='.$providers);
 	$list_feeds = json_decode($json_preview, true);
 ?>
@@ -19,6 +19,7 @@
 			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
 	<fieldset id="preview-feed">
 	<legend>Preview Feed</legend>
+		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
 		<input type="hidden" name="keyword" value="<?php echo $keyword; ?>" id="keyword" />	
 		<input type="hidden" name="limit" value="<?php echo $limit; ?>" id="limit" />
@@ -39,7 +40,7 @@
 		
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview" >
 		<span class="preview-text"><b>Video Channel: </b><?php echo $channel; ?></span><br/>
-		<span class="preview-text"><b>Keywords: </b><?php echo $keyword; ?></span><br/>
+		<span class="preview-text"><b>Keywords: </b><?php echo $keyword.$keywords_and; ?></span><br/>
 		<span class="preview-text"><b>Providers: </b><?php echo $provider_text; ?></span><br/>
 	<?php
 		foreach ($list_feeds["results"] as $result) {

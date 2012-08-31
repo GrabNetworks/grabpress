@@ -216,7 +216,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			if( self::validate_key() ) {
 				$categories = rawurlencode($_POST[ 'channel' ]);
-				$keywords_and = rawurlencode( $_POST[ 'keyword' ] );
+				$keywords_and = rawurlencode( $_POST[ 'keywords_and' ] );
 				$json = GrabPress::get_json( 'http://catalog.'.self::$environment.'.com/catalogs/1/categories' );
 				$list = json_decode( $json );
 				foreach ( $list as $record ) {
@@ -474,6 +474,9 @@ if( ! class_exists( 'GrabPress' ) ) {
   		//if (!current_user_can('manage_options'))  {
 		// 	wp_die( __('You do not have sufficient permissions to access this page.') );
 		// }
+		if($_POST["referer"] == "edit"){
+			$_POST = GrabPress::formDefaultValues();
+		}
 		$list_provider = GrabPress::getProviders();
 		$providers_total = count($list_provider);
 		$blogusers = get_users();
@@ -506,7 +509,12 @@ if( ! class_exists( 'GrabPress' ) ) {
 
 	static function formDefaultValues($params = array()){
 		GrabPress::log();
-		$defaults = array("publish" => false, "click_to_play" => false, "category" => array(),"action" =>"default","provider"=>array());
+		$defaults = array("publish" => false,
+			"click_to_play" => false,
+			"category" => array(),
+			"action" => "default",
+			"provider" => array(),
+			"keywords_and" => "");
 		foreach ($defaults as $key => $value) {
 			if(!array_key_exists($key,$params)){
 				$params[$key] = $value;

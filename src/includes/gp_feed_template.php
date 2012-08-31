@@ -198,6 +198,7 @@
 				$connector_id = GrabPress::get_connector_id();		
 			?>
 			<form method="post" action="" id="form-create-feed">
+				<input type="hidden"  name="referer" value="create" />
 				<input type="hidden"  name="action" value="update" />
 	            		<table class="form-table grabpress-table">
 	                		<tr valign="top">
@@ -404,6 +405,7 @@ else{
 				?>
 				<form id="form-<?php echo $feedId; ?>" action=""  method="post">		
 					<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
+					<input type="hidden" name="referer" value="edit" />
 					<tr>											
 						<td>
 								<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />	
