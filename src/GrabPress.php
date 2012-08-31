@@ -614,9 +614,7 @@ if( ! class_exists( 'GrabPress' ) ) {
 				case 'link-user' :
 					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
 						$credentials = array( 'user' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
-						var_dump( $credentials );
 						$user_json = self::apiCall( 'GET', '/user/validate', $credentials, TRUE );
-						var_dump( $user_json );
 						$user_data = json_decode( $user_json );
 						if( isset( $user_data -> user ) ){
 							$user = $user_data -> user;
