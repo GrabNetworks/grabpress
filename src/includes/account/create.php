@@ -2,6 +2,7 @@
 <fieldset id="account" class="create">
 	<legend>Create Account</legend>
 	<form action="" method="post" id="register">
+		<input type="hidden" name="action" value="create-user"/>
 		<table>
 	    	<tr><td>Email *</td><td><input id="id_email" type="text" name="email" maxlength="255"></td></tr>
 			<tr><td>Create Password* (minimum 6 characters)</td><td><input type="password" name="password1" id="id_password1"></td></tr>
@@ -21,10 +22,17 @@
 				<td class = "account-help" >Note: All fields marked with an asterisk* are required.</td>
 				<td id="buttons" class = "account-help" >
 					<a href ="#">clear form</a>
-					<input type="button" class="button-primary" value="<?php _e( 'Create Account') ?>"/>
+					<input type="button" class="button-primary" value="<?php _e('Create Account') ?>"/>
 					<input type="button" class="button-secondary" value="<?php _e('Cancel') ?>"/>
 				</td>
 			</tr>
 		</table>
 	</form>
 </fieldset>
+	<script>
+		(function($){
+			$('#register input.button-primary').click(function(){
+				$('#register').submit();
+			})
+		})( jQuery )
+	</script>

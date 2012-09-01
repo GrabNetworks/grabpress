@@ -644,6 +644,33 @@ if( ! class_exists( 'GrabPress' ) ) {
 						$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
 						$_POST[ 'action' ] = 'default';
 					}
+					break;
+					case 'create-user':
+						$user_data = array(
+						   	'user'=>array(
+						   		'email'=>$_POST['email'],
+						         'password'=>$_POST['password1'],
+						         'first_name'=>$_POST['first_name'],
+						         'last_name'=>$_POST['last_name'],
+						         'address1'=>$_POST['address1'],
+						         'address2'=>$_POST['address2'],
+						         'city'=>$_POST['address2'],
+						         'state'=>$_POST['state'],
+						         'zip'=>$_POST['zip'],
+						         'phone_number'=>$_POST['phone_number'],
+						         'paypal_id'=>$_POST['paypal_id']
+							)
+						);
+						$result_json = self::apiCall('POST', '/register', $user_data);
+						$result_data = json_decode( $result_json);
+						if(!isset( $result_data->error ) ){
+							$_POST[ 'action' ] = 'link-user';
+							return self::dispatcher();
+						}else{
+							self::$error = 'Error creating user.';
+							$_POST['action'] = 'create';
+						}
+						break;
 			}
 			GrabPress::render_account_management();
 			break;

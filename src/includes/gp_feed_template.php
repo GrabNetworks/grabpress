@@ -315,8 +315,7 @@ else{
 										$provider_opt_out = $provider->opt_out;
 										if($provider_opt_out == false){
 											echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-										}										
-								   		
+										}
 									} 
 								?>
 							</select> *
