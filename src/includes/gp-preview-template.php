@@ -1,4 +1,4 @@
-	<?php 
+<?php 
 	$providers = join($provider, ",");
 	$provider_total = count(GrabPress::getProviders());
 	if($provider_total == count($provider)){
