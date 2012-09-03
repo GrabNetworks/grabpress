@@ -228,7 +228,7 @@
 	        		<tr valign="top">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keyword" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keyword"];?>"/>
+						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_and"];?>"/>
 						<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
 					</td>
         		        </tr>
@@ -369,9 +369,9 @@
 					$noun .= 's';
 				}
 				if ( GrabPress::$environment == "grabqa" ) {
-					GrabPress::showMessage( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment );
+					GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment );
 				}else {
-					GrabPress::showMessage( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
+					GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
 				}
 		?>
 		<div>
