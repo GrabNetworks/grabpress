@@ -228,7 +228,7 @@
 	        		<tr valign="top">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_and"];?>"/>
+						<input type="text" name="keywords" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords"];?>"/>
 						<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
 					</td>
         		        </tr>
@@ -428,7 +428,7 @@
 							</select>
 						</td>
 						<td>
-							<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>
+							<input type="text" name="keywords" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>
 						</td>
 						<td>
 							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:90px;">

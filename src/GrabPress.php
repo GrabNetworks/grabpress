@@ -223,7 +223,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
 				$categories = rawurlencode( $_POST[ 'channel' ] );
-				$keywords_and = rawurlencode( $_POST[ 'keywords_and' ] );
+				$keywords_and = rawurlencode( $_POST[ 'keywords' ] );
 				$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 				$list = json_decode( $json );
 				foreach ( $list as $record ) {
@@ -535,7 +535,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"category" => array(),
 				"action" => "default",
 				"provider" => array(),
-				"keywords_and" => "" );
+				"keywords" => "" );
 			foreach ( $defaults as $key => $value ) {
 				if ( !array_key_exists( $key, $params ) ) {
 					$params[$key] = $value;
@@ -568,7 +568,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				case 'modify':
 					$feed_id = $_POST['feed_id'];
-					$keywords_and = htmlspecialchars( $_POST['keywords_and'] );
+					$keywords_and = htmlspecialchars( $_POST['keywords'] );
 					$categories = rawurlencode( $_POST[ 'channel' ] );
 					$providers = $_POST['provider'];
 					$providersList = implode( ',', $providers );
