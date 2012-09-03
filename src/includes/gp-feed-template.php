@@ -369,9 +369,9 @@
 					$noun .= 's';
 				}
 				if ( GrabPress::$environment == "grabqa" ) {
-					GrabPress::showMessage( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment );
+					GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment );
 				}else {
-					GrabPress::showMessage( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
+					GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
 				}
 		?>
 		<div>

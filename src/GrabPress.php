@@ -127,7 +127,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $response;
 		}
 
-		function api_call( $method, $resource, $data=array(), $return_status=FALSE ) {
+		static function api_call( $method, $resource, $data=array(), $return_status=FALSE ) {
 			GrabPress::log();
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_API_location();

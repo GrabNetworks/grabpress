@@ -1,6 +1,6 @@
 <?php 
 	$providers = join($provider, ",");
-	$provider_total = count(GrabPress::getProviders());
+	$provider_total = count(GrabPress::get_providers());
 	if($provider_total == count($provider)){
 		$provider_text = "All Providers";
 	}else{
@@ -73,7 +73,6 @@
 <script type="text/javascript">
 	jQuery(function(){
 		jQuery("#close-preview").click(function() {		  
-		  //window.history.back();
 		  var form = jQuery('#preview-feed');	
 		  var action = jQuery('#action-preview-feed');
 		  action.val("default");
