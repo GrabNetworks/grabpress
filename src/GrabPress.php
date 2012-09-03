@@ -506,6 +506,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					"blogusers" => $blogusers ) );
 		}
 
+		static function render_feed_creation_success(){
+			print GrabPress::fetch( "includes/gp-feed-created-template.php" );
+		}
+
 		static function grabpress_preview_videos() {
 			GrabPress::log();
 			/*
@@ -554,11 +558,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'update':
 					if ( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
 						GrabPress::create_feed();
-						$_POST = GrabPress::form_default_values();
+
+						GrabPress::render_feed_creation_success();
 					}else {
 						GrabPress::$invalid = true;
+						GrabPress::render_feed_management();
 					}
-					GrabPress::render_feed_management();
 					break;
 				case 'delete':
 					$feed_id = $_POST['feed_id'];
