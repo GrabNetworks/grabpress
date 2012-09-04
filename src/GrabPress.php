@@ -664,7 +664,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'link-user' :
 					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
 						$credentials = array( 'user' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
-						$user_json = self::apiCall( 'GET', '/user/validate', $credentials, TRUE );
+						$user_json = GrabPress::api_call( 'GET', '/user/validate', $credentials, TRUE );
 						$user_data = json_decode( $user_json );
 						if( isset( $user_data -> user ) ){
 							$user = $user_data -> user;
@@ -672,8 +672,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							 	'user_id' 	=> $user -> id,
 								'email' 	=> $user -> email
 							);
-							GrabPress::log( 'PUTting to connector ' . self::get_connector_id() . ':' . $user -> id );
-							$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
+							GrabPress::log( 'PUTting to connector ' . GrabPress::get_connector_id() . ':' . $user -> id );
+							$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 							$_POST[ 'action' ] = 'default';
 						}else{
 							GrabPress::$error = 'No user with the email ' . $_POST[ 'email' ] . ' exists in our system.';
@@ -690,8 +690,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						 	'user_id' 	=> null,
 							'email' 	=> $user -> email
 						);
-						GrabPress::log( 'PUTting to connector ' . self::get_connector_id() . ':' . $user -> ID );
-						$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
+						GrabPress::log( 'PUTting to connector ' . GrabPress::get_connector_id() . ':' . $user -> ID );
+						$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 						$_POST[ 'action' ] = 'default';
 					}
 					break;
@@ -704,20 +704,22 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						         'last_name'=>$_POST['last_name'],
 						         'address1'=>$_POST['address1'],
 						         'address2'=>$_POST['address2'],
-						         'city'=>$_POST['address2'],
+						         'city'=>$_POST['city'],
 						         'state'=>$_POST['state'],
 						         'zip'=>$_POST['zip'],
 						         'phone_number'=>$_POST['phone_number'],
 						         'paypal_id'=>$_POST['paypal_id']
 							)
 						);
-						$result_json = self::apiCall('POST', '/register', $user_data);
+						$user_json = json_encode($user_data);
+						var_dump( $user_json );
+						$result_json = GrabPress::api_call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
 						$result_data = json_decode( $result_json);
 						if(!isset( $result_data->error ) ){
 							$_POST[ 'action' ] = 'link-user';
-							return self::dispatcher();
+							return GrabPress::dispatcher();
 						}else{
-							self::$error = 'Error creating user.';
+							GrabPress::$error = 'Error creating user.';
 							$_POST['action'] = 'create';
 						}
 						break;
