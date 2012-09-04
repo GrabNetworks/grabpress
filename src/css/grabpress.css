@@ -163,7 +163,9 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
     background: url("images/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6; 
     border: 1px solid #CCCCCC; color: #999; 
     font-weight: bold; 
-    height: 26px;  
+    height: 26px;
+    *height: 17px;
+    *padding-top: 5px;  
     width: 230px; 
     font-size: 12px; 
     font-family: 'Trebuchet MS',Tahoma,Verdana,Arial,sans-serif;
@@ -178,7 +180,8 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
 .grabpress-table input#create-feed-btn{ background: url("../images/button-grad.png") repeat-x scroll left top #21759B; border-color: #298CBA; color: #FFFFFF; font-weight: bold; height: 20px; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3); }
 .grabpress-table input.btn-delete{ background:red; border-color:red; color: #fff; height: 20px; }
 .grabpress-table input#btn-preview-feed{ background: url("../images/white-grad.png") repeat-x scroll left top #F2F2F2; border-color: #BBBBBB; color: #464646; height: 20px; text-shadow: 0 1px 0 #FFFFFF; }
-.grabpress-table input#publish-check{ height: 13px; }
+.grabpress-table input#publish-check{ height: 13px; margin-left: 14px; }
+.grabpress-table input.click-to-play-feed{ margin-left: 3px; }
 .hide{ display: none;}
 .author-select{ width: 225px; }
 .grabpress-table input[type="checkbox"]{ vertical-align: baseline !important; }
@@ -199,6 +202,14 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
     text-decoration: none;
     width: 500px;
 } 
+.grabpress-table .ui-multiselect{
+    *height: 28px;
+}
+.grabpress-table #schedule-select-button .ui-selectmenu-status {
+    width: 52px;
+}
+
+
 
 /* Preview Feed */
 .tile-left {

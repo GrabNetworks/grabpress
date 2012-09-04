@@ -137,7 +137,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-			curl_setopt( $ch, CURLOPT_VERBOSE, true );
+			//curl_setopt( $ch, CURLOPT_VERBOSE, true );
 			curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
 				'Content-type: application/json'
 			) );
