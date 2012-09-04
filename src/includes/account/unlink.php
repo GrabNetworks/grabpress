@@ -9,12 +9,12 @@
 		</table>
 	</form>
 </fieldset>
-	<script>
-		(function($){
-			$('#unlink input.button-primary').click(function(){
-				if($('#confirm').prop('checked') ){
-					$('#unlink').submit();
-				}
-			})
-		})( jQuery )
-	</script>
+<script>
+	(function($){
+		$('#unlink input.button-primary').click(function(){
+			if($('#confirm').prop('checked') ){
+				$('#unlink').submit();
+			}
+		})
+	})( jQuery )
+</script>

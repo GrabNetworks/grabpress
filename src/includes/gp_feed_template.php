@@ -244,13 +244,13 @@
 							<th scope="row">Schedule</th>
 		        		           	<td>
 								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
-<?php
-if(GrabPress::$environment == 'grabqa'){
- $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
-}
-else{
- $times = array( '12 hrs', '01 day', '02 days', '03 days');
-}
+									<?php
+										if(GrabPress::$environment == 'grabqa'){
+										 $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+										}
+										else{
+										 $times = array( '12 hrs', '01 day', '02 days', '03 days');
+										}
 
 										for ($o = 0; $o < count( $times ); $o++) {
 											$time = $times[$o];
@@ -421,14 +421,14 @@ else{
 						<td>
 							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:90px;">
 								<?php 
-if(GrabPress::$environment == 'grabqa'){
- $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
- $values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
-}
-else{
- $times = array( '12 hrs', '01 day', '02 days', '03 days');
- $values = array( 720, 1440, 2880, 4320 );
-} 
+									if(GrabPress::$environment == 'grabqa'){
+									 $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+									 $values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
+									}
+									else{
+									 $times = array( '12 hrs', '01 day', '02 days', '03 days');
+									 $values = array( 720, 1440, 2880, 4320 );
+									} 
 									for ( $o = 0; $o < count( $times ); $o++ ) {
 										$time = $times[$o];
 										$value = $values[$o];

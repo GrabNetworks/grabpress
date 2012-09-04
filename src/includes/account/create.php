@@ -17,7 +17,7 @@
 			<tr><td>Phone Number*</td><td><input id="id_phone_number" type="text" name="phone_number" maxlength="255"></td></tr>
 			<tr><td>Paypal ID</td><td><input id="id_paypal_id" type="text" name="paypal_id" maxlength="255"></td></tr>
 			<tr><td>Website Domain*<select><option>http://</option><option>https://</option></select></td><td><input id="id_url" type="text" name="url" maxlength="255"></td></tr>
-			<tr><td/><td id ="tos">I agree to Grab Networks' <a href="http://www.grab-media.com/terms/" target="_blank">Terms of Service*<input type="checkbox" name="tos" id="id_tos"></td></tr>
+			<tr><td/><td id ="tos">I agree to Grab Networks' <a href="http://www.grab-media.com/terms/" target="_blank">Terms of Service*</a><input type="checkbox" name="tos" id="id_tos"></td></tr>
 			<tr>
 				<td class = "account-help" >Note: All fields marked with an asterisk* are required.</td>
 				<td id="buttons" class = "account-help" >

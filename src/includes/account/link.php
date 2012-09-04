@@ -14,10 +14,10 @@
 		</table>
 	</form>
 </fieldset>
-	<script>
-		(function($){
-			$('#link-existing input.button-primary').click(function(){
-				$('#link-existing').submit();
-			})
-		})( jQuery )
-	</script>
+<script>
+	(function($){
+		$('#link-existing input.button-primary').click(function(){
+			$('#link-existing').submit();
+		})
+	})( jQuery )
+</script>
