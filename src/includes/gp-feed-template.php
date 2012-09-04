@@ -188,6 +188,7 @@
 		  	 fixed: true,
 		  	 position: 'bottom'
 		  });
+		  $('input, textarea').placeholder();
 
 	});
 	</script>
