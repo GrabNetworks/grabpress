@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.4.2b41
+Version: 0.5.0b48
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -62,7 +62,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function abort( $message ) {
-			GrabPress::log();
+			GrabPress::log( '<><><> "FATAL" ERROR. YOU SHOULD NEVER SEE THIS MESSAGE <><><>:'.$message );
+			
+			//TDDO: please root out the reason this is being triggered and fix the code so it doesn't get called, rather than commenting out its effects. silencing errors is not good practice.
+			
 			// die($message.'<br/>Please <a href = "https://getsatisfaction.com/grabmedia">contact Grab support</a><br/>Debug Info:</br>'.debug_backtrace() );
 		}
 
@@ -102,10 +105,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$allowedposttags[ 'style' ] = array();
 			}
 		}
-
-		static function get_API_location() {
-			GrabPress::log();
-			if ( $_SERVER['SERVER_ADDR'] == '127.0.0.1' ) {
+		static function get_api_location() {
+			// GrabPress::log();
+			if ($_SERVER['SERVER_ADDR'] == '127.0.0.1'){
 				$apiLocation = '10.3.1.37';
 			}else {
 				$apiLocation = '74.10.95.28';
@@ -127,7 +129,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $response;
 		}
 
-		static function api_call( $method, $resource, $data=array(), $return_status=FALSE ) {
+		static function api_call( $method, $resource, $data=array() ){
 			GrabPress::log();
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_API_location();
@@ -135,31 +137,43 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-			curl_setopt( $ch, CURLOPT_VERBOSE, true );
+			//curl_setopt( $ch, CURLOPT_VERBOSE, true );
 			curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
-					'Content-type: application/json'
-				) );
-			switch ( $method ) {
-			case 'GET':
-				curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
-				break;
-			case 'POST';
-				curl_setopt( $ch, CURLOPT_POST, true );
-				curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
-				break;
-			case 'PUT';
-				//curl_setopt( $ch, CURLOPT_PUT, true );
-				curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'PUT' );
-				curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
-				break;
-			case 'DELETE';
-				curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'DELETE' );
-				break;
+				'Content-type: application/json'
+			) );
+			$params = '';
+			if( isset($auth) ){
+				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
+			}else{
+				$params = strstr($resource, '?') ? '&' : '?';
+				foreach ($data as $key => $value) {
+					$params .=$key.'='.$value.'&';
+				}
+				$params = substr($params, 0, -1);
+			}
+			switch($method){
+				case 'GET':					
+					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
+					$location.=$params;
+					break;
+				case 'POST';
+					curl_setopt( $ch, CURLOPT_POST, true );
+					curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
+					break;
+				case 'PUT';
+					//curl_setopt( $ch, CURLOPT_PUT, true );
+					curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+					curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
+					break;
+				case 'DELETE';
+					curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+					break;
 			}
 			$response = curl_exec( $ch );
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 			curl_close( $ch );
-			return ( $return_status ) ?  $status==200 : $response;
+			GrabPress::log( 'status = ' . $status . ', response =' . $response );
+			return $response;
 		}
 
 		static function get_connector_user() {
@@ -493,8 +507,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			//if (!current_user_can('manage_options'))  {
 			//  wp_die( __('You do not have sufficient permissions to access this page.') );
 			// }
-			if ( $_POST["referer"] == "edit" ) {
-				$_POST = GrabPress::form_default_values();
+			if ( (isset($_POST["referer"])) && ( $_POST["referer"] == "edit" )) {
+				$_POST = GrabPress::form_default_values();				
 			}
 			$list_provider = GrabPress::get_providers();
 			$providers_total = count( $list_provider );
@@ -547,7 +561,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $params;
 		}
-
 		static function dispatcher() {
 			GrabPress::log();
 			$_POST = GrabPress::form_default_values( $_POST );
@@ -558,7 +571,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'update':
 					if ( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
 						GrabPress::create_feed();
-
 						GrabPress::render_feed_creation_success();
 					}else {
 						GrabPress::$invalid = true;
@@ -650,17 +662,65 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			case 'account':
 				switch ( $_POST[ 'action' ] ) {
 				case 'link-user' :
-					if ( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ] ) ) {
-						$credentials = array( 'email' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
-						$user_exists = GrabPress::api_call( 'POST', '/user/validate?api_key='.GrabPress::$api_key, $credentials, TRUE );
-						if ( $user_exists ) {
-							$connector_data = array( 'user_id' => $_POST[ 'email' ] );
-							GrabPress::api_call( 'POST', '/connectors/'.GrabPress::get_connector_id().'?api_key='.GrabPress::$api_key, $connector_data );
+					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
+						$credentials = array( 'user' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
+						$user_json = self::apiCall( 'GET', '/user/validate', $credentials, TRUE );
+						$user_data = json_decode( $user_json );
+						if( isset( $user_data -> user ) ){
+							$user = $user_data -> user;
+							$connector_data = array(
+							 	'user_id' 	=> $user -> id,
+								'email' 	=> $user -> email
+							);
+							GrabPress::log( 'PUTting to connector ' . self::get_connector_id() . ':' . $user -> id );
+							$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
 							$_POST[ 'action' ] = 'default';
+						}else{
+							GrabPress::$error = 'No user with the email ' . $_POST[ 'email' ] . ' exists in our system.';
+							$_POST[ 'action' ] = 'link';
 						}
 					}else {
 						GrabPress::abort( 'Attempt to link user with incomplete form data.' );
 					}
+					break;
+				case 'unlink-user' :
+					if( isset( $_POST[ 'confirm' ]) ){
+						$user = get_user_by( 'slug', 'grabpress');
+						$connector_data = array(
+						 	'user_id' 	=> null,
+							'email' 	=> $user -> email
+						);
+						GrabPress::log( 'PUTting to connector ' . self::get_connector_id() . ':' . $user -> ID );
+						$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
+						$_POST[ 'action' ] = 'default';
+					}
+					break;
+					case 'create-user':
+						$user_data = array(
+						   	'user'=>array(
+						   		'email'=>$_POST['email'],
+						         'password'=>$_POST['password1'],
+						         'first_name'=>$_POST['first_name'],
+						         'last_name'=>$_POST['last_name'],
+						         'address1'=>$_POST['address1'],
+						         'address2'=>$_POST['address2'],
+						         'city'=>$_POST['address2'],
+						         'state'=>$_POST['state'],
+						         'zip'=>$_POST['zip'],
+						         'phone_number'=>$_POST['phone_number'],
+						         'paypal_id'=>$_POST['paypal_id']
+							)
+						);
+						$result_json = self::apiCall('POST', '/register', $user_data);
+						$result_data = json_decode( $result_json);
+						if(!isset( $result_data->error ) ){
+							$_POST[ 'action' ] = 'link-user';
+							return self::dispatcher();
+						}else{
+							self::$error = 'Error creating user.';
+							$_POST['action'] = 'create';
+						}
+						break;
 				}
 				GrabPress::render_account_management();
 				break;
@@ -685,6 +745,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js' );
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' );
+			wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
+			
 		}
 
 		static function print_styles() {
