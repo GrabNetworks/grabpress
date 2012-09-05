@@ -142,7 +142,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				'Content-type: application/json'
 			) );
 			$params = '';
-			if( $auth ){
+			if( isset($auth) ){
 				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
 			}else{
 				$params = strstr($resource, '?') ? '&' : '?';
@@ -507,8 +507,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			//if (!current_user_can('manage_options'))  {
 			//  wp_die( __('You do not have sufficient permissions to access this page.') );
 			// }
-			if ( $_POST["referer"] == "edit" ) {
-				$_POST = GrabPress::form_default_values();
+			if ( (isset($_POST["referer"])) && ( $_POST["referer"] == "edit" )) {
+				$_POST = GrabPress::form_default_values();				
 			}
 			$list_provider = GrabPress::get_providers();
 			$providers_total = count( $list_provider );
