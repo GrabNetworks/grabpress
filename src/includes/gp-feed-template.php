@@ -355,7 +355,7 @@
 			</form>
 		</div>
 
-		<?php
+				<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
 			$active_feeds = 0;
@@ -452,23 +452,13 @@
 							?>
 						</td>
 						<td>							
-							<?php 
-								for ( $o = 1; $o < 6; $o++ ) {
-									if($o == $feed->posts_per_update){
-										echo $o;
-									}
-								}
-							?>
+							<?php echo $feed->posts_per_update; ?>
 						</td>
 						<td>
-						<?php
-							echo $publish = $feed->custom_options->publish ? "Yes" : "No";
-						?>
+							<?php echo $publish = $feed->custom_options->publish ? "Yes" : "No"; ?>
 						</td>
 						<td>
-						<?php					
-							echo $click_to_play = $feed->auto_play ? "Auto" : "Click";
-						?>
+							<?php echo $click_to_play = $feed->auto_play ? "Auto" : "Click"; ?>
 						</td>
 						<td>
 						<?php	
@@ -509,6 +499,7 @@
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" />
 							<?php								
 								$providers_selected = count($providers);
+								var_dump($providers_selected); echo "<br/><br/>";
 								if($providers_selected == 1){
 									if ( in_array( "", $providers ) ) {
 										echo "All providers";
@@ -543,4 +534,4 @@
 		</div>
 
 	<div class="result"> </div>
-<?php } ?>
+	<?php } ?>
