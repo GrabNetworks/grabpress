@@ -1,12 +1,8 @@
 <form method="post" action="" id="account-chooser">
 	<table>
 		<tr>
-			<?php $checked = $_POST['action'] == 'default' ? 'checked="checked" ' : ''; ?>
-			<td><input type="radio" name="action" value="default" <?php echo $checked ?>/>Continue without Linking</td>
-		</tr>
-		<tr>
-			<?php $checked = $_POST['action'] == 'link' ? ' checked="checked" ' : ''; ?>
-			<td><input type="radio" name="action" value="link" <?php echo $checked ?>/>Link to an existing Publisher account</td>
+			<?php $checked = $_POST['action'] == 'default' ? ' checked="checked" ' : ''; ?>
+			<td><input type="radio" name="action" value="default" <?php echo $checked ?>/>Link to an existing Publisher account</td>
 		</tr>
 		<tr>
 			<?php $checked = $_POST['action'] == 'create' ? ' checked="checked" ' : ''; ?>

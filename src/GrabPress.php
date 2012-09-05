@@ -129,8 +129,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $response;
 		}
 
-		static function api_call( $method, $resource, $data=array() ){
+		static function api_call( $method, $resource, $data=array(), $auth=false ){
 			GrabPress::log();
+			if($auth){
+				GrabPress::log("HTTP AUTH <> ". $data['user'] . ":" . $data['pass']);
+			}
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_API_location();
 			$location = 'http://'.$apiLocation.$resource;
@@ -399,7 +402,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					'user_url' => $user_url,
 					'user_email' => $user_email,
 					'display_name' => $display_name,
-					'user_pass' => GrabPress::$api_key ,
+					'user_pass' => GrabPress::$api_key,
 					'nickname' => $nickname,
 					'first_name' => $first_name,
 					'last_name' => $last_name,
@@ -664,8 +667,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'link-user' :
 					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
 						$credentials = array( 'user' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
-						$user_json = GrabPress::api_call( 'GET', '/user/validate', $credentials, TRUE );
+						var_dump( $credentials );
+						$user_json = GrabPress::api_call( 'GET', '/user/validate', $credentials, true );
 						$user_data = json_decode( $user_json );
+						var_dump( $user_data );
 						if( isset( $user_data -> user ) ){
 							$user = $user_data -> user;
 							$connector_data = array(
@@ -696,19 +701,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 					break;
 					case 'create-user':
+						$payment = isset( $_POST['paypal_id']) ? 'paypal' : '';
 						$user_data = array(
 						   	'user'=>array(
 						   		'email'=>$_POST['email'],
-						         'password'=>$_POST['password1'],
+						         'password'=>$_POST['password'],
 						         'first_name'=>$_POST['first_name'],
 						         'last_name'=>$_POST['last_name'],
-						         'address1'=>$_POST['address1'],
-						         'address2'=>$_POST['address2'],
-						         'city'=>$_POST['city'],
-						         'state'=>$_POST['state'],
-						         'zip'=>$_POST['zip'],
-						         'phone_number'=>$_POST['phone_number'],
-						         'paypal_id'=>$_POST['paypal_id']
+						         'payment_detail' => array(
+						         	'payee' => $_POST['first_name'] . ' ' . $_POST['last_name'],
+							        'address1'=>$_POST['address1'],
+							        'address2'=>$_POST['address2'],
+							        'city'=>$_POST['city'],
+							        'state'=>$_POST['state'],
+							        'zip'=>$_POST['zip'],
+							        'country_id' => 214,
+							        'preferred_payment_type'=> 'Paypal',
+							        'phone_number'=>$_POST['phone_number'],
+							        'paypal_id'=>$_POST['paypal_id']
+						         )
 							)
 						);
 						$user_json = json_encode($user_data);

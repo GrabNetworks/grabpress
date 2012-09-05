@@ -5,7 +5,7 @@
 		<input type="hidden" name="action" value="create-user"/>
 		<table>
 	    	<tr><td>Email *</td><td><input id="id_email" type="text" name="email" maxlength="255"></td></tr>
-			<tr><td>Create Password* (minimum 6 characters)</td><td><input type="password" name="password1" id="id_password1"></td></tr>
+			<tr><td>Create Password* (minimum 6 characters)</td><td><input type="password" name="password" id="id_password"></td></tr>
 			<tr><td>Re-enter Password*</td><td><input type="password" name="password2" id="id_password2"></td></tr>
 			<tr><td>First Name*</td><td><input id="id_first_name" type="text" name="first_name" maxlength="255"></td></tr>
 			<tr><td>Last Name*</td><td><input id="id_last_name" type="text" name="last_name" maxlength="255"></td></tr>

@@ -22,7 +22,10 @@
 				})( jQuery )
 			</script>
 			<?php switch( $_POST[ 'action' ] ){
-					case 'link':
+					case 'default':
+						if($linked){
+							break;
+						}
 					case 'switch':
 						echo GrabPress::fetch('includes/account/link.php');
 						break;
