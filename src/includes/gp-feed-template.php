@@ -355,7 +355,7 @@
 			</form>
 		</div>
 
-				<?php
+		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
 			$active_feeds = 0;
@@ -499,7 +499,6 @@
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" />
 							<?php								
 								$providers_selected = count($providers);
-								var_dump($providers_selected); echo "<br/><br/>";
 								if($providers_selected == 1){
 									if ( in_array( "", $providers ) ) {
 										echo "All providers";
