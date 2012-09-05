@@ -7,8 +7,8 @@
 		$provider_text = count($provider)." of ".$provider_total." selected";
 	}
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords
-		.'&categories='.$channel.'&order=DESC&order_by=created_at&providers='.$providers);
+		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords)
+		.'&categories='.urlencode($channel).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
 	$list_feeds = json_decode($json_preview, true);
 ?>
 <form method="post" action="" id="preview-feed">

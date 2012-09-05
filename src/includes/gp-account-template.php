@@ -4,6 +4,12 @@
 			<?php
 				$user = GrabPress::get_connector_user();
 				$linked = isset( $user->email);
+				if( $linked ){?>
+			<p class="account-help">This installation is linked to <?php echo $user->email; ?></p>					
+				<?php }else{?>					
+			<p class="account-help">This installation is not linked to a Publisher account. <a href="#">what is that?</a><br/>
+			Linking GrabPress to your account allows us to keep track of the video ads displayed with your Grab content and make sure you get paid.</p>
+				<?php }
 				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php') : GrabPress::fetch('includes/account/chooser/unlinked.php');
 			?>
 			<script>
@@ -13,7 +19,6 @@
 					})
 				})( jQuery )
 			</script>
-			
 			<?php switch( $_POST[ 'action' ] ){
 					case 'link':
 					case 'switch':

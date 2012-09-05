@@ -188,6 +188,7 @@
 		  	 fixed: true,
 		  	 position: 'bottom'
 		  });
+		  $('input, textarea').placeholder();
 
 	});
 	</script>
@@ -276,7 +277,7 @@
 							<span class="description">Leave this unchecked to moderate autoposts before they go live</span>
 						</td>
 						<tr valign="top">
-						<th scope="row">Click-to-play Video (CTP)</th>
+						<th scope="row">Player Mode</th>
 						<td>
 							<?php $ctp_checked = ( $form["click_to_play"]==1 )?'checked="checked"':"";?>
 							<input type="checkbox" value="1" <?php echo $ctp_checked;?>  name="click_to_play" id="click_to_play" />
@@ -374,6 +375,8 @@
 					GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
 				}
 		?>
+
+
 		<div>
 			<h3>Manage Feeds</h3>
 			<table class="grabpress-table" style="margin-bottom:215px;">
@@ -384,12 +387,12 @@
 					<th>Schedule</th>
 					<th>Max Results</th>
 					<th>Publish</th>
-					<th>CTP</th>
+					<th>Player Mode</th>
 					<th>Post Categories</th>
 					<th>Author</th>
 					<th>Providers</th>
-					<th>Delete</th>
-					<th>Preview Feed</th>
+					<th></th>
+					<th></th>
 					<th></th>
 				</tr>
 				<?php
@@ -414,24 +417,22 @@
 								echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
 							?>
 						</td>
-						<td>
-							<select  name="channel" id="channel-select-<?php echo $feedId; ?>" onchange="toggleButton(<?php echo $feedId; ?>)" class="channel-select" >
+						<td>							
 							<?php
 								foreach ( $categories_list as $record ) {
 									$category = $record -> category;
 									$name = $category -> name;
 									$id = $category -> id;
-									$selected = ( $name == $feed->name )  ? 'selected = "selected"' : '';
-									echo '<option '.$selected.' value = "'.$name.'">'.$name.'</option>\n';
+									if($name == $feed->name){
+										echo $name;
+									}									
 								}
 							?>
-							</select>
 						</td>
-						<td>
-							<input type="text" name="keywords" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>
+						<td>							
+							<?php echo $url['keywords_and']; ?>							
 						</td>
-						<td>
-							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:90px;">
+						<td>							
 							<?php
 								if ( GrabPress::$environment == 'grabqa' ) {
 									$times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
@@ -444,112 +445,102 @@
 								for ( $o = 0; $o < count( $times ); $o++ ) {
 									$time = $times[$o];
 									$value = $values[$o];
-									$selected = ( $value == $feed->update_frequency ) ? ' selected="selected"' : '';
-									echo '<option '.$selected.' value="'.$time.'">'.$time.'</option>\n';
+									if($value == $feed->update_frequency){
+										echo $time;
+									}									
 								}
 							?>
-							</select>
 						</td>
-						<td>
-							<select name="limit" id="limit-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="limit-select" style="width:60px;" >
+						<td>							
 							<?php 
 								for ( $o = 1; $o < 6; $o++ ) {
-									$selected = ( $o == $feed->posts_per_update )? 'selected = "selected"' : '';
-									echo '<option '.$selected.' value = "'.$o.'">'.$o.'</option>\n';
-								}
-							?>
-							</select>
-						</td>
-						<td>
-						<?php
-							$checked = ( $feed->custom_options->publish )?'checked="checked"':'';
-							echo '<input '.$checked.' type="checkbox" value="1" name="publish" id="publish-check" onclick="toggleButton('.$feedId.')" />';
-						?>
-						</td>
-						<td>
-						<?php
-							$checked = ( $feed->auto_play  ) ? '' : ' checked = "checked"';
-							echo '<input'.$checked.' type="checkbox" value="1" name="click_to_play" id="click_to_play-<?php echo $feedId; ?>" onclick="toggleButton('.$feedId.')" />';
-						?>
-						</td>
-						<td>
-						<?php
-							$category_list_length = count( $feed->custom_options->category );
-							if ( isset( $feed->custom_options->category ) ) {
-								$category_list = $feed->custom_options->category;
-							}else {
-								$category_list = str_split( "Uncategorized" );
-							}
-							$category_ids = get_all_category_ids();
-							$args = array( 'echo' => 0,
-								'taxonomy' => 'category',
-								'hide_empty' => 0,
-								'id' => 'category-select-'.$feed->id,
-								'class' => 'category-select' );
-							$cats = wp_dropdown_categories( $args );
-							$cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $cats );
-							$cats = str_replace( "\n", "", $cats );
-							$cats = str_replace( "\t", "", $cats );
-							$cats = str_replace( "<select name='cat' id='cat' class='postform' ><option class=\"level-0\" value=\"", "", $cats );
-							$cats = str_replace( "\">", "-", $select_cats );
-							$cats = str_replace( "</option><option class=\"level-0\" value=\"", "_", $cats );
-							$cats = str_replace( "</option></select>", "", $cats );
-
-							echo "<select multiple='multiple' class=\"postcats\" name=\"category[]\" id=\"postcats-".$feedId."\" onchange=\"toggleButton(".$feedId.");\" >\n";
-							foreach ( $category_ids as $cat_id ) {
-								$cat_name = get_cat_name( $cat_id );
-								$sel= "";
-								$sel = in_array( $cat_name, $category_list )  ? 'selected = "selected"' : '';
-								echo "<option ". $sel ." value=\"$cat_id\">";
-								echo $cat_name;
-								echo "</option>\n";
-							}
-							echo "</select>";
-						?>
-						</td>
-						<td>
-							<select name="author" id="author-<?php echo $feedId; ?>" onchange="toggleButton(<?php echo $feedId; ?>);" class="author-select" >
-							<?php
-								foreach ( $blogusers as $user ) {
-									$author_name = $user->display_name;
-									$author_id = $user->ID;
-									$selected = ( $author_id == $feed->custom_options->author_id )  ? 'selected = "selected"' : '';
-									echo '<option '.$selected.' value = "'.$author_id.'">'.$author_name.'</option>\n';
-								}
-							?>
-							</select>
-						</td>
-						<td>
-							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" />
-							<select name="provider[]" class="provider-select-update multiselect" id="provider-select-update-<?php echo $feedId; ?>" multiple="multiple" onchange="toggleButton(<?php echo $feedId; ?>);" >
-							<?php
-								foreach ( $list_provider as $record_provider ) {
-									$provider = $record_provider->provider;
-									$provider_name = $provider->name;
-									$provider_id = $provider->id;
-									$selected = in_array( $provider_id, $providers )  ? 'selected = "selected"' : '';
-									if ( in_array( "", $providers ) ) {
-										echo '<option selected = "selected" value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-									}else {
-										echo '<option '.$selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+									if($o == $feed->posts_per_update){
+										echo $o;
 									}
 								}
 							?>
-							</select>
+						</td>
+						<td>
+						<?php
+							echo $publish = $feed->custom_options->publish ? "Yes" : "No";
+						?>
+						</td>
+						<td>
+						<?php					
+							echo $click_to_play = $feed->auto_play ? "Auto" : "Click";
+						?>
+						</td>
+						<td>
+						<?php	
+							if ( isset( $feed->custom_options->category ) ) {
+								$category_list = $feed->custom_options->category;
+								$category_list_length = count( $feed->custom_options->category );							
+
+								$category_ids = get_all_category_ids();							
+
+								if($category_list_length == 0){
+									echo "Uncategorized";
+								}elseif($category_list_length == 1){
+									foreach ( $category_ids as $cat_id ) {
+										$cat_name = get_cat_name( $cat_id );
+										if(in_array( $cat_name, $category_list )){
+											echo $cat_name;								
+										}
+								    }
+								}else {								
+									echo $category_list_length." selected";
+								}	
+							}				
+						?>
+						</td>
+						<td>
+							
+							<?php
+								foreach ( $blogusers as $user ) {
+									$author_name = $user->display_name;
+									$author_id = $user->ID;									
+									if($author_id == $feed->custom_options->author_id){
+										echo $author_name;
+									}									
+								}
+							?>
+						</td>
+						<td>
+							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" />
+							<?php								
+								$providers_selected = count($providers);
+								if($providers_selected == 1){
+									if ( in_array( "", $providers ) ) {
+										echo "All providers";
+									}else{	
+										foreach ( $list_provider as $record_provider ) {
+											$provider = $record_provider->provider;
+											$provider_name = $provider->name;
+											$provider_id = $provider->id;											
+											if(in_array( $provider_id, $providers )) {											
+												echo $provider_name;									
+											}
+										}
+									}
+								}else{
+									echo $providers_selected." providers selected of ".$providers_total;
+								}
+							?>
+						</td>
+						<td>
+							<input type="button" onclick="previewFeed(<?php echo $feedId; ?>)" class="button-secondary" value="<?php _e( 'preview' ) ?>" id="btn-preview-feed" />
+						</td>
+						<td>
+							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" name="<?php echo $feedId; ?>" >edit</button>
 						</td>
 						<td>
 							<input type="button" class="button-primary btn-delete" value="<?php _e( 'X' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
-						</td>
-						<td>
-							<input type="button" onclick="previewFeed(<?php echo $feedId; ?>)" class="button-secondary" value="<?php _e( 'View Feed' ) ?>" id="btn-preview-feed" />
-						</td>
-						<td>
-							<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" style="visibility:hidden;" name="<?php echo $feedId; ?>" >update</button>
 						</td>
 					</tr>
 					</form>
 				<?php } ?>
 			</table>
 		</div>
+
 	<div class="result"> </div>
 <?php } ?>
