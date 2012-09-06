@@ -18,8 +18,9 @@
 			GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
 		}
 ?>
+<fieldset>
+	<legend>Manage Feeds</legend>
 <div>
-	<h3>Manage Feeds</h3>
 	<table class="grabpress-table" style="margin-bottom:215px;">
 		<tr>
 			<th>Active</th>
@@ -159,10 +160,10 @@
 					?>
 				</td>
 				<td>
-					<a href="#" onclick="previewFeed(<?php echo $feedId; ?>);return false;" d="btn-preview-feed">preview</a>
+					<a href="#" onclick="previewFeed(<?php echo $feedId; ?>);return false;" id="btn-preview-feed-<?php echo $feedId; ?>">preview</a>
 				</td>
 				<td>					
-					<a href="#" id="btn-update-<?php echo $feedId; ?>">edit</a>
+					<a href="#" onclick="editFeed(<?php echo $feedId; ?>);return false;" id="btn-update-<?php echo $feedId; ?>">edit</a>
 				</td>
 				<td>
 					<input type="button" class="button-primary btn-delete" value="<?php _e( 'X' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
@@ -174,4 +175,5 @@
 </div>
 
 <div class="result"> </div>
+</fieldset>
 <?php } ?>

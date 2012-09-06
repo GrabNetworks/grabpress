@@ -1,11 +1,15 @@
+<form method="post" action="" id="form-create-feed">
+	<fieldset>
+		<legend>Create Feed</legend>
 <div class="wrap">
+	<?php echo "ACTION: "; var_dump($form["action"]); echo "<br/><br/>"; ?>
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 	<p>New video content delivered fresh to your blog.</p>
 	<h3>Create Feed</h3>
 	<script type="text/javascript">
 	( function ( global, $ ) {
-	    $("#form-create-feed input[name=action]").val("update");
+	    //$("#form-create-feed input[name=action]").val("update");
 		global.hasValidationErrors = function () {
 			var category =  $('#channel-select').val();
 			if(category == ''){
@@ -44,10 +48,17 @@
 		}
 		global.selectedCategories = <?php echo json_encode( $form["category"] );?>;
 
-		global.previewFeed = function(id) {
+		global.previewFeed = function(id) {			
 			var form = jQuery('#form-'+id);
 			var action = jQuery('#action-'+id);
 			action.val("preview-feed");
+			form.submit();
+		}
+
+		global.editFeed = function(id) {
+			var form = jQuery('#form-'+id);
+			var action = jQuery('#action-'+id);
+			action.val("edit-feed");
 			form.submit();
 		}
 
@@ -79,7 +90,7 @@
 	}
 
 	jQuery(function($){
-		$("#form-create-feed input[name=action]").val("update");
+		//$("#form-create-feed input[name=action]").val("update");
 		// Show "Preview Feed" and "Create Feed" buttons
 		$("#form-create-feed").bind("change", function(e) {
 		   	if(!hasValidationErrors()){
@@ -196,9 +207,19 @@
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
 		$connector_id = GrabPress::get_connector_id();
 	?>
-	<form method="post" action="" id="form-create-feed">
-		<input type="hidden"  name="referer" value="create" />
-		<input type="hidden"  name="action" value="update" />
+	<!--<form method="post" action="" id="form-create-feed">-->
+		<?php  
+			if(isset($form["referer"])){
+				$referer = ($form["referer"] == "edit") ? 'edit' : 'create';
+			}else{
+				$referer = "create";
+			}	
+			if(isset($form["action"])){		
+				$value = ($form["action"] == "modify") ? 'modify' : 'update';
+			}
+		?>
+		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
+		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
         		<table class="form-table grabpress-table">
             		<tr valign="top">
 				<th scope="row">API Key</th>
@@ -352,10 +373,14 @@
 						</td>
 					</tr>
 				</table>
-			</form>
+			<!--</form>-->
 </div>
-<?php echo GrabPress::fetch('includes/gp-manage-feeds.php',
+</fieldset>
+<?php
+	echo GrabPress::fetch('includes/gp-manage-feeds.php',
 				array( "form" => $_POST,
 					"list_provider" => $list_provider,
 					"providers_total" => $providers_total,
-					"blogusers" => $blogusers )); ?>
+					"blogusers" => $blogusers )); 
+?>
+</form>
