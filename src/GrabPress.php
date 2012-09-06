@@ -347,6 +347,18 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 
+		static function get_feed($feed_id) {
+			GrabPress::log();
+			if ( GrabPress::validate_key() ) {
+				$connector_id = GrabPress::get_connector_id();					
+				$feed_json = GrabPress::api_call( 'GET', '/connectors/'.$connector_id.'/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key );
+				$feed_data = json_decode( $feed_json );
+				return $feed_data;
+			}else {
+				GrabPress::abort( 'no valid key' );
+			}
+		}
+
 		static function create_API_connection() {
 			GrabPress::log();
 			$user_url = get_site_url();
@@ -531,7 +543,33 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				wp_die( __('You do not have sufficient permissions to access this page.') );
 			}
 			*/
-			print GrabPress::fetch( "includes/gp-preview-template.php", $_POST );
+			if(isset($_POST["referer"])){
+				if($_POST["referer"] == "create"){
+					print GrabPress::fetch( "includes/gp-preview-template.php", $_POST );
+				}else{
+					$feed_id = $_POST['feed_id'];
+					$providers_total = $_POST['providers_total'];
+					$feed = GrabPress::get_feed($feed_id);			
+					
+					$url = array();
+					parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
+					$providers = explode( ",", $url["providers"] ); // providers chosen by the user
+
+					print GrabPress::fetch( "includes/gp-preview-template.php", 
+						array( "referer" => "edit",
+							   "action" => "preview-feed",
+							   "channel" => $feed->feed->name,
+							   "keywords" => $url['keywords_and'],
+							   "limit" => $feed->feed->posts_per_update,
+							   "schedule" => $feed->feed->update_frequency,
+							   "publish" => $feed->feed->custom_options->publish,
+							   "click_to_play" => $feed->feed->auto_play,
+							   "author" => $feed->feed->custom_options->author_id,
+							   "provider" => $providers,
+							   "providers_total" => $providers_total
+						) );
+				}
+			}
 		}
 
 		static function fetch( $file = null, $data = array() ) {

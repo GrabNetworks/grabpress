@@ -159,10 +159,10 @@
 					?>
 				</td>
 				<td>
-					<input type="button" onclick="previewFeed(<?php echo $feedId; ?>)" class="button-secondary" value="<?php _e( 'preview' ) ?>" id="btn-preview-feed" />
+					<a href="#" onclick="previewFeed(<?php echo $feedId; ?>);return false;" d="btn-preview-feed">preview</a>
 				</td>
-				<td>
-					<button class="button-primary btn-update" id="btn-update-<?php echo $feedId; ?>" name="<?php echo $feedId; ?>" >edit</button>
+				<td>					
+					<a href="#" id="btn-update-<?php echo $feedId; ?>">edit</a>
 				</td>
 				<td>
 					<input type="button" class="button-primary btn-delete" value="<?php _e( 'X' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
