@@ -1,8 +1,7 @@
-<form method="post" action="" id="form-create-feed">
+<!--<form method="post" action="" id="form-create-feed">-->
 	<fieldset>
 		<legend>Create Feed</legend>
 <div class="wrap">
-	<?php echo "ACTION: "; var_dump($form["action"]); echo "<br/><br/>"; ?>
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 	<p>New video content delivered fresh to your blog.</p>
@@ -49,17 +48,11 @@
 		global.selectedCategories = <?php echo json_encode( $form["category"] );?>;
 
 		global.previewFeed = function(id) {			
-			var form = jQuery('#form-'+id);
-			var action = jQuery('#action-'+id);
-			action.val("preview-feed");
-			form.submit();
+			window.location = "admin.php?page=autoposter&action=preview-feed&feed_id="+id;
 		}
 
 		global.editFeed = function(id) {
-			var form = jQuery('#form-'+id);
-			var action = jQuery('#action-'+id);
-			action.val("edit-feed");
-			form.submit();
+			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
 		}
 
 	} )( window, jQuery );
@@ -80,7 +73,6 @@
 	};
 
 	function showButtons() {
-		//alert("entro a showButtons");
 		var errors = hasValidationErrors();
 		if(!errors){
 			jQuery('.hide').show();
@@ -207,7 +199,23 @@
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
 		$connector_id = GrabPress::get_connector_id();
 	?>
-	<!--<form method="post" action="" id="form-create-feed">-->
+	<form method="post" action="" id="form-create-feed">
+		<?php 
+			if(isset($form["feed_id"])) {
+				$feed_id = $form["feed_id"];
+		?>
+			<input type="hidden"  name="feed_id" value="<?php echo $feed_id; ?>" />
+		<?php		
+			}
+		?>
+		<?php 
+			if(isset($form["active"])) {
+				$active = $form["active"];
+		?>
+			<input type="hidden"  name="active" value="<?php echo $active; ?>" />
+		<?php		
+			}
+		?>
 		<?php  
 			if(isset($form["referer"])){
 				$referer = ($form["referer"] == "edit") ? 'edit' : 'create';
@@ -218,6 +226,7 @@
 				$value = ($form["action"] == "modify") ? 'modify' : 'update';
 			}
 		?>
+
 		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
         		<table class="form-table grabpress-table">
@@ -300,7 +309,8 @@
 						<tr valign="top">
 						<th scope="row">Player Mode</th>
 						<td>
-							<?php $ctp_checked = ( $form["click_to_play"]==1 )?'checked="checked"':"";?>
+							<?php echo "CLICK: "; var_dump($form["click_to_play"]); echo "<br/><br/>"; ?>
+							<?php $ctp_checked = ( $form["click_to_play"]=='1' )?'checked="checked"':"";?>
 							<input type="checkbox" value="1" <?php echo $ctp_checked;?>  name="click_to_play" id="click_to_play" />
 							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#" onclick='return false;' id="learn-more">learn more</a></span>
 						</td>
@@ -308,6 +318,7 @@
 		        		<tr valign="top">
 						<th scope="row">Post Category</th>
 						<td>
+							<?php echo "CATEGORYFORM: "; var_dump($form["category"]); echo "<br/><br/>"; ?>
 							<?php
 								$select_cats = wp_dropdown_categories  ( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 ) );
 								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
@@ -373,7 +384,7 @@
 						</td>
 					</tr>
 				</table>
-			<!--</form>-->
+			</form>
 </div>
 </fieldset>
 <?php
@@ -383,4 +394,4 @@
 					"providers_total" => $providers_total,
 					"blogusers" => $blogusers )); 
 ?>
-</form>
+<!--</form>-->

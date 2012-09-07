@@ -281,8 +281,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}else {
 					$update_frequency = 60 * 24 * $schedule;
 				}
-				if ( ! $_POST['click_to_play'] ) {
-
+				echo "CLICKTOPLAY: "; var_dump($_POST['click_to_play']); echo "<br/><br/>";
+				if ( $_POST['click_to_play'] == "1" ) {
 					$auto_play = "1";
 				}else {
 					$auto_play = "0";
@@ -321,10 +321,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
 				
-				if ( (isset($_POST["referer"])) && ( $_POST["referer"] == "edit" )) {
-					$_POST = GrabPress::form_default_values();				
-				}
-				$feed = GrabPress::get_feed($feed_id);			
+				$feed = GrabPress::get_feed($feed_id);
 				
 				$url = array();
 				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
@@ -332,18 +329,28 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$list_provider = GrabPress::get_providers();
 				$providers_total = count( $list_provider );
 				$blogusers = get_users();
+
+				$cats = array();
+				if ( is_array( $feed->feed->custom_options->category ) ) {
+					foreach ( $feed->feed->custom_options->category as $cat ) {						
+						$cats[] = get_cat_id( $cat );						
+					}
+				}
+
 				print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "edit",
 										   "action" => "modify",
+										   "feed_id" => $feed_id,
 										   "channel" => $feed->feed->name,
 										   "keywords" => $url['keywords_and'],
 										   "limit" => $feed->feed->posts_per_update,
 										   "schedule" => $feed->feed->update_frequency,
+										   "active" => $feed->feed->active,
 										   "publish" => $feed->feed->custom_options->publish,
 										   "click_to_play" => $feed->feed->auto_play,
 										   "author" => $feed->feed->custom_options->author_id,
 										   "provider" => $providers,
-										   "category" => $feed->feed->custom_options->category
+										   "category" => $cats
 											),
 							"list_provider" => $list_provider,
 							"providers_total" => $providers_total,
@@ -554,9 +561,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			//if (!current_user_can('manage_options'))  {
 			//  wp_die( __('You do not have sufficient permissions to access this page.') );
 			// }
+			/*
 			if ( (isset($_POST["referer"])) && ( $_POST["referer"] == "edit" )) {
 				$_POST = GrabPress::form_default_values();				
 			}
+			*/
 			$list_provider = GrabPress::get_providers();
 			$providers_total = count( $list_provider );
 			$blogusers = get_users();
@@ -578,33 +587,44 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				wp_die( __('You do not have sufficient permissions to access this page.') );
 			}
 			*/
-			if(isset($_POST["referer"])){
-				if($_POST["referer"] == "create"){
-					print GrabPress::fetch( "includes/gp-preview-template.php", $_POST );
-				}else{
-					$feed_id = $_POST['feed_id'];
-					$providers_total = $_POST['providers_total'];
-					$feed = GrabPress::get_feed($feed_id);			
-					
-					$url = array();
-					parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
-					$providers = explode( ",", $url["providers"] ); // providers chosen by the user
+			if(isset($_POST["referer"]) && ( $_POST["referer"] == "create" || $_POST["referer"] == "edit" )){
+				print GrabPress::fetch( "includes/gp-preview-template.php", $_POST );
+			}else{
+				$feed_id = $_GET['feed_id'];
+				$providers_total = count(GrabPress::get_providers());
+				$feed = GrabPress::get_feed($feed_id);	
 
-					print GrabPress::fetch( "includes/gp-preview-template.php", 
-						array( "referer" => "edit",
-							   "action" => "preview-feed",
-							   "channel" => $feed->feed->name,
-							   "keywords" => $url['keywords_and'],
-							   "limit" => $feed->feed->posts_per_update,
-							   "schedule" => $feed->feed->update_frequency,
-							   "publish" => $feed->feed->custom_options->publish,
-							   "click_to_play" => $feed->feed->auto_play,
-							   "author" => $feed->feed->custom_options->author_id,
-							   "provider" => $providers,
-							   "providers_total" => $providers_total
-						) );
+				echo "FEED: "; var_dump($feed); echo "<br/><br/>";	
+				
+				$url = array();
+				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
+				$providers = explode( ",", $url["providers"] ); // providers chosen by the user
+				echo "URL: "; var_dump($url); echo "<br/><br/>";
+				echo "PROVIDERSPREVIEW: "; var_dump($providers); echo "<br/><br/>";
+
+				if ( is_array( $feed->feed->custom_options->category ) ) {
+					foreach ( $feed->feed->custom_options->category as $cat ) {
+						$cats[] = get_cat_id( $cat );
+					}
 				}
+
+				print GrabPress::fetch( "includes/gp-preview-template.php", 
+					array( "referer" => "edit",
+						   "action" => "edit-feed",
+						   "feed_id" => $feed_id,
+						   "channel" => $feed->feed->name,
+						   "keywords" => $url['keywords_and'],
+						   "limit" => $feed->feed->posts_per_update,
+						   "schedule" => $feed->feed->update_frequency,
+						   "publish" => $feed->feed->custom_options->publish,
+						   "click_to_play" => $feed->feed->auto_play,
+						   "author" => $feed->feed->custom_options->author_id,
+						   "provider" => $providers,
+						   "providers_total" => $providers_total,
+						   "category" => $cats
+					) );
 			}
+			
 		}
 
 		static function fetch( $file = null, $data = array() ) {
@@ -624,7 +644,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$defaults = array( "publish" => false,
 				"click_to_play" => false,
 				"category" => array(),
-				"action" => "default",
 				"provider" => array(),
 				"keywords" => "" );
 			foreach ( $defaults as $key => $value ) {
@@ -636,13 +655,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		static function dispatcher() {
 			GrabPress::log();
+			$action = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
 			$_POST = GrabPress::form_default_values( $_POST );			
 			$params = $_POST;			
 			switch ( $_GET[ 'page' ] ) {
 			case 'autoposter':
-				switch ( $params['action'] ) {
+				switch ( $action ) {
 				case 'update':
-					echo "UPDATEFEED";
 					if ( GrabPress::validate_key() && $_POST[ 'channel' ] != '' && $_POST[ 'provider' ] != '' ) {
 						GrabPress::create_feed();
 						GrabPress::render_feed_creation_success();
@@ -658,7 +677,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPress::render_feed_management();
 					break;
 				case 'modify':
-					echo "modifyFEED";
 					$feed_id = $_POST['feed_id'];
 					$keywords_and = htmlspecialchars( $_POST['keywords'] );
 					$categories = rawurlencode( $_POST[ 'channel' ] );
@@ -698,7 +716,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}else {
 						$update_frequency = 60 * 24 * $schedule;
 					}
-					if ( ! $_POST['click_to_play'] ) {//defaults to false
+
+					echo "CLICKTOPLAYEDIT: "; var_dump($_POST['click_to_play']); echo "<br/><br/>";
+					if ( $_POST['click_to_play'] == "1" ) {//defaults to false
 						$auto_play = '1';
 					}else {
 						$auto_play = '0';
@@ -723,13 +743,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					);
 
 					GrabPress::api_call( 'PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
-					GrabPress::render_feed_management();
+					GrabPress::render_feed_creation_success();
 					break;
 				case 'preview-feed':
 					GrabPress::grabpress_preview_videos();
 					break;
 				case 'edit-feed':			
-					$feed_id = $_POST['feed_id'];
+					$feed_id = $_REQUEST['feed_id'];
 					GrabPress::grabpress_edit_feed($feed_id);
 					break;	
 				case 'default':
