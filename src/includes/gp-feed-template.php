@@ -46,10 +46,19 @@
 				}
 		}
 		global.selectedCategories = <?php echo json_encode( $form["category"] );?>;
-
-		global.previewFeed = function(id) {			
-			window.location = "admin.php?page=autoposter&action=preview-feed&feed_id="+id;
-		}
+		<?php if(isset($_GET["feed_id"])) { ?>
+			global.previewFeed = function(id) {			
+			    var form = jQuery('#form-'+id);
+			    var action = jQuery('#action-'+id);
+			    action.val("edit-feed");
+			    form.submit();
+			}
+			<?php }else{ ?>
+			global.previewFeed = function(id) {			
+				window.location = "admin.php?page=autoposter&action=preview-feed&feed_id="+id;
+			}
+		<?php } ?>
+		
 
 		global.editFeed = function(id) {
 			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
@@ -282,17 +291,32 @@
         		           	<td>
 								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
 									<?php
+										
 										if ( GrabPress::$environment == 'grabqa' ) {
 											$times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
 										}
 										else {
 											$times = array( '12 hrs', '01 day', '02 days', '03 days' );
-										}
+										}	
 
-										for ( $o = 0; $o < count( $times ); $o++ ) {
-											$time = $times[$o];
-											$selected = ( $time == $form["schedule"] )?'selected="selected"':"";
-											echo "<option value = \"$time\" $selected >$time</option>\n";
+										if(!isset($form["schedule"])){
+											for ( $o = 0; $o < count( $times ); $o++ ) {
+												$time = $times[$o];
+												echo "<option value = \"$time\" >$time</option>\n";
+											}
+										}else{
+											if ( GrabPress::$environment == 'grabqa' ) {												
+												$values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
+											}
+											else {
+												$values = array( 720, 1440, 2880, 4320 );
+											}
+											for ( $o = 0; $o < count( $times ); $o++ ) {
+												$time = $times[$o];
+												$value = $values[$o];
+												$selected = ( $value == $form["schedule"] )?'selected="selected"':"";
+												echo "<option value = \"$time\" $selected >$time</option>\n";
+											}
 										}
 									?>
 								</select>
@@ -309,7 +333,6 @@
 						<tr valign="top">
 						<th scope="row">Player Mode</th>
 						<td>
-							<?php echo "CLICK: "; var_dump($form["click_to_play"]); echo "<br/><br/>"; ?>
 							<?php $ctp_checked = ( $form["click_to_play"]=='1' )?'checked="checked"':"";?>
 							<input type="checkbox" value="1" <?php echo $ctp_checked;?>  name="click_to_play" id="click_to_play" />
 							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#" onclick='return false;' id="learn-more">learn more</a></span>
@@ -318,7 +341,6 @@
 		        		<tr valign="top">
 						<th scope="row">Post Category</th>
 						<td>
-							<?php echo "CATEGORYFORM: "; var_dump($form["category"]); echo "<br/><br/>"; ?>
 							<?php
 								$select_cats = wp_dropdown_categories  ( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 ) );
 								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
