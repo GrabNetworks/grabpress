@@ -799,7 +799,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 							$_POST[ 'action' ] = 'default';
 						}else{
-							GrabPress::$error = 'No user with the email ' . $_POST[ 'email' ] . ' exists in our system.';
+							// var_dump( $user_data);
+							GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
 							$_POST[ 'action' ] = 'default';
 						}
 					}else {

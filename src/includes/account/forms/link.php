@@ -3,11 +3,11 @@
 	<form id="link-existing" method="post" action="">
 		<table>
 			<input type="hidden" name="action" id="action" value="link-user"/>
-			<tr><td>Email address<input name="email" id="id_email" type="text"/></td></tr>
+			<tr><td>Email address<input name="email" id="id_email" type="text" value=<?php echo isset($_POST['email']) ? $_POST['email'] : '';?> /></td></tr>
 			<tr><td>Password<input name="password" id="id_password" type="password"/></td></tr>
 			<tr><td class = "account-help">
 					<a href="#">I don't remember my password</a>
-					<input type="button" class="button-primary" style="display:none" id="submit_button" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
+					<input type="button" class="button-primary" disabled="disabled" id="submit_button" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
 					
 					<input type="button" class="button-secondary" id="cancel_button" value="<?php _e('Cancel') ?>"/>
 				</td>
@@ -24,7 +24,7 @@
 				console.log( 'validate');
 				var email_valid =  $( '#id_email' ).val().match(/[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i );
 				console.log( 'email:' + email_valid );
-				var pass_valid = ( $('#id_password').val().length > 5 ) ;
+				var pass_valid = ( $('#id_password').val().length > 0 ) ;
 				console.log( 'pass:' + pass_valid );
 			
 				var valid = email_valid && pass_valid;
@@ -32,15 +32,21 @@
 				return valid
 			}
 			function doValidation(){
-		    	console.log( 'valid?');
-				$( '#submit_button' ).css('display',validate()?'block':'none');
+		    	// console.log( 'valid?');
+				if ( validate() ){
+					$( '#submit_button' ).removeAttr('disabled');
+					$('#submit_button').click(function(){
+						$('#link-existing').submit();
+					});
+					
+				} else {
+					$( '#submit_button' ).attr('disabled', 'disabled');
+					$( '#submit_button' ).off('click');
+				}
 			}
 		    $("input").keyup(doValidation);
 		    $("input").click(doValidation);
 		    $("select").change(doValidation);
-			$('#submit_button').click(function(){
-				$('#link-existing').submit();
-			})
 			
 			$('#cancel_button').click(function(){
 				$('#action').val('default');
