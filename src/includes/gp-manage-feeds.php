@@ -19,9 +19,9 @@
 		}
 ?>
 <fieldset>
-	<legend>Manage Feeds</legend>
+	<legend><?php echo $_GET['action']=='edit-feed' ? 'Current':'Manage'?> Feeds</legend>
 <div>
-	<table class="grabpress-table" style="margin-bottom:215px;">
+	<table class="grabpress-table">
 		<tr>
 			<th>Active</th>
 			<th>Video Channel</th>

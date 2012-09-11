@@ -1,11 +1,10 @@
 <!--<form method="post" action="" id="form-create-feed">-->
-	<fieldset>
-		<legend>Create Feed</legend>
 <div class="wrap">
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 	<p>New video content delivered fresh to your blog.</p>
-	<h3>Create Feed</h3>
+		<fieldset>
+		<legend><?php echo $_GET['action']=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
 	( function ( global, $ ) {
 	    //$("#form-create-feed input[name=action]").val("update");
@@ -407,7 +406,6 @@
 					</tr>
 				</table>
 			</form>
-</div>
 </fieldset>
 <?php
 	echo GrabPress::fetch('includes/gp-manage-feeds.php',
@@ -416,4 +414,5 @@
 					"providers_total" => $providers_total,
 					"blogusers" => $blogusers )); 
 ?>
+</div>
 <!--</form>-->
