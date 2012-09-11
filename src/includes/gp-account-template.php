@@ -23,6 +23,9 @@
 			</script>
 			<?php switch( $_POST[ 'action' ] ){
 					case 'default':
+						if($linked){
+							break;
+						}
 					case 'switch':
 						echo GrabPress::fetch('includes/account/forms/link.php');
 						break;
