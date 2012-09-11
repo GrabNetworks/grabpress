@@ -131,7 +131,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function api_call( $method, $resource, $data=array(), $auth=false ){
 			GrabPress::log();
-			if($auth){
+			if(isset($auth) && isset($data['user']) && isset($data['pass'])){
 				GrabPress::log("HTTP AUTH <> ". $data['user'] . ":" . $data['pass']);
 			}
 			$json = json_encode( $data );
@@ -145,7 +145,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				'Content-type: application/json'
 			) );
 			$params = '';
-			if( isset($auth) ){
+			if( isset($auth) && isset($data['user']) && isset($data['pass'])){
 				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
 			}else{
 				$params = strstr($resource, '?') ? '&' : '?';
