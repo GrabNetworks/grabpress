@@ -75,6 +75,15 @@
 </div>
 </form>
 <script type="text/javascript">
+<?php $qa = GrabPress::$environment == 'grabqa'; ?>
+if(!window.grabModal){
+      try{
+        window.grabModal = new com.grabnetworks.Modal( { id : <?php echo $qa ? '1000014775' : '1720202'; ?>, tgt: '<?php echo GrabPress::$environment; ?>', width: 800, height: 450 } );
+        window.grabModal.hide();
+      }catch(err){
+        
+      }
+    }
 	jQuery(function(){	
 		//var feed_id = <?php echo $feed_id  = isset($_GET["feed_id"]) ? $_GET["feed_id"] : "undefined"; ?>;
 		var feed_action = '<?php echo $action  = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';

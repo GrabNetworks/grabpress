@@ -23,7 +23,7 @@
 				<td class = "account-help" >Note: All fields marked with an asterisk* are required.</td>
 				<td id="buttons" class = "account-help" >
 					<a href ="#">clear form</a>
-					<input type="button" class="button-primary" style="display:none" id="submit_button" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
+					<input type="button" class="button-primary" disabled="disabled" id="submit_button" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
 					<input type="button" class="button-secondary" id="cancel_button" value="<?php _e('Cancel') ?>"/>
 				</td>
 			</tr>
@@ -78,8 +78,17 @@
 				$('#register').submit();
 			})
 			function doValidation(){
-		    	console.log( 'valid?');
-				$( '#submit_button' ).css('display',validate() ? 'block' : 'none' );
+		    	// console.log( 'valid?');
+				if ( validate() ){
+					$( '#submit_button' ).removeAttr('disabled');
+					$( '#submit_button' ).off('click');
+					
+				} else {
+					$( '#submit_button' ).attr('disabled', 'disabled');
+					$('#submit_button').click(function(){
+						$('#link-existing').submit();
+					});
+				}
 			}
 		    $("input").keyup(doValidation);
 		    $("input").click(doValidation);

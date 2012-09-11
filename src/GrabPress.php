@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.5.0b51
+Version: 0.5.1b51
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -799,7 +799,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 							$_POST[ 'action' ] = 'default';
 						}else{
-							GrabPress::$error = 'No user with the email ' . $_POST[ 'email' ] . ' exists in our system.';
+							// var_dump( $user_data);
+							GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
 							$_POST[ 'action' ] = 'default';
 						}
 					}else {
@@ -865,6 +866,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js' );
+			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
 			wp_enqueue_script( 'jquery-ui-filter', $plugin_url.'/js/ui/multi/jquery.multiselect.filter.min.js' );
 			wp_enqueue_script( 'jquery-ui-multiselect', $plugin_url.'/js/ui/multi/jquery.multiselect.min.js' );
 
