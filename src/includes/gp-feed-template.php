@@ -201,6 +201,29 @@
 		  });
 		  $('input, textarea').placeholder();
 
+		  $('.active-check').bind('click', function(e){
+
+		  	var id = this.id.replace('active-check-','');
+		  	var active_check = $(this);
+
+		  	if(active_check.is(':checked')) {
+		        var active = 1;
+		    }else{
+		    	var active = 0;
+		    }		    
+
+		    var data = {
+				action: 'my_action',
+				feed_id: id,
+				active: active
+			};
+
+			$.post(ajaxurl, data, function(response) {
+				//alert('Got this from the server: ' + response);
+			});
+
+		  });
+
 	});
 	</script>
 	<?php

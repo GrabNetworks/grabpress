@@ -889,6 +889,24 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
 
 		}
+
+		static function my_action_callback() {
+			global $wpdb; // this is how you get access to the database
+
+			$feed_id = intval( $_POST['feed_id'] );
+			$active = intval( $_POST['active'] );	
+
+			$post_data = array(
+				'feed' => array(
+					'active' => $active
+				)
+			);
+
+			GrabPress::api_call( 'PUT', '/connectors/' . self::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . self::$api_key, $post_data );
+
+			die(); // this is required to return a proper result
+		}
+
 	}//class
 }//ifndefclass
 GrabPress::log( '-------------------------------------------------------' );
@@ -898,4 +916,6 @@ register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
 register_uninstall_hook( __FILE__, array( 'GrabPress', 'delete_connector' ) );
 add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
+add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
+
 GrabPress::allow_tags();

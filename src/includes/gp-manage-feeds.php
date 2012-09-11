@@ -54,9 +54,9 @@
 			<tr>
 				<td>
 					<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />
-					<?php
+					<?php						
 						$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-						echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
+						echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />'
 					?>
 				</td>
 				<td>							
