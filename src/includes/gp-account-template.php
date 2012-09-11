@@ -27,13 +27,13 @@
 							break;
 						}
 					case 'switch':
-						echo GrabPress::fetch('includes/account/link.php');
+						echo GrabPress::fetch('includes/account/forms/link.php');
 						break;
 					case 'create':
-						echo GrabPress::fetch('includes/account/create.php');
+						echo GrabPress::fetch('includes/account/forms/create.php');
 						break;
 					case 'unlink':
-						echo GrabPress::fetch('includes/account/unlink.php');
+						echo GrabPress::fetch('includes/account/forms/unlink.php');
 						break;
 				}
 			?>

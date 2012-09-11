@@ -667,10 +667,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'link-user' :
 					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
 						$credentials = array( 'user' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
-						var_dump( $credentials );
 						$user_json = GrabPress::api_call( 'GET', '/user/validate', $credentials, true );
 						$user_data = json_decode( $user_json );
-						var_dump( $user_data );
 						if( isset( $user_data -> user ) ){
 							$user = $user_data -> user;
 							$connector_data = array(
@@ -682,7 +680,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$_POST[ 'action' ] = 'default';
 						}else{
 							GrabPress::$error = 'No user with the email ' . $_POST[ 'email' ] . ' exists in our system.';
-							$_POST[ 'action' ] = 'link';
+							$_POST[ 'action' ] = 'default';
 						}
 					}else {
 						GrabPress::abort( 'Attempt to link user with incomplete form data.' );
@@ -695,7 +693,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						 	'user_id' 	=> null,
 							'email' 	=> $user -> email
 						);
-						GrabPress::log( 'PUTting to connector ' . GrabPress::get_connector_id() . ':' . $user -> ID );
 						$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 						$_POST[ 'action' ] = 'default';
 					}
@@ -723,7 +720,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							)
 						);
 						$user_json = json_encode($user_data);
-						var_dump( $user_json );
 						$result_json = GrabPress::api_call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
 						$result_data = json_decode( $result_json);
 						if(!isset( $result_data->error ) ){
