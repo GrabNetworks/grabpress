@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.5.1b54
+Version: 0.5.1b57
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -609,6 +609,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$_POST = GrabPress::form_default_values();				
 			}
 			*/
+
 			$list_provider = GrabPress::get_providers();
 			$providers_total = count( $list_provider );
 			$blogusers = get_users();
@@ -716,7 +717,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$feed_id = $_POST['feed_id'];
 					$connector_id = GrabPress::get_connector_id();
 					GrabPress::api_call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
-					GrabPress::render_feed_management();
+					GrabPress::render_feed_management();					
 					break;
 				case 'modify':
 					$feed_id = $_POST['feed_id'];
@@ -933,6 +934,17 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			die(); // this is required to return a proper result
 		}
 
+		static function delete_action_callback() {
+			global $wpdb; // this is how you get access to the database
+
+			$feed_id = intval( $_POST['feed_id'] );	
+
+			$connector_id = GrabPress::get_connector_id();
+			GrabPress::api_call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
+
+			die(); // this is required to return a proper result
+		}
+
 	}//class
 }//ifndefclass
 GrabPress::log( '-------------------------------------------------------' );
@@ -943,5 +955,6 @@ register_uninstall_hook( __FILE__, array( 'GrabPress', 'delete_connector' ) );
 add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
+add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 
 GrabPress::allow_tags();
