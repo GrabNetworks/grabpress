@@ -18,10 +18,10 @@
 			GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
 		}
 ?>
-<fieldset>
-	<legend>Manage Feeds</legend>
+<fieldset class="fieldset-manage">
+	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> Feeds</legend>
 <div>
-	<table class="grabpress-table" style="margin-bottom:215px;">
+	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
 			<th>Active</th>
 			<th>Video Channel</th>
@@ -51,12 +51,12 @@
 		<form id="form-<?php echo $feedId; ?>" action=""  method="post">
 			<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
 			<input type="hidden" name="referer" value="edit" />
-			<tr>
+			<tr id="tr-<?php echo $feedId; ?>">
 				<td>
 					<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />
-					<?php
+					<?php						
 						$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-						echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check"/>'
+						echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />'
 					?>
 				</td>
 				<td>							
