@@ -17,9 +17,14 @@
 		}else {
 			GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
 		}
+		if(($num_feeds == 1) && (isset($_GET['action']) == 'edit-feed')){
+			$text_feeds = "Feed";
+		}else{
+			$text_feeds = "Feeds";
+		}
 ?>
 <fieldset class="fieldset-manage">
-	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> Feeds</legend>
+	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> <?php echo $text_feeds ?> </legend>
 <div>
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
