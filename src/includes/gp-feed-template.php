@@ -44,9 +44,9 @@
 						feed_id: id
 					};
 
-					$.post(ajaxurl, data, function(response) {});
-
-					window.location = "admin.php?page=autoposter";
+					$.post(ajaxurl, data, function(response) {
+						window.location = "admin.php?page=autoposter";
+					});
 
 				} else{					
 					$('#tr-'+id+' td').css("background-color","#FFE4C4");
