@@ -74,7 +74,7 @@
 				$('#register').submit();
 			})
 			$('#register input.button-secondary').click(function(){
-				$('#action').val( 'default' );
+				$('#id_action').val( 'default' );
 				$('#register').submit();
 			})
 			function doValidation(){

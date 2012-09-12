@@ -23,6 +23,7 @@
 			</script>
 			<?php switch( $_POST[ 'action' ] ){
 					case 'default':
+					case NULL:
 						if($linked){
 							break;
 						}

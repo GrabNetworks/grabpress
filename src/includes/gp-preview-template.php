@@ -53,7 +53,9 @@
 		<div class="tile-left">
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 			<p class="video_date">
-			<span><?php echo $result["video"]["created_at"]; ?></span>
+				<?php $date = new DateTime( $result["video"]["created_at"] );
+				$stamp = $date->format('m/d/Y') ?>
+			<span><?php echo $stamp; ?></span>
 			</p>
 			<p class="video_logo">
 			<span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
