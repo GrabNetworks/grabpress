@@ -273,15 +273,20 @@
 
 		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
-        		<table class="form-table grabpress-table">
-            		<tr valign="top">
-				<th scope="row">API Key</th>
-	                	<td>
-					<?php echo get_option( 'grabpress_key' ); ?>
-				</td>
-			</tr>
+        	<table class="form-table grabpress-table">
+	            <tr valign="top">
+					<th scope="row">API Key</th>
+		            <td>
+						<?php echo get_option( 'grabpress_key' ); ?>
+					</td>
+				</tr>
 				<tr>
-					<th scope="row">Video Channel</th>
+					<td>
+						<h3>Search Criteria</h3>
+					</td>					
+				</tr>
+				<tr valign="top">
+					<th scope="row">Grab Video Categories*</th>
 					<td>
 						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px" >
 							<option <?php  ( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>
@@ -296,33 +301,47 @@
 									echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>\n';
 								}
 							?>
-						</select> *
-						<span class="description">Select a channel to grab from</span>
+						</select>
+						<span class="description">Add or remove specific video categories from this feed</span>
 					</td>
 				</tr>
-	        		<tr valign="top">
+	        	<tr valign="top">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keywords" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords"];?>"/>
-						<span class="description">Enter search keywords (e.g. <b>celebrity gossip</b>)</span>
+						<input type="text" name="keywords" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords"];?>" maxlength="255" />
+						<span class="description">Enter search terms separated by spaces (e.g. <b>celebrity gossip</b>)</span>
 					</td>
-        		        </tr>
-        		        <tr valign="top">
-					<th scope="row">Max Results</th>
-        		           	<td>
-						<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
-							<?php 
-								for ( $o = 1; $o < 6; $o++ ) {
-									$selected = ( $o == $form["limit"] )?'selected="selected"':"";
-									echo "<option value = \"$o\" $selected>$o</option>\n";
-								} 
+        		</tr>
+        		<tr valign="top">
+						<th scope="row">Providers</th>
+						<td>
+							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
+							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="showButtons()" >
+							<?php
+								foreach ( $list_provider as $record_provider ) {
+									$provider = $record_provider->provider;
+									$provider_name = $provider->name;
+									$provider_id = $provider->id;
+									$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
+									echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
+								}
 							?>
-						</select>
-						<span class="description">Indicate the maximum number of videos to grab at a time</span>
+							</select> *
+							<span class="description">Select providers for your autoposts</span>
+						</td>
+				</tr>
+				<tr valign="top">
+					<td>
+						<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e( 'Preview Feed' ) ?>" id="btn-preview-feed" />
 					</td>
 				</tr>
-        		        <tr valign="top">
-					<th scope="row">Schedule</th>
+				<tr>
+					<td>
+						<h3>Publish Settings</h3>
+					</td>					
+				</tr>
+        		<tr valign="top">
+					<th scope="row">Schedule*</th>
         		           	<td>
 								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
 									<?php
@@ -355,38 +374,36 @@
 										}
 									?>
 								</select>
-								<span class="description">Determine how often to grab new videos</span>
+								<span class="description">Determine how often to search for new videos</span>
 							</td>
-						</tr>
-		        		<tr valign="top">
-						<th scope="row">Publish</th>
-						<td>
-							<?php $publish_checked = ( $form["publish"]==1 )?'checked="checked"':"";?>
-							<input type="checkbox" value="1" name="publish" id="publish-check" <?php echo $publish_checked;?> />
-							<span class="description">Leave this unchecked to moderate autoposts before they go live</span>
-						</td>
-						<tr valign="top">
-						<th scope="row">Player Mode</th>
-						<td>
-							<?php $ctp_checked = ( $form["click_to_play"]=='1' )?'checked="checked"':"";?>
-							<input type="checkbox" value="1" <?php echo $ctp_checked;?>  name="click_to_play" id="click_to_play" />
-							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#" onclick='return false;' id="learn-more">learn more</a></span>
-						</td>
-					</tr>
-		        		<tr valign="top">
-						<th scope="row">Post Category</th>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Max Results*</th>
+        		           	<td>
+						<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
+							<?php 
+								for ( $o = 1; $o < 6; $o++ ) {
+									$selected = ( $o == $form["limit"] )?'selected="selected"':"";
+									echo "<option value = \"$o\" $selected>$o</option>\n";
+								} 
+							?>
+						</select>
+						<span class="description">Indicate the maximum number of videos to grab at a time</span>
+					</td>
+				</tr>
+				<tr valign="top">
+						<th scope="row">Post Categories</th>
 						<td>
 							<?php
 								$select_cats = wp_dropdown_categories  ( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 ) );
 								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
 								echo $select_cats;
 							?>
-							<span class="description">Select a category for your autoposts</span>
+							<span class="description">If no selection is made, your default category '#DEFAULT_CAT#' will be used.</span>
 						</td>
-					</tr>
-					</tr>
-						<tr valign="top">
-						<th scope="row">Post Author</th>
+				</tr>
+				<tr valign="top">
+						<th scope="row">Post Author*</th>
 						<td>
 							<select name="author" id="author_id" class="author-select" >
 							<?php
@@ -398,48 +415,37 @@
 								}
 							?>
 							</select>
-							<span class="description">Select the default Wordpress user to credit as author of the posts from this feed</span>
+							<span class="description">Select the default WordPress user to credit as author of the posts from this feed</span>
 						</td>
-					</tr>
-					</tr>
-		        		<tr valign="top">
-						<th scope="row">Providers</th>
+			    </tr>
+			   	<tr valign="top">
+			   			<th scope="row">Player Mode*</th>
 						<td>
-							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
-							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="showButtons()" >
-							<?php
-								foreach ( $list_provider as $record_provider ) {
-									$provider = $record_provider->provider;
-									$provider_name = $provider->name;
-									$provider_id = $provider->id;
-									$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
-									echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
-								}
-							?>
-							</select> *
-							<span class="description">Select providers for your autoposts</span>
+							<?php $ctp_checked = ( $form["click_to_play"]=='1' )?'checked="checked"':"";?>
+							<input type="checkbox" value="1" <?php echo $ctp_checked;?>  name="click_to_play" id="click_to_play" />
+							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#" onclick='return false;' id="learn-more">learn more</a></span>
 						</td>
-					</tr>
-					<tr valign="top">
+				</tr>
+				<tr valign="top">		
+						<th scope="row">Delivery Mode*</th>
 						<td>
-							<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e( 'Preview Feed' ) ?>" id="btn-preview-feed" />
+							<?php $publish_checked = ( $form["publish"]==1 )?'checked="checked"':"";?>
+							<input type="checkbox" value="1" name="publish" id="publish-check" <?php echo $publish_checked;?> />
+							<span class="description">Leave this unchecked to moderate autoposts before they go live</span>
 						</td>
-						<td>
-							<span class="description hide">Click to preview which videos will be autoposted from this feed</span>
-						</td>
-					</tr>
-					<tr valign="top">
-						<td>
-							<input type="submit" class="button-primary hide" value="<?php _e( 'Create Feed' ) ?>" id="create-feed-btn" />
-						</td>
-						<td>
-							<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
-							<?php
-								echo GrabPress::$feed_message;
-							?>
-							</span>
-						</td>
-					</tr>
+				</tr>
+				<tr valign="top">
+					<td>
+						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
+						<?php
+							echo GrabPress::$feed_message;
+						?>
+						</span>
+					</td>
+										<td>
+						<input type="submit" class="button-primary hide" value="<?php _e( 'Create Feed' ) ?>" id="create-feed-btn" />
+					</td>
+				</tr>
 				</table>
 			</form>
 </fieldset>
