@@ -181,7 +181,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $response;
 		}
 
-		static function get_connector_user() {
+		static function get_user() {
 			if(GrabPress::$connector_user){
 				return GrabPress::$connector_user;
 			}
@@ -595,7 +595,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$list = json_decode( $json_provider );
 			$list = array_filter( $list, array( "GrabPress", "_filter_out_out_providers" ) );
 			GrabPress::$providers = $list;
-			return $list
+			return $list;
 		}
 
 		static function render_feed_management() {

@@ -52,7 +52,18 @@
 				$('#action').val('default');
 				$('#email').val('');
 				$('#password').val('');
-				$('#link-existing').submit();
+					if(window.confirm('Are you sure you want to cancel linking?\n\n' +
+					<?php 
+					$user = GrabPress::get_user();
+					$linked = isset( $user->email );
+					if( $linked ){?>
+						'Money earned with this installation will continue to be credited to the account associated with the email address <?php echo $user->email; ?>.'
+					<?php }else{ ?>
+						'Ads played due to this plug-in installation will not earn you any money.'
+					<?php } ?>
+					)){
+						$('#link-existing').submit();
+					}
 			})
 		})( jQuery )
 </script>
