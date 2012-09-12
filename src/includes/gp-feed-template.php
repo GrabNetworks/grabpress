@@ -33,14 +33,23 @@
 			$('#btn-update-' + feedId).css({"visibility":"visible"});
 		}
 
-		global.deleteFeed = function(id){
+		global.deleteFeed = function(id){	
+			$('#tr-'+id+' td').css("background-color","red");	
 			var form = $('#form-'+id);
-			var action = $('#action-'+id);
-			var answer = confirm('Are you sure you want to delete the feed? You will no longer receive automatic posts with the specified settings.');
-				if(answer){
-					action.val("delete");
-				form.submit();
-				} else{
+			var action = $('#action-'+id);			
+			var answer = confirm('Are you sure you want to delete this feed? You will no longer receive videos based on its settings. Existing video posts will not be deleted.');
+				if(answer){					
+				    var data = {
+						action: 'delete_action',
+						feed_id: id
+					};
+
+					$.post(ajaxurl, data, function(response) {
+						window.location = "admin.php?page=autoposter";
+					});
+
+				} else{					
+					$('#tr-'+id+' td').css("background-color","#FFE4C4");
 					return false;
 				}
 		}
@@ -257,6 +266,8 @@
 			}	
 			if(isset($form["action"])){		
 				$value = ($form["action"] == "modify") ? 'modify' : 'update';
+			}else{
+				$value = "update";
 			}
 		?>
 
