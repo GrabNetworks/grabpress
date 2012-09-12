@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.5.0b48
+Version: 0.5.1b51
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -129,8 +129,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $response;
 		}
 
-		static function api_call( $method, $resource, $data=array() ){
+		static function api_call( $method, $resource, $data=array(), $auth=false ){
 			GrabPress::log();
+			if(isset($auth) && isset($data['user']) && isset($data['pass'])){
+				GrabPress::log("HTTP AUTH <> ". $data['user'] . ":" . $data['pass']);
+			}
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_API_location();
 			$location = 'http://'.$apiLocation.$resource;
@@ -142,7 +145,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				'Content-type: application/json'
 			) );
 			$params = '';
-			if( isset($auth) ){
+			if( isset($auth) && isset($data['user']) && isset($data['pass'])){
 				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
 			}else{
 				$params = strstr($resource, '?') ? '&' : '?';
@@ -477,7 +480,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					'user_url' => $user_url,
 					'user_email' => $user_email,
 					'display_name' => $display_name,
-					'user_pass' => GrabPress::$api_key ,
+					'user_pass' => GrabPress::$api_key,
 					'nickname' => $nickname,
 					'first_name' => $first_name,
 					'last_name' => $last_name,
@@ -784,7 +787,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'link-user' :
 					if( isset( $_POST[ 'email' ] ) && isset( $_POST[ 'password' ]) ){
 						$credentials = array( 'user' => $_POST[ 'email' ], 'pass' => $_POST[ 'password' ] );
-						$user_json = self::apiCall( 'GET', '/user/validate', $credentials, TRUE );
+						$user_json = GrabPress::api_call( 'GET', '/user/validate', $credentials, true );
 						$user_data = json_decode( $user_json );
 						if( isset( $user_data -> user ) ){
 							$user = $user_data -> user;
@@ -792,12 +795,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							 	'user_id' 	=> $user -> id,
 								'email' 	=> $user -> email
 							);
-							GrabPress::log( 'PUTting to connector ' . self::get_connector_id() . ':' . $user -> id );
-							$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
+							GrabPress::log( 'PUTting to connector ' . GrabPress::get_connector_id() . ':' . $user -> id );
+							$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 							$_POST[ 'action' ] = 'default';
 						}else{
-							GrabPress::$error = 'No user with the email ' . $_POST[ 'email' ] . ' exists in our system.';
-							$_POST[ 'action' ] = 'link';
+							// var_dump( $user_data);
+							GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
+							$_POST[ 'action' ] = 'default';
 						}
 					}else {
 						GrabPress::abort( 'Attempt to link user with incomplete form data.' );
@@ -810,34 +814,40 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						 	'user_id' 	=> null,
 							'email' 	=> $user -> email
 						);
-						GrabPress::log( 'PUTting to connector ' . self::get_connector_id() . ':' . $user -> ID );
-						$result_json = self::apiCall( 'PUT', '/connectors/' . self::get_connector_id() . '?api_key=' . self::$api_key, $connector_data );
+						$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 						$_POST[ 'action' ] = 'default';
 					}
 					break;
 					case 'create-user':
+						$payment = isset( $_POST['paypal_id']) ? 'paypal' : '';
 						$user_data = array(
 						   	'user'=>array(
 						   		'email'=>$_POST['email'],
-						         'password'=>$_POST['password1'],
+						         'password'=>$_POST['password'],
 						         'first_name'=>$_POST['first_name'],
 						         'last_name'=>$_POST['last_name'],
-						         'address1'=>$_POST['address1'],
-						         'address2'=>$_POST['address2'],
-						         'city'=>$_POST['address2'],
-						         'state'=>$_POST['state'],
-						         'zip'=>$_POST['zip'],
-						         'phone_number'=>$_POST['phone_number'],
-						         'paypal_id'=>$_POST['paypal_id']
+						         'payment_detail' => array(
+						         	'payee' => $_POST['first_name'] . ' ' . $_POST['last_name'],
+							        'address1'=>$_POST['address1'],
+							        'address2'=>$_POST['address2'],
+							        'city'=>$_POST['city'],
+							        'state'=>$_POST['state'],
+							        'zip'=>$_POST['zip'],
+							        'country_id' => 214,
+							        'preferred_payment_type'=> 'Paypal',
+							        'phone_number'=>$_POST['phone_number'],
+							        'paypal_id'=>$_POST['paypal_id']
+						         )
 							)
 						);
-						$result_json = self::apiCall('POST', '/register', $user_data);
+						$user_json = json_encode($user_data);
+						$result_json = GrabPress::api_call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
 						$result_data = json_decode( $result_json);
 						if(!isset( $result_data->error ) ){
 							$_POST[ 'action' ] = 'link-user';
-							return self::dispatcher();
+							return GrabPress::dispatcher();
 						}else{
-							self::$error = 'Error creating user.';
+							GrabPress::$error = 'Error creating user.';
 							$_POST['action'] = 'create';
 						}
 						break;
@@ -856,6 +866,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js' );
+			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
 			wp_enqueue_script( 'jquery-ui-filter', $plugin_url.'/js/ui/multi/jquery.multiselect.filter.min.js' );
 			wp_enqueue_script( 'jquery-ui-multiselect', $plugin_url.'/js/ui/multi/jquery.multiselect.min.js' );
 
@@ -880,6 +891,24 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
 
 		}
+
+		static function my_action_callback() {
+			global $wpdb; // this is how you get access to the database
+
+			$feed_id = intval( $_POST['feed_id'] );
+			$active = intval( $_POST['active'] );	
+
+			$post_data = array(
+				'feed' => array(
+					'active' => $active
+				)
+			);
+
+			GrabPress::api_call( 'PUT', '/connectors/' . self::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . self::$api_key, $post_data );
+
+			die(); // this is required to return a proper result
+		}
+
 	}//class
 }//ifndefclass
 GrabPress::log( '-------------------------------------------------------' );
@@ -889,4 +918,6 @@ register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
 register_uninstall_hook( __FILE__, array( 'GrabPress', 'delete_connector' ) );
 add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
+add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
+
 GrabPress::allow_tags();

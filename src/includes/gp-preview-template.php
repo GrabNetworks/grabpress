@@ -53,7 +53,9 @@
 		<div class="tile-left">
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 			<p class="video_date">
-			<span><?php echo $result["video"]["created_at"]; ?></span>
+				<?php $date = new DateTime( $result["video"]["created_at"] );
+				$stamp = $date->format('m/d/Y') ?>
+			<span><?php echo $stamp; ?></span>
 			</p>
 			<p class="video_logo">
 			<span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
@@ -75,6 +77,15 @@
 </div>
 </form>
 <script type="text/javascript">
+<?php $qa = GrabPress::$environment == 'grabqa'; ?>
+if(!window.grabModal){
+      try{
+        window.grabModal = new com.grabnetworks.Modal( { id : <?php echo $qa ? '1000014775' : '1720202'; ?>, tgt: '<?php echo GrabPress::$environment; ?>', width: 800, height: 450 } );
+        window.grabModal.hide();
+      }catch(err){
+        
+      }
+    }
 	jQuery(function(){	
 		//var feed_id = <?php echo $feed_id  = isset($_GET["feed_id"]) ? $_GET["feed_id"] : "undefined"; ?>;
 		var feed_action = '<?php echo $action  = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';

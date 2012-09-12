@@ -1,11 +1,10 @@
 <!--<form method="post" action="" id="form-create-feed">-->
-	<fieldset>
-		<legend>Create Feed</legend>
 <div class="wrap">
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
 	<p>New video content delivered fresh to your blog.</p>
-	<h3>Create Feed</h3>
+		<fieldset style="border: 1px solid <?php echo isset($_GET['action'])=='edit-feed' ? 'red':'black'?> ">
+		<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
 	( function ( global, $ ) {
 	    //$("#form-create-feed input[name=action]").val("update");
@@ -201,6 +200,31 @@
 		  	 position: 'bottom'
 		  });
 		  $('input, textarea').placeholder();
+
+		  $('.active-check').bind('click', function(e){
+
+		  	var id = this.id.replace('active-check-','');
+		  	var active_check = $(this);
+
+		  	if(active_check.is(':checked')) {
+		        var active = 1;		        
+		        $('#tr-'+id+' td').css("background-color","#FFE4C4");
+		    }else{
+		    	var active = 0;
+		    	$('#tr-'+id+' td').css("background-color","#DCDCDC");		    	
+		    }		    
+
+		    var data = {
+				action: 'my_action',
+				feed_id: id,
+				active: active
+			};
+
+			$.post(ajaxurl, data, function(response) {
+				//alert('Got this from the server: ' + response);
+			});
+
+		  });
 
 	});
 	</script>
@@ -407,7 +431,6 @@
 					</tr>
 				</table>
 			</form>
-</div>
 </fieldset>
 <?php
 	echo GrabPress::fetch('includes/gp-manage-feeds.php',
@@ -416,4 +439,5 @@
 					"providers_total" => $providers_total,
 					"blogusers" => $blogusers )); 
 ?>
+</div>
 <!--</form>-->

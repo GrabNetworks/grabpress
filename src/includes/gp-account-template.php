@@ -9,7 +9,9 @@
 				<?php }else{?>					
 			<p class="account-help">This installation is not linked to a Publisher account. <a href="#">what is that?</a><br/>
 			Linking GrabPress to your account allows us to keep track of the video ads displayed with your Grab content and make sure you get paid.</p>
-				<?php }
+				<?php }?>
+			<p class="account-help">From here you can:</p>
+			<?php
 				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php') : GrabPress::fetch('includes/account/chooser/unlinked.php');
 			?>
 			<script>
@@ -20,15 +22,19 @@
 				})( jQuery )
 			</script>
 			<?php switch( $_POST[ 'action' ] ){
-					case 'link':
+					case 'default':
+					case NULL:
+						if($linked){
+							break;
+						}
 					case 'switch':
-						echo GrabPress::fetch('includes/account/link.php');
+						echo GrabPress::fetch('includes/account/forms/link.php');
 						break;
 					case 'create':
-						echo GrabPress::fetch('includes/account/create.php');
+						echo GrabPress::fetch('includes/account/forms/create.php');
 						break;
 					case 'unlink':
-						echo GrabPress::fetch('includes/account/unlink.php');
+						echo GrabPress::fetch('includes/account/forms/unlink.php');
 						break;
 				}
 			?>
