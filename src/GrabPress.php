@@ -680,8 +680,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		static function dispatcher() {			
 			GrabPress::log();
-			$action = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
-			$_POST = GrabPress::form_default_values( $_POST );			
+			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
+			$_POST = GrabPress::form_default_values( $_POST );
+			$action = $_REQUEST[ 'action' ];		
 			$params = $_POST;			
 			switch ( $_GET[ 'page' ] ) {
 			case 'autoposter':
@@ -851,6 +852,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$_POST['action'] = 'create';
 						}
 						break;
+					default:
+						$_POST[ 'action' ] = 'default';
 				}
 				GrabPress::render_account_management();
 				break;
