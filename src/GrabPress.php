@@ -31,7 +31,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $debug = true;
 		static $message = false;
 		static $error = false;
-		static $feed_message = 'Fields marked with an asterisk * are required.';
+		static $feed_message = 'items marked with an asterisk * are required.';
 		static $connector_id;
 		static $connector_user;
 
