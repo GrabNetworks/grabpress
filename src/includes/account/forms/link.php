@@ -50,8 +50,6 @@
 			
 			$('#cancel_button').click(function(){
 				$('#action').val('default');
-				$('#email').val('');
-				$('#password').val('');
 					if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
 					$user = GrabPress::get_user();
@@ -62,6 +60,8 @@
 						'Ads played due to this plug-in installation will not earn you any money.'
 					<?php } ?>
 					)){
+						
+						$('#link-existing')[0].reset()
 						$('#link-existing').submit();
 					}
 			})
