@@ -357,7 +357,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 										   "click_to_play" => $_POST["click_to_play"],
 										   "author" => $_POST["author"],
 										   "provider" => $_POST["provider"],
-										   "category" => $_POST["category"]
+										   "category" => $_POST["category"]								   
 											),
 							"list_provider" => $list_provider,
 							"providers_total" => $providers_total,
@@ -945,6 +945,17 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			die(); // this is required to return a proper result
 		}
 
+		static function reset_action_callback() {
+			global $wpdb; // this is how you get access to the database
+
+			$feed_id = intval( $_POST['feed_id'] );	
+
+			//$connector_id = GrabPress::get_connector_id();
+			//GrabPress::api_call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
+			GrabPress::render_feed_management();
+			die(); // this is required to return a proper result
+		}
+
 	}//class
 }//ifndefclass
 GrabPress::log( '-------------------------------------------------------' );
@@ -956,5 +967,6 @@ add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
+add_action('wp_ajax_reset_action', array( 'GrabPress', 'reset_action_callback' ));
 
 GrabPress::allow_tags();
