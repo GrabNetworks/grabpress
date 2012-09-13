@@ -34,6 +34,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $feed_message = 'items marked with an asterisk * are required.';
 		static $connector_id;
 		static $connector_user;
+		static $providers;
 
 		static function log( $message = false ) {
 			if ( GrabPress::$debug ) {
@@ -588,7 +589,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function get_providers() {
-			if( GrabPress::$providers){
+			if( isset(GrabPress::$providers) ){
 				return GrabPress::$providers;
 			}
 			$json_provider = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1' );
