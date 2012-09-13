@@ -60,7 +60,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					echo '<div id="message" class="updated fade">';
 				}
 			if ( $show ) {
-				$icon_src = plugin_dir_url( __FILE__ ).'g.png';
+				$icon_src = GrabPress::get_g_icon_src();
 				echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$show.'</p></div>';
 			}
 		}
@@ -247,7 +247,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				return false;
 			}
 		}
-		
+		static function get_g_icon_src(){
+				return plugin_dir_url( __FILE__ ).'/images/icons/g.png';
+		}
+		static function get_green_icon_src( $name ){
+				return plugin_dir_url( __FILE__ ).'/images/icons/web-2.0-mini-green/'.$name.'.png';
+		}
 		static function create_feed() {
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
@@ -556,7 +561,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function grabpress_plugin_menu() {
 			GrabPress::log();
-			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), plugin_dir_url( __FILE__ ).'g.png', 10 );
+			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 10 );
 			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
