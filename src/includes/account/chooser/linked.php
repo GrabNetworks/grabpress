@@ -1,7 +1,7 @@
 <form method="post" action="" id="account-chooser">
 	<table>
 		<tr>
-			<?php $checked = ( $_POST['action'] == NULL ||  $_POST['action'] == 'default' ) ? 'checked="checked" ' : ''; ?>
+			<?php $checked =  $_POST['action'] == 'default'  ? 'checked="checked" ' : ''; ?>
 			<td><input type="radio" name="action" value="default" <?php echo $checked ?>/>Continue using this account</td>
 		</tr>
 		<tr>

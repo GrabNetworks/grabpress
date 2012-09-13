@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.5.1b54
+Version: 0.5.1b57
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -31,7 +31,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $debug = true;
 		static $message = false;
 		static $error = false;
-		static $feed_message = 'Fields marked with an asterisk * are required.';
+		static $feed_message = 'items marked with an asterisk * are required.';
+		static $connector_id;
+		static $connector_user;
+		static $providers;
 
 		static function log( $message = false ) {
 			if ( GrabPress::$debug ) {
@@ -135,7 +138,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				GrabPress::log("HTTP AUTH <> ". $data['user'] . ":" . $data['pass']);
 			}
 			$json = json_encode( $data );
-			$apiLocation = GrabPress::get_API_location();
+			$apiLocation = GrabPress::get_api_location();
 			$location = 'http://'.$apiLocation.$resource;
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
@@ -179,16 +182,23 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $response;
 		}
 
-		static function get_connector_user() {
+		static function get_user() {
+			if(GrabPress::$connector_user){
+				return GrabPress::$connector_user;
+			}
 			GrabPress::log();
 			$id = GrabPress::get_connector_id();
 			$user_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/user?api_key='.GrabPress::$api_key );
 			$user_data = json_decode( $user_json );
+			GrabPress::$connector_user = $user_data;
 			return $user_data;
 		}
 
 		static function get_connector_id() {
 			GrabPress::log();
+			if(GrabPress::$connector_id){
+				return GrabPress::$connector_id;
+			}
 			if ( GrabPress::validate_key() ) {
 				$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
 				$connectors_json =  GrabPress::api_call( 'GET',  '/connectors?api_key='.GrabPress::$api_key );
@@ -229,6 +239,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$connector_data = json_decode( $connector_json );
 					$connector_id = $connector_data -> connector -> id;
 				}
+				GrabPress::$connector_id - $connector_id;
 				return $connector_id;
 			}else {
 				GrabPress::$feed_message = 'Your API key is no longer valid. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
@@ -578,9 +589,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function get_providers() {
+			if( isset(GrabPress::$providers) ){
+				return GrabPress::$providers;
+			}
 			$json_provider = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1' );
 			$list = json_decode( $json_provider );
-			return array_filter( $list, array( "GrabPress", "_filter_out_out_providers" ) );
+			$list = array_filter( $list, array( "GrabPress", "_filter_out_out_providers" ) );
+			GrabPress::$providers = $list;
+			return $list;
 		}
 
 		static function render_feed_management() {
@@ -681,8 +697,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		static function dispatcher() {			
 			GrabPress::log();
-			$action = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
-			$_POST = GrabPress::form_default_values( $_POST );			
+			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
+			$_POST = GrabPress::form_default_values( $_POST );
+			$action = $_REQUEST[ 'action' ];		
 			$params = $_POST;			
 			switch ( $_GET[ 'page' ] ) {
 			case 'autoposter':
@@ -852,6 +869,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$_POST['action'] = 'create';
 						}
 						break;
+					case 'link':
+					case 'unlink':
+					case 'create':
+					case 'switch':
+						break;
+					default:
+						$_POST[ 'action' ] = 'default';
 				}
 				GrabPress::render_account_management();
 				break;
@@ -905,7 +929,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				)
 			);
 
-			GrabPress::api_call( 'PUT', '/connectors/' . self::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . self::$api_key, $post_data );
+			GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
 
 			die(); // this is required to return a proper result
 		}
