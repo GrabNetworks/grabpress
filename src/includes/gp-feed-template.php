@@ -99,7 +99,18 @@
 	}
 
 	jQuery(function($){
-		//$("#form-create-feed input[name=action]").val("update");
+		  $('#reset-form').bind('click', function(e){
+		    var referer = $("input[name=referer]").val();
+		    
+		    if( referer == "create" ){
+		    	window.location = "admin.php?page=autoposter";
+		    }else{
+		    	var id = $("input[name=feed_id]").val();
+		    	window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
+		    }
+		    
+		  });
+
 		// Show "Preview Feed" and "Create Feed" buttons
 		$("#form-create-feed").bind("change", function(e) {
 		   	if(!hasValidationErrors()){
@@ -155,6 +166,7 @@
 		  	 	toggleButton(id);
 			 }
 		   }).multiselectfilter();
+
 
 		  $('#create-feed-btn').bind('click', function(e){
 		  	var errors = hasValidationErrors();
@@ -233,7 +245,9 @@
 				//alert('Got this from the server: ' + response);
 			});
 
-		  });
+		  });	  
+
+		  
 
 	});
 	</script>
@@ -442,7 +456,10 @@
 						?>
 						</span>
 					</td>
-										<td>
+					<td>
+						<a href="#" id="reset-form" >reset form</a>
+					</td>
+					<td>
 						<input type="submit" class="button-primary hide" value="<?php _e( 'Create Feed' ) ?>" id="create-feed-btn" />
 					</td>
 				</tr>
