@@ -22,9 +22,9 @@
 			<tr>
 				<td class = "account-help" >Note: All fields marked with an asterisk* are required.</td>
 				<td id="buttons" class = "account-help" >
-					<a href ="#">clear form</a>
-					<input type="button" class="button-primary" disabled="disabled" id="submit_button" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
-					<input type="button" class="button-secondary" id="cancel_button" value="<?php _e('Cancel') ?>"/>
+					<a id = "clear-form" href ="#">clear form</a>
+					<input type="button" class="button-primary" disabled="disabled" id="submit-button" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
+					<input type="button" class="button-secondary" id="cancel-button" value="<?php _e('Cancel') ?>"/>
 				</td>
 			</tr>
 		</table>
@@ -70,22 +70,25 @@
 				//console.log('valid:'+ valid )
 				return valid
 			}
-			$('#register input.button-primary').click(function(){
+			$('#submit-buttoni').click(function(){
 				$('#register').submit();
 			})
-			$('#register input.button-secondary').click(function(){
-				$('#id_action').val( 'default' );
-				$('#register').submit();
+			$('#cancel-button').click(function(){
+				if(window.confirm('Are you sure you want to cancel creation?\n\nAds played due to this plug-in will continue to not earn you any money, and your changes to this form will be lost.')){
+					$('#id_action').val( 'default' );
+					$('#register')[0].reset();
+					$('#register').submit();
+				}
 			})
 			function doValidation(){
 		    	// console.log( 'valid?');
 				if ( validate() ){
-					$( '#submit_button' ).removeAttr('disabled');
-					$( '#submit_button' ).off('click');
+					$( '#submit-button' ).removeAttr('disabled');
+					$( '#submit-button' ).off('click');
 					
 				} else {
-					$( '#submit_button' ).attr('disabled', 'disabled');
-					$('#submit_button').click(function(){
+					$( '#submit-button' ).attr('disabled', 'disabled');
+					$('#submit-button').click(function(){
 						$('#link-existing').submit();
 					});
 				}
@@ -93,5 +96,8 @@
 		    $("input").keyup(doValidation);
 		    $("input").click(doValidation);
 		    $("select").change(doValidation);
+		    $("#clear-form").click(function() {
+				$('#register')[0].reset();
+		    })
 		   })(jQuery)
 	</script>

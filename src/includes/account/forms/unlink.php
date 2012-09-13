@@ -26,6 +26,7 @@
 		
 		$('#cancel_button').click(function(){
 			$('#action').val('default');
+			$('#unlink')[0].reset();
 			$('#unlink').submit();
 		})
 	})( jQuery )
