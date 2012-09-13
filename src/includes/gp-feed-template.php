@@ -65,14 +65,14 @@
 			global.previewFeed = function(id) {			
 				window.location = "admin.php?page=autoposter&action=preview-feed&feed_id="+id;
 			}
-		<?php } ?>
-		
+		<?php } ?>		
 
 		global.editFeed = function(id) {
 			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
 		}
 
 	} )( window, jQuery );
+
 	var multiSelectOptions = {
 	  	 noneSelectedText:"Select providers",
 	  	 selectedText:function(selectedCount, totalCount){
@@ -98,8 +98,12 @@
 		}
 	}
 
+	jQuery(window).load(function () {
+	    showButtons();
+	});
+
 	jQuery(function($){
-		  $('#reset-form').bind('click', function(e){
+		$('#reset-form').bind('click', function(e){
 		    var referer = $("input[name=referer]").val();
 		    
 		    if( referer == "create" ){
@@ -109,7 +113,7 @@
 		    	window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
 		    }
 		    
-		  });
+		});
 
 		// Show "Preview Feed" and "Create Feed" buttons
 		$("#form-create-feed").bind("change", function(e) {
@@ -121,7 +125,7 @@
 				return false;
 			}
 		});
-		showButtons();
+		//showButtons();
 	   $("#form-create-feed input").keypress(function(e) {
 		    if(e.which == 13) {
 		        e.preventDefault();

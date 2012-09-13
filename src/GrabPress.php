@@ -357,7 +357,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 										   "click_to_play" => $_POST["click_to_play"],
 										   "author" => $_POST["author"],
 										   "provider" => $_POST["provider"],
-										   "category" => $_POST["category"]
+										   "category" => $_POST["category"]								   
 											),
 							"list_provider" => $list_provider,
 							"providers_total" => $providers_total,
