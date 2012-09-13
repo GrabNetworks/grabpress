@@ -251,7 +251,14 @@
 
 		  });	  
 
-		  
+		   $('#cancel-editing').bind('click', function(e){ 
+				var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
+				if(answer){				
+					window.location = "admin.php?page=autoposter";
+				} else{				
+					return false;
+				}
+		  });		  
 
 	});
 	</script>
@@ -460,6 +467,11 @@
 						?>
 						</span>
 					</td>
+					<?php if(isset($_GET['action'])=='edit-feed'){ ?>
+					<td>						
+						<a href="#" id="cancel-editing" >cancel editing</a>						
+					</td>
+					<?php } ?>
 					<td>
 						<a href="#" id="reset-form" >reset form</a>
 					</td>
