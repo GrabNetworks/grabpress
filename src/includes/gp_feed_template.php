@@ -197,16 +197,11 @@
 			<form method="post" action="" id="form-create-feed">
 				<input type="hidden"  name="action" value="update" />
 	            		<table class="form-table grabpress-table">
-	                		<tr valign="top">
-						<th scope="row">API Key</th>
-			                	<td>
-							<?php echo get_option( 'grabpress_key' ); ?>
-						</td>
-					</tr>
+
 						<tr>
 							<th scope="row">Video Channel</th>
 							<td>
-								<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px">
+								<select  style="<?php GrabPress::outline_invalid(); ?>" name="channel" id="channel-select" class="channel-select" style="width:500px">
 									<option selected = "selected" value = "">Choose One</option>
 									<?php 	
 										$json = GrabPress::get_json('http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories');

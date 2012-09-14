@@ -1,8 +1,8 @@
 <!--<form method="post" action="" id="form-create-feed">-->
 <div class="wrap">
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
-	<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
-	<p>New video content delivered fresh to your blog.</p>
+	<h2>GrabPress: Autopost Videos by Category and Keywords</h2>
+	<p>Feed your blog with fresh video content.</p>
 		<fieldset style="border: 1px solid <?php echo isset($_GET['action'])=='edit-feed' ? 'red':'black'?> ">
 		<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
@@ -97,10 +97,6 @@
 			jQuery('.hide').hide();
 		}
 	}
-
-	jQuery(window).load(function () {
-	    showButtons();
-	});
 
 	jQuery(function($){
 		$('#reset-form').bind('click', function(e){
@@ -261,6 +257,11 @@
 		  });		  
 
 	});
+
+	jQuery(window).load(function () {
+	    showButtons();
+	});
+
 	</script>
 	<?php
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
@@ -299,12 +300,20 @@
 		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
         	<table class="form-table grabpress-table">
-	            <tr valign="top">
-					<th scope="row">API Key</th>
-		            <td>
-						<?php echo get_option( 'grabpress_key' ); ?>
-					</td>
-				</tr>
+	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
+	                <tr valign="top">
+						<th scope="row">Plug-in Version & Build Number</th>
+			            <td>
+							<?php echo GrabPress::$version ?>
+						</td>
+					</tr>
+	                <tr valign="top">
+						<th scope="row">API Key</th>
+			            <td>
+							<?php echo get_option( 'grabpress_key' ); ?>
+						</td>
+					</tr>
+				<?php } ?>
 				<tr>
 					<td>
 						<h3>Search Criteria</h3>
@@ -460,6 +469,7 @@
 						</td>
 				</tr>
 				<tr valign="top">
+					<td/>
 					<td>
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
 						<?php
@@ -476,12 +486,18 @@
 						<a href="#" id="reset-form" >reset form</a>
 					</td>
 					<td>
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
+						<input type="submit" class="button-primary hide" value="<?php _e( 'Save Changes' ) ?>" id="create-feed-btn" />
+						<?php }else{ ?>
 						<input type="submit" class="button-primary hide" value="<?php _e( 'Create Feed' ) ?>" id="create-feed-btn" />
+						<?php } ?>
 					</td>
 				</tr>
 				</table>
 			</form>
 </fieldset>
+<?php $display_message = isset($_GET['action'])=='edit-feed' ? "display-element" : "hide"; ?>
+<span class="edit-form-text <?php echo $display_message ?>" >Please use the form above to edit the settings of the feed marked "editing" below</span>
 <?php
 	echo GrabPress::fetch('includes/gp-manage-feeds.php',
 				array( "form" => $_POST,
