@@ -174,7 +174,7 @@
 					<a href="#" onclick="editFeed(<?php echo $feedId; ?>);return false;" id="btn-update-<?php echo $feedId; ?>">edit</a>
 				</td>
 				<td>
-					<input type="button" class="button-primary btn-delete" value="<?php _e( 'X' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
+					<input type="button" class="btn-delete" value="<?php _e( 'x' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 				</td>
 			</tr>
 			</form>

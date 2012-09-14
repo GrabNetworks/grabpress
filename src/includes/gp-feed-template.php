@@ -3,7 +3,7 @@
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Category and Keywords</h2>
 	<p>Feed your blog with fresh video content.</p>
-		<fieldset style="border: 1px solid <?php echo isset($_GET['action'])=='edit-feed' ? 'red':'black'?> ">
+		<fieldset class="<?php echo isset($_GET['action'])=='edit-feed' ? 'edit-mode':''?>">
 		<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
 	( function ( global, $ ) {
@@ -492,6 +492,9 @@
 			</form>
 </fieldset>
 <?php
+	if(isset($_GET['action'])=='edit-feed'){
+echo '<div><p id="edit-notice">Please use the form above to edit the settings of the feed marked "editing" below</p></div>';
+	}
 	echo GrabPress::fetch('includes/gp-manage-feeds.php',
 				array( "form" => $_POST,
 					"list_provider" => $list_provider,

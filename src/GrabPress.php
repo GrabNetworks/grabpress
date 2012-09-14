@@ -248,10 +248,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 		static function get_g_icon_src(){
-				return plugin_dir_url( __FILE__ ).'/images/icons/g.png';
+				return plugin_dir_url( __FILE__ ).'images/icons/g.png';
 		}
 		static function get_green_icon_src( $name ){
-				return plugin_dir_url( __FILE__ ).'/images/icons/web-2.0-mini-green/'.$name.'.png';
+				return plugin_dir_url( __FILE__ ).'images/icons/green/'.$name.'.png';
 		}
 		static function create_feed() {
 			GrabPress::log();
