@@ -318,7 +318,8 @@ span.warning {
 	font-weight: bold;
 	color: #880000;
 }
-.manage-table td{
+.manage-table .inactive-row td{background-color: #DCDCDC !important;}
+.manage-table .row-feed td{
     background-color: #FFE4C4;
     margin-bottom: 1px solid #FFF;
     padding: 0;
@@ -333,4 +334,16 @@ span.warning {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
+.display-element{ display: block !important;}
+.edit-form-text{
+    text-align:center;
+    color:red;
+    padding:15px 0 10px 0;
+    font-style: italic;
+    font-size: 14px;
+}
+.hide-button{ display: none !important;}
+.manage-table .editing-feed td{background-color: red !important;}
+
+
 

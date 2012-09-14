@@ -98,10 +98,6 @@
 		}
 	}
 
-	jQuery(window).load(function () {
-	    showButtons();
-	});
-
 	jQuery(function($){
 		$('#reset-form').bind('click', function(e){
 		    var referer = $("input[name=referer]").val();
@@ -261,6 +257,11 @@
 		  });		  
 
 	});
+
+	jQuery(window).load(function () {
+	    showButtons();
+	});
+
 	</script>
 	<?php
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
@@ -485,12 +486,18 @@
 						<a href="#" id="reset-form" >reset form</a>
 					</td>
 					<td>
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
+						<input type="submit" class="button-primary hide" value="<?php _e( 'Save Changes' ) ?>" id="create-feed-btn" />
+						<?php }else{ ?>
 						<input type="submit" class="button-primary hide" value="<?php _e( 'Create Feed' ) ?>" id="create-feed-btn" />
+						<?php } ?>
 					</td>
 				</tr>
 				</table>
 			</form>
 </fieldset>
+<?php $display_message = isset($_GET['action'])=='edit-feed' ? "display-element" : "hide"; ?>
+<span class="edit-form-text <?php echo $display_message ?>" >Please use the form above to edit the settings of the feed marked "editing" below</span>
 <?php
 	echo GrabPress::fetch('includes/gp-manage-feeds.php',
 				array( "form" => $_POST,
