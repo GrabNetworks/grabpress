@@ -56,12 +56,25 @@
 		<form id="form-<?php echo $feedId; ?>" action=""  method="post">
 			<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
 			<input type="hidden" name="referer" value="edit" />
-			<tr id="tr-<?php echo $feedId; ?>">
+			<?php 
+				if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){
+					$row_class = "editing-feed";
+				}elseif(!$feed->active){
+					$row_class = "inactive-row";
+				}else{
+					$row_class = "row-feed";
+				}
+			?>
+			<tr id="tr-<?php echo $feedId; ?>" class="<?php echo $row_class; ?>">
 				<td>
 					<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />
-					<?php						
-						$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-						echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />'
+					<?php 
+						if(isset($_GET['action'])=='edit-feed'){
+							echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
+					 	}else{ 
+							$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
+							echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
+						} 
 					?>
 				</td>
 				<td>							
@@ -167,14 +180,38 @@
 						}
 					?>
 				</td>
+				<?php				
+					if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){
+						$class_preview_button = "hide-button";
+						$text_edit_button = "editing";
+						$class_edit_button = "display-element";
+						$class_delete_button = "display-element";
+					}elseif(isset($_GET['action']) && ($_GET['action']=='edit-feed')){
+						$class_preview_button = "hide-button";
+						$text_edit_button = "edit";
+						$class_edit_button = "hide-button";
+						$class_delete_button = "hide-button";
+					}else{						
+						$class_preview_button = "display-element";
+						$text_edit_button = "edit";
+						$class_edit_button = "display-element";
+						$class_delete_button = "display-element";
+					}
+				?>
 				<td>
-					<a href="#" onclick="previewFeed(<?php echo $feedId; ?>);return false;" id="btn-preview-feed-<?php echo $feedId; ?>">preview</a>
-				</td>
-				<td>					
-					<a href="#" onclick="editFeed(<?php echo $feedId; ?>);return false;" id="btn-update-<?php echo $feedId; ?>">edit</a>
+					<a href="#" onclick="previewFeed(<?php echo $feedId; ?>);return false;" id="btn-preview-feed-<?php echo $feedId; ?>" class="<?php echo $class_preview_button; ?>" >preview</a>
 				</td>
 				<td>
-					<input type="button" class="btn-delete" value="<?php _e( 'x' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
+					<?php if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){ 
+						echo $text_edit_button;
+					 }else{ ?>				
+					<a href="#" onclick="editFeed(<?php echo $feedId; ?>);return false;" id="btn-update-<?php echo $feedId; ?>" class="<?php echo $class_edit_button; ?>">						
+						<?php echo $text_edit_button; ?>
+					</a>
+					<?php } ?>
+				</td>
+				<td>
+					<input type="button" class="btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'x' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 				</td>
 			</tr>
 			</form>
