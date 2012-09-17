@@ -10,17 +10,22 @@
 	</form>
 </fieldset>
 <script>
+	console = console || { log:function(){}};
 	(function($){
 		$('#confirm').click(function(){
 	    	console.log( 'valid?');
-			if ( $('#confirm').attr('checked') == 'checked' ){
+			if ( $('#confirm').attr('checked')){
 				$( '#submit_button' ).removeAttr('disabled');
 				$('#submit_button').click(function(){
 					$('#unlink').submit();
 				})				
 			} else {
 				$( '#submit_button' ).attr('disabled', 'disabled');	
-				$( '#submit_button' ).off('click');
+				if( $( '#submit_button' ).off ){
+					$( '#submit_button' ).off('click');
+				}else{
+					$( '#submit_button' ).unbind('click');
+				}
 			}
 		})
 		
