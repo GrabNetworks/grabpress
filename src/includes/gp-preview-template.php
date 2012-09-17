@@ -1,7 +1,7 @@
 <?php 
 	$providers = join($provider, ",");
 	$provider_total = count(GrabPress::get_providers());
-	if($provider_total == count($provider)){
+	if(($provider_total == count($provider)) || in_array("", $provider)){
 		$provider_text = "All Providers";
 	}else{
 		$provider_text = count($provider)." of ".$provider_total." selected";
