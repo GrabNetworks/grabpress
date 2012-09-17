@@ -365,7 +365,7 @@
 						</td>
 				</tr>
 				<tr valign="top">
-					<td>
+					<td colspan="4">
 						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
 						<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e( 'Preview Changes' ) ?>" id="btn-preview-feed" />
 						<?php }else{ ?>
