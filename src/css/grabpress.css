@@ -178,7 +178,7 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
 }
 .grabpress-table input[type="text"]:focus{  background: url("images/ui-bg_glass_65_ffffff_1x400.png") repeat-x scroll 50% 50% #FFFFFF; border: 1px solid #FBD850; color: #D54E21; font-weight: bold; }
 .grabpress-table input#create-feed-btn{ background: url("../images/button-grad.png") repeat-x scroll left top #21759B; border-color: #298CBA; color: #FFFFFF; font-weight: bold; height: 20px; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);  float: right;}
-.grabpress-table input.btn-delete{ background:none; border:none; color: #000; height: 10px; }
+.grabpress-table input.btn-delete{line-height:auto; background:none; border:none; color: #000; }
 .grabpress-table input#btn-preview-feed{ background: url("../images/white-grad.png") repeat-x scroll left top #F2F2F2; border-color: #BBBBBB; color: #464646; height: 20px; text-shadow: 0 1px 0 #FFFFFF; float: right; }
 .grabpress-table input#publish-check{ height: 13px; margin-left: 0px; }
 .grabpress-table input.click-to-play-feed{ margin-left: 3px; }
@@ -242,11 +242,21 @@ cursor: pointer;
     width: 250px;
     overflow: hidden;
 }
+fieldset.edit-mode{
+	border-color: red;
+}
 h2.video_title {
     font-size: 14px;
     font-weight: bold;
     line-height: 14px;
     padding: 0;
+}
+p#edit-notice{
+	font-size: 14px;
+	color: red;
+	text-align: center;
+	font-style: italic;
+	margin: 12px 10px 10px 10px;
 }
 #close-preview {
     float: right;
@@ -279,7 +289,7 @@ legend {
 	font-size: 10px;
 }
 
-input[ type="button" ], #account input[ type="checkbox"], select{
+input[ type="button" ]/*, #account input[ type="checkbox"], select*/{
 	margin: 0 5px;
 	float: right;
 }
@@ -304,8 +314,11 @@ td * {
 #account.create {
 	width: 650px;
 }
-#account.create td, #account.create input[type='text'], #account.create input[type='password']{
-	width: 310px;
+#account.create td{
+padding-right: 10px;
+} 
+#account.create input[type='text'], #account.create input[type='password']{
+	width: 350px;
 }
 #buttons, #tos {
 	text-align: right;
@@ -318,21 +331,38 @@ span.warning {
 	font-weight: bold;
 	color: #880000;
 }
+.manage-table *{
+	font-size: 10px;
+	
+}
+.manage-table  {
+    border-collapse: collapse;
+}
+
 .manage-table .inactive-row td{background-color: #DCDCDC !important;}
 .manage-table .row-feed td{
     background-color: #FFE4C4;
-    margin-bottom: 1px solid #FFF;
-    padding: 0;
-    border-bottom: 3px solid #FFF;
-    padding: 3px;
+    padding: 3px 3px 5px 3px;
+}
+.manage-table .row-feed{
+   border-top: 3px solid white;
+   border-bottom: 3px solid white;
 }
 .manage-table td:first-child{
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+	padding-left: 10px;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
 }
 .manage-table td:last-child{
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+	padding-right: 10px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+#id_agree{
+	float:left;
+}
+#id_protocol{
+	float:right;
 }
 .display-element{ display: block !important;}
 .edit-form-text{
@@ -342,9 +372,14 @@ span.warning {
     font-style: italic;
     font-size: 14px;
 }
+#required{
+	float:left;
+}
+#id_tos{
+	text-align: right;
+	font-size: 10px;
+}
 .hide-button{ display: none !important;}
 .manage-table .editing-feed td{background-color: red !important;}
 .grabpress-table .preview-btn-text{ float: right; }
-
-
 
