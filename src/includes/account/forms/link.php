@@ -27,7 +27,6 @@
 				//console.log( 'email:' + email_valid );
 				var pass_valid = ( $('#password').val().length > 0 ) ;
 				//console.log( 'pass:' + pass_valid );
-			
 				var valid = email_valid && pass_valid;
 				//console.log('valid:'+ valid )
 				return valid
@@ -42,7 +41,11 @@
 					
 				} else {
 					$( '#submit_button' ).attr('disabled', 'disabled');
-					$( '#submit_button' ).off('click');
+					if( $( '#submit_button' ).off ){
+						$( '#submit_button' ).off('click');
+					}else{
+						$( '#submit_button' ).unbind('click');
+					}
 				}
 			}
 		    $("input").keyup(doValidation);

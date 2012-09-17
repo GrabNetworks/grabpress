@@ -100,9 +100,11 @@
 					
 				} else {
 					$( '#submit-button' ).attr('disabled', 'disabled');
-					$('#submit-button').click(function(){
-						$('#link-existing').submit();
-					});
+					if( $( '#submit_button' ).off ){
+						$( '#submit_button' ).off('click');
+					}else{
+						$( '#submit_button' ).unbind('click');
+					}
 				}
 			}
 		    $("input").keyup(doValidation);
