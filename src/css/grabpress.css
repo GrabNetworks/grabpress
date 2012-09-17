@@ -344,6 +344,7 @@ span.warning {
 }
 .hide-button{ display: none !important;}
 .manage-table .editing-feed td{background-color: red !important;}
+.grabpress-table .preview-btn-text{ float: right; }
 
 
 

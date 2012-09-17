@@ -33,7 +33,7 @@
 			<th>Keywords</th>
 			<th>Schedule</th>
 			<th>Max Results</th>
-			<th>Publish</th>
+			<th>Auto-Publish</th>
 			<th>Player Mode</th>
 			<th>Post Categories</th>
 			<th>Author</th>
