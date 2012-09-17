@@ -437,7 +437,7 @@
 								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
 								echo $select_cats;
 							?>
-							<span class="description">If no selection is made, your default category '#DEFAULT_CAT#' will be used.</span>
+							<span class="description">If no selection is made, your default category '<?php echo get_cat_name("1") ?>' will be used.</span>
 						</td>
 				</tr>
 				<tr valign="top">
