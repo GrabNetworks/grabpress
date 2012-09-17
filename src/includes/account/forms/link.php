@@ -32,7 +32,7 @@
 				return valid
 			}
 			function doValidation(){
-		    	//console.log( 'valid?');
+		    	//console.log( 'valid?'); 
 				if ( validate() ){
 					$( '#submit_button' ).removeAttr('disabled');
 					$('#submit_button').click(function(){
@@ -53,8 +53,8 @@
 		    $("select").change(doValidation);
 			
 			$('#cancel_button').click(function(){
-				$('#action').val('default');
-					if(window.confirm('Are you sure you want to cancel linking?\n\n' +
+				$('#id_action').attr('value', 'default');
+				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
 					$user = GrabPress::get_user();
 					$linked = isset( $user->email );
