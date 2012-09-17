@@ -359,7 +359,10 @@ span.warning {
     border-bottom-right-radius: 7px;
 }
 #id_agree{
- float:left;
+	float:left;
+}
+#id_protocol{
+	float:right;
 }
 .display-element{ display: block !important;}
 .edit-form-text{
