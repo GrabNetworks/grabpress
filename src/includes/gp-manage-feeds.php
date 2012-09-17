@@ -121,7 +121,7 @@
 					<?php echo $publish = $feed->custom_options->publish ? "Yes" : "No"; ?>
 				</td>
 				<td>
-					<?php echo $click_to_play = $feed->auto_play ? "Auto" : "Click"; ?>
+					<?php echo $click_to_play = $feed->auto_play ? "Click" : "Auto"; ?>
 				</td>
 				<td>
 				<?php	
