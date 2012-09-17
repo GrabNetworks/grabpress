@@ -16,23 +16,24 @@
 	</form>
 </fieldset>
 <script>
+	//console = //console || { log:function(){}};
 	(function( $ ){
 			function notEmpty( id ){
 				return ( $( '#' + id ).val() != '' );
 			}
 			function validate(){
-				console.log( 'validate');
+				//console.log( 'validate');
 				var email_valid =  $( '#email' ).val().match(/[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i );
-				console.log( 'email:' + email_valid );
+				//console.log( 'email:' + email_valid );
 				var pass_valid = ( $('#password').val().length > 0 ) ;
-				console.log( 'pass:' + pass_valid );
+				//console.log( 'pass:' + pass_valid );
 			
 				var valid = email_valid && pass_valid;
-				console.log('valid:'+ valid )
+				//console.log('valid:'+ valid )
 				return valid
 			}
 			function doValidation(){
-		    	// console.log( 'valid?');
+		    	//console.log( 'valid?');
 				if ( validate() ){
 					$( '#submit_button' ).removeAttr('disabled');
 					$('#submit_button').click(function(){

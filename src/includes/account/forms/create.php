@@ -16,21 +16,20 @@
 			<tr><td>Zip*</td><td><input id="id_zip" type="text" name="zip" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="zip_ok"/></td></tr>
 			<tr><td>Phone Number*</td><td><input id="id_phone_number" type="text" name="phone_number" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="phone_ok"/></td></tr>
 			<tr><td>Paypal ID</td><td><input id="id_paypal_id" type="text" name="paypal_id" maxlength="255"></td></tr>
-			<tr><td>Website Domain*<select id= "id_protocol"><option>http://</option><option>https://</option></select></td><td><input id="id_site" type="text" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="site_ok"/></td></tr>
+			<tr><td>Website Domain*<select id= "id_protocol"><option>http://</option><option>https://</option></select></td><td><input id="id_site" type="text" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="url_ok"/></td></tr>
 			<input type="hidden" name = 'url' id='id_url' />
-			<tr><td/><td id ="id_tos">I agree to Grab Networks' <a href="http://www.grab-media.com/terms/" target="_blank">Terms of Service*</a><input type="checkbox" name="tos" id="id_agree"></td><td>
-			<tr>
-				<td class = "account-help" >Note: All fields marked with an asterisk* are required.</td>
-				<td id="buttons" class = "account-help" >
-					<a id = "clear-form" href ="#">clear form</a>
-					<input type="button" class="button-primary" disabled="disabled" id="submit-button" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
-					<input type="button" class="button-secondary" id="cancel-button" value="<?php _e('Cancel') ?>"/>
-				</td>
-			</tr>
+			<tr><td/><td id ="id_tos">I agree to Grab Networks' <a href="http://www.grab-media.com/terms/" target="_blank">Terms of Service*</a></td><td><input type="checkbox" name="tos" id="id_agree"></td><td>
 		</table>
 	</form>
+	<div id="buttons" >
+		<span id="required" class = "account-help" >Note: All fields marked with an asterisk* are required.</span>
+		<a id = "clear-form" href ="#">clear form</a>
+		<input type="button" class="button-primary" disabled="disabled" id="submit-button" value="<?php _e( ($_POST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
+		<input type="button" class="button-secondary" id="cancel-button" value="<?php _e('Cancel') ?>"/>
+	</div>
 </fieldset>
 	<script>
+	console = console || { log:function(){}};
 	(function( $ ){
 			function notEmpty( id ){
 				$( '#' + id ).val( $( '#' + id ).val().replace(/^\s*/, ''));
@@ -60,7 +59,7 @@
 				$( '#last_ok' ).css( 'display', last_valid ? 'block' : 'none' );
 				//console.log( 'last:' + last_valid );
 				var address_valid = notEmpty( 'id_address1' );
-				$( '#add_ok' ).css( 'display', address_valid ? 'block' : 'none' );
+				$( '#address_ok' ).css( 'display', address_valid ? 'block' : 'none' );
 				//console.log( 'address:' + address_valid );
 				var city_valid = notEmpty( 'id_city'  );
 				$( '#city_ok' ).css( 'display', city_valid ? 'block' : 'none' );

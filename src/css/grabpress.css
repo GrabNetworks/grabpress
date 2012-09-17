@@ -289,7 +289,7 @@ legend {
 	font-size: 10px;
 }
 
-input[ type="button" ], #account input[ type="checkbox"], select{
+input[ type="button" ]/*, #account input[ type="checkbox"], select*/{
 	margin: 0 5px;
 	float: right;
 }
@@ -314,8 +314,11 @@ td * {
 #account.create {
 	width: 650px;
 }
-#account.create td, #account.create input[type='text'], #account.create input[type='password']{
-	width: 310px;
+#account.create td{
+padding-right: 10px;
+} 
+#account.create input[type='text'], #account.create input[type='password']{
+	width: 350px;
 }
 #buttons, #tos {
 	text-align: right;
@@ -340,6 +343,8 @@ span.warning {
 .manage-table .row-feed td{
     background-color: #FFE4C4;
     padding: 3px 3px 5px 3px;
+}
+.manage-table .row-feed{
    border-top: 3px solid white;
    border-bottom: 3px solid white;
 }
@@ -353,7 +358,9 @@ span.warning {
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
 }
-
+#id_agree{
+ float:left;
+}
 .display-element{ display: block !important;}
 .edit-form-text{
     text-align:center;
@@ -361,6 +368,13 @@ span.warning {
     padding:15px 0 10px 0;
     font-style: italic;
     font-size: 14px;
+}
+#required{
+	float:left;
+}
+#id_tos{
+	text-align: right;
+	font-size: 10px;
 }
 .hide-button{ display: none !important;}
 .manage-table .editing-feed td{background-color: red !important;}
