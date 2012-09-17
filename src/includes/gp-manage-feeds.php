@@ -33,7 +33,7 @@
 			<th>Keywords</th>
 			<th>Schedule</th>
 			<th>Max Results</th>
-			<th>Publish</th>
+			<th>Auto-Publish</th>
 			<th>Player Mode</th>
 			<th>Post Categories</th>
 			<th>Author</th>
@@ -211,7 +211,7 @@
 					<?php } ?>
 				</td>
 				<td>
-					<input type="button" class="button-primary btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'X' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
+					<input type="button" class="btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'x' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 				</td>
 			</tr>
 			</form>
