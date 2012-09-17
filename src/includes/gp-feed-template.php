@@ -366,7 +366,11 @@
 				</tr>
 				<tr valign="top">
 					<td>
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
+						<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e( 'Preview Changes' ) ?>" id="btn-preview-feed" />
+						<?php }else{ ?>
 						<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e( 'Preview Feed' ) ?>" id="btn-preview-feed" />
+						<?php } ?>						
 					</td>
 				</tr>
 				<tr>
@@ -455,17 +459,44 @@
 			   	<tr valign="top">
 			   			<th scope="row">Player Mode*</th>
 						<td>
-							<?php $ctp_checked = ( $form["click_to_play"]=='1' )?'checked="checked"':"";?>
-							<input type="checkbox" value="1" <?php echo $ctp_checked;?>  name="click_to_play" id="click_to_play" />
+							<?php 
+								if(isset($_GET['action'])=='edit-feed'){
+									if($form["click_to_play"]=='1'){
+										$ctp_checked_click = 'checked="checked"';
+										$ctp_checked_auto = "";
+									}else{
+										$ctp_checked_click = "";
+										$ctp_checked_auto = 'checked="checked"';
+									}
+								}else{
+									$ctp_checked_click = "";
+									$ctp_checked_auto = 'checked="checked"';
+								}							
+							?>
+							<input type="radio" name="click_to_play" value="0" <?php echo $ctp_checked_auto;?> /> Auto-Play
+							<input type="radio" name="click_to_play" value="1" <?php echo $ctp_checked_click;?> /> Click-to-Play
 							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#" onclick='return false;' id="learn-more">learn more</a></span>
 						</td>
 				</tr>
 				<tr valign="top">		
 						<th scope="row">Delivery Mode*</th>
 						<td>
-							<?php $publish_checked = ( $form["publish"]==1 )?'checked="checked"':"";?>
-							<input type="checkbox" value="1" name="publish" id="publish-check" <?php echo $publish_checked;?> />
-							<span class="description">Leave this unchecked to moderate autoposts before they go live</span>
+							<?php 
+								if(isset($_GET['action'])=='edit-feed'){									
+									if($form["publish"] == '1'){
+										$publish_checked_automatic = 'checked="checked"';
+										$publish_checked_draft = "";
+									}else{
+										$publish_checked_automatic = "";
+										$publish_checked_draft = 'checked="checked"';
+									}
+								}else{
+									$publish_checked_draft = "";
+									$publish_checked_automatic = 'checked="checked"';
+								}							
+							?>
+							<input type="radio" name="publish" value="0" <?php echo $publish_checked_draft; ?> /> Create Drafts to be moderated and published manually
+							<input type="radio" name="publish" value="1" <?php echo $publish_checked_automatic; ?> /> Publish Posts Automatically
 						</td>
 				</tr>
 				<tr valign="top">
