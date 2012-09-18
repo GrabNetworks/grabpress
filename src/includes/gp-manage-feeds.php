@@ -2,6 +2,7 @@
 	$feeds = GrabPress::get_feeds();
 	$num_feeds = count( $feeds );
 	$active_feeds = 0;
+
 	for ( $i=0; $i < $num_feeds; $i++ ) {
 		if ( $feeds[$i]->feed->active > 0 ) {
 			$active_feeds++;
@@ -13,9 +14,9 @@
 			$noun .= 's';
 		}
 		if ( GrabPress::$environment == "grabqa" ) {
-			GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment );
+			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active.  ENVIRONMENT = ' . GrabPress::$environment;
 		}else {
-			GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
+			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span>  <span id="noun-active-feeds">'.$noun.'</span> active.';
 		}
 		if(($num_feeds == 1) && (isset($_GET['action']) == 'edit-feed')){
 			$text_feeds = "Feed";
@@ -33,7 +34,7 @@
 			<th>Keywords</th>
 			<th>Schedule</th>
 			<th>Max Results</th>
-			<th>Publish</th>
+			<th>Auto-Publish</th>
 			<th>Player Mode</th>
 			<th>Post Categories</th>
 			<th>Author</th>

@@ -243,7 +243,16 @@
 
 			$.post(ajaxurl, data, function(response) {
 				//alert('Got this from the server: ' + response);
+				var noun = 'feed';
+
+				if( response > 1 || response == 0){
+					noun = noun + 's';
+				}
+				
+				$('#num-active-feeds').text(response);	
+				$('#noun-active-feeds').text(noun);
 			});
+
 
 		  });	  
 
@@ -365,7 +374,8 @@
 						</td>
 				</tr>
 				<tr valign="top">
-					<td colspan="4">
+					<td colspan="2"><span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span></td>
+					<td colspan="2">
 						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
 						<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e( 'Preview Changes' ) ?>" id="btn-preview-feed" />
 						<?php }else{ ?>
@@ -391,23 +401,25 @@
 											$times = array( '12 hrs', '01 day', '02 days', '03 days' );
 										}	
 
+										if ( GrabPress::$environment == 'grabqa' ) {												
+											$values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
+										}
+										else {
+											$values = array( 720, 1440, 2880, 4320 );
+										}
+
 										if(!isset($form["schedule"])){
 											for ( $o = 0; $o < count( $times ); $o++ ) {
 												$time = $times[$o];
-												echo "<option value = \"$time\" >$time</option>\n";
+												$value = $values[$o];
+												echo "<option value = \"$value\" >$time</option>\n";
 											}
 										}else{
-											if ( GrabPress::$environment == 'grabqa' ) {												
-												$values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
-											}
-											else {
-												$values = array( 720, 1440, 2880, 4320 );
-											}
 											for ( $o = 0; $o < count( $times ); $o++ ) {
 												$time = $times[$o];
 												$value = $values[$o];
 												$selected = ( $value == $form["schedule"] )?'selected="selected"':"";
-												echo "<option value = \"$time\" $selected >$time</option>\n";
+												echo "<option value = \"$value\" $selected >$time</option>\n";
 											}
 										}
 									?>
@@ -530,9 +542,6 @@
 <?php $display_message = isset($_GET['action'])=='edit-feed' ? "display-element" : "hide"; ?>
 <span class="edit-form-text <?php echo $display_message ?>" >Please use the form above to edit the settings of the feed marked "editing" below</span>
 <?php
-	if(isset($_GET['action'])=='edit-feed'){
-echo '<div><p id="edit-notice">Please use the form above to edit the settings of the feed marked "editing" below</p></div>';
-	}
 	echo GrabPress::fetch('includes/gp-manage-feeds.php',
 				array( "form" => $_POST,
 					"list_provider" => $list_provider,

@@ -10,9 +10,14 @@
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords)
 		.'&categories='.urlencode($channel).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
 	$list_feeds = json_decode($json_preview, true);
+	
+	if(empty($list_feeds["results"])){
+		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please <a href="#" class="close-preview">modify your settings</a> until you see the kind of videos you want in your feed';
+	}
+	
 ?>
 <form method="post" action="" id="preview-feed">
-	<input type="hidden" id="action-preview-feed" name="action" value="" />
+	<input type="hidden" id="action-preview-feed" name="action" value="" />	
 <div class="wrap">
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Autopost Videos by Channel and Tag</h2>
@@ -90,11 +95,11 @@ if(!window.grabModal){
 		//var feed_id = <?php echo $feed_id  = isset($_GET["feed_id"]) ? $_GET["feed_id"] : "undefined"; ?>;
 		var feed_action = '<?php echo $action  = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 		if(feed_action == "preview-feed"){
-		  	jQuery("#close-preview").click(function() {		  
+		  	jQuery(".close-preview").click(function() {		  
 		  		window.location = "admin.php?page=autoposter";
 	  		});
 		}else{
-			jQuery("#close-preview").click(function() {		  
+			jQuery(".close-preview").click(function() {		  
 			  var form = jQuery('#preview-feed');	
 			  var action = jQuery('#action-preview-feed');
 			  action.val(feed_action);

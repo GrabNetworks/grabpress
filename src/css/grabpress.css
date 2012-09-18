@@ -339,7 +339,7 @@ span.warning {
     border-collapse: collapse;
 }
 
-.manage-table .inactive-row td{background-color: #DCDCDC !important;}
+.manage-table .inactive-row td{background-color: #DCDCDC;}
 .manage-table .row-feed td{
     background-color: #FFE4C4;
     padding: 3px 3px 5px 3px;
@@ -381,4 +381,5 @@ span.warning {
 }
 .hide-button{ display: none !important;}
 .manage-table .editing-feed td{background-color: red !important;}
+.grabpress-table .preview-btn-text{ float: right; }
 
