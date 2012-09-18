@@ -30,7 +30,7 @@
 		})
 		
 		$('#cancel_button').click(function(){
-			$('#action').val('default');
+			$('#id_action').attr('value', 'default');
 			$('#unlink')[0].reset();
 			$('#unlink').submit();
 		})

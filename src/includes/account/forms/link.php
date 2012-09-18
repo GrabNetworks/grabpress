@@ -27,13 +27,12 @@
 				//console.log( 'email:' + email_valid );
 				var pass_valid = ( $('#password').val().length > 0 ) ;
 				//console.log( 'pass:' + pass_valid );
-			
 				var valid = email_valid && pass_valid;
 				//console.log('valid:'+ valid )
 				return valid
 			}
 			function doValidation(){
-		    	//console.log( 'valid?');
+		    	//console.log( 'valid?'); 
 				if ( validate() ){
 					$( '#submit_button' ).removeAttr('disabled');
 					$('#submit_button').click(function(){
@@ -42,7 +41,11 @@
 					
 				} else {
 					$( '#submit_button' ).attr('disabled', 'disabled');
-					$( '#submit_button' ).off('click');
+					if( $( '#submit_button' ).off ){
+						$( '#submit_button' ).off('click');
+					}else{
+						$( '#submit_button' ).unbind('click');
+					}
 				}
 			}
 		    $("input").keyup(doValidation);
@@ -50,8 +53,8 @@
 		    $("select").change(doValidation);
 			
 			$('#cancel_button').click(function(){
-				$('#action').val('default');
-					if(window.confirm('Are you sure you want to cancel linking?\n\n' +
+				$('#id_action').attr('value', 'default');
+				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
 					$user = GrabPress::get_user();
 					$linked = isset( $user->email );

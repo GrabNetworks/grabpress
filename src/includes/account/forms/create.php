@@ -87,7 +87,7 @@
 			})
 			$('#cancel-button').click(function(){
 				if(window.confirm('Are you sure you want to cancel creation?\n\nAds played due to this plug-in will continue to not earn you any money, and your changes to this form will be lost.')){
-					$('#id_action').val( 'default' );
+					$('#id_action').attr('value', 'default');
 					$('#register')[0].reset();
 					$('#register').submit();
 				}
@@ -100,9 +100,11 @@
 					
 				} else {
 					$( '#submit-button' ).attr('disabled', 'disabled');
-					$('#submit-button').click(function(){
-						$('#link-existing').submit();
-					});
+					if( $( '#submit_button' ).off ){
+						$( '#submit_button' ).off('click');
+					}else{
+						$( '#submit_button' ).unbind('click');
+					}
 				}
 			}
 		    $("input").keyup(doValidation);

@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '0.5.1b62';
+		static $version = '0.6.0b65';
 		static $api_key;
 		static $invalid = false;
 		static $environment = 'grabqa'; // or 'grabnetworks'
@@ -293,14 +293,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 				$schedule = $_POST['schedule'];
 
-				if ( preg_match( "/m/", $schedule ) ) {
-					$update_frequency = $schedule;
-				}
-				elseif ( preg_match( "/h/", $schedule ) ) {
-					$update_frequency = 60 * $schedule;
-				}else {
-					$update_frequency = 60 * 24 * $schedule;
-				}
 				if ( $_POST['click_to_play'] == "1" ) {
 					$auto_play = "1";
 				}else {
@@ -319,7 +311,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							'publish' => (bool)( $_POST[ 'publish' ] ),
 							'author_id' => $author_id
 						),
-						'update_frequency' => $update_frequency,
+						'update_frequency' => $_POST[ 'schedule' ] ,
 						'auto_play' => $auto_play
 
 					)
@@ -638,7 +630,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			*/
 			if(isset($_POST["referer"]) && ( $_POST["referer"] == "create" || $_POST["referer"] == "edit" )){
-				print GrabPress::fetch( "includes/gp-preview-template.php", $_POST );
+				print GrabPress::fetch( "includes/gp-preview-template.php", $_POST );				
 			}else{
 				$feed_id = $_GET['feed_id'];
 				$providers_total = count(GrabPress::get_providers());
@@ -757,15 +749,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						$cats[] = 'Uncategorized';
 					}
 
-					$schedule = $_POST['schedule'];
-					if ( preg_match( "/m/", $schedule ) ) {
-						$update_frequency = $schedule;
-					}elseif ( preg_match( "/h/", $schedule ) ) {
-						$update_frequency = 60 * $schedule;
-					}else {
-						$update_frequency = 60 * 24 * $schedule;
-					}
-
 					if ( $_POST['click_to_play'] == "1" ) {//defaults to false
 						$auto_play = '1';
 					}else {
@@ -785,7 +768,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								'publish' => (bool)( $_POST[ 'publish' ] ),
 								'author_id' => $author_id
 							),
-							'update_frequency' => $update_frequency,
+							'update_frequency' => $_POST['schedule'],
 							'auto_play' => $auto_play
 						)
 					);
@@ -823,7 +806,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 							$_POST[ 'action' ] = 'default';
 						}else{
-							// var_dump( $user_data);
 							GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
 							$_POST[ 'action' ] = 'default';
 						}
@@ -936,6 +918,19 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			);
 
 			GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
+
+			$feeds = GrabPress::get_feeds();
+			$num_feeds = count( $feeds );
+
+			$active_feeds = 0;
+	
+			for ( $i=0; $i < $num_feeds; $i++ ) {
+				if ( $feeds[$i]->feed->active > 0 ) {
+					$active_feeds++;
+				}
+			}
+
+			echo $active_feeds;
 
 			die(); // this is required to return a proper result
 		}
