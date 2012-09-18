@@ -919,6 +919,19 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
 
+			$feeds = GrabPress::get_feeds();
+			$num_feeds = count( $feeds );
+
+			$active_feeds = 0;
+	
+			for ( $i=0; $i < $num_feeds; $i++ ) {
+				if ( $feeds[$i]->feed->active > 0 ) {
+					$active_feeds++;
+				}
+			}
+
+			echo $active_feeds;
+
 			die(); // this is required to return a proper result
 		}
 

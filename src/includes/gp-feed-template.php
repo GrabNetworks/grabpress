@@ -243,7 +243,16 @@
 
 			$.post(ajaxurl, data, function(response) {
 				//alert('Got this from the server: ' + response);
+				var noun = 'feed';
+
+				if( response > 1 || response == 0){
+					noun = noun + 's';
+				}
+				
+				$('#num-active-feeds').text(response);	
+				$('#noun-active-feeds').text(noun);
 			});
+
 
 		  });	  
 
