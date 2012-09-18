@@ -2,6 +2,7 @@
 	$feeds = GrabPress::get_feeds();
 	$num_feeds = count( $feeds );
 	$active_feeds = 0;
+	//GrabPress::$message =  'GrabPress plugin is enabled with ';
 	for ( $i=0; $i < $num_feeds; $i++ ) {
 		if ( $feeds[$i]->feed->active > 0 ) {
 			$active_feeds++;
@@ -12,10 +13,14 @@
 		if ( $active_feeds > 1 || $active_feeds == 0 ) {
 			$noun .= 's';
 		}
+		//GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
 		if ( GrabPress::$environment == "grabqa" ) {
-			GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment );
+			//GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment );
+			GrabPress::$message = 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment;
 		}else {
-			GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
+			//GrabPress::show_message( 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.' );
+			//GrabPress::showMessage('GrabPress Autoposter active with '.$num_feeds.' '.$noun.'.');
+			GrabPress::$message = 'GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.';
 		}
 		if(($num_feeds == 1) && (isset($_GET['action']) == 'edit-feed')){
 			$text_feeds = "Feed";
