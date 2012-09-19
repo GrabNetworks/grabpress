@@ -70,11 +70,20 @@
 	    	var errors = hasValidationErrors();
 			if ( !errors ){
 				$('#create-feed-btn').removeAttr('disabled');
-				$('#create-feed-btn').off('click');
 				$('#btn-preview-feed').removeAttr('disabled');
-				$('#btn-preview-feed').off('click');
-				$('.hide').show();
-				form.submit();					
+
+				if( $( '#create-feed-btn' ).off ){
+					$( '#create-feed-btn' ).off('click');
+				}else{
+					$( '#create-feed-btn' ).unbind('click');
+				}
+
+				if( $( '#btn-preview-feed' ).off ){
+					$( '#btn-preview-feed' ).off('click');
+				}else{
+					$( '#btn-preview-feed' ).unbind('click');
+				}
+				$('.hide').show();					
 			}else{
 				$( '#create-feed-btn' ).attr('disabled', 'disabled');
 				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
@@ -89,8 +98,7 @@
 					$( '#btn-preview-feed' ).off('click');
 				}else{
 					$( '#btn-preview-feed' ).unbind('click');
-				}
-				
+				}				
 
 				$('.hide').hide();
 			}
