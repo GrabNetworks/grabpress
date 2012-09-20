@@ -30,15 +30,15 @@
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
 			<th>Active</th>
-			<th>Video Channel</th>
+			<th>Video Categories</th>
 			<th>Keywords</th>
+			<th>Content Providers</th>			
 			<th>Schedule</th>
 			<th>Max Results</th>
-			<th>Auto-Publish</th>
-			<th>Player Mode</th>
 			<th>Post Categories</th>
-			<th>Author</th>
-			<th>Providers</th>
+			<th>Author</th>		
+			<th>Player Mode</th>
+			<th>Auto-Publish</th>			
 			<th></th>
 			<th></th>
 			<th></th>
@@ -96,6 +96,28 @@
 						echo $keywords_and = ($keywords_and_num > 15) ? substr($url['keywords_and'],0,15)."..." : $url['keywords_and'];
 					?>							
 				</td>
+				<td>
+					<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" />
+					<?php								
+						$providers_selected = count($providers);
+						if($providers_selected == 1){
+							if ( in_array( "", $providers ) ) {
+								echo "All providers";
+							}else{	
+								foreach ( $list_provider as $record_provider ) {
+									$provider = $record_provider->provider;
+									$provider_name = $provider->name;
+									$provider_id = $provider->id;											
+									if(in_array( $provider_id, $providers )) {											
+										echo $provider_name;									
+									}
+								}
+							}
+						}else{
+							echo $providers_selected." providers selected of ".$providers_total;
+						}
+					?>
+				</td>
 				<td>							
 					<?php
 						if ( GrabPress::$environment == 'grabqa' ) {
@@ -117,12 +139,6 @@
 				</td>
 				<td>							
 					<?php echo $feed->posts_per_update; ?>
-				</td>
-				<td>
-					<?php echo $publish = $feed->custom_options->publish ? "Yes" : "No"; ?>
-				</td>
-				<td>
-					<?php echo $click_to_play = $feed->auto_play ? "Click" : "Auto"; ?>
 				</td>
 				<td>
 				<?php	
@@ -160,27 +176,11 @@
 					?>
 				</td>
 				<td>
-					<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" />
-					<?php								
-						$providers_selected = count($providers);
-						if($providers_selected == 1){
-							if ( in_array( "", $providers ) ) {
-								echo "All providers";
-							}else{	
-								foreach ( $list_provider as $record_provider ) {
-									$provider = $record_provider->provider;
-									$provider_name = $provider->name;
-									$provider_id = $provider->id;											
-									if(in_array( $provider_id, $providers )) {											
-										echo $provider_name;									
-									}
-								}
-							}
-						}else{
-							echo $providers_selected." providers selected of ".$providers_total;
-						}
-					?>
-				</td>
+					<?php echo $click_to_play = $feed->auto_play ? "Click" : "Auto"; ?>
+				</td>	
+				<td>
+					<?php echo $publish = $feed->custom_options->publish ? "Yes" : "No"; ?>
+				</td>			
 				<?php				
 					if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){
 						$class_preview_button = "hide-button";

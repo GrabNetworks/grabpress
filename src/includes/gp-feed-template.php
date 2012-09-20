@@ -332,7 +332,7 @@
 					</td>					
 				</tr>
 				<tr valign="top">
-					<th scope="row">Grab Video Categories*</th>
+					<th scope="row">Grab Video Categories<span class="asterisk">*</span></th>
 					<td>
 						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px" >
 							<option <?php  ( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>
@@ -372,8 +372,8 @@
 									echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
 								}
 							?>
-							</select> *
-							<span class="description">Select providers for your autoposts</span>
+							</select>
+							<span class="description">Add or remove specific providers content from this feed</span>
 						</td>
 				</tr>
 				<tr valign="top">
@@ -392,7 +392,7 @@
 					</td>					
 				</tr>
         		<tr valign="top">
-					<th scope="row">Schedule*</th>
+					<th scope="row">Schedule<span class="asterisk">*</span></th>
         		           	<td>
 								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
 									<?php
@@ -431,7 +431,7 @@
 							</td>
 				</tr>
 				<tr valign="top">
-					<th scope="row">Max Results*</th>
+					<th scope="row">Max Results<span class="asterisk">*</span></th>
         		           	<td>
 						<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
 							<?php 
@@ -456,7 +456,7 @@
 						</td>
 				</tr>
 				<tr valign="top">
-						<th scope="row">Post Author*</th>
+						<th scope="row">Post Author<span class="asterisk">*</span></th>
 						<td>
 							<select name="author" id="author_id" class="author-select" >
 							<?php
@@ -472,7 +472,7 @@
 						</td>
 			    </tr>
 			   	<tr valign="top">
-			   			<th scope="row">Player Mode*</th>
+			   			<th scope="row">Player Mode<span class="asterisk">*</span></th>
 						<td>
 							<?php 
 								if(isset($_GET['action'])=='edit-feed'){
@@ -489,12 +489,12 @@
 								}							
 							?>
 							<input type="radio" name="click_to_play" value="0" <?php echo $ctp_checked_auto;?> /> Auto-Play
-							<input type="radio" name="click_to_play" value="1" <?php echo $ctp_checked_click;?> /> Click-to-Play
-							<span class="description">Check this to wait for the reader to click to start the video (this is likely to result in fewer ad impressions) <a href="#" onclick='return false;' id="learn-more">learn more</a></span>
+							<input type="radio" name="click_to_play" value="1" <?php echo $ctp_checked_click;?> /> Click-to-Play 
+							<span class="description">(this is likely to result in fewer ad impressions <a href="#" onclick='return false;' id="learn-more">learn more</a>)</span>
 						</td>
 				</tr>
 				<tr valign="top">		
-						<th scope="row">Delivery Mode*</th>
+						<th scope="row">Delivery Mode<span class="asterisk">*</span></th>
 						<td>
 							<?php 
 								if(isset($_GET['action'])=='edit-feed'){									

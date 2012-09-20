@@ -630,7 +630,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			*/
 			if(isset($_POST["referer"]) && ( $_POST["referer"] == "create" || $_POST["referer"] == "edit" )){
-				print GrabPress::fetch( "includes/gp-preview-template.php", $_POST );				
+				print GrabPress::fetch( "includes/gp-preview-template.php", $_POST );	
 			}else{
 				$feed_id = $_GET['feed_id'];
 				$providers_total = count(GrabPress::get_providers());
