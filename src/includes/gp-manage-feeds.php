@@ -176,7 +176,7 @@
 					?>
 				</td>
 				<td>
-					<?php echo $click_to_play = $feed->auto_play ? "Click" : "Auto"; ?>
+					<?php echo $click_to_play = $feed->auto_play ? "Auto" : "Click"; ?>
 				</td>	
 				<td>
 					<?php echo $publish = $feed->custom_options->publish ? "Yes" : "No"; ?>

@@ -271,9 +271,6 @@
 		  //$("input").click(doValidation);
 		  //$("select").change(doValidation);
 
-
-
-
 	});
 
 	jQuery(window).load(function () {
@@ -482,15 +479,15 @@
 						<td>
 							<?php	
 								if(isset($form["click_to_play"]) && ($form["click_to_play"]=='1')){
-									$ctp_checked_click = 'checked="checked"';
-									$ctp_checked_auto = "";
-								}else{
 									$ctp_checked_click = "";
 									$ctp_checked_auto = 'checked="checked"';
+								}else{
+									$ctp_checked_click = 'checked="checked"';
+									$ctp_checked_auto = "";
 								}					
 							?>
-							<input type="radio" name="click_to_play" value="0" <?php echo $ctp_checked_auto;?> /> Auto-Play
-							<input type="radio" name="click_to_play" value="1" <?php echo $ctp_checked_click;?> /> Click-to-Play 
+							<input type="radio" name="click_to_play" value="1" <?php echo $ctp_checked_auto;?> /> Auto-Play
+							<input type="radio" name="click_to_play" value="0" <?php echo $ctp_checked_click;?> /> Click-to-Play 
 							<span class="description">(this is likely to result in fewer ad impressions <a href="#" onclick='return false;' id="learn-more">learn more</a>)</span>
 						</td>
 				</tr>
