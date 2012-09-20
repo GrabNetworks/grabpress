@@ -7,14 +7,13 @@
 		<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
 	( function ( global, $ ) {
-	    //$("#form-create-feed input[name=action]").val("update");
+
 		global.hasValidationErrors = function () {
 			var category =  $('#channel-select').val();
-			if(category == ''){
-				return "Please select at least one video channel";
-			}else if($("#provider-select :selected").length == 0){
-				return "Please select at least one provider";
-			}else {
+			if((category == '') || ($("#provider-select :selected").length == 0)){
+				return true;
+			}
+			else {
 				return false;
 			}
 		}
@@ -27,10 +26,6 @@
 			}else{
 				alert(errors);
 			}
-		}
-
-		global.toggleButton = function (feedId) {
-			$('#btn-update-' + feedId).css({"visibility":"visible"});
 		}
 
 		global.deleteFeed = function(id){	
@@ -71,6 +66,44 @@
 			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
 		}
 
+		global.doValidation = function(){
+	    	var errors = hasValidationErrors();
+			if ( !errors ){
+				$('#create-feed-btn').removeAttr('disabled');
+				$('#btn-preview-feed').removeAttr('disabled');
+
+				if( $( '#create-feed-btn' ).off ){
+					$( '#create-feed-btn' ).off('click');
+				}else{
+					$( '#create-feed-btn' ).unbind('click');
+				}
+
+				if( $( '#btn-preview-feed' ).off ){
+					$( '#btn-preview-feed' ).off('click');
+				}else{
+					$( '#btn-preview-feed' ).unbind('click');
+				}
+				$('.hide').show();					
+			}else{
+				$( '#create-feed-btn' ).attr('disabled', 'disabled');
+				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
+				
+				if( $( '#create-feed-btn' ).off ){
+					$( '#create-feed-btn' ).off('click');
+				}else{
+					$( '#create-feed-btn' ).unbind('click');
+				}
+
+				if( $( '#btn-preview-feed' ).off ){
+					$( '#btn-preview-feed' ).off('click');
+				}else{
+					$( '#btn-preview-feed' ).unbind('click');
+				}				
+
+				$('.hide').hide();
+			}
+		}
+
 	} )( window, jQuery );
 
 	var multiSelectOptions = {
@@ -89,15 +122,6 @@
 	  	 selectedText: "# of # selected"
 	};
 
-	function showButtons() {
-		var errors = hasValidationErrors();
-		if(!errors){
-			jQuery('.hide').show();
-		}else{
-			jQuery('.hide').hide();
-		}
-	}
-
 	jQuery(function($){
 		$('#reset-form').bind('click', function(e){
 		    var referer = $("input[name=referer]").val();
@@ -111,17 +135,6 @@
 		    
 		});
 
-		// Show "Preview Feed" and "Create Feed" buttons
-		$("#form-create-feed").bind("change", function(e) {
-		   	if(!hasValidationErrors()){
-				$('.hide').show();
-			}else{
-				$('.hide').hide();
-				e.preventDefault();
-				return false;
-			}
-		});
-		//showButtons();
 	   $("#form-create-feed input").keypress(function(e) {
 		    if(e.which == 13) {
 		        e.preventDefault();
@@ -141,7 +154,7 @@
 
 		$("#provider-select").multiselect(multiSelectOptions, {
 	  	 uncheckAll: function(e, ui){
-	  	 	$('.hide').hide();
+	  	 	doValidation();
 		 },
 		 checkAll: function(e, ui){
 		 	/*
@@ -149,10 +162,7 @@
 				$('.hide').show();
 			}
 			*/
-			var errors = hasValidationErrors();
-			if(!errors){
-				$('.hide').show();
-			}
+			doValidation();
 		 }
 		  }).multiselectfilter();
 
@@ -166,19 +176,6 @@
 		  	 	toggleButton(id);
 			 }
 		   }).multiselectfilter();
-
-
-		  $('#create-feed-btn').bind('click', function(e){
-		  	var errors = hasValidationErrors();
-		  	var form = $('#form-create-feed');
-			if(!errors){
-				form.submit();
-			}else{
-				alert(errors);
-				e.preventDefault();
-				return false;
-			}
-		  });
 
 		  $('.btn-update').bind('click', function(e){
 		    id = $(this).attr('name');
@@ -263,12 +260,18 @@
 				} else{				
 					return false;
 				}
-		  });		  
+		  });	
+
+		  $("#form-create-feed").change(doValidation);	
+		  //$("input").keyup(doValidation);
+		  //$("input").click(doValidation);
+		  //$("select").change(doValidation);
+
 
 	});
 
 	jQuery(window).load(function () {
-	    showButtons();
+	    doValidation();
 	});
 
 	</script>
@@ -359,7 +362,7 @@
 						<th scope="row">Providers</th>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
-							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="showButtons()" >
+							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
 							<?php
 								foreach ( $list_provider as $record_provider ) {
 									$provider = $record_provider->provider;
@@ -374,12 +377,12 @@
 						</td>
 				</tr>
 				<tr valign="top">
-					<td colspan="2"><span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span></td>
-					<td colspan="2">
+					<td colspan="4"><span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span></td>
+					<td colspan="1">
 						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
-						<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e( 'Preview Changes' ) ?>" id="btn-preview-feed" />
+						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php _e( 'Preview Changes' ) ?>" id="btn-preview-feed" />
 						<?php }else{ ?>
-						<input type="button" onclick="previewVideos()" class="button-secondary hide" value="<?php _e( 'Preview Feed' ) ?>" id="btn-preview-feed" />
+						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php _e( 'Preview Feed' ) ?>" id="btn-preview-feed" />
 						<?php } ?>						
 					</td>
 				</tr>
@@ -512,7 +515,7 @@
 						</td>
 				</tr>
 				<tr valign="top">
-					<td/>
+					<td>&nbsp;</td>
 					<td>
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
 						<?php
@@ -524,15 +527,17 @@
 					<td>						
 						<a href="#" id="cancel-editing" >cancel editing</a>						
 					</td>
+					<?php }else{ ?>
+					<td>&nbsp;</td>
 					<?php } ?>
 					<td>
 						<a href="#" id="reset-form" >reset form</a>
 					</td>
 					<td>
 						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
-						<input type="submit" class="button-primary hide" value="<?php _e( 'Save Changes' ) ?>" id="create-feed-btn" />
+						<input type="submit" class="button-primary" disabled="disabled" value="<?php _e( 'Save Changes' ) ?>" id="create-feed-btn" />
 						<?php }else{ ?>
-						<input type="submit" class="button-primary hide" value="<?php _e( 'Create Feed' ) ?>" id="create-feed-btn" />
+						<input type="submit" class="button-primary" disabled="disabled" value="<?php _e( 'Create Feed' ) ?>" id="create-feed-btn" />
 						<?php } ?>
 					</td>
 				</tr>
