@@ -359,7 +359,7 @@
 					</td>
         		</tr>
         		<tr valign="top">
-						<th scope="row">Providers</th>
+						<th scope="row">Content Providers</th>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
 							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
@@ -474,19 +474,14 @@
 			   	<tr valign="top">
 			   			<th scope="row">Player Mode<span class="asterisk">*</span></th>
 						<td>
-							<?php 
-								if(isset($_GET['action'])=='edit-feed'){
-									if($form["click_to_play"]=='1'){
-										$ctp_checked_click = 'checked="checked"';
-										$ctp_checked_auto = "";
-									}else{
-										$ctp_checked_click = "";
-										$ctp_checked_auto = 'checked="checked"';
-									}
+							<?php	
+								if(isset($form["click_to_play"]) && ($form["click_to_play"]=='1')){
+									$ctp_checked_click = 'checked="checked"';
+									$ctp_checked_auto = "";
 								}else{
 									$ctp_checked_click = "";
 									$ctp_checked_auto = 'checked="checked"';
-								}							
+								}					
 							?>
 							<input type="radio" name="click_to_play" value="0" <?php echo $ctp_checked_auto;?> /> Auto-Play
 							<input type="radio" name="click_to_play" value="1" <?php echo $ctp_checked_click;?> /> Click-to-Play 
@@ -496,19 +491,14 @@
 				<tr valign="top">		
 						<th scope="row">Delivery Mode<span class="asterisk">*</span></th>
 						<td>
-							<?php 
-								if(isset($_GET['action'])=='edit-feed'){									
-									if($form["publish"] == '1'){
-										$publish_checked_automatic = 'checked="checked"';
-										$publish_checked_draft = "";
-									}else{
-										$publish_checked_automatic = "";
-										$publish_checked_draft = 'checked="checked"';
-									}
-								}else{
-									$publish_checked_draft = "";
+							<?php								
+								if(isset($form["publish"]) && ($form["publish"] == '1')){
 									$publish_checked_automatic = 'checked="checked"';
-								}							
+									$publish_checked_draft = "";
+								}else{
+									$publish_checked_automatic = '';
+									$publish_checked_draft = 'checked="checked"';
+								}
 							?>
 							<input type="radio" name="publish" value="0" <?php echo $publish_checked_draft; ?> /> Create Drafts to be moderated and published manually
 							<input type="radio" name="publish" value="1" <?php echo $publish_checked_automatic; ?> /> Publish Posts Automatically
