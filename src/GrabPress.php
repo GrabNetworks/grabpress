@@ -571,6 +571,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 
 				GrabPress::$message = 'Thank you for activating Grab Autoposter. Try creating your first feed '.$here.'.';
+			}else{
+				GrabPress::$message = 'Grab Autoposter ON with '.$num_feeds.' active feeds';
 			}
 		}
 
