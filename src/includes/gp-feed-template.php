@@ -260,12 +260,18 @@
 				} else{				
 					return false;
 				}
-		  });	
+		  });
+
+		  $(".ui-selectmenu").click(function(){
+			    $(".ui-multiselect-menu").css("display", "none");
+			});
 
 		  $("#form-create-feed").change(doValidation);	
 		  //$("input").keyup(doValidation);
 		  //$("input").click(doValidation);
 		  //$("select").change(doValidation);
+
+
 
 
 	});
