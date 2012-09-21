@@ -13,10 +13,15 @@
 		if ( $active_feeds > 1 || $active_feeds == 0 ) {
 			$noun .= 's';
 		}
+		$user = GrabPress::get_user();	
+		$linked = isset( $user->email);
+
+		$linked_message = $linked ? '' : 'Want to earn money? <a href="admin.php?page=account&action=create">Create</a> or <a href="admin.php?page=account&action=default">link</a> an existing Grab Publisher account.';
+
 		if ( GrabPress::$environment == "grabqa" ) {
-			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active.  ENVIRONMENT = ' . GrabPress::$environment;
+			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active. '.$linked_message .'  ENVIRONMENT = ' . GrabPress::$environment;
 		}else {
-			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span>  <span id="noun-active-feeds">'.$noun.'</span> active.';
+			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span>  <span id="noun-active-feeds">'.$noun.'</span> active.'.$linked_message;
 		}
 		if(($num_feeds == 1) && (isset($_GET['action']) == 'edit-feed')){
 			$text_feeds = "Feed";
