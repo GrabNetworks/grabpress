@@ -1,3 +1,4 @@
+
 <fieldset class="fieldset-manage">
 	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> <?php echo $text_feeds ?> </legend>
 <div>
