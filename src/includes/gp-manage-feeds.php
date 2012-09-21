@@ -1,34 +1,3 @@
-<?php
-	$feeds = GrabPress::get_feeds();
-	$num_feeds = count( $feeds );
-	$active_feeds = 0;
-
-	for ( $i=0; $i < $num_feeds; $i++ ) {
-		if ( $feeds[$i]->feed->active > 0 ) {
-			$active_feeds++;
-		}
-	}
-	if ( $active_feeds > 0 || $num_feeds > 0 ) {
-		$noun = 'feed';
-		if ( $active_feeds > 1 || $active_feeds == 0 ) {
-			$noun .= 's';
-		}
-		$user = GrabPress::get_user();	
-		$linked = isset( $user->email);
-
-		$linked_message = $linked ? '' : 'Want to earn money? <a href="admin.php?page=account&action=create">Create</a> or <a href="admin.php?page=account&action=default">link</a> an existing Grab Publisher account.';
-
-		if ( GrabPress::$environment == "grabqa" ) {
-			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active. '.$linked_message .'  ENVIRONMENT = ' . GrabPress::$environment;
-		}else {
-			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span>  <span id="noun-active-feeds">'.$noun.'</span> active.'.$linked_message;
-		}
-		if(($num_feeds == 1) && (isset($_GET['action']) == 'edit-feed')){
-			$text_feeds = "Feed";
-		}else{
-			$text_feeds = "Feeds";
-		}
-?>
 <fieldset class="fieldset-manage">
 	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> <?php echo $text_feeds ?> </legend>
 <div>
@@ -49,6 +18,8 @@
 			<th></th>
 		</tr>
 		<?php
+			$feeds = GrabPress::get_feeds();
+			$num_feeds = count( $feeds );
 			$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 			$categories_list = json_decode( $json );
 
@@ -227,4 +198,3 @@
 
 <div class="result"> </div>
 </fieldset>
-<?php } ?>

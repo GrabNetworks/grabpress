@@ -560,8 +560,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			unset( $submenu['grabpress'][0] );
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
-				$admin = get_admin_url();
-				$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+			$admin = get_admin_url();
+			$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 			if ( $num_feeds == 0 ) {
 				$admin_page = $admin.'admin.php?page=autoposter';
 				if ( $current_page != $admin_page ) {
@@ -569,25 +569,31 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}else {
 					$here = 'here';
 				}
-
-				GrabPress::$message = 'Thank you for activating Grab Autoposter. Try creating your first feed '.$here.'.';
+	
+				GrabPress::$message = 'Thank you for activating GrabPress. Try creating your first Autoposter feed '.$here.'.';
 			}else{
-				$admin_page = $admin.'admin.php?page=account';
-				$account = '';
-				$user = GrabPress::get_user();
-				$linked = isset( $user->email);
-				if(!$linked){
-					if ( $current_page != $admin_page ) {
-						$create = '<a href="'.$admin_page.'">Create or link an existing Grab Publisher account</a>';
-					}else {
-						$create = 'Create or link an existing Grab Publisher account';
+				$active_feeds = 0;
+			
+				for ( $i=0; $i < $num_feeds; $i++ ) {
+					if ( $feeds[$i]->feed->active > 0 ) {
+						$active_feeds++;
 					}
-					$account = ' Want to earn money? '.$create;
 				}
-				GrabPress::$message = 'Grab Autoposter ON with '.$num_feeds.' active feeds.'.$account;
+				if ( $active_feeds > 0 || $num_feeds > 0 ) {
+					$noun = 'feed';
+					if ( $active_feeds > 1 || $active_feeds == 0 ) {
+						$noun .= 's';
+					}
+					$user = GrabPress::get_user();	
+					$linked = isset( $user->email);
+					$create = $_REQUEST[ 'page'] == 'account' &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
+					$link = $_REQUEST[ 'page'] == 'account' &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
+					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
+					$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
+					GrabPress::$message = 'Grab Autoposter is ON with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active. '.$linked_message .$environment;
+				}
 			}
 		}
-
 		static function render_account_management() {
 			GrabPress::log();
 			//if (!current_user_can('manage_options'))  {

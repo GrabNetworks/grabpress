@@ -540,11 +540,17 @@
 <?php $display_message = isset($_GET['action'])=='edit-feed' ? "display-element" : "hide"; ?>
 <span class="edit-form-text <?php echo $display_message ?>" >Please use the form above to edit the settings of the feed marked "editing" below</span>
 <?php
-	echo GrabPress::fetch('includes/gp-manage-feeds.php',
-				array( "form" => $_POST,
-					"list_provider" => $list_provider,
-					"providers_total" => $providers_total,
-					"blogusers" => $blogusers )); 
+	$feeds = GrabPress::get_feeds();
+	$num_feeds = count( $feeds );
+	if($num_feeds > 0 ){
+		echo GrabPress::fetch('includes/gp-manage-feeds.php',
+			array( "form" => $_POST,
+				"list_provider" => $list_provider,
+				"providers_total" => $providers_total,
+				"blogusers" => $blogusers 
+			)
+		); 
+	}
 ?>
 </div>
 <!--</form>-->
