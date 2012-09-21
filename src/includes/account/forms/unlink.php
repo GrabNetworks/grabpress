@@ -31,7 +31,7 @@
 		
 		$('#cancel_button').click(function(){
 			$('#unlink')[0].reset();
-			$('#id_action').attr('value', 'default');
+			$('#action').attr('value', 'default');
 			$('#unlink').submit();
 		})
 	})( jQuery )
