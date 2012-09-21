@@ -53,7 +53,7 @@
 		    $("select").change(doValidation);
 			
 			$('#cancel_button').click(function(){
-				$('#id_action').attr('value', 'default');
+				$('#action').attr('value', 'default');
 				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
 					$user = GrabPress::get_user();

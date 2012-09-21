@@ -67,7 +67,7 @@
 				var state_valid = notEmpty( 'id_state' );
 				$( '#state_ok' ).css( 'display', state_valid ? 'block' : 'none' );
 				//console.log( 'state:' + state_valid );
-				var zip_valid = notEmpty( 'id_zip' );
+				var zip_valid = $('#id_zip').val().match(/^\d{5}(-\d{4})?$/);
 				$( '#zip_ok' ).css( 'display', zip_valid ? 'block' : 'none' );
 				//console.log( 'zip:' + zip_valid );
 				var agree_valid = $('#id_agree').attr('checked');
@@ -82,16 +82,17 @@
 				//console.log('valid:'+ valid )
 				return valid
 			}
-			$('#submit-buttoni').click(function(){
+			$('#submit-button').click(function(){
 				$('#register').submit();
-			})
+			});
 			$('#cancel-button').click(function(){
-				if(window.confirm('Are you sure you want to cancel creation?\n\nAds played due to this plug-in will continue to not earn you any money, and your changes to this form will be lost.')){
+				var confirm = window.confirm('Are you sure you want to cancel creation?\n\nAds played due to this plug-in will continue to not earn you any money, and your changes to this form will be lost.')
+				if( confirm){
 					$('#id_action').attr('value', 'default');
 					$('#register')[0].reset();
 					$('#register').submit();
 				}
-			})
+			});
 			function doValidation(){
 		    	// console.log( 'valid?');
 				if ( validate() ){
@@ -112,6 +113,7 @@
 		    $("select").change(doValidation);
 		    $("#clear-form").click(function() {
 				$('#register')[0].reset();
+		    	doValidation();
 		    })
 		   })(jQuery)
 	</script>

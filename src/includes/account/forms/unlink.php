@@ -30,8 +30,8 @@
 		})
 		
 		$('#cancel_button').click(function(){
-			$('#id_action').attr('value', 'default');
 			$('#unlink')[0].reset();
+			$('#action').attr('value', 'default');
 			$('#unlink').submit();
 		})
 	})( jQuery )

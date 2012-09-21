@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.6.0b69
+Version: 0.6.0b71
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '0.6.0b69';
+		static $version = '0.6.0b71';
 		static $api_key;
 		static $invalid = false;
 		static $environment = 'grabqa'; // or 'grabnetworks'
@@ -560,10 +560,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			unset( $submenu['grabpress'][0] );
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
-			if ( $num_feeds == 0 ) {
 				$admin = get_admin_url();
-				$admin_page = $admin.'admin.php?page=autoposter';
 				$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+			if ( $num_feeds == 0 ) {
+				$admin_page = $admin.'admin.php?page=autoposter';
 				if ( $current_page != $admin_page ) {
 					$here = '<a href="'.$admin_page.'">here</a>';
 				}else {
@@ -571,6 +571,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 
 				GrabPress::$message = 'Thank you for activating Grab Autoposter. Try creating your first feed '.$here.'.';
+			}else{
+				$admin_page = $admin.'admin.php?page=account';
+				$account = '';
+				$user = GrabPress::get_user();
+				$linked = isset( $user->email);
+				if(!$linked){
+					if ( $current_page != $admin_page ) {
+						$create = '<a href="'.$admin_page.'">Create or link an existing Grab Publisher account</a>';
+					}else {
+						$create = 'Create or link an existing Grab Publisher account';
+					}
+					$account = ' Want to earn money? '.$create;
+				}
+				GrabPress::$message = 'Grab Autoposter ON with '.$num_feeds.' active feeds.'.$account;
 			}
 		}
 
