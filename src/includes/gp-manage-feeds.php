@@ -41,9 +41,9 @@
 			<th>Schedule</th>
 			<th>Max Results</th>
 			<th>Post Categories</th>
-			<th>Author</th>		
+			<th>Author</th>					
 			<th>Player Mode</th>
-			<th>Auto-Publish</th>			
+			<th>Delivery Mode</th>					
 			<th></th>
 			<th></th>
 			<th></th>
@@ -184,7 +184,7 @@
 					<?php echo $click_to_play = $feed->auto_play ? "Auto" : "Click"; ?>
 				</td>	
 				<td>
-					<?php echo $publish = $feed->custom_options->publish ? "Yes" : "No"; ?>
+					<?php echo $publish = $feed->custom_options->publish ? "Publish" : "Draft"; ?>
 				</td>			
 				<?php				
 					if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){
