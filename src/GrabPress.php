@@ -190,6 +190,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			$id = GrabPress::get_connector_id();
 			$user_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/user?api_key='.GrabPress::$api_key );
+			echo "USERJSON: "; var_dump($user_json); echo "<br/><br/>";
 			$user_data = json_decode( $user_json );
 			GrabPress::$connector_user = $user_data;
 			return $user_data;

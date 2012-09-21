@@ -13,6 +13,7 @@
 		if ( $active_feeds > 1 || $active_feeds == 0 ) {
 			$noun .= 's';
 		}
+
 		$user = GrabPress::get_user();	
 		$linked = isset( $user->email);
 
