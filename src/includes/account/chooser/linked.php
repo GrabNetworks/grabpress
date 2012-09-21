@@ -14,5 +14,5 @@
 		</tr>
 	</table>
 </form>
-<p class="account-help">To update your Publisher account information, please visit our Web site by clicking <a href="#">here</a></p>
+<p class="account-help">To update your Publisher account information, please visit our Web site by clicking <a href="http://www.grab-media.com/publisherAdmin/account/">here</a></p>
 

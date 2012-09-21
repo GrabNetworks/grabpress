@@ -21,7 +21,7 @@
 					})
 				})( jQuery )
 			</script>
-			<?php switch( $_POST[ 'action' ] ){
+			<?php switch( $_REQUEST[ 'action' ] ){
 					case 'default':
 					case NULL:
 						if($linked){

@@ -13,10 +13,15 @@
 		if ( $active_feeds > 1 || $active_feeds == 0 ) {
 			$noun .= 's';
 		}
+		$user = GrabPress::get_user();	
+		$linked = isset( $user->email);
+
+		$linked_message = $linked ? '' : 'Want to earn money? <a href="admin.php?page=account&action=create">Create</a> or <a href="admin.php?page=account&action=default">link</a> an existing Grab Publisher account.';
+
 		if ( GrabPress::$environment == "grabqa" ) {
-			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active.  ENVIRONMENT = ' . GrabPress::$environment;
+			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active. '.$linked_message .'  ENVIRONMENT = ' . GrabPress::$environment;
 		}else {
-			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span>  <span id="noun-active-feeds">'.$noun.'</span> active.';
+			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span>  <span id="noun-active-feeds">'.$noun.'</span> active.'.$linked_message;
 		}
 		if(($num_feeds == 1) && (isset($_GET['action']) == 'edit-feed')){
 			$text_feeds = "Feed";
@@ -36,9 +41,9 @@
 			<th>Schedule</th>
 			<th>Max Results</th>
 			<th>Post Categories</th>
-			<th>Author</th>		
+			<th>Author</th>					
 			<th>Player Mode</th>
-			<th>Auto-Publish</th>			
+			<th>Delivery Mode</th>					
 			<th></th>
 			<th></th>
 			<th></th>
@@ -179,7 +184,7 @@
 					<?php echo $click_to_play = $feed->auto_play ? "Auto" : "Click"; ?>
 				</td>	
 				<td>
-					<?php echo $publish = $feed->custom_options->publish ? "Yes" : "No"; ?>
+					<?php echo $publish = $feed->custom_options->publish ? "Publish" : "Draft"; ?>
 				</td>			
 				<?php				
 					if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){
