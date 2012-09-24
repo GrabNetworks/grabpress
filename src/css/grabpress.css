@@ -1,8 +1,9 @@
 /**
 * jquery.multiselect.css 
 */
-.ui-multiselect { padding:4px 0 4px 10px; text-align:left; }
-.ui-multiselect span.ui-icon { float:right }
+.ui-multiselect { padding:3px 0 1px 10px; text-align:left; }
+.ui-multiselect span.ui-icon { float: right;
+margin-top: -1px; padding: 2px 3px 0 0;}
 .ui-multiselect-single .ui-multiselect-checkboxes input { position:absolute !important; top: auto !important; left:-9999px; }
 .ui-multiselect-single .ui-multiselect-checkboxes label { padding:5px !important }
 
@@ -129,14 +130,14 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
 */
 /* Selectmenu
 ----------------------------------*/
-.ui-selectmenu { display: block; display: inline-block; position: relative; height: 25px !important; vertical-align: middle; text-decoration: none; overflow: hidden; zoom: 1; }
+.ui-selectmenu { display: block; display: inline-block; position: relative; height: 20px !important; vertical-align: middle; text-decoration: none; overflow: hidden; zoom: 1; }
 .ui-selectmenu-icon { position:absolute; right:6px; margin-top:-8px; top: 50%; }
 .ui-selectmenu-menu { padding:0; margin:0; position:absolute; top: 0; display: none; z-index: 1005;} /* z-index: 1005 to make selectmenu work with dialog */
 .ui-selectmenu-menu  ul { padding:0; margin:0; list-style:none; position: relative; overflow: auto; overflow-y: auto ; overflow-x: hidden; -webkit-overflow-scrolling: touch;} 
 .ui-selectmenu-open { display: block; }
 .ui-selectmenu-menu-popup { margin-top: -1px; }
 .ui-selectmenu-menu li { padding:0; margin:0; display: block; border-top: 1px dotted transparent; border-bottom: 1px dotted transparent; border-right-width: 0 !important; border-left-width: 0 !important; font-weight: normal !important; }
-.ui-selectmenu-menu li a,.ui-selectmenu-status { line-height: 1.4em; display: block; padding: .405em 2.1em .405em 1em; outline:none; text-decoration:none; }
+.ui-selectmenu-menu li a,.ui-selectmenu-status { line-height: 1.4em; display: block; padding: .3em 2.1em .2em 1em; outline:none; text-decoration:none; }
 .ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor: default; }
 .ui-selectmenu-menu li.ui-selectmenu-hasIcon a,
 .ui-selectmenu-hasIcon .ui-selectmenu-status { padding-left: 20px; position: relative; margin-left: 5px; }
@@ -163,7 +164,8 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
     background: url("images/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6; 
     border: 1px solid #CCCCCC; color: #999; 
     font-weight: bold; 
-    height: 26px;
+    padding: 10px;
+    height: 20px;
     *height: 17px;
     *padding-top: 5px;  
     width: 230px; 
@@ -177,10 +179,8 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
     *width: 222px;
 }
 .grabpress-table input[type="text"]:focus{  background: url("images/ui-bg_glass_65_ffffff_1x400.png") repeat-x scroll 50% 50% #FFFFFF; border: 1px solid #FBD850; color: #D54E21; font-weight: bold; }
-.grabpress-table input#create-feed-btn{ background: url("../images/button-grad.png") repeat-x scroll left top #21759B; border-color: #298CBA; color: #FFFFFF; font-weight: bold; height: 20px; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);  float: right;}
-.grabpress-table input.btn-delete{line-height:auto; background:none; border:none; color: #000; cursor: pointer; }
-.grabpress-table input#btn-preview-feed{ background: url("../images/white-grad.png") repeat-x scroll left top #F2F2F2; border-color: #BBBBBB; color: #464646; height: 20px; text-shadow: 0 1px 0 #FFFFFF; float: right; }
-.grabpress-table input#publish-check{ height: 13px; margin-left: 0px; }
+/*.grabpress-table input#create-feed-btn{ background: url("../images/button-grad.png") repeat-x scroll left top #21759B; border-color: #298CBA; color: #FFFFFF; font-weight: bold; height: 20px; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);  float: right;}*/.grabpress-table input.btn-delete{line-height:auto; background:none; border:none; color: #000; cursor: pointer; }
+/*.grabpress-table input#btn-preview-feed{ background: url("../images/white-grad.png") repeat-x scroll left top #F2F2F2; border-color: #BBBBBB; color: #464646; height: 20px; text-shadow: 0 1px 0 #FFFFFF; float: right; }*/.grabpress-table input#publish-check{ height: 13px; margin-left: 0px; }
 .grabpress-table input.click-to-play-feed{ margin-left: 3px; }
 .hide{ display: none !important;}
 .author-select{ width: 225px; }
@@ -243,7 +243,7 @@ cursor: pointer;
     overflow: hidden;
 }
 fieldset.edit-mode{
-	border-color: red;
+	border-color: #c41500;
 }
 h2.video_title {
     font-size: 14px;
@@ -253,7 +253,7 @@ h2.video_title {
 }
 p#edit-notice{
 	font-size: 14px;
-	color: red;
+	color: #c41500;
 	text-align: center;
 	font-style: italic;
 	margin: 12px 10px 10px 10px;
@@ -290,7 +290,8 @@ legend {
 }
 
 input[ type="button" ]/*, #account input[ type="checkbox"], select*/{
-	margin: 0 5px;
+	/*margin: 0 5px;*/
+	display: inline;
 	float: right;
 }
 #link-existing input[type='text'], #link-existing input[type='password']{
@@ -338,6 +339,11 @@ span.warning {
 .manage-table  {
     border-collapse: collapse;
 }
+.manage-table th {
+    text-align: left;
+    vertical-align: bottom;
+    padding: 3px 3px 5px 3px;
+}
 
 .manage-table .inactive-row td{background-color: #DCDCDC;}
 .manage-table .row-feed td{
@@ -367,7 +373,7 @@ span.warning {
 .display-element{ display: block !important;}
 .edit-form-text{
     text-align:center;
-    color:red;
+    color:#c41500;
     padding:15px 0 10px 0;
     font-style: italic;
     font-size: 14px;
@@ -379,8 +385,23 @@ span.warning {
 	text-align: right;
 	font-size: 10px;
 }
+#cancel-editing{
+	margin-left: 30px;
+	font-size: 10px;
+}
 .hide-button{ display: none !important;}
-.manage-table .editing-feed td{background-color: red !important;}
+.manage-table .editing-feed td{
+	background-color: #c41500 !important;
+	color: white !important
+}
 .grabpress-table .preview-btn-text{ float: right; }
 .grabpress-table .asterisk{ font-size: 16px; }
+.grabpress-table th{ width: 130px }
+#create-form,
+.edit-form-text,
+#manage-table {
+	width: 850px;
+}
+
+td.button-tip{ text-align: right; }
 

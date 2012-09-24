@@ -3,7 +3,7 @@
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Category and Keywords</h2>
 	<p>Feed your blog with fresh video content.</p>
-		<fieldset class="<?php echo isset($_GET['action'])=='edit-feed' ? 'edit-mode':''?>">
+		<fieldset id="create-form" class="<?php echo isset($_GET['action'])=='edit-feed' ? 'edit-mode':''?>">
 		<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
 	( function ( global, $ ) {
@@ -316,13 +316,13 @@
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
-	                <tr valign="top">
+	                <tr valign="bottom">
 						<th scope="row">Plug-in Version & Build Number</th>
 			            <td>
 							<?php echo GrabPress::$version ?>
 						</td>
 					</tr>
-	                <tr valign="top">
+	                <tr valign="bottom">
 						<th scope="row">API Key</th>
 			            <td>
 							<?php echo get_option( 'grabpress_key' ); ?>
@@ -334,7 +334,7 @@
 						<h3>Search Criteria</h3>
 					</td>					
 				</tr>
-				<tr valign="top">
+				<tr valign="bottom">
 					<th scope="row">Grab Video Categories<span class="asterisk">*</span></th>
 					<td>
 						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px" >
@@ -354,14 +354,14 @@
 						<span class="description">Add or remove specific video categories from this feed</span>
 					</td>
 				</tr>
-	        	<tr valign="top">
+	        	<tr valign="bottom">
 					<th scope="row">Keywords</th>
         		           	<td >
 						<input type="text" name="keywords" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords"];?>" maxlength="255" />
 						<span class="description">Enter search terms separated by spaces (e.g. <b>celebrity gossip</b>)</span>
 					</td>
         		</tr>
-        		<tr valign="top">
+        		<tr valign="bottom">
 						<th scope="row">Content Providers</th>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
@@ -379,14 +379,9 @@
 							<span class="description">Add or remove specific providers content from this feed</span>
 						</td>
 				</tr>
-				<tr valign="top">
-					<td colspan="4"><span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span></td>
-					<td colspan="1">
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
-						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php _e( 'Preview Changes' ) ?>" id="btn-preview-feed" />
-						<?php }else{ ?>
-						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php _e( 'Preview Feed' ) ?>" id="btn-preview-feed" />
-						<?php } ?>						
+				<tr valign="bottom">
+					<td colspan="2" class="button-tip"><span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
+						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />				
 					</td>
 				</tr>
 				<tr>
@@ -394,7 +389,7 @@
 						<h3>Publish Settings</h3>
 					</td>					
 				</tr>
-        		<tr valign="top">
+        		<tr valign="bottom">
 					<th scope="row">Schedule<span class="asterisk">*</span></th>
         		           	<td>
 								<select name="schedule" id="schedule-select" class="schedule-select" style="width:90px;" >
@@ -433,7 +428,7 @@
 								<span class="description">Determine how often to search for new videos</span>
 							</td>
 				</tr>
-				<tr valign="top">
+				<tr valign="bottom">
 					<th scope="row">Max Results<span class="asterisk">*</span></th>
         		           	<td>
 						<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
@@ -447,7 +442,7 @@
 						<span class="description">Indicate the maximum number of videos to grab at a time</span>
 					</td>
 				</tr>
-				<tr valign="top">
+				<tr valign="bottom">
 						<th scope="row">Post Categories</th>
 						<td>
 							<?php
@@ -458,7 +453,7 @@
 							<span class="description">If no selection is made, your default category '<?php echo get_cat_name("1") ?>' will be used.</span>
 						</td>
 				</tr>
-				<tr valign="top">
+				<tr valign="bottom">
 						<th scope="row">Post Author<span class="asterisk">*</span></th>
 						<td>
 							<select name="author" id="author_id" class="author-select" >
@@ -474,7 +469,7 @@
 							<span class="description">Select the default WordPress user to credit as author of the posts from this feed</span>
 						</td>
 			    </tr>
-			   	<tr valign="top">
+			   	<tr valign="bottom">
 			   			<th scope="row">Player Mode<span class="asterisk">*</span></th>
 						<td>
 							<?php	
@@ -491,7 +486,7 @@
 							<span class="description">(this is likely to result in fewer ad impressions <a href="#" onclick='return false;' id="learn-more">learn more</a>)</span>
 						</td>
 				</tr>
-				<tr valign="top">		
+				<tr valign="bottom">		
 						<th scope="row">Delivery Mode<span class="asterisk">*</span></th>
 						<td>
 							<?php								
@@ -507,31 +502,11 @@
 							<input type="radio" name="publish" value="1" <?php echo $publish_checked_automatic; ?> /> Publish Posts Automatically
 						</td>
 				</tr>
-				<tr valign="top">
-					<td>&nbsp;</td>
-					<td>
-						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red">
-						<?php
-							echo GrabPress::$feed_message;
-						?>
-						</span>
-					</td>
-					<?php if(isset($_GET['action'])=='edit-feed'){ ?>
-					<td>						
-						<a href="#" id="cancel-editing" >cancel editing</a>						
-					</td>
-					<?php }else{ ?>
-					<td>&nbsp;</td>
-					<?php } ?>
-					<td>
-						<a href="#" id="reset-form" >reset form</a>
-					</td>
-					<td>
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?>
-						<input type="submit" class="button-primary" disabled="disabled" value="<?php _e( 'Save Changes' ) ?>" id="create-feed-btn" />
-						<?php }else{ ?>
-						<input type="submit" class="button-primary" disabled="disabled" value="<?php _e( 'Create Feed' ) ?>" id="create-feed-btn" />
-						<?php } ?>
+				<tr valign="bottom">
+					<td colspan="2" class="button-tip">
+						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>
+						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="create-feed-btn" />
 					</td>
 				</tr>
 				</table>
@@ -544,7 +519,7 @@
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
-			array( "form" => $_POST,
+			array( "form" => $_REQUEST,
 				"list_provider" => $list_provider,
 				"providers_total" => $providers_total,
 				"blogusers" => $blogusers 

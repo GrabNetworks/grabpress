@@ -1,19 +1,19 @@
 
-<fieldset class="fieldset-manage">
-	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> <?php echo $text_feeds ?> </legend>
+<fieldset id="manage-table" class="fieldset-manage">
+	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> Feeds</legend>
 <div>
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
 			<th>Active</th>
-			<th>Video Categories</th>
+			<th>Video<br/>Categories</th>
 			<th>Keywords</th>
-			<th>Content Providers</th>			
+			<th>Content<br/>Providers</th>			
 			<th>Schedule</th>
-			<th>Max Results</th>
-			<th>Post Categories</th>
+			<th>Max<br/>Results</th>
+			<th>Post<br/>Categories</th>
 			<th>Author</th>					
-			<th>Player Mode</th>
-			<th>Delivery Mode</th>					
+			<th>Player<br/>Mode</th>
+			<th>Delivery<br/>Mode</th>					
 			<th></th>
 			<th></th>
 			<th></th>
