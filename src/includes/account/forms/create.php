@@ -12,13 +12,20 @@
 			<tr><td>Address 1*</td><td><input id="id_address1" type="text" name="address1" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="address_ok"/></td></tr>
 			<tr><td>Address 2</td><td><input id="id_address2" type="text" name="address2" maxlength="255"></td></tr>
 			<tr><td>City*</td><td><input id="id_city" type="text" name="city" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="city_ok"/></td></tr>
-			<tr><td>State*</td><td><input id="id_state" type="text" name="state" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="state_ok"/></td></tr>
+			<tr><td>State*</td><td><select id="id_state"><?php
+    			$states_arr = array('AL'=>"Alabama",'AK'=>"Alaska",'AZ'=>"Arizona",'AR'=>"Arkansas",'CA'=>"California",'CO'=>"Colorado",'CT'=>"Connecticut",'DE'=>"Delaware",'DC'=>"District Of Columbia",'FL'=>"Florida",'GA'=>"Georgia",'HI'=>"Hawaii",'ID'=>"Idaho",'IL'=>"Illinois", 'IN'=>"Indiana", 'IA'=>"Iowa",  'KS'=>"Kansas",'KY'=>"Kentucky",'LA'=>"Louisiana",'ME'=>"Maine",'MD'=>"Maryland", 'MA'=>"Massachusetts",'MI'=>"Michigan",'MN'=>"Minnesota",'MS'=>"Mississippi",'MO'=>"Missouri",'MT'=>"Montana",'NE'=>"Nebraska",'NV'=>"Nevada",'NH'=>"New Hampshire",'NJ'=>"New Jersey",'NM'=>"New Mexico",'NY'=>"New York",'NC'=>"North Carolina",'ND'=>"North Dakota",'OH'=>"Ohio",'OK'=>"Oklahoma", 'OR'=>"Oregon",'PA'=>"Pennsylvania",'RI'=>"Rhode Island",'SC'=>"South Carolina",'SD'=>"South Dakota",'TN'=>"Tennessee",'TX'=>"Texas",'UT'=>"Utah",'VT'=>"Vermont",'VA'=>"Virginia",'WA'=>"Washington",'WV'=>"West Virginia",'WI'=>"Wisconsin",'WY'=>"Wyoming");
+				$string = '<option value="">Select Your State</option>';
+		        foreach($states_arr as $k => $v){
+		            $string .= '<option value="'.$k.'"'.$s.'>'.$v.'</option>'."\n";
+		        }
+		        echo $string;
+			?></select></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="state_ok"/></td></tr>
 			<tr><td>Zip*</td><td><input id="id_zip" type="text" name="zip" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="zip_ok"/></td></tr>
 			<tr><td>Phone Number*</td><td><input id="id_phone_number" type="text" name="phone_number" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="phone_ok"/></td></tr>
 			<tr><td>Paypal ID</td><td><input id="id_paypal_id" type="text" name="paypal_id" maxlength="255"></td></tr>
 			<tr><td>Website Domain*<select id= "id_protocol"><option>http://</option><option>https://</option></select></td><td><input id="id_site" type="text" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="display:none" id="url_ok"/></td></tr>
 			<input type="hidden" name = 'url' id='id_url' />
-			<tr><td/><td id ="id_tos">I agree to Grab Networks' <a href="http://www.grab-media.com/terms/" target="_blank">Terms of Service*</a></td><td><input type="checkbox" name="tos" id="id_agree"></td><td>
+			<tr valign="bottom"><td/><td id ="id_tos">I agree to Grab Networks' <a href="http://www.grab-media.com/terms/" target="_blank">Terms of Service*</a></td><td><input type="checkbox" name="tos" id="id_agree"></td><td>
 		</table>
 	</form>
 	<div id="buttons" >

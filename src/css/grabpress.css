@@ -303,14 +303,14 @@ input[ type="button" ]/*, #account input[ type="checkbox"], select*/{
 }
 
 #link-existing td, #create-account td, #unlink td {
-	width: 480px;
+	width: 400px;
 	height: 16px;
 }
 td * {
 	vertical-align: bottom;
 }
 #account {
-	width: 500px;
+	width: 400px;
 }
 #account.create {
 	width: 650px;
@@ -388,6 +388,9 @@ span.warning {
 #cancel-editing{
 	margin-left: 30px;
 	font-size: 10px;
+}
+#acknowledge #confirm{
+	margin-left: 10px;
 }
 .hide-button{ display: none !important;}
 .manage-table .editing-feed td{
