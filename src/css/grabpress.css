@@ -299,7 +299,7 @@ input[ type="button" ]/*, #account input[ type="checkbox"], select*/{
 	float: right;
 }
 .grabpress-table input[ type="button" ]{
-	float: none;
+	float: right;
 }
 
 #link-existing td, #create-account td, #unlink td {
@@ -366,6 +366,7 @@ span.warning {
 }
 #id_agree{
 	float:left;
+	font-size: 20px;
 }
 #id_protocol{
 	float:right;
@@ -406,5 +407,8 @@ span.warning {
 	width: 850px;
 }
 
-td.button-tip{ text-align: right; }
+td.button-tip{ text-align: center; }
+#create-feed-btn {
+float: right;
+}
 
