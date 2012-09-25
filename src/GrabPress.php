@@ -257,7 +257,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
 				$categories = rawurlencode( $_POST[ 'channel' ] );
-				$keywords_and = rawurlencode( $_POST[ 'keywords' ] );
+				$keywords = rawurlencode( $_POST[ 'keywords' ] );
 				$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 				$list = json_decode( $json );
 				foreach ( $list as $record ) {
@@ -275,7 +275,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
-				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords='.$keywords.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 				$connector_id = GrabPress::get_connector_id();
 				$category_list = $_POST[ 'category' ];
 				$category_length = count( $category_list );
@@ -375,7 +375,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "action" => "modify",
 											   "feed_id" => $feed_id,
 											   "channel" => $feed->feed->name,
-											   "keywords" => $url['keywords_and'],
+											   "keywords" => $url['keywords'],
 											   "limit" => $feed->feed->posts_per_update,
 											   "schedule" => $feed->feed->update_frequency,
 											   "active" => $feed->feed->active,
@@ -673,7 +673,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						   "action" => "edit-feed",
 						   "feed_id" => $feed_id,
 						   "channel" => $feed->feed->name,
-						   "keywords" => $url['keywords_and'],
+						   "keywords" => $url['keywords'],
 						   "limit" => $feed->feed->posts_per_update,
 						   "schedule" => $feed->feed->update_frequency,
 						   "publish" => $feed->feed->custom_options->publish,
@@ -739,7 +739,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				case 'modify':
 					$feed_id = $_POST['feed_id'];
-					$keywords_and = htmlspecialchars( $_POST['keywords'] );
+					$keywords = htmlspecialchars( $_POST['keywords'] );
 					$categories = rawurlencode( $_POST[ 'channel' ] );
 					$providers = $_POST['provider'];
 					$providersList = implode( ',', $providers );
@@ -748,7 +748,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $providersListTotal == $providers_total ) {
 						$providersList = '';
 					}
-					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords='.$keywords.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 					$connector_id = GrabPress::get_connector_id();
 					$active = (bool)$_POST['active'];
 

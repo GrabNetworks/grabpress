@@ -84,8 +84,8 @@
 				</td>
 				<td>		
 					<?php 
-						$keywords_and_num = strlen($url['keywords_and']);
-						echo $keywords_and = ($keywords_and_num > 15) ? substr($url['keywords_and'],0,15)."..." : $url['keywords_and'];
+						$keywords_num = strlen($url['keywords']);
+						echo $keywords = ($keywords_num > 15) ? substr($url['keywords'],0,15)."..." : $url['keywords'];
 					?>							
 				</td>
 				<td>

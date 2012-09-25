@@ -477,7 +477,7 @@
 			   	<tr valign="top">
 			   			<th scope="row">Player Mode<span class="asterisk">*</span></th>
 						<td>
-							<?php	
+							<?php
 								if(isset($form["click_to_play"]) && ($form["click_to_play"]=='1')){
 									$ctp_checked_auto = 'checked="checked"';
 									$ctp_checked_click = "";
