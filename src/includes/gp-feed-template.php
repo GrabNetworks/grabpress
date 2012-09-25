@@ -479,11 +479,11 @@
 						<td>
 							<?php	
 								if(isset($form["click_to_play"]) && ($form["click_to_play"]=='1')){
-									$ctp_checked_click = "";
 									$ctp_checked_auto = 'checked="checked"';
+									$ctp_checked_click = "";
 								}else{
-									$ctp_checked_click = 'checked="checked"';
 									$ctp_checked_auto = "";
+									$ctp_checked_click = 'checked="checked"';									
 								}					
 							?>
 							<input type="radio" name="click_to_play" value="1" <?php echo $ctp_checked_auto;?> /> Auto-Play

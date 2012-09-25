@@ -1,6 +1,21 @@
+<?php
+	$feeds = GrabPress::get_feeds();
+	$num_feeds = count( $feeds ); 
+	$active_feeds = 0;
 
+	for ( $i=0; $i < $num_feeds; $i++ ) {
+		if ( $feeds[$i]->feed->active > 0 ) {
+			$active_feeds++;
+		}
+	}
+
+	$noun = 'Feed';
+	if ( $active_feeds > 1 || $active_feeds == 0 ) {
+		$noun .= 's';
+	}
+?>
 <fieldset class="fieldset-manage">
-	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> <?php echo $text_feeds ?> </legend>
+	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current ':'Manage '; echo $noun ?> </legend>
 <div>
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
@@ -192,10 +207,9 @@
 					<input type="button" class="btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'x' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 				</td>
 			</tr>
-			</form>
+		</form>
 		<?php } ?>
 	</table>
 </div>
-
 <div class="result"> </div>
 </fieldset>
