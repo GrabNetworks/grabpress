@@ -496,11 +496,11 @@
 						<td>
 							<?php								
 								if(isset($form["publish"]) && ($form["publish"] == '1')){
-									$publish_checked_automatic = 'checked="checked"';
 									$publish_checked_draft = "";
+									$publish_checked_automatic = 'checked="checked"';									
 								}else{
-									$publish_checked_automatic = '';
 									$publish_checked_draft = 'checked="checked"';
+									$publish_checked_automatic = '';									
 								}
 							?>
 							<input type="radio" name="publish" value="0" <?php echo $publish_checked_draft; ?> /> Create Drafts to be moderated and published manually

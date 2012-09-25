@@ -701,8 +701,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function form_default_values( $params = array() ) {
 			GrabPress::log();
-			$defaults = array( "publish" => false,
-				"click_to_play" => false,
+			$defaults = array( "publish" => true,
+				"click_to_play" => true,
 				"category" => array(),
 				"provider" => array(),
 				"keywords" => "" );
