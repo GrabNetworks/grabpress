@@ -537,8 +537,10 @@
 				</table>
 			</form>
 </fieldset>
-<?php $display_message = isset($_GET['action'])=='edit-feed' ? "display-element" : "hide"; ?>
-<span class="edit-form-text <?php echo $display_message ?>" >Please use the form above to edit the settings of the feed marked "editing" below</span>
+<?php if(isset($_GET['action'])=='edit-feed') { ?>
+<span class="edit-form-text display-element" >Please use the form above to edit the settings of the feed marked "editing" below</span>
+<?php } ?>
+
 <?php
 	$feeds = GrabPress::get_feeds();
 	$num_feeds = count( $feeds );
