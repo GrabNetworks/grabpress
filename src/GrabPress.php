@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: GrabPress
-Plugin URI: http://www.grab-media.com/publisher/solutions/autoposter
+Plugin URI: http://www.grab-media.com/publisher/
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.6.0b73
+Version: 0.6.0b75
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '0.6.0b73';
+		static $version = '0.6.0b75';
 		static $api_key;
 		static $invalid = false;
 		static $environment = 'grabqa'; // or 'grabnetworks'
@@ -190,7 +190,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			$id = GrabPress::get_connector_id();
 			$user_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/user?api_key='.GrabPress::$api_key );
-			echo "USERJSON: "; var_dump($user_json); echo "<br/><br/>";
 			$user_data = json_decode( $user_json );
 			GrabPress::$connector_user = $user_data;
 			return $user_data;
@@ -258,7 +257,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
 				$categories = rawurlencode( $_POST[ 'channel' ] );
-				$keywords_and = rawurlencode( $_POST[ 'keywords' ] );
+				$keywords = rawurlencode( $_POST[ 'keywords' ] );
 				$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 				$list = json_decode( $json );
 				foreach ( $list as $record ) {
@@ -276,7 +275,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
-				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords='.$keywords.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 				$connector_id = GrabPress::get_connector_id();
 				$category_list = $_POST[ 'category' ];
 				$category_length = count( $category_list );
@@ -376,7 +375,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "action" => "modify",
 											   "feed_id" => $feed_id,
 											   "channel" => $feed->feed->name,
-											   "keywords" => $url['keywords_and'],
+											   "keywords" => $url['keywords'],
 											   "limit" => $feed->feed->posts_per_update,
 											   "schedule" => $feed->feed->update_frequency,
 											   "active" => $feed->feed->active,
@@ -561,8 +560,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			unset( $submenu['grabpress'][0] );
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
-				$admin = get_admin_url();
-				$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+			$admin = get_admin_url();
+			$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 			if ( $num_feeds == 0 ) {
 				$admin_page = $admin.'admin.php?page=autoposter';
 				if ( $current_page != $admin_page ) {
@@ -570,25 +569,31 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}else {
 					$here = 'here';
 				}
-
-				GrabPress::$message = 'Thank you for activating Grab Autoposter. Try creating your first feed '.$here.'.';
+	
+				GrabPress::$message = 'Thank you for activating GrabPress. Try creating your first Autoposter feed '.$here.'.';
 			}else{
-				$admin_page = $admin.'admin.php?page=account';
-				$account = '';
-				$user = GrabPress::get_user();
-				$linked = isset( $user->email);
-				if(!$linked){
-					if ( $current_page != $admin_page ) {
-						$create = '<a href="'.$admin_page.'">Create or link an existing Grab Publisher account</a>';
-					}else {
-						$create = 'Create or link an existing Grab Publisher account';
+				$active_feeds = 0;
+			
+				for ( $i=0; $i < $num_feeds; $i++ ) {
+					if ( $feeds[$i]->feed->active > 0 ) {
+						$active_feeds++;
 					}
-					$account = ' Want to earn money? '.$create;
 				}
-				GrabPress::$message = 'Grab Autoposter ON with '.$num_feeds.' active feeds.'.$account;
+				if ( $active_feeds > 0 || $num_feeds > 0 ) {
+					$noun = 'feed';
+					if ( $active_feeds > 1 || $active_feeds == 0 ) {
+						$noun .= 's';
+					}
+					$user = GrabPress::get_user();	
+					$linked = isset( $user->email);
+					$create = $_REQUEST[ 'page'] == 'account' &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
+					$link = $_REQUEST[ 'page'] == 'account' &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
+					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
+					$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
+					GrabPress::$message = 'Grab Autoposter is ON with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active. '.$linked_message .$environment;
+				}
 			}
 		}
-
 		static function render_account_management() {
 			GrabPress::log();
 			//if (!current_user_can('manage_options'))  {
@@ -668,7 +673,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						   "action" => "edit-feed",
 						   "feed_id" => $feed_id,
 						   "channel" => $feed->feed->name,
-						   "keywords" => $url['keywords_and'],
+						   "keywords" => $url['keywords'],
 						   "limit" => $feed->feed->posts_per_update,
 						   "schedule" => $feed->feed->update_frequency,
 						   "publish" => $feed->feed->custom_options->publish,
@@ -696,8 +701,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function form_default_values( $params = array() ) {
 			GrabPress::log();
-			$defaults = array( "publish" => false,
-				"click_to_play" => false,
+			$defaults = array( "publish" => true,
+				"click_to_play" => true,
 				"category" => array(),
 				"provider" => array(),
 				"keywords" => "" );
@@ -734,7 +739,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				case 'modify':
 					$feed_id = $_POST['feed_id'];
-					$keywords_and = htmlspecialchars( $_POST['keywords'] );
+					$keywords = htmlspecialchars( $_POST['keywords'] );
 					$categories = rawurlencode( $_POST[ 'channel' ] );
 					$providers = $_POST['provider'];
 					$providersList = implode( ',', $providers );
@@ -743,7 +748,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $providersListTotal == $providers_total ) {
 						$providersList = '';
 					}
-					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords='.$keywords.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 					$connector_id = GrabPress::get_connector_id();
 					$active = (bool)$_POST['active'];
 

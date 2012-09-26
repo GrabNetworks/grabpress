@@ -477,13 +477,13 @@
 			   	<tr valign="top">
 			   			<th scope="row">Player Mode<span class="asterisk">*</span></th>
 						<td>
-							<?php	
+							<?php
 								if(isset($form["click_to_play"]) && ($form["click_to_play"]=='1')){
-									$ctp_checked_click = "";
 									$ctp_checked_auto = 'checked="checked"';
+									$ctp_checked_click = "";
 								}else{
-									$ctp_checked_click = 'checked="checked"';
 									$ctp_checked_auto = "";
+									$ctp_checked_click = 'checked="checked"';									
 								}					
 							?>
 							<input type="radio" name="click_to_play" value="1" <?php echo $ctp_checked_auto;?> /> Auto-Play
@@ -496,11 +496,11 @@
 						<td>
 							<?php								
 								if(isset($form["publish"]) && ($form["publish"] == '1')){
-									$publish_checked_automatic = 'checked="checked"';
 									$publish_checked_draft = "";
+									$publish_checked_automatic = 'checked="checked"';									
 								}else{
-									$publish_checked_automatic = '';
 									$publish_checked_draft = 'checked="checked"';
+									$publish_checked_automatic = '';									
 								}
 							?>
 							<input type="radio" name="publish" value="0" <?php echo $publish_checked_draft; ?> /> Create Drafts to be moderated and published manually
@@ -540,11 +540,17 @@
 <?php $display_message = isset($_GET['action'])=='edit-feed' ? "display-element" : "hide"; ?>
 <span class="edit-form-text <?php echo $display_message ?>" >Please use the form above to edit the settings of the feed marked "editing" below</span>
 <?php
-	echo GrabPress::fetch('includes/gp-manage-feeds.php',
-				array( "form" => $_POST,
-					"list_provider" => $list_provider,
-					"providers_total" => $providers_total,
-					"blogusers" => $blogusers )); 
+	$feeds = GrabPress::get_feeds();
+	$num_feeds = count( $feeds );
+	if($num_feeds > 0 ){
+		echo GrabPress::fetch('includes/gp-manage-feeds.php',
+			array( "form" => $_POST,
+				"list_provider" => $list_provider,
+				"providers_total" => $providers_total,
+				"blogusers" => $blogusers 
+			)
+		); 
+	}
 ?>
 </div>
 <!--</form>-->

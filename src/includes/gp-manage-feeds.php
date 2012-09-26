@@ -1,6 +1,6 @@
 <?php
 	$feeds = GrabPress::get_feeds();
-	$num_feeds = count( $feeds );
+	$num_feeds = count( $feeds ); 
 	$active_feeds = 0;
 
 	for ( $i=0; $i < $num_feeds; $i++ ) {
@@ -8,30 +8,14 @@
 			$active_feeds++;
 		}
 	}
-	if ( $active_feeds > 0 || $num_feeds > 0 ) {
-		$noun = 'feed';
-		if ( $active_feeds > 1 || $active_feeds == 0 ) {
-			$noun .= 's';
-		}
 
-		$user = GrabPress::get_user();	
-		$linked = isset( $user->email);
-
-		$linked_message = $linked ? '' : 'Want to earn money? <a href="admin.php?page=account&action=create">Create</a> or <a href="admin.php?page=account&action=default">link</a> an existing Grab Publisher account.';
-
-		if ( GrabPress::$environment == "grabqa" ) {
-			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active. '.$linked_message .'  ENVIRONMENT = ' . GrabPress::$environment;
-		}else {
-			GrabPress::$message = 'GrabPress plugin is enabled with <span id="num-active-feeds">'.$active_feeds.'</span>  <span id="noun-active-feeds">'.$noun.'</span> active.'.$linked_message;
-		}
-		if(($num_feeds == 1) && (isset($_GET['action']) == 'edit-feed')){
-			$text_feeds = "Feed";
-		}else{
-			$text_feeds = "Feeds";
-		}
+	$noun = 'Feed';
+	if ( $active_feeds > 1 || $active_feeds == 0 ) {
+		$noun .= 's';
+	}
 ?>
 <fieldset class="fieldset-manage">
-	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> <?php echo $text_feeds ?> </legend>
+	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current ':'Manage '; echo $noun ?> </legend>
 <div>
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
@@ -50,6 +34,8 @@
 			<th></th>
 		</tr>
 		<?php
+			$feeds = GrabPress::get_feeds();
+			$num_feeds = count( $feeds );
 			$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 			$categories_list = json_decode( $json );
 
@@ -98,8 +84,8 @@
 				</td>
 				<td>		
 					<?php 
-						$keywords_and_num = strlen($url['keywords_and']);
-						echo $keywords_and = ($keywords_and_num > 15) ? substr($url['keywords_and'],0,15)."..." : $url['keywords_and'];
+						$keywords_num = strlen($url['keywords']);
+						echo $keywords = ($keywords_num > 15) ? substr($url['keywords'],0,15)."..." : $url['keywords'];
 					?>							
 				</td>
 				<td>
@@ -221,11 +207,9 @@
 					<input type="button" class="btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'x' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
 				</td>
 			</tr>
-			</form>
+		</form>
 		<?php } ?>
 	</table>
 </div>
-
 <div class="result"> </div>
 </fieldset>
-<?php } ?>

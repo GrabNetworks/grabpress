@@ -344,23 +344,7 @@
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count($feeds);
-			$active_feeds = 0;
-			for ($i=0; $i < $num_feeds; $i++){
- 			 if($feeds[$i]->feed->active > 0){
-  			  $active_feeds++; 
- 			 }  
-			}
-			if( $active_feeds > 0 || $num_feeds > 0 ){
- 			 $noun = 'feed';  
- 			 if( $active_feeds > 1 || $active_feeds == 0 ){
-  		   	  $noun .= 's';
-			 }    
-			if (GrabPress::$environment == "grabqa"){
-				GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.  ENVIRONMENT = ' . GrabPress::$environment);
-			}else{
-				GrabPress::showMessage('GrabPress plugin is enabled with '.$active_feeds.' '.$noun.' active.');
-			}			
-			?>
+		?>
 			<div>
 				<h3>Manage Feeds</h3>
 				<table class="grabpress-table" style="margin-bottom:215px;">
@@ -411,7 +395,7 @@
 								</select>
 						</td>
 						<td>	
-								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>		
+								<input type="text" name="keywords" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords']; ?>" class="keywords" id="keywords_<?php echo $feedId; ?>"/>		
 						</td>
 						<td>
 							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:90px;">
@@ -542,4 +526,3 @@
 				</table>
 			</div>
 			<div class="result"> </div>
-<?php } ?>
