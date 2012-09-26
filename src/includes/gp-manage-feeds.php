@@ -13,6 +13,7 @@
 	if ( $active_feeds > 1 || $active_feeds == 0 ) {
 		$noun .= 's';
 	}
+
 ?>
 <fieldset class="fieldset-manage">
 	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current ':'Manage '; echo $noun ?> </legend>
