@@ -319,7 +319,7 @@ td * {
 padding-right: 10px;
 } 
 #account.create input[type='text'], #account.create input[type='password']{
-	width: 350px;
+	width: 346px;
 }
 #buttons, #tos {
 	text-align: right;
@@ -411,4 +411,6 @@ td.button-tip{ text-align: center; }
 #create-feed-btn {
 float: right;
 }
-
+#buttons {
+line-height: 24px;
+}

@@ -542,6 +542,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$connector_id = GrabPress::get_connector_id();
 			$response = GrabPress::api_call( 'PUT', '/connectors/' . $connector_id . '/deactivate?api_key='.GrabPress::$api_key );
 			delete_option( 'grabpress_key' );
+			$grab_user = get_user_by('name', 'grabpress');
+			$current_user = wp_get_current_user();
+			wp_delete_user( $grab_user->id, $current_user->id );
+			GrabPress::$message = 'GrabPress has been deactivated. Any posts that used to be credited to the "grabpress" user are now assigned to you. XML-RPC is still enabled, unless you are using it for anything else, we recommend you turn it off.';
 		}
 
 		static function outline_invalid() {
