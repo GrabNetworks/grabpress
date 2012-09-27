@@ -395,7 +395,7 @@
 								</select>
 						</td>
 						<td>	
-								<input type="text" name="keywords_and" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords_and']; ?>" class="keywords_and" id="keywords_and_<?php echo $feedId; ?>"/>		
+								<input type="text" name="keywords" onkeyup="toggleButton(<?php echo $feedId; ?>)" value="<?php echo $url['keywords']; ?>" class="keywords" id="keywords_<?php echo $feedId; ?>"/>		
 						</td>
 						<td>
 							<select name="schedule" id="schedule-select" onchange="toggleButton(<?php echo $feedId; ?>)" class="schedule-select" style="width:90px;">

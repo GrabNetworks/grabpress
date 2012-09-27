@@ -182,7 +182,7 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
 /*.grabpress-table input#create-feed-btn{ background: url("../images/button-grad.png") repeat-x scroll left top #21759B; border-color: #298CBA; color: #FFFFFF; font-weight: bold; height: 20px; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);  float: right;}*/.grabpress-table input.btn-delete{line-height:auto; background:none; border:none; color: #000; cursor: pointer; }
 /*.grabpress-table input#btn-preview-feed{ background: url("../images/white-grad.png") repeat-x scroll left top #F2F2F2; border-color: #BBBBBB; color: #464646; height: 20px; text-shadow: 0 1px 0 #FFFFFF; float: right; }*/.grabpress-table input#publish-check{ height: 13px; margin-left: 0px; }
 .grabpress-table input.click-to-play-feed{ margin-left: 3px; }
-.hide{ display: none !important;}
+.hide{ display: none;}
 .author-select{ width: 225px; }
 .grabpress-table input[type="checkbox"]{ vertical-align: baseline !important; }
 .grabpress-table #channel-select, .grabpress-table .channel-select{ width: 230px !important; }
@@ -319,7 +319,7 @@ td * {
 padding-right: 10px;
 } 
 #account.create input[type='text'], #account.create input[type='password']{
-	width: 350px;
+	width: 346px;
 }
 #buttons, #tos {
 	text-align: right;
@@ -411,4 +411,6 @@ td.button-tip{ text-align: center; }
 #create-feed-btn {
 float: right;
 }
-
+#buttons {
+line-height: 24px;
+}
