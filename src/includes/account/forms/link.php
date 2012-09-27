@@ -3,7 +3,7 @@
 	<form id="link-existing" method="post" action="">
 		<table>
 			<input type="hidden" name="action" id="action" value="link-user"/>
-			<tr><td>Email address<input name="email" id="email" type="text" value="<?php echo (isset($_REQUEST['email']) !== NULL ? $_REQUEST['email'] : '';?>" /></td></tr>
+			<tr><td>Email address<input name="email" id="email" type="text" value="<?php echo (isset($_REQUEST['email']) !== NULL) ? $_REQUEST['email'] : '';?>" /></td></tr>
 
 			<tr><td>Password<input name="password" id="password" type="password"/></td></tr>
 			<tr valign="bottom"><td class = "account-help">
@@ -54,7 +54,6 @@
 		    $("select").change(doValidation);
 			
 			$('#cancel_button').click(function(){
-				$('#action').attr('value', 'default');
 				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
 					$user = GrabPress::get_user();
@@ -66,9 +65,10 @@
 					<?php } ?>
 					)){
 						
-						$('#link-existing')[0].reset()
-						$('#link-existing').submit();
-					}
+					$('#link-existing')[0].reset()
+					$('#action').attr('value', 'default');
+					$('#link-existing').submit();
+				}
 			})
 		})( jQuery )
 </script>
