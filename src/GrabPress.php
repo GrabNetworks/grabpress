@@ -819,7 +819,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			case 'account':
 				
 			switch ( isset($_REQUEST[ 'action' ]) ) {
-
+				case 'default':
+					break;
 				case 'link-user' :
 					if( isset( $_REQUEST[ 'email' ] ) && isset( $_REQUEST[ 'password' ]) ){
 						$credentials = array( 'user' => $_REQUEST[ 'email' ], 'pass' => $_REQUEST[ 'password' ] );
