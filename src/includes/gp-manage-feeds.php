@@ -3,7 +3,7 @@
 	$num_feeds = count( $feeds ); 
 	$active_feeds = 0;
 
-
+?>
 <fieldset id="manage-table" class="fieldset-manage">
 	<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Current':'Manage'?> Feeds</legend>
 
