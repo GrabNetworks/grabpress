@@ -111,7 +111,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		static function get_api_location() {
 			// GrabPress::log();
-			if(GrabPress::$environment == "grabqa"){
+			if(GrabPress::$environment == "grabnetworks"){
 				$apiLocation = 'autoposter.grabnetworks.com';
 			}	
 			elseif ($_SERVER['SERVER_ADDR'] == '127.0.0.1'){
