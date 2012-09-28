@@ -380,8 +380,9 @@
 						</td>
 				</tr>
 				<tr valign="bottom">
-					<td colspan="2" class="button-tip"><span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
-						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />				
+					<td colspan="2" class="button-tip">						
+						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
+						<span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
 					</td>
 				</tr>
 				<tr>
@@ -502,10 +503,17 @@
 							<input type="radio" name="publish" value="1" <?php echo $publish_checked_automatic; ?> /> Publish Posts Automatically
 						</td>
 				</tr>
-				<tr valign="bottom">
-					<td colspan="2" class="button-tip">
-						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>
+				<tr valign="bottom">					
+					<td class="button-tip" colspan="2">						
+						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>						
+					</td>
+					<td>
+						<a id="reset-form" href="#">reset form</a>	
+					</td>
+					<td>
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>					
+					</td>
+					<td>
 						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="create-feed-btn" />
 					</td>
 				</tr>

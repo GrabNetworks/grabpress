@@ -3,7 +3,7 @@
 	<form id="link-existing" method="post" action="">
 		<table>
 			<input type="hidden" name="action" id="action" value="link-user"/>
-			<tr><td>Email address<input name="email" id="email" type="text" value="<?php echo (isset($_REQUEST['email']) !== NULL) ? $_REQUEST['email'] : '';?>" /></td></tr>
+			<tr><td>Email address<input name="email" id="email" type="text" value="<?php echo $email = (isset($_REQUEST['email']) && ($_REQUEST['email'] !== NULL)) ? $_REQUEST['email'] : ''; ?>" /></td></tr>
 
 			<tr><td>Password<input name="password" id="password" type="password"/></td></tr>
 			<tr valign="bottom"><td class = "account-help">
