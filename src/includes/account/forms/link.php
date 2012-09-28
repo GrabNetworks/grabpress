@@ -2,10 +2,18 @@
 	<legend><?php echo $_REQUEST[ 'action' ] == 'switch' ? 'Another' : 'Existing' ?> Account</legend>
 	<form id="link-existing" method="post" action="">
 		<table>
-			<input type="hidden" name="action" id="action" value="link-user"/>
-			<tr><td>Email address<input name="email" id="email" type="text" value="<?php echo $email = (isset($_REQUEST['email']) && ($_REQUEST['email'] !== NULL)) ? $_REQUEST['email'] : ''; ?>" /></td></tr>
+			<input type="hidden" name="action" value="link-user" />
+			<tr>
+				<td>
+					Email address<input name="email" id="email" type="text" value="<?php echo $email = (isset($_REQUEST['email']) && ($_REQUEST['email'] !== NULL)) ? $_REQUEST['email'] : ''; ?>" />
+				</td>
+			</tr>
 
-			<tr><td>Password<input name="password" id="password" type="password"/></td></tr>
+			<tr>
+				<td>
+					Password<input name="password" id="password" type="password"/>
+				</td>
+			</tr>
 			<tr valign="bottom"><td class = "account-help">
 					<a href="http://grab-media.com/publisherAdmin/password/" target="_blank">I don't remember my password</a>
 					<input type="button" class="button-primary" disabled="disabled" id="submit_button" value="<?php _e( ($_REQUEST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>

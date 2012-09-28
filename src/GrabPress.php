@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 0.6.0b80
+Version: 1.0.0
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '0.6.0b80';
+		static $version = '1.0.0';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabnetworks'; // 'grabqa';
@@ -111,7 +111,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		static function get_api_location() {
 			// GrabPress::log();
-			if ($_SERVER['SERVER_ADDR'] == '127.0.0.1'){
+			if(GrabPress::$environment == "grabnetworks"){
+				$apiLocation = 'autoposter.grabnetworks.com';
+			}	
+			elseif ($_SERVER['SERVER_ADDR'] == '127.0.0.1'){
 				$apiLocation = '10.3.1.37';
 			}else {
 				$apiLocation = '74.10.95.28';
@@ -818,85 +821,87 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				break;
 			case 'account':
 				
-			switch ( isset($_REQUEST[ 'action' ]) ) {
-				case 'default':
-					break;
-				case 'link-user' :
-					if( isset( $_REQUEST[ 'email' ] ) && isset( $_REQUEST[ 'password' ]) ){
-						$credentials = array( 'user' => $_REQUEST[ 'email' ], 'pass' => $_REQUEST[ 'password' ] );
-						$user_json = GrabPress::api_call( 'GET', '/user/validate', $credentials, true );
-						$user_data = json_decode( $user_json );
-						if( isset( $user_data -> user ) ){
-							$user = $user_data -> user;
+			if(isset($_REQUEST[ 'action' ])){
+				switch ( $_REQUEST[ 'action' ] ) {
+					case 'default':
+						break;
+					case 'link-user' :
+						if( isset( $_REQUEST[ 'email' ] ) && isset( $_REQUEST[ 'password' ]) ){
+							$credentials = array( 'user' => $_REQUEST[ 'email' ], 'pass' => $_REQUEST[ 'password' ] );
+							$user_json = GrabPress::api_call( 'GET', '/user/validate', $credentials, true );
+							$user_data = json_decode( $user_json );
+							if( isset( $user_data -> user ) ){
+								$user = $user_data -> user;
+								$connector_data = array(
+								 	'user_id' 	=> $user -> id,
+									'email' 	=> $user -> email
+								);
+								GrabPress::log( 'PUTting to connector ' . GrabPress::get_connector_id() . ':' . $user -> id );
+								$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
+								$_REQUEST[ 'action' ] = 'default';
+							}else{
+								GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
+								$_REQUEST[ 'action' ] = 'default';
+							}
+						}else {
+							GrabPress::abort( 'Attempt to link user with incomplete form data.' );
+						}
+						break;
+					case 'unlink-user' :
+						if( isset( $_REQUEST[ 'confirm' ]) ){
+							$user = get_user_by( 'slug', 'grabpress');
 							$connector_data = array(
-							 	'user_id' 	=> $user -> id,
+							 	'user_id' 	=> null,
 								'email' 	=> $user -> email
 							);
-							GrabPress::log( 'PUTting to connector ' . GrabPress::get_connector_id() . ':' . $user -> id );
 							$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
 							$_REQUEST[ 'action' ] = 'default';
-						}else{
-							GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
+						}
+						break;
+						case 'create-user':							
+							$payment = isset( $_REQUEST['paypal_id']) ? 'paypal' : '';
+							$user_data = array(
+							   	'user'=>array(
+							   		'email'=>$_REQUEST['email'],
+							         'password'=>$_REQUEST['password'],
+							         'first_name'=>$_REQUEST['first_name'],
+							         'last_name'=>$_REQUEST['last_name'],
+							         'payment_detail' => array(
+							         	'payee' => $_REQUEST['first_name'] . ' ' . $_REQUEST['last_name'],
+								        'address1'=>$_REQUEST['address1'],
+								        'address2'=>$_REQUEST['address2'],
+								        'city'=>$_REQUEST['city'],
+								        'state'=>$_REQUEST['state'],
+								        'zip'=>$_REQUEST['zip'],
+								        'country_id' => 214,
+								        'preferred_payment_type'=> 'Paypal',
+								        'phone_number'=>$_REQUEST['phone_number'],
+								        'paypal_id'=>$_REQUEST['paypal_id']
+							         )
+								)
+							);
+							$user_json = json_encode($user_data);
+							$result_json = GrabPress::api_call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
+							$result_data = json_decode( $result_json);
+							if(!isset( $result_data->error ) ){
+								$_REQUEST[ 'action' ] = 'link-user';
+								return GrabPress::dispatcher();
+							}else{
+								GrabPress::$error = 'Error creating user.';
+								$_REQUEST['action'] = 'create';
+							}
+							break;
+						case 'link':
+						case 'unlink':
+						case 'create':
+						case 'switch':
+							break;
+						default:
 							$_REQUEST[ 'action' ] = 'default';
-						}
-					}else {
-						GrabPress::abort( 'Attempt to link user with incomplete form data.' );
 					}
+					GrabPress::render_account_management();
 					break;
-				case 'unlink-user' :
-					if( isset( $_REQUEST[ 'confirm' ]) ){
-						$user = get_user_by( 'slug', 'grabpress');
-						$connector_data = array(
-						 	'user_id' 	=> null,
-							'email' 	=> $user -> email
-						);
-						$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
-						$_REQUEST[ 'action' ] = 'default';
-					}
-					break;
-					case 'create-user':
-						$payment = isset( $_REQUEST['paypal_id']) ? 'paypal' : '';
-						$user_data = array(
-						   	'user'=>array(
-						   		'email'=>$_REQUEST['email'],
-						         'password'=>$_REQUEST['password'],
-						         'first_name'=>$_REQUEST['first_name'],
-						         'last_name'=>$_REQUEST['last_name'],
-						         'payment_detail' => array(
-						         	'payee' => $_REQUEST['first_name'] . ' ' . $_REQUEST['last_name'],
-							        'address1'=>$_REQUEST['address1'],
-							        'address2'=>$_REQUEST['address2'],
-							        'city'=>$_REQUEST['city'],
-							        'state'=>$_REQUEST['state'],
-							        'zip'=>$_REQUEST['zip'],
-							        'country_id' => 214,
-							        'preferred_payment_type'=> 'Paypal',
-							        'phone_number'=>$_REQUEST['phone_number'],
-							        'paypal_id'=>$_REQUEST['paypal_id']
-						         )
-							)
-						);
-						$user_json = json_encode($user_data);
-						$result_json = GrabPress::api_call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
-						$result_data = json_decode( $result_json);
-						if(!isset( $result_data->error ) ){
-							$_REQUEST[ 'action' ] = 'link-user';
-							return GrabPress::dispatcher();
-						}else{
-							GrabPress::$error = 'Error creating user.';
-							$_REQUEST['action'] = 'create';
-						}
-						break;
-					case 'link':
-					case 'unlink':
-					case 'create':
-					case 'switch':
-						break;
-					default:
-						$_REQUEST[ 'action' ] = 'default';
 				}
-				GrabPress::render_account_management();
-				break;
 			}
 		}
 
