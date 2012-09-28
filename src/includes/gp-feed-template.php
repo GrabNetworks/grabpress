@@ -69,13 +69,13 @@
 		global.doValidation = function(){
 	    	var errors = hasValidationErrors();
 			if ( !errors ){
-				$('#create-feed-btn').removeAttr('disabled');
+				$('#btn-create-feed').removeAttr('disabled');
 				$('#btn-preview-feed').removeAttr('disabled');
 
-				if( $( '#create-feed-btn' ).off ){
-					$( '#create-feed-btn' ).off('click');
+				if( $( '#btn-create-feed' ).off ){
+					$( '#btn-create-feed' ).off('click');
 				}else{
-					$( '#create-feed-btn' ).unbind('click');
+					$( '#btn-create-feed' ).unbind('click');
 				}
 
 				if( $( '#btn-preview-feed' ).off ){
@@ -85,13 +85,13 @@
 				}
 				$('.hide').show();					
 			}else{
-				$( '#create-feed-btn' ).attr('disabled', 'disabled');
+				$( '#btn-create-feed' ).attr('disabled', 'disabled');
 				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
 				
-				if( $( '#create-feed-btn' ).off ){
-					$( '#create-feed-btn' ).off('click');
+				if( $( '#btn-create-feed' ).off ){
+					$( '#btn-create-feed' ).off('click');
 				}else{
-					$( '#create-feed-btn' ).unbind('click');
+					$( '#btn-create-feed' ).unbind('click');
 				}
 
 				if( $( '#btn-preview-feed' ).off ){
@@ -505,16 +505,14 @@
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>						
-					</td>
-					<td>
+						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
+						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" />
+										
+
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>	
 						<a id="reset-form" href="#">reset form</a>	
-					</td>
-					<td>
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>					
-					</td>
-					<td>
-						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="create-feed-btn" />
+				
+
 					</td>
 				</tr>
 				</table>
