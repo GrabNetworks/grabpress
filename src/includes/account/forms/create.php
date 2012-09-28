@@ -12,11 +12,11 @@
 			<tr><td>Address 1*</td><td><input id="id_address1" type="text" name="address1" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="address_ok"/></td></tr>
 			<tr><td>Address 2</td><td><input id="id_address2" type="text" name="address2" maxlength="255"></td></tr>
 			<tr><td>City*</td><td><input id="id_city" type="text" name="city" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="city_ok"/></td></tr>
-			<tr><td>State*</td><td><select id="id_state"><?php
+			<tr><td>State*</td><td><select name="state" id="id_state"><?php
     			$states_arr = array('AL'=>"Alabama",'AK'=>"Alaska",'AZ'=>"Arizona",'AR'=>"Arkansas",'CA'=>"California",'CO'=>"Colorado",'CT'=>"Connecticut",'DE'=>"Delaware",'DC'=>"District Of Columbia",'FL'=>"Florida",'GA'=>"Georgia",'HI'=>"Hawaii",'ID'=>"Idaho",'IL'=>"Illinois", 'IN'=>"Indiana", 'IA'=>"Iowa",  'KS'=>"Kansas",'KY'=>"Kentucky",'LA'=>"Louisiana",'ME'=>"Maine",'MD'=>"Maryland", 'MA'=>"Massachusetts",'MI'=>"Michigan",'MN'=>"Minnesota",'MS'=>"Mississippi",'MO'=>"Missouri",'MT'=>"Montana",'NE'=>"Nebraska",'NV'=>"Nevada",'NH'=>"New Hampshire",'NJ'=>"New Jersey",'NM'=>"New Mexico",'NY'=>"New York",'NC'=>"North Carolina",'ND'=>"North Dakota",'OH'=>"Ohio",'OK'=>"Oklahoma", 'OR'=>"Oregon",'PA'=>"Pennsylvania",'RI'=>"Rhode Island",'SC'=>"South Carolina",'SD'=>"South Dakota",'TN'=>"Tennessee",'TX'=>"Texas",'UT'=>"Utah",'VT'=>"Vermont",'VA'=>"Virginia",'WA'=>"Washington",'WV'=>"West Virginia",'WI'=>"Wisconsin",'WY'=>"Wyoming");
 				$string = '<option value="">Select Your State</option>';
 		        foreach($states_arr as $k => $v){
-		            $string .= '<option value="'.$k.'"'.$s.'>'.$v.'</option>'."\n";
+		            $string .= '<option value="'.$k.'">'.$v.'</option>'."\n";
 		        }
 		        echo $string;
 			?></select></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="state_ok"/></td></tr>
@@ -30,8 +30,8 @@
 	</form>
 	<div id="buttons" >
 		<span id="required" class = "account-help" >Note: All fields marked with an asterisk* are required.</span>
-		<a id = "clear-form" href ="#">clear form</a>
-		<input type="button" class="button-primary" disabled="disabled" id="submit-button" value="<?php _e( ($_REQUEST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
+		<a id = "clear-form" href ="#">clear form</a>	
+		<input type="button" class="button-primary" disabled="disabled" id="submit-button" value="<?php _e( $text = ($_REQUEST[ 'action' ] == 'switch') ? 'Change' : 'Link'.' Account') ?>"/>
 		<input type="button" class="button-secondary" id="cancel-button" value="<?php _e('Cancel') ?>"/>
 	</div>
 </fieldset>
@@ -89,9 +89,11 @@
 				//console.log('valid:'+ valid )
 				return valid
 			}
+			//$('#submit-button').bind('click', function(e){
 			$('#submit-button').click(function(){
 				$('#register').submit();
 			});
+
 			$('#cancel-button').click(function(){
 				var confirm = window.confirm('Are you sure you want to cancel creation?\n\nAds played due to this plug-in will continue to not earn you any money, and your changes to this form will be lost.')
 				if( confirm){
@@ -101,17 +103,17 @@
 				}
 			});
 			function doValidation(){
-		    	// console.log( 'valid?');
+		    	 //console.log( 'valid?');
 				if ( validate() ){
 					$( '#submit-button' ).removeAttr('disabled');
-					$( '#submit-button' ).off('click');
+					$( '#submit-button' ).on('click');
 					
 				} else {
 					$( '#submit-button' ).attr('disabled', 'disabled');
-					if( $( '#submit_button' ).off ){
-						$( '#submit_button' ).off('click');
+					if( $( '#submit_button' ).on ){
+						$( '#submit_button' ).on('click');
 					}else{
-						$( '#submit_button' ).unbind('click');
+						$( '#submit_button' ).bind('click');
 					}
 				}
 			}

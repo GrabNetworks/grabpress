@@ -69,13 +69,13 @@
 		global.doValidation = function(){
 	    	var errors = hasValidationErrors();
 			if ( !errors ){
-				$('#create-feed-btn').removeAttr('disabled');
+				$('#btn-create-feed').removeAttr('disabled');
 				$('#btn-preview-feed').removeAttr('disabled');
 
-				if( $( '#create-feed-btn' ).off ){
-					$( '#create-feed-btn' ).off('click');
+				if( $( '#btn-create-feed' ).off ){
+					$( '#btn-create-feed' ).off('click');
 				}else{
-					$( '#create-feed-btn' ).unbind('click');
+					$( '#btn-create-feed' ).unbind('click');
 				}
 
 				if( $( '#btn-preview-feed' ).off ){
@@ -85,13 +85,13 @@
 				}
 				$('.hide').show();					
 			}else{
-				$( '#create-feed-btn' ).attr('disabled', 'disabled');
+				$( '#btn-create-feed' ).attr('disabled', 'disabled');
 				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
 				
-				if( $( '#create-feed-btn' ).off ){
-					$( '#create-feed-btn' ).off('click');
+				if( $( '#btn-create-feed' ).off ){
+					$( '#btn-create-feed' ).off('click');
 				}else{
-					$( '#create-feed-btn' ).unbind('click');
+					$( '#btn-create-feed' ).unbind('click');
 				}
 
 				if( $( '#btn-preview-feed' ).off ){
