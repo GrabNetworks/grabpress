@@ -69,13 +69,13 @@
 		global.doValidation = function(){
 	    	var errors = hasValidationErrors();
 			if ( !errors ){
-				$('#create-feed-btn').removeAttr('disabled');
+				$('#btn-create-feed').removeAttr('disabled');
 				$('#btn-preview-feed').removeAttr('disabled');
 
-				if( $( '#create-feed-btn' ).off ){
-					$( '#create-feed-btn' ).off('click');
+				if( $( '#btn-create-feed' ).off ){
+					$( '#btn-create-feed' ).off('click');
 				}else{
-					$( '#create-feed-btn' ).unbind('click');
+					$( '#btn-create-feed' ).unbind('click');
 				}
 
 				if( $( '#btn-preview-feed' ).off ){
@@ -85,13 +85,13 @@
 				}
 				$('.hide').show();					
 			}else{
-				$( '#create-feed-btn' ).attr('disabled', 'disabled');
+				$( '#btn-create-feed' ).attr('disabled', 'disabled');
 				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
 				
-				if( $( '#create-feed-btn' ).off ){
-					$( '#create-feed-btn' ).off('click');
+				if( $( '#btn-create-feed' ).off ){
+					$( '#btn-create-feed' ).off('click');
 				}else{
-					$( '#create-feed-btn' ).unbind('click');
+					$( '#btn-create-feed' ).unbind('click');
 				}
 
 				if( $( '#btn-preview-feed' ).off ){
@@ -380,8 +380,9 @@
 						</td>
 				</tr>
 				<tr valign="bottom">
-					<td colspan="2" class="button-tip"><span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
-						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />				
+					<td colspan="2" class="button-tip">						
+						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
+						<span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
 					</td>
 				</tr>
 				<tr>
@@ -502,11 +503,16 @@
 							<input type="radio" name="publish" value="1" <?php echo $publish_checked_automatic; ?> /> Publish Posts Automatically
 						</td>
 				</tr>
-				<tr valign="bottom">
-					<td colspan="2" class="button-tip">
+				<tr valign="bottom">					
+					<td class="button-tip" colspan="2">						
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>
-						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="create-feed-btn" />
+						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" />
+										
+
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>	
+						<a id="reset-form" href="#">reset form</a>	
+				
+
 					</td>
 				</tr>
 				</table>
