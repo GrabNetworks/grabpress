@@ -990,3 +990,4 @@ add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 
 GrabPress::allow_tags();
+
