@@ -74,9 +74,9 @@
 					)){
 						
 					$('#link-existing')[0].reset()
-					$('#action').attr('value', 'default');
+					//$('#action').attr('value', 'default');
 					e.preventDefault();
-		        	return false;
+					return false;
 				}
 			})
 		})( jQuery )
