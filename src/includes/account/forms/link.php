@@ -61,7 +61,7 @@
 		    $("input").click(doValidation);
 		    $("select").change(doValidation);
 			
-			$('#cancel_button').click(function(){
+			$('#cancel_button').click(function(e){
 				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
 					$user = GrabPress::get_user();
@@ -75,7 +75,8 @@
 						
 					$('#link-existing')[0].reset()
 					$('#action').attr('value', 'default');
-					$('#link-existing').submit();
+					e.preventDefault();
+		        	return false;
 				}
 			})
 		})( jQuery )
