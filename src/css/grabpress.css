@@ -389,7 +389,12 @@ span.warning {
 }
 #cancel-editing{
 	margin-left: 30px;
-	font-size: 10px;
+	font-size: 12px;
+    float: right;
+}
+#reset-form{
+    float: right;
+    margin: 0 15px 0 10px;
 }
 #acknowledge #confirm{
 	margin-left: 10px;

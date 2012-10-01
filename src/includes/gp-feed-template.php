@@ -507,12 +507,8 @@
 					<td class="button-tip" colspan="2">						
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
 						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" />
-										
-
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>	
-						<a id="reset-form" href="#">reset form</a>	
-				
-
+						<a id="reset-form" href="#">reset form</a>
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>				
 					</td>
 				</tr>
 				</table>
