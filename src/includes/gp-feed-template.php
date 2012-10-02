@@ -169,11 +169,9 @@
 		  $(".provider-select-update").multiselect(multiSelectOptions, {
 		  	 uncheckAll: function(e, ui){
 		  	 	id = this.id.replace('provider-select-update-','');
-		  	 	toggleButton(id);
 			 },
 			 checkAll: function(e, ui){
 		  	 	id = this.id.replace('provider-select-update-','');
-		  	 	toggleButton(id);
 			 }
 		   }).multiselectfilter();
 
@@ -199,11 +197,9 @@
 		  	header:false,
 		  	uncheckAll: function(e, ui){
 		  	 	id = this.id.replace('postcats-','');
-		  	 	toggleButton(id);
 			 },
 			 checkAll: function(e, ui){
 		  	 	id = this.id.replace('postcats-','');
-		  	 	toggleButton(id);
 			 }
 		  }).multiselectfilter();
 
