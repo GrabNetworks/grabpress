@@ -28,7 +28,8 @@
 			}
 		}
 
-		global.deleteFeed = function(id){	
+		global.deleteFeed = function(id){
+			var bg_color = $('#tr-'+id+' td').css("background-color")
 			$('#tr-'+id+' td').css("background-color","red");	
 			var form = $('#form-'+id);
 			var action = $('#action-'+id);			
@@ -44,7 +45,7 @@
 					});
 
 				} else{					
-					$('#tr-'+id+' td').css("background-color","#FFE4C4");
+					$('#tr-'+id+' td').css("background-color", bg_color);
 					return false;
 				}
 		}
