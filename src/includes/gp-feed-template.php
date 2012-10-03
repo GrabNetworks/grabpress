@@ -343,7 +343,7 @@
 									$category = $record -> category;
 									$name = $category -> name;
 									$id = $category -> id;
-									$selected = ( $name == $form["channel"] )?'selected="selected"':"";
+									$selected = (( isset($form["channel"]) ) && ( $name == $form["channel"] ))?'selected="selected"':"";
 									echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>\n';
 								}
 							?>
@@ -432,7 +432,7 @@
 						<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
 							<?php 
 								for ( $o = 1; $o < 6; $o++ ) {
-									$selected = ( $o == $form["limit"] )?'selected="selected"':"";
+									$selected = ((isset($form["limit"])) && ( $o == $form["limit"] )) ?'selected="selected"':"";
 									echo "<option value = \"$o\" $selected>$o</option>\n";
 								} 
 							?>
@@ -459,7 +459,7 @@
 								foreach ( $blogusers as $user ) {
 									$author_name = $user->display_name;
 									$author_id = $user->ID;
-									$selected = ( $form["author"]==$author_id )?'selected="selected"':"";
+									$selected = ((isset($form["author"])) && ( $form["author"]==$author_id ) )?'selected="selected"':"";
 									echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
 								}
 							?>
@@ -502,10 +502,11 @@
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
+						
 						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" />
 						<a id="reset-form" href="#">reset form</a>
 						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>				
+						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
 					</td>
 				</tr>
 				</table>
