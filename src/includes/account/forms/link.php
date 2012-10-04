@@ -2,7 +2,7 @@
 	<legend><?php echo $_REQUEST[ 'action' ] == 'switch' ? 'Another' : 'Existing' ?> Account</legend>
 	<form id="link-existing" method="post" action="">
 		<table>
-			<input type="hidden" name="action" value="link-user" />
+			<input id="action-link-user" type="hidden" name="action" value="link-user" />
 			<tr>
 				<td>
 					Email address<input name="email" id="email" type="text" value="<?php echo $email = (isset($_REQUEST['email']) && ($_REQUEST['email'] !== NULL)) ? $_REQUEST['email'] : ''; ?>" />
@@ -75,8 +75,8 @@
 						
 					$('#link-existing')[0].reset()
 					//$('#action').attr('value', 'default');
-					e.preventDefault();
-					return false;
+					$('#action-link-user').val('default');
+					$('#link-existing').submit();
 				}
 			})
 		})( jQuery )
