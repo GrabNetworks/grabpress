@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 1.0.0
+Version: 1.0.0b85
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,10 +25,10 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '1.0.0';
+		static $version = '1.0.0b85';
 		static $api_key;
 		static $invalid = false;
-		static $environment =  'grabnetworks'; // 'grabqa';
+		static $environment =  'grabqa'; // 'grabnetworks';
 		static $debug = true;
 		static $message = false;
 		static $error = false;
@@ -260,7 +260,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
 				$categories = rawurlencode( $_REQUEST[ 'channel' ] );
-				$keywords = rawurlencode( $_REQUEST[ 'keywords' ] );
+				$keywords_and = rawurlencode( $_REQUEST[ 'keywords_and' ] );
 
 				$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 				$list = json_decode( $json );
@@ -279,7 +279,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
-				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords='.$keywords.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 				$connector_id = GrabPress::get_connector_id();
 				$category_list = $_REQUEST[ 'category' ];
 				$category_length = count( $category_list );
@@ -351,7 +351,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 										   "action" => "modify",
 										   "feed_id" => $_REQUEST["feed_id"],
 										   "channel" => $_REQUEST["channel"],
-										   "keywords" => $_REQUEST["keywords"],
+										   "keywords_and" => $_REQUEST["keywords_and"],
 										   "limit" => $_REQUEST["limit"],
 										   "schedule" => $_REQUEST["schedule"],
 										   "active" => $_REQUEST["active"],
@@ -379,7 +379,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "action" => "modify",
 											   "feed_id" => $feed_id,
 											   "channel" => $feed->feed->name,
-											   "keywords" => $url['keywords'],
+											   "keywords_and" => $url['keywords_and'],
 											   "limit" => $feed->feed->posts_per_update,
 											   "schedule" => $feed->feed->update_frequency,
 											   "active" => $feed->feed->active,
@@ -484,7 +484,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}else {
 				GrabPress::abort( 'No get_user function.' );
 			}
-			if ( $user_data ) {// user exists, hash password to keep data up-to-date
+			if ( isset($user_data) ) {// user exists, hash password to keep data up-to-date
 				$msg = 'User Exists ('.$user_login.'): '.$user_data->ID;
 				$user = array(
 					"id" => $user_data -> ID,
@@ -559,13 +559,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			};
 		}
 
-		static function grabpress_plugin_menu() {
-			GrabPress::log();
-			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 10 );
-			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
-			global $submenu;
-			unset( $submenu['grabpress'][0] );
+		static function grabpress_plugin_messages() {
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
 			$admin = get_admin_url();
@@ -593,7 +587,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						$noun .= 's';
 					}
 					$user = GrabPress::get_user();	
-					$linked = isset( $user->email);
+					$linked = isset($user->email);
 					$create =  $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
 					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
 					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
@@ -602,6 +596,17 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 			}
 		}
+
+		static function grabpress_plugin_menu() {
+			GrabPress::log();
+			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 10 );
+			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
+			global $submenu;
+			unset( $submenu['grabpress'][0] );
+			GrabPress::grabpress_plugin_messages();			
+		}
+
 		static function render_account_management() {
 			GrabPress::log();
 			//if (!current_user_can('manage_options'))  {
@@ -681,7 +686,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						   "action" => "edit-feed",
 						   "feed_id" => $feed_id,
 						   "channel" => $feed->feed->name,
-						   "keywords" => $url['keywords'],
+						   "keywords_and" => $url['keywords_and'],
 						   "limit" => $feed->feed->posts_per_update,
 						   "schedule" => $feed->feed->update_frequency,
 						   "publish" => $feed->feed->custom_options->publish,
@@ -713,7 +718,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"click_to_play" => true,
 				"category" => array(),
 				"provider" => array(),
-				"keywords" => "" );
+				"keywords_and" => "" );
 			foreach ( $defaults as $key => $value ) {
 				if ( !array_key_exists( $key, $params ) ) {
 					$params[$key] = $value;
@@ -748,7 +753,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'modify':
 
 					$feed_id = $_REQUEST['feed_id'];
-					$keywords = htmlspecialchars( $_REQUEST['keywords'] );
+					$keywords_and = htmlspecialchars( $_REQUEST['keywords_and'] );
 					$categories = rawurlencode( $_REQUEST[ 'channel' ] );
 					$providers = $_REQUEST['provider'];
 
@@ -758,7 +763,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $providersListTotal == $providers_total ) {
 						$providersList = '';
 					}
-					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords='.$keywords.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
 					$connector_id = GrabPress::get_connector_id();
 					$active = (bool)$_REQUEST['active'];
 
@@ -838,6 +843,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								);
 								GrabPress::log( 'PUTting to connector ' . GrabPress::get_connector_id() . ':' . $user -> id );
 								$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
+								GrabPress::grabpress_plugin_messages();
 								$_REQUEST[ 'action' ] = 'default';
 							}else{
 								GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
@@ -855,6 +861,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								'email' 	=> $user -> email
 							);
 							$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
+							GrabPress::grabpress_plugin_messages();
 							$_REQUEST[ 'action' ] = 'default';
 						}
 						break;

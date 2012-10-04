@@ -7,7 +7,7 @@
 		$provider_text = count($provider)." of ".$provider_total." selected";
 	}
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords='.urlencode($keywords)
+		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and)
 		.'&categories='.urlencode($channel).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
 	$list_feeds = json_decode($json_preview, true);
 	
@@ -30,7 +30,7 @@
 		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
 		<input type="hidden" name="active" value="<?php echo $active; ?>" id="active" />
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
-		<input type="hidden" name="keywords" value="<?php echo $keywords; ?>" id="keyword" />	
+		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />	
 		<input type="hidden" name="limit" value="<?php echo $limit; ?>" id="limit" />
 		<input type="hidden" name="schedule" value="<?php echo $schedule; ?>" id="schedule" />
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
@@ -49,7 +49,7 @@
 		
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview" >
 		<span class="preview-text"><b>Video Channel: </b><?php echo $channel; ?></span><br/>
-		<span class="preview-text"><b>Keywords: </b><?php echo $keywords; ?></span><br/>
+		<span class="preview-text"><b>Keywords: </b><?php echo $keywords_and; ?></span><br/>
 		<span class="preview-text"><b>Providers: </b><?php echo $provider_text; ?></span><br/>
 	<?php
 		foreach ($list_feeds["results"] as $result) {

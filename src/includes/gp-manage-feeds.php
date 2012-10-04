@@ -57,7 +57,7 @@
 							echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
 					 	}else{ 
 							$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-							echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
+							echo '<input '.$checked.' type="checkbox" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
 						} 
 					?>
 				</td>
@@ -75,8 +75,8 @@
 				</td>
 				<td>		
 					<?php 
-						$keywords_num = strlen($url['keywords']);
-						echo $keywords = ($keywords_num > 15) ? substr($url['keywords'],0,15)."..." : $url['keywords'];
+						$keywords_and_num = strlen($url['keywords_and']);
+						echo $keywords_and = ($keywords_and_num > 15) ? substr($url['keywords_and'],0,15)."..." : $url['keywords_and'];
 					?>							
 				</td>
 				<td>
