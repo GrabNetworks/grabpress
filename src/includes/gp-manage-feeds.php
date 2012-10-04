@@ -57,7 +57,7 @@
 							echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
 					 	}else{ 
 							$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-							echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
+							echo '<input '.$checked.' type="checkbox" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
 						} 
 					?>
 				</td>

@@ -484,7 +484,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}else {
 				GrabPress::abort( 'No get_user function.' );
 			}
-			if ( $user_data ) {// user exists, hash password to keep data up-to-date
+			if ( isset($user_data) ) {// user exists, hash password to keep data up-to-date
 				$msg = 'User Exists ('.$user_login.'): '.$user_data->ID;
 				$user = array(
 					"id" => $user_data -> ID,
@@ -559,13 +559,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			};
 		}
 
-		static function grabpress_plugin_menu() {
-			GrabPress::log();
-			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 10 );
-			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
-			global $submenu;
-			unset( $submenu['grabpress'][0] );
+		static function grabpress_plugin_messages() {
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
 			$admin = get_admin_url();
@@ -593,7 +587,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						$noun .= 's';
 					}
 					$user = GrabPress::get_user();	
-					$linked = isset( $user->email);
+					$linked = isset($user->email);
 					$create =  $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
 					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
 					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
@@ -602,6 +596,17 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 			}
 		}
+
+		static function grabpress_plugin_menu() {
+			GrabPress::log();
+			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 10 );
+			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
+			global $submenu;
+			unset( $submenu['grabpress'][0] );
+			GrabPress::grabpress_plugin_messages();			
+		}
+
 		static function render_account_management() {
 			GrabPress::log();
 			//if (!current_user_can('manage_options'))  {
@@ -838,6 +843,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								);
 								GrabPress::log( 'PUTting to connector ' . GrabPress::get_connector_id() . ':' . $user -> id );
 								$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
+								GrabPress::grabpress_plugin_messages();
 								$_REQUEST[ 'action' ] = 'default';
 							}else{
 								GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
@@ -855,6 +861,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								'email' 	=> $user -> email
 							);
 							$result_json = GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
+							GrabPress::grabpress_plugin_messages();
 							$_REQUEST[ 'action' ] = 'default';
 						}
 						break;
