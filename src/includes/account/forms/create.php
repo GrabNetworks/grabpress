@@ -97,8 +97,8 @@
 			$('#cancel-button').click(function(){
 				var confirm = window.confirm('Are you sure you want to cancel creation?\n\nAds played due to this plug-in will continue to not earn you any money, and your changes to this form will be lost.')
 				if( confirm){
-					$('#id_action').attr('value', 'default');
 					$('#register')[0].reset();
+					$('#id_action').val('default');
 					$('#register').submit();
 				}
 			});

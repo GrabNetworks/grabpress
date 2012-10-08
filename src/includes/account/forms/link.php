@@ -2,7 +2,7 @@
 	<legend><?php echo $_REQUEST[ 'action' ] == 'switch' ? 'Another' : 'Existing' ?> Account</legend>
 	<form id="link-existing" method="post" action="">
 		<table>
-			<input type="hidden" name="action" value="link-user" />
+			<input id="action-link-user" type="hidden" name="action" value="link-user" />
 			<tr>
 				<td>
 					Email address<input name="email" id="email" type="text" value="<?php echo $email = (isset($_REQUEST['email']) && ($_REQUEST['email'] !== NULL)) ? $_REQUEST['email'] : ''; ?>" />
@@ -61,7 +61,7 @@
 		    $("input").click(doValidation);
 		    $("select").change(doValidation);
 			
-			$('#cancel_button').click(function(){
+			$('#cancel_button').click(function(e){
 				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
 					$user = GrabPress::get_user();
@@ -74,7 +74,8 @@
 					)){
 						
 					$('#link-existing')[0].reset()
-					$('#action').attr('value', 'default');
+					//$('#action').attr('value', 'default');
+					$('#action-link-user').val('default');
 					$('#link-existing').submit();
 				}
 			})
