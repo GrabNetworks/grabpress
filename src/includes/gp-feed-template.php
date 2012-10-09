@@ -9,8 +9,7 @@
 	( function ( global, $ ) {
 
 		global.hasValidationErrors = function () {
-			var category =  $('#channel-select').val();
-			if((category == '') || ($("#provider-select :selected").length == 0)){
+			if(($("#channel-select :selected").length == 0) || ($("#provider-select :selected").length == 0)){
 				return true;
 			}
 			else {
@@ -123,6 +122,17 @@
 	  	 selectedText: "# of # selected"
 	};
 
+	var multiSelectOptionsChannels = {
+	  	 noneSelectedText:"Select Video Categories",
+	  	 selectedText:function(selectedCount, totalCount){
+			if (totalCount==selectedCount){
+	  	 		return "All Video Categories";
+	  	 	}else{
+	  	 		return selectedCount + " of " + totalCount + " Video Categories";
+	  	 	}
+	  	 }
+	};
+
 	jQuery(function($){
 		$('#reset-form').bind('click', function(e){
 		    var referer = $("input[name=referer]").val();
@@ -146,6 +156,11 @@
 		if($('#provider-select option:selected').length == 0){
 			$('#provider-select option').attr('selected', 'selected');
 		}
+
+		if($('#channel-select option:selected').length == 0){
+			$('#channel-select option').attr('selected', 'selected');
+		}
+
 		var category_options = $('#cat option');
 		for(var i=0;i<category_options.length; i++){
 			if($.inArray($(category_options[i]).val(),selectedCategories)>-1){
@@ -204,7 +219,7 @@
 			 }
 		  }).multiselectfilter();
 
-		  $(".channel-select").selectmenu();
+		  //$(".channel-select").selectmenu();
 		  $(".schedule-select").selectmenu();
 		  $(".limit-select").selectmenu();
 		  $(".author-select").selectmenu();
@@ -261,7 +276,16 @@
 
 		  $(".ui-selectmenu").click(function(){
 			    $(".ui-multiselect-menu").css("display", "none");
-			});
+			});		  
+
+		  $("#channel-select").multiselect(multiSelectOptionsChannels, {
+		  	 uncheckAll: function(e, ui){
+		  	 	
+			 },
+			 checkAll: function(e, ui){
+		  	 	
+			 }
+		   });
 
 		  $("#form-create-feed").change(doValidation);	
 		  //$("input").keyup(doValidation);
@@ -334,16 +358,23 @@
 				<tr valign="bottom">
 					<th scope="row">Grab Video Categories<span class="asterisk">*</span></th>
 					<td>
-						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px" >
-							<option <?php  ( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>
+						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />
+						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+							<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
 							<?php
+								if(is_array($form["channel"])){
+									$channels = $form["channel"];
+								}else{
+									$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
+								}
+								
 								$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 								$list = json_decode( $json );
 								foreach ( $list as $record ) {
-									$category = $record -> category;
-									$name = $category -> name;
-									$id = $category -> id;
-									$selected = (( isset($form["channel"]) ) && ( $name == $form["channel"] ))?'selected="selected"':"";
+									$channel = $record -> category;
+									$name = $channel -> name;
+									$id = $channel -> id;
+									$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
 									echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>\n';
 								}
 							?>
@@ -524,6 +555,8 @@
 			array( "form" => $_REQUEST,
 				"list_provider" => $list_provider,
 				"providers_total" => $providers_total,
+				"list_channels" => $list_channels,
+				"channels_total" => $channels_total,
 				"blogusers" => $blogusers 
 			)
 		); 
