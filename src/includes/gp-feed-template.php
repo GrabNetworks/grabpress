@@ -156,6 +156,11 @@
 		if($('#provider-select option:selected').length == 0){
 			$('#provider-select option').attr('selected', 'selected');
 		}
+
+		if($('#channel-select option:selected').length == 0){
+			$('#channel-select option').attr('selected', 'selected');
+		}
+
 		var category_options = $('#cat option');
 		for(var i=0;i<category_options.length; i++){
 			if($.inArray($(category_options[i]).val(),selectedCategories)>-1){
@@ -271,12 +276,15 @@
 
 		  $(".ui-selectmenu").click(function(){
 			    $(".ui-multiselect-menu").css("display", "none");
-			});
-
-		  
+			});		  
 
 		  $("#channel-select").multiselect(multiSelectOptionsChannels, {
-		  	 header:false
+		  	 uncheckAll: function(e, ui){
+		  	 	
+			 },
+			 checkAll: function(e, ui){
+		  	 	
+			 }
 		   });
 
 		  $("#form-create-feed").change(doValidation);	
@@ -352,7 +360,7 @@
 					<td>
 						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />
 						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
-							<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->
+							<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
 							<?php
 								if(is_array($form["channel"])){
 									$channels = $form["channel"];
