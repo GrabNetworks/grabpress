@@ -6,9 +6,17 @@
 	}else{
 		$provider_text = count($provider)." of ".$provider_total." selected";
 	}
+
+	$channels = join($channel, ",");
+	$channel_total = count(GrabPress::get_channels());
+	if(($channel_total == count($channel)) || in_array("", $channel)){
+		$channel_text = "All Video Categories";
+	}else{
+		$channel_text = count($channel)." of ".$channel_total." selected";
+	}
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and)
-		.'&categories='.urlencode($channel).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
+		.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
 	$list_feeds = json_decode($json_preview, true);
 	
 	if(empty($list_feeds["results"])){
@@ -36,8 +44,8 @@
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
 		<input type="hidden" name="click_to_play" value="<?php echo $click_to_play; ?>" id="click_to_play" />
 		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />	
-		<select name="category[]" style="display:none;" multiple="multiple	">
-			<?php foreach($category as $cat){ ?>
+		<select name="channel[]" style="display:none;" multiple="multiple	">
+			<?php foreach($channel as $cat){ ?>
 				<option value="<?php echo $cat;?>" selected="selected"/>
 			<?php } ?>
 		</select>
@@ -48,7 +56,7 @@
 		</select>
 		
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview" >
-		<span class="preview-text"><b>Video Channel: </b><?php echo $channel; ?></span><br/>
+		<span class="preview-text"><b>Video Channel: </b><?php echo $channel_text; ?></span><br/>
 		<span class="preview-text"><b>Keywords: </b><?php echo $keywords_and; ?></span><br/>
 		<span class="preview-text"><b>Providers: </b><?php echo $provider_text; ?></span><br/>
 	<?php

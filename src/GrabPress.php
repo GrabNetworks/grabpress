@@ -36,6 +36,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $connector_id;
 		static $connector_user;
 		static $providers;
+		static $channels;
 
 		static function log( $message = false ) {
 			if ( GrabPress::$debug ) {
@@ -259,19 +260,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function create_feed() {
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
-				$categories = rawurlencode( $_REQUEST[ 'channel' ] );
+				$channels = $_REQUEST[ 'channel' ];
+				$channelsList = implode( ',', $channels );
+				$channelsListTotal = count( $channels ); // Total providers chosen by the user
+				$channels_total = $_REQUEST['channels_total']; // Total providers from the catalog list
+				if ( $channelsListTotal == $channels_total ) {
+					$channelsList = '';
+				}
+
 				$keywords_and = rawurlencode( $_REQUEST[ 'keywords_and' ] );
 
-				$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-				$list = json_decode( $json );
-				foreach ( $list as $record ) {
-					$category = $record -> category;
-					$name = $category -> name;
-					$id = $category -> id;
-					if ( $name == $_REQUEST['channel'] ) {
-						$cat_id = $id;
-					}
-				}
 				$providers = $_REQUEST['provider'];
 				$providersList = implode( ',', $providers );
 				$providersListTotal = count( $providers ); // Total providers chosen by the user
@@ -279,7 +277,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
-				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$channelsList.'&order=DESC&order_by=created_at&providers='.$providersList;
 				$connector_id = GrabPress::get_connector_id();
 				$category_list = $_REQUEST[ 'category' ];
 				$category_length = count( $category_list );
@@ -307,7 +305,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 				$post_data = array(
 					'feed' => array(
-						'name' => $_REQUEST[ 'channel' ],
+						'name' => $channelsList,
 						'posts_per_update' => $_REQUEST[ 'limit' ],
 						'url' => $url,
 						'custom_options' => array(
@@ -343,6 +341,27 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$providers = explode( ",", $url["providers"] ); // providers chosen by the user
 				$list_provider = GrabPress::get_providers();
 				$providers_total = count( $list_provider );
+
+				
+				$channels = explode( ",", $url["categories"] ); // Categories or channels chosen by the user
+				$list_channels = GrabPress::get_channels();
+				$channels_total = count( $list_channels );	
+				
+				//$channelsList = implode( ',', $channels ); // Video Categories or Channels
+				//$channelsListTotal = count( $channels ); 
+				//$channels_total = $_REQUEST['channels_total']; 
+				//if ( $channelsListTotal == $channels_total ) {
+				//	$channelsList = '';
+				//}
+
+				//$channels = $_REQUEST[ 'channel' ];
+				//$channelsList = implode( ',', $channels );
+				//$channelsListTotal = count( $channels ); // Total providers chosen by the user
+				//$channels_total = $_REQUEST['channels_total']; // Total providers from the catalog list
+				//if ( $channelsListTotal == $channels_total ) {
+				//	$channelsList = '';
+				//}
+
 				$blogusers = get_users();
 
 				if(isset($_REQUEST) && isset($_REQUEST["channel"]) != "" && isset($_REQUEST["provider"]) != ""){
@@ -363,6 +382,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											),
 							"list_provider" => $list_provider,
 							"providers_total" => $providers_total,
+							"list_channels" => $list_channels,
+							"channels_total" => $channels_total,
 							"blogusers" => $blogusers
 					 ) );
 				}else{
@@ -391,6 +412,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 												),
 								"list_provider" => $list_provider,
 								"providers_total" => $providers_total,
+								"list_channels" => $list_channels,
+								"channels_total" => $channels_total,
 								"blogusers" => $blogusers
 						 ) );
 
@@ -588,7 +611,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 					$user = GrabPress::get_user();	
 					$linked = isset($user->email);
-					$create =  $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
+					$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
 					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
 					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
 					$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
@@ -604,7 +627,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
-			GrabPress::grabpress_plugin_messages();			
+			//GrabPress::grabpress_plugin_messages();			
 		}
 
 		static function render_account_management() {
@@ -630,6 +653,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $list;
 		}
 
+		static function get_channels() {
+			if( isset(GrabPress::$channels) ){
+				return GrabPress::$channels;
+			}
+			$json_channel = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );			
+			$list = json_decode( $json_channel );
+			GrabPress::$channels = $list;
+			return $list;
+		}
+
 		static function render_feed_management() {
 			GrabPress::log();
 			//if (!current_user_can('manage_options'))  {
@@ -641,13 +674,19 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			*/
 
-			$list_provider = GrabPress::get_providers();
+			$list_provider = GrabPress::get_providers();			
 			$providers_total = count( $list_provider );
+
+			$list_channels = GrabPress::get_channels();
+			$channels_total = count( $list_channels );
+
 			$blogusers = get_users();
 			print GrabPress::fetch( 'includes/gp-feed-template.php',
 				array( "form" => $_REQUEST,
 					"list_provider" => $list_provider,
 					"providers_total" => $providers_total,
+					"list_channels" => $list_channels,
+					"channels_total" => $channels_total,
 					"blogusers" => $blogusers ) );
 		}
 
@@ -681,11 +720,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$cats[] = "";
 				}
 
+				$channel = explode( ',', $feed->feed->name );				 
+
 				print GrabPress::fetch( "includes/gp-preview-template.php", 
 					array( "referer" => "edit",
 						   "action" => "edit-feed",
 						   "feed_id" => $feed_id,
-						   "channel" => $feed->feed->name,
+						   "channel" => $channel,
 						   "keywords_and" => $url['keywords_and'],
 						   "limit" => $feed->feed->posts_per_update,
 						   "schedule" => $feed->feed->update_frequency,
@@ -754,16 +795,24 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 					$feed_id = $_REQUEST['feed_id'];
 					$keywords_and = htmlspecialchars( $_REQUEST['keywords_and'] );
-					$categories = rawurlencode( $_REQUEST[ 'channel' ] );
-					$providers = $_REQUEST['provider'];
+					//$categories = $_REQUEST[ 'channel' ];
+					$channels = $_REQUEST[ 'channel' ];
+					$channelsList = implode( ',', $channels );
+					$channelsListTotal = count( $channels ); // Total providers chosen by the user
+					$channels_total = $_REQUEST['channels_total']; // Total providers from the catalog list
+					if ( $channelsListTotal == $channels_total ) {
+						$channelsList = '';
+					}
 
+
+					$providers = $_REQUEST['provider'];
 					$providersList = implode( ',', $providers );
 					$providersListTotal = count( $providers ); // Total providers chosen by the user
 					$providers_total = $_REQUEST['providers_total']; // Total providers from the catalog list
 					if ( $providersListTotal == $providers_total ) {
 						$providersList = '';
 					}
-					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$categories.'&order=DESC&order_by=created_at&providers='.$providersList;
+					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$channelsList.'&order=DESC&order_by=created_at&providers='.$providersList;
 					$connector_id = GrabPress::get_connector_id();
 					$active = (bool)$_REQUEST['active'];
 
@@ -795,7 +844,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$post_data = array(
 						'feed' => array(
 							'active' => $active,
-							'name' => $_REQUEST[ 'channel' ],
+							'name' => $channelsList,
 							'posts_per_update' => $_REQUEST[ 'limit' ],
 							'url' => $url,
 							'custom_options' => array(
@@ -998,6 +1047,8 @@ register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
 register_uninstall_hook( __FILE__, array( 'GrabPress', 'delete_connector' ) );
 add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
+//add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
+add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 

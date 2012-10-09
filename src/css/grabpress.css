@@ -422,3 +422,4 @@ line-height: 24px;
 .button-tip span.description{
     float: center;  
 }
+#message{ position: relative; }

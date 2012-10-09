@@ -27,8 +27,8 @@
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
-			$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-			$categories_list = json_decode( $json );
+			//$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+			//$categories_list = json_decode( $json );
 
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
 				$feed = $feeds[$n]->feed;
@@ -36,6 +36,7 @@
 				parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
 				$feedId = $feed->id;
 				$providers = explode( ",", $url["providers"] ); // providers chosen by the user
+				$channels = explode( ",", $url["categories"] ); // Video categories chosen by the user
 		?>
 		<form id="form-<?php echo $feedId; ?>" action=""  method="post">
 			<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
@@ -61,15 +62,25 @@
 						} 
 					?>
 				</td>
-				<td>							
-					<?php
-						foreach ( $categories_list as $record ) {
-							$category = $record -> category;
-							$name = $category -> name;
-							$id = $category -> id;
-							if($name == $feed->name){
-								echo $name;
-							}									
+				<td>	
+					<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />						
+					<?php						
+						$channels_selected = count($channels);
+						if($channels_selected == 1){
+							if ( in_array( "", $channels ) ) {
+								echo "All Video Categories";
+							}else{									
+								foreach ( $list_channels as $record_channel ) {
+									$channel = $record_channel->category;
+									$channel_name = $channel->name;
+									$channel_id = $channel->id;											
+									if(in_array( $channel_name, $channels )) {											
+										echo $channel_name;									
+									}
+								}								
+							}
+						}else{
+							echo $channels_selected." of ".$channels_total." Video Categories";
 						}
 					?>
 				</td>
