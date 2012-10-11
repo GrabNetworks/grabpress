@@ -62,7 +62,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 			if ( $show ) {
 				$icon_src = GrabPress::get_g_icon_src();
-				echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$show.'</p></div>';
+				echo '<p><img src="'.$icon_src.'" style="vertical-align:top; position:relative; top:-2px; margin-right:2px;"/>'.$show.'</p></div>';									
 			}
 		}
 
@@ -980,7 +980,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js' );
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' );
-			wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
+			
+			$wpversion = floatval(get_bloginfo('version'));
+			if ( $wpversion <= 3.1 ) {		
+			    wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.1.8.7.js' );
+			}else{				
+				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
+			}
 			
 		}
 
@@ -1047,8 +1053,8 @@ register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
 register_uninstall_hook( __FILE__, array( 'GrabPress', 'delete_connector' ) );
 add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
-//add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
-add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
+add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ), 12 );
+//add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 
