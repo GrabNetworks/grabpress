@@ -11,7 +11,6 @@
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
 			<th>Active</th>
-			<th>Video<br/>Categories</th>
 			<th>Keywords</th>
 			<th>Content<br/>Providers</th>			
 			<th>Schedule</th>
@@ -41,6 +40,7 @@
 		<form id="form-<?php echo $feedId; ?>" action=""  method="post">
 			<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
 			<input type="hidden" name="referer" value="edit" />
+			<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />	
 			<?php 
 				if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){
 					$row_class = "editing-feed";
@@ -60,28 +60,6 @@
 							$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
 							echo '<input '.$checked.' type="checkbox" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
 						} 
-					?>
-				</td>
-				<td>	
-					<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />						
-					<?php						
-						$channels_selected = count($channels);
-						if($channels_selected == 1){
-							if ( in_array( "", $channels ) ) {
-								echo "All Video Categories";
-							}else{									
-								foreach ( $list_channels as $record_channel ) {
-									$channel = $record_channel->category;
-									$channel_name = $channel->name;
-									$channel_id = $channel->id;											
-									if(in_array( $channel_name, $channels )) {											
-										echo $channel_name;									
-									}
-								}								
-							}
-						}else{
-							echo $channels_selected." of ".$channels_total." Video Categories";
-						}
 					?>
 				</td>
 				<td>		
