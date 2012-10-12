@@ -320,6 +320,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				);
 				$response_json = GrabPress::api_call( 'POST', '/connectors/' . $connector_id . '/feeds/?api_key='.GrabPress::$api_key, $post_data );
 				$response_data = json_decode( $response_json );
+
 				if ( $response_data -> feed -> active == true ) {
 					GrabPress::$feed_message = 'Grab yourself a coffee. Your videos are on the way!';
 				}else {
@@ -494,6 +495,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			if ( ! isset( GrabPress::$api_key ) ) {
 				GrabPress::abort( 'Error retrieving API Key' );//unless storing failed
 			}
+
 			GrabPress::$api_key = get_option( 'grabpress_key' );//retreive api key from storage
 			/*
 		 * Keep user up to date with API info
@@ -567,11 +569,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function delete_connector() {
 			GrabPress::log();
 			$connector_id = GrabPress::get_connector_id();
+
 			$response = GrabPress::api_call( 'PUT', '/connectors/' . $connector_id . '/deactivate?api_key='.GrabPress::$api_key );
 			delete_option( 'grabpress_key' );
-			$grab_user = get_user_by('name', 'grabpress');
+			$grab_user = get_user_by('login', 'grabpress');
 			$current_user = wp_get_current_user();
 			wp_delete_user( $grab_user->id, $current_user->id );
+			$response_delete = GrabPress::api_call( 'DELETE', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key );
 			GrabPress::$message = 'GrabPress has been deactivated. Any posts that used to be credited to the "grabpress" user are now assigned to you. XML-RPC is still enabled, unless you are using it for anything else, we recommend you turn it off.';
 		}
 
@@ -1050,10 +1054,10 @@ GrabPress::log( '-------------------------------------------------------' );
 add_action( 'admin_print_styles', array( 'GrabPress', 'print_styles' ) );
 add_action( 'admin_print_scripts', array( 'GrabPress', 'print_scripts' ) );
 register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
-register_uninstall_hook( __FILE__, array( 'GrabPress', 'delete_connector' ) );
+register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector' ));
 add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
-add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ), 12 );
+add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ));
 //add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
