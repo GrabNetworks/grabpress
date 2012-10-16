@@ -1,12 +1,13 @@
-=== Plugin Name ===
+=== GrabPress ===
 Contributors: grabmedia, jduquette
-Plugin Name: GrabPress
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.0.1   
 Tested up to: 3.4.1  
 Stable tag: 1.0.0  
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html 
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+Configure Grab's AutoPoster software to deliver fresh video direct to your Blog.
 
 == Description ==  
 
@@ -117,10 +118,19 @@ We hope to allow users to edit the layout / posting template in future updates o
  
  Grabpress automates delivery of topical content to your site. This cuts down the footwork needed to optimize revenue potential for individual posts on your site, as well as keeping your site up to date with hot topics being talked about now.  Not only does Grabpress deliver monetized multimedia posts based on your criteria, but it is built to be leveraged by teams large and small as a tool for editors to stay in touch with news, gossip, and highlights that are happening now.
 
+
 == Screenshots ==  
- 
+
+1. GrabPress Create/Edit Feed Frame.
+2. GrabPress Manage Feed Frame.
+3. GrabPress Preview Feed Frame.
+4. GrabPress create a new account frame. 
 
 == Changelog ==  
 
 = 1.0.0 = 
  * Public Beta
+
+== Upgrade Notice ==
+= 1.0.0 =
+ * Initial release
