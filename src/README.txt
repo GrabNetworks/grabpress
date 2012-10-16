@@ -1,8 +1,7 @@
-
-=== GrabPress ===  
-
-Contributors: grabmedia 
-Tags: video, grab, autoposter, grab press, grab media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
+=== Plugin Name ===
+Contributors: grabmedia, jduquette
+Plugin Name: GrabPress
+Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.0.1   
 Tested up to: 3.4.1  
 Stable tag: 1.0.0  
@@ -36,7 +35,9 @@ Manual Plugin Installation
 	Plugin installed successfully.  
 9.  Click 'Activate Plugin' link > The GrabPress menu item should now appear in the left side navigation menu  
 
-== Frequently Asked Questions ==  
+== Frequently Asked Questions ==
+
+**Getting Started...**
 
 = How do I set up an account with Grab Media? =
 
@@ -53,6 +54,9 @@ Manual Plugin Installation
 = I would like to get more data than the report portal provides.  How can I get that?
 
 Grab can provide you automated, daily data exports that enable you to perform your own performance analyses.  Contact us and we can provide you the data that you need. 
+
+
+**Creating Auto Posting Feeds...**
 
 = I have installed the plug-in and set up my account.  Now what? =
 
@@ -80,6 +84,8 @@ Grab can provide you automated, daily data exports that enable you to perform yo
 
 = How many feeds can I create? =
  There is no limit on the number of feeds you can create.
+
+**General Questions...**
 
 = Why is there a tabbed index for Grabpress in my site dashboard? =
  Grabpress is built to scale. That means we have many more features and ways of delivering monetized video intended for the future. This includes, but is not limited to, single video embed insertion via your post editor, post promotion, and layout editing. As features such as these become available through Grabpress updates, they will appear as additional tabs within Grabpress.
@@ -110,7 +116,6 @@ We hope to allow users to edit the layout / posting template in future updates o
 = Why should I use Grabpress to deliver video to my blog? =
  
  Grabpress automates delivery of topical content to your site. This cuts down the footwork needed to optimize revenue potential for individual posts on your site, as well as keeping your site up to date with hot topics being talked about now.  Not only does Grabpress deliver monetized multimedia posts based on your criteria, but it is built to be leveraged by teams large and small as a tool for editors to stay in touch with news, gossip, and highlights that are happening now.
-
 
 == Screenshots ==  
  
