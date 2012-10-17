@@ -9,13 +9,15 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Configure Grab's AutoPoster software to deliver fresh video direct to your Blog.
 
-== Description ==  
+== Description ==
 
-GrabPress is Grab Media's WordPress plugin, which enables members of our publisher network to use our innovative software products to improve their workflow and enrich the experience for their audience. Better content means more site visitors and longer site visits. 
+GrabPress from Grab Media is the solution for publishers on the Wordpress platform using video to drive engagement and revenue on their sites. It allows website editors to publish high quality video content within their Wordpress sites. The integration of the Grab Media video catalog with your content management system via the GrabPress plug-in enables all assets of the content catalog-including the video titles, descriptions, keywords, and preview images to be published along with the video content, or to be leveraged in content promotional themes and widgets.
 
-GrabPress makes it easy to get the best video content brought directly to your blog via our Autoposter technology, either as a draft or a published post. Its the first of many of our product offerings enabled by GrabPress plug-in. Keep GrabPress up-to-date to see the new features we add to make your life as a publisher easier, and help you bring the most relevant multimedia content to your readers. 
+By automating video delivery Grabpress cuts the legwork needed to ensure a sound video strategy on your site. Whether you run your own site, or work with a team of editors, it can be tricky to get on the same page regarding video. Grabpress is built to ease those pains, and provide a dependable workflow editors can leverage into larger revenue streams.
 
-Grab Media provides the easiest way to bring ad-supported, professionally produced video content to your Wordpress blog. Grab Media delivers video content from top professional content producers to online publishers and audiences. Publishers rely on Grab Media to position their message in front of large-scale, engaged audiences, so they can focus on brand promotion. 
+Beyond delivery of premium content, workflow optimization, and revenue through Grabpress, publishers also get insight into activity reporting by tying their GrabMedia account to the GrabPress plug in. With GrabPress, the editor is in control to create more content and increase the value of their page views.
+
+For additional documentation, contact your account manager or email us at support@grab-media.com for more assistance.  
 
 www.grab-media.com
 
