@@ -121,10 +121,11 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Screenshots ==  
 
-1. GrabPress Create/Edit Feed Frame.
-2. GrabPress Manage Feed Frame.
-3. GrabPress Preview Feed Frame.
-4. GrabPress create a new account frame. 
+1. Create and edit feed(s) for autoposting to your Blog.
+2. View and manage your existing feed(s).
+3. Preview the results of your configured feed(s).
+4. Create a publisher account to link you embeds, so you can get paid!
+5. Video results are automatically posted to your Blog.
 
 == Changelog ==  
 
