@@ -59,6 +59,7 @@
 		<span class="preview-text"><b>Video Channel: </b><?php echo $channel_text; ?></span><br/>
 		<span class="preview-text"><b>Keywords: </b><?php echo $keywords_and; ?></span><br/>
 		<span class="preview-text"><b>Providers: </b><?php echo $provider_text; ?></span><br/>
+		<span class="preview-text">This preview shows the kinds of videos that will be auto-posted for you when they arrive in the Grab Media catalog in the future. If you want to get the embed code for one of these videos to feature in one of your posts, log in to <a href="http://grab-media.com/premium-videos">grab-media.com/premium-videos</a> and find the video you are looking for, and grab the embed code.</span><br/><br/>	
 	<?php
 		foreach ($list_feeds["results"] as $result) {
 	?>
