@@ -410,7 +410,7 @@
 				<tr valign="bottom">
 					<td colspan="2" class="button-tip">						
 						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
-						<span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
+						<span class="hide preview-btn-text">Click here to sample the kinds of videos that will be auto posted by this feed in the future.</span>
 					</td>
 				</tr>
 				<tr>
