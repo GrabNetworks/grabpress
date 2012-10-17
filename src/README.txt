@@ -129,9 +129,25 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Changelog ==  
 
+= 1.0.1 =
+*Features:*
+ 
+ * AUTO-134: The 'grabpress' user is not removed from the WordPress database after the plugin is deactivated and deleted.
+ * AUTO-175: As a publisher, I want to exclude keywords from search parameters, to better refine my results.
+ * AUTO-311: As a publisher, I want to name my feeds, so I can easily identify what I am using the feed for.
+
+*Bug Fixes:*
+
+ * AUTO-263: Create Feed page is displayed when user tries to open 'preview feed' page in new tab.
+ * AUTO-301: On Internet Explorer, running on Windows XP, the keyword values are truncated when editing a feed.
+ * AUTO-308: Creating a new account with an existing account e-mail address does not display appropriate warning.
+
+*Known Issues:*
+  
 = 1.0.0 = 
  * Public Beta
 
 == Upgrade Notice ==
+
 = 1.0.0 =
  * Initial release
