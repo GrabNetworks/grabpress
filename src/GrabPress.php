@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: GrabPress
-Plugin URI: http://www.grab-media.com/publisher/
+Plugin URI: http://www.grab-media.com/publisher/grabpress/ 
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
 Version: 1.0.0b90
 Author: Grab Media
