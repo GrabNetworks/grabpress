@@ -144,7 +144,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_api_location();
-			$location = 'http://'.$apiLocation.$resource;			
+			$location = 'http://'.$apiLocation.$resource;
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -163,9 +163,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$params = substr($params, 0, -1);
 			}
 			switch($method){
-				case 'GET':		
+				case 'GET':					
 					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
-					$location.=$params;		
+					$location.=$params;
 					break;
 				case 'POST';
 					curl_setopt( $ch, CURLOPT_POST, true );
@@ -575,7 +575,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$grab_user = get_user_by('login', 'grabpress');
 			$current_user = wp_get_current_user();
 			wp_delete_user( $grab_user->id, $current_user->id );
-			$response_delete = GrabPress::api_call( 'DELETE', '/connectors/' . $connector_id . '?api_key=' . GrabPress::$api_key );
+			$response_delete = GrabPress::api_call( 'DELETE', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key );
 			GrabPress::$message = 'GrabPress has been deactivated. Any posts that used to be credited to the "grabpress" user are now assigned to you. XML-RPC is still enabled, unless you are using it for anything else, we recommend you turn it off.';
 		}
 
