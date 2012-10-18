@@ -390,6 +390,13 @@
 					</td>
         		</tr>
         		<tr valign="bottom">
+					<th scope="row">Exclude these keywords</th>
+        		           	<td >
+						<input type="text" name="keywords_not" id="keywords_not" class="ui-autocomplete-input" value="<?php echo $form["keywords_not"];?>" />
+						<span class="description">Exclude these keywords</span>
+					</td>
+        		</tr>
+        		<tr valign="bottom">
 						<th scope="row">Content Providers</th>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
@@ -410,7 +417,7 @@
 				<tr valign="bottom">
 					<td colspan="2" class="button-tip">						
 						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
-						<span class="hide preview-btn-text">Click here to sample the kinds of videos that will be auto posted by this feed in the future.</span>
+						<span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
 					</td>
 				</tr>
 				<tr>

@@ -12,6 +12,7 @@
 		<tr>
 			<th>Active</th>
 			<th>Keywords</th>
+			<th>Excluded Keywords</th>
 			<th>Content<br/>Providers</th>			
 			<th>Schedule</th>
 			<th>Max<br/>Results</th>
@@ -66,6 +67,12 @@
 					<?php 
 						$keywords_and_num = strlen($url['keywords_and']);
 						echo $keywords_and = ($keywords_and_num > 15) ? substr($url['keywords_and'],0,15)."..." : $url['keywords_and'];
+					?>							
+				</td>
+				<td>		
+					<?php 
+						$keywords_not_num = strlen($url['keywords_not']);
+						echo $keywords_not = ($keywords_not_num > 15) ? substr($url['keywords_not'],0,15)."..." : $url['keywords_not'];
 					?>							
 				</td>
 				<td>

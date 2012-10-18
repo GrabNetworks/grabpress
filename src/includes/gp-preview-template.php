@@ -15,7 +15,7 @@
 		$channel_text = count($channel)." of ".$channel_total." selected";
 	}
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and)
+		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
 		.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
 	$list_feeds = json_decode($json_preview, true);
 	
@@ -38,7 +38,8 @@
 		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
 		<input type="hidden" name="active" value="<?php echo $active; ?>" id="active" />
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
-		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />	
+		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
+		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />
 		<input type="hidden" name="limit" value="<?php echo $limit; ?>" id="limit" />
 		<input type="hidden" name="schedule" value="<?php echo $schedule; ?>" id="schedule" />
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
@@ -58,8 +59,8 @@
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview" >
 		<span class="preview-text"><b>Video Channel: </b><?php echo $channel_text; ?></span><br/>
 		<span class="preview-text"><b>Keywords: </b><?php echo $keywords_and; ?></span><br/>
+		<span class="preview-text"><b>Keywords excluded: </b><?php echo $keywords_not; ?></span><br/>
 		<span class="preview-text"><b>Providers: </b><?php echo $provider_text; ?></span><br/>
-		<span class="preview-text">This preview shows the kinds of videos that will be auto-posted for you when they arrive in the Grab Media catalog in the future. If you want to get the embed code for one of these videos to feature in one of your posts, log in to <a href="http://grab-media.com/premium-videos">grab-media.com/premium-videos</a> and find the video you are looking for, and grab the embed code.</span><br/><br/>	
 	<?php
 		foreach ($list_feeds["results"] as $result) {
 	?>
