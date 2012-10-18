@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: GrabPress
-Plugin URI: http://www.grab-media.com/publisher/grabpress/ 
+Plugin URI: http://www.grab-media.com/publisher/grabpress/
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
-Version: 1.0.0b90
+Version: 1.0.0b92
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '1.0.0b90';
+		static $version = '1.0.0b92';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa'; // 'grabnetworks';
@@ -144,7 +144,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_api_location();
-			$location = 'http://'.$apiLocation.$resource;
+			$location = 'http://'.$apiLocation.$resource;			
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -163,9 +163,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$params = substr($params, 0, -1);
 			}
 			switch($method){
-				case 'GET':					
+				case 'GET':		
 					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
-					$location.=$params;
+					$location.=$params;		
 					break;
 				case 'POST';
 					curl_setopt( $ch, CURLOPT_POST, true );
@@ -575,7 +575,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$grab_user = get_user_by('login', 'grabpress');
 			$current_user = wp_get_current_user();
 			wp_delete_user( $grab_user->id, $current_user->id );
-			$response_delete = GrabPress::api_call( 'DELETE', '/connectors/' . GrabPress::get_connector_id() . '?api_key=' . GrabPress::$api_key );
+			$response_delete = GrabPress::api_call( 'DELETE', '/connectors/' . $connector_id . '?api_key=' . GrabPress::$api_key );
 			GrabPress::$message = 'GrabPress has been deactivated. Any posts that used to be credited to the "grabpress" user are now assigned to you. XML-RPC is still enabled, unless you are using it for anything else, we recommend you turn it off.';
 		}
 
@@ -1057,8 +1057,8 @@ register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
 register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector' ));
 add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
-add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ));
-//add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
+//add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ));
+add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 
