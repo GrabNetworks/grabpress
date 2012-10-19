@@ -386,7 +386,7 @@
 					<th scope="row">Keywords</th>
         		           	<td >
 						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_and"];?>" maxlength="255" />
-						<span class="description">Enter search terms separated by spaces (e.g. <b>celebrity gossip</b>)</span>
+						<span class="description">Default search setting is 'all of these words'</span>
 					</td>
         		</tr>
         		<tr valign="bottom">
