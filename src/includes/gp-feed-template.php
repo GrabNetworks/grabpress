@@ -386,7 +386,7 @@
 					<th scope="row">Keywords</th>
         		           	<td >
 						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_and"];?>" maxlength="255" />
-						<span class="description">Enter search terms separated by spaces (e.g. <b>celebrity gossip</b>)</span>
+						<span class="description">Default search setting is 'all of these words'</span>
 					</td>
         		</tr>
         		<tr valign="bottom">
@@ -417,7 +417,7 @@
 				<tr valign="bottom">
 					<td colspan="2" class="button-tip">						
 						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
-						<span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
+						<span class="hide preview-btn-text">Click here to sample the kinds of videos that will be auto posted by this feed in the future.</span>
 					</td>
 				</tr>
 				<tr>
