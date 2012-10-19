@@ -1,4 +1,3 @@
-# TEST FOR CS
 === GrabPress ===
 Contributors: grabmedia, jduquette
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
