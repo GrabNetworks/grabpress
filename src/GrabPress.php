@@ -937,7 +937,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								$_REQUEST[ 'action' ] = 'link-user';
 								return GrabPress::dispatcher();
 							}else{
-								GrabPress::$error = 'Error creating user.';
+								GrabPress::$error = 'A user with the supplied email already exists in our system. Please click <a href="http://www.grab-media.com/publisherAdmin/password">here</a> if you forgot your password.';
 								$_REQUEST['action'] = 'create';
 							}
 							break;
