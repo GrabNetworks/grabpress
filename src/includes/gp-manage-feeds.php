@@ -11,8 +11,8 @@
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
 			<th>Active</th>
-			<th>Video<br/>Categories</th>
 			<th>Keywords</th>
+			<th>Excluded Keywords</th>
 			<th>Content<br/>Providers</th>			
 			<th>Schedule</th>
 			<th>Max<br/>Results</th>
@@ -27,8 +27,8 @@
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
-			$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-			$categories_list = json_decode( $json );
+			//$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+			//$categories_list = json_decode( $json );
 
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
 				$feed = $feeds[$n]->feed;
@@ -36,10 +36,12 @@
 				parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
 				$feedId = $feed->id;
 				$providers = explode( ",", $url["providers"] ); // providers chosen by the user
+				$channels = explode( ",", $url["categories"] ); // Video categories chosen by the user
 		?>
 		<form id="form-<?php echo $feedId; ?>" action=""  method="post">
 			<input type="hidden" id="action-<?php echo $feedId; ?>" name="action" value="" />
 			<input type="hidden" name="referer" value="edit" />
+			<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />	
 			<?php 
 				if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){
 					$row_class = "editing-feed";
@@ -57,26 +59,20 @@
 							echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
 					 	}else{ 
 							$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-							echo '<input '.$checked.' type="checkbox" onclick="toggleButton('.$feedId.')" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
+							echo '<input '.$checked.' type="checkbox" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
 						} 
-					?>
-				</td>
-				<td>							
-					<?php
-						foreach ( $categories_list as $record ) {
-							$category = $record -> category;
-							$name = $category -> name;
-							$id = $category -> id;
-							if($name == $feed->name){
-								echo $name;
-							}									
-						}
 					?>
 				</td>
 				<td>		
 					<?php 
-						$keywords_num = strlen($url['keywords']);
-						echo $keywords = ($keywords_num > 15) ? substr($url['keywords'],0,15)."..." : $url['keywords'];
+						$keywords_and_num = strlen($url['keywords_and']);
+						echo $keywords_and = ($keywords_and_num > 15) ? substr($url['keywords_and'],0,15)."..." : $url['keywords_and'];
+					?>							
+				</td>
+				<td>		
+					<?php 
+						$keywords_not_num = strlen($url['keywords_not']);
+						echo $keywords_not = ($keywords_not_num > 15) ? substr($url['keywords_not'],0,15)."..." : $url['keywords_not'];
 					?>							
 				</td>
 				<td>

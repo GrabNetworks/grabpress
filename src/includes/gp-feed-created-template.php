@@ -1,4 +1,8 @@
 <script type="text/javascript">
+jQuery('#message').hide();
+jQuery(document).ready(function($) {
+    $('#wpbody-content').append($('#message'));
+});
 var gp_redirect_url = "admin.php?page=autoposter";
 var gp_redirect_seconds = 4;
 var gp_redirect_time;
@@ -17,7 +21,7 @@ jQuery(function(){
 })
 </script>
 
-<div id="message" class="updated fade">
+<div id="message-feed-created" class="updated fade">
   <p>
     Feed created successfully.  Redirecting in 5 seconds ...  If you are not redirected automatically, please press <a href="admin.php?page=autoposter">here</a>
   </p>

@@ -164,8 +164,8 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
     background: url("images/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6; 
     border: 1px solid #CCCCCC; color: #999; 
     font-weight: bold; 
-    padding: 10px;
-    height: 30px;
+    padding: 2px 10px 1px 10px;
+    height: 22px;
     *height: 17px;
     *padding-top: 5px;  
     width: 230px; 
@@ -388,8 +388,12 @@ span.warning {
 	font-size: 10px;
 }
 #cancel-editing{
-	margin-left: 30px;
-	font-size: 10px;
+	font-size: 12px;
+    float: right;
+}
+#reset-form{
+    float: right;
+    margin: 0 15px 0 10px;
 }
 #acknowledge #confirm{
 	margin-left: 10px;
@@ -408,10 +412,14 @@ span.warning {
 	width: 850px;
 }
 
-td.button-tip{ text-align: center; }
+td.button-tip{ padding-left: 160px; height: 27px; /*text-align: center;*/ }
 #btn-create-feed {
 float: right;
 }
 #buttons {
 line-height: 24px;
 }
+.button-tip span.description{
+    float: center;  
+}
+#message{ /* position: relative; top: 150px; left: 0px;*/ }

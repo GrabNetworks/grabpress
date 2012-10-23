@@ -9,8 +9,7 @@
 	( function ( global, $ ) {
 
 		global.hasValidationErrors = function () {
-			var category =  $('#channel-select').val();
-			if((category == '') || ($("#provider-select :selected").length == 0)){
+			if(($("#channel-select :selected").length == 0) || ($("#provider-select :selected").length == 0)){
 				return true;
 			}
 			else {
@@ -28,7 +27,8 @@
 			}
 		}
 
-		global.deleteFeed = function(id){	
+		global.deleteFeed = function(id){
+			var bg_color = $('#tr-'+id+' td').css("background-color")
 			$('#tr-'+id+' td').css("background-color","red");	
 			var form = $('#form-'+id);
 			var action = $('#action-'+id);			
@@ -44,7 +44,7 @@
 					});
 
 				} else{					
-					$('#tr-'+id+' td').css("background-color","#FFE4C4");
+					$('#tr-'+id+' td').css("background-color", bg_color);
 					return false;
 				}
 		}
@@ -122,6 +122,17 @@
 	  	 selectedText: "# of # selected"
 	};
 
+	var multiSelectOptionsChannels = {
+	  	 noneSelectedText:"Select Video Categories",
+	  	 selectedText:function(selectedCount, totalCount){
+			if (totalCount==selectedCount){
+	  	 		return "All Video Categories";
+	  	 	}else{
+	  	 		return selectedCount + " of " + totalCount + " Video Categories";
+	  	 	}
+	  	 }
+	};
+
 	jQuery(function($){
 		$('#reset-form').bind('click', function(e){
 		    var referer = $("input[name=referer]").val();
@@ -145,6 +156,11 @@
 		if($('#provider-select option:selected').length == 0){
 			$('#provider-select option').attr('selected', 'selected');
 		}
+
+		if($('#channel-select option:selected').length == 0){
+			$('#channel-select option').attr('selected', 'selected');
+		}
+
 		var category_options = $('#cat option');
 		for(var i=0;i<category_options.length; i++){
 			if($.inArray($(category_options[i]).val(),selectedCategories)>-1){
@@ -169,11 +185,9 @@
 		  $(".provider-select-update").multiselect(multiSelectOptions, {
 		  	 uncheckAll: function(e, ui){
 		  	 	id = this.id.replace('provider-select-update-','');
-		  	 	toggleButton(id);
 			 },
 			 checkAll: function(e, ui){
 		  	 	id = this.id.replace('provider-select-update-','');
-		  	 	toggleButton(id);
 			 }
 		   }).multiselectfilter();
 
@@ -199,15 +213,13 @@
 		  	header:false,
 		  	uncheckAll: function(e, ui){
 		  	 	id = this.id.replace('postcats-','');
-		  	 	toggleButton(id);
 			 },
 			 checkAll: function(e, ui){
 		  	 	id = this.id.replace('postcats-','');
-		  	 	toggleButton(id);
 			 }
 		  }).multiselectfilter();
 
-		  $(".channel-select").selectmenu();
+		  //$(".channel-select").selectmenu();
 		  $(".schedule-select").selectmenu();
 		  $(".limit-select").selectmenu();
 		  $(".author-select").selectmenu();
@@ -264,7 +276,16 @@
 
 		  $(".ui-selectmenu").click(function(){
 			    $(".ui-multiselect-menu").css("display", "none");
-			});
+			});		  
+
+		  $("#channel-select").multiselect(multiSelectOptionsChannels, {
+		  	 uncheckAll: function(e, ui){
+		  	 	
+			 },
+			 checkAll: function(e, ui){
+		  	 	
+			 }
+		   });
 
 		  $("#form-create-feed").change(doValidation);	
 		  //$("input").keyup(doValidation);
@@ -337,16 +358,23 @@
 				<tr valign="bottom">
 					<th scope="row">Grab Video Categories<span class="asterisk">*</span></th>
 					<td>
-						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel" id="channel-select" class="channel-select" style="width:500px" >
-							<option <?php  ( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>
+						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />
+						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+							<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
 							<?php
+								if(is_array($form["channel"])){
+									$channels = $form["channel"];
+								}else{
+									$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
+								}
+								
 								$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 								$list = json_decode( $json );
 								foreach ( $list as $record ) {
-									$category = $record -> category;
-									$name = $category -> name;
-									$id = $category -> id;
-									$selected = ( $name == $form["channel"] )?'selected="selected"':"";
+									$channel = $record -> category;
+									$name = $channel -> name;
+									$id = $channel -> id;
+									$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
 									echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>\n';
 								}
 							?>
@@ -357,8 +385,15 @@
 	        	<tr valign="bottom">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keywords" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords"];?>" maxlength="255" />
-						<span class="description">Enter search terms separated by spaces (e.g. <b>celebrity gossip</b>)</span>
+						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_and"];?>" maxlength="255" />
+						<span class="description">Default search setting is 'all of these words'</span>
+					</td>
+        		</tr>
+        		<tr valign="bottom">
+					<th scope="row">Exclude these keywords</th>
+        		           	<td >
+						<input type="text" name="keywords_not" id="keywords_not" class="ui-autocomplete-input" value="<?php echo $form["keywords_not"];?>" />
+						<span class="description">Exclude these keywords</span>
 					</td>
         		</tr>
         		<tr valign="bottom">
@@ -382,7 +417,7 @@
 				<tr valign="bottom">
 					<td colspan="2" class="button-tip">						
 						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
-						<span class="hide preview-btn-text">Click to preview which videos will be autoposted from this feed</span>
+						<span class="hide preview-btn-text">Click here to sample the kinds of videos that will be auto posted by this feed in the future.</span>
 					</td>
 				</tr>
 				<tr>
@@ -435,7 +470,7 @@
 						<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
 							<?php 
 								for ( $o = 1; $o < 6; $o++ ) {
-									$selected = ( $o == $form["limit"] )?'selected="selected"':"";
+									$selected = ((isset($form["limit"])) && ( $o == $form["limit"] )) ?'selected="selected"':"";
 									echo "<option value = \"$o\" $selected>$o</option>\n";
 								} 
 							?>
@@ -462,7 +497,7 @@
 								foreach ( $blogusers as $user ) {
 									$author_name = $user->display_name;
 									$author_id = $user->ID;
-									$selected = ( $form["author"]==$author_id )?'selected="selected"':"";
+									$selected = ((isset($form["author"])) && ( $form["author"]==$author_id ) )?'selected="selected"':"";
 									echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
 								}
 							?>
@@ -505,14 +540,11 @@
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
+						
 						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" />
-										
-
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>	
-						<a id="reset-form" href="#">reset form</a>	
-				
-
+						<a id="reset-form" href="#">reset form</a>
+						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>				
+						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
 					</td>
 				</tr>
 				</table>
@@ -530,6 +562,8 @@
 			array( "form" => $_REQUEST,
 				"list_provider" => $list_provider,
 				"providers_total" => $providers_total,
+				"list_channels" => $list_channels,
+				"channels_total" => $channels_total,
 				"blogusers" => $blogusers 
 			)
 		); 
