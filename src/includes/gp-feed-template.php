@@ -120,26 +120,40 @@
 				name: name
 			};
 
-			$.post(ajaxurl, data, function(response) {
-				//alert('Got this from the server: ' + response);
-				if(response != "true"){
-					if((feed_date == name) && ((typeof edit === "undefined") || (edit===null))){
-						$('#dialog-name').val(name);
-						$('#dialog').dialog('open');
-					}else{
-						if( (!regx.test(name)) || (regx_name.test(name)) ){
-							alert("The name entered contains special characters or starts/ends with spaces. Please enter a different name");
-						}else if(name.length < 6){					
-							alert("The name entered is less than 6 characters. Please enter a name between 6 and 14 characters");
-						}else {
-							$('#name').val(name);
-							$("#form-create-feed").submit();
-						}				
-					}
-				}else{					
-					alert("The name entered is already in use. Please select a different name");
-				}				
-			});	
+			// Update feed
+			if(edit === "update"){ 
+				if( (!regx.test(name)) || (regx_name.test(name)) ){
+					alert("The name entered contains special characters or starts/ends with spaces. Please enter a different name");
+				}else if(name.length < 6){					
+					alert("The name entered is less than 6 characters. Please enter a name between 6 and 14 characters");
+				}else {
+					$('#name').val(name);
+					$("#form-create-feed").submit();
+				}
+	
+			}else{  // Create feed
+				$.post(ajaxurl, data, function(response) {
+					//alert('Got this from the server: ' + response);
+				    if(response != "true"){
+					   	if((feed_date == name) && ((typeof edit === "undefined") || (edit===null))){
+							$('#dialog-name').val(name);
+							$('#dialog').dialog('open');
+				    	}else{
+							if( (!regx.test(name)) || (regx_name.test(name)) ){
+								alert("The name entered contains special characters or starts/ends with spaces. Please enter a different name");
+							}else if(name.length < 6){					
+								alert("The name entered is less than 6 characters. Please enter a name between 6 and 14 characters");
+							}else {
+								$('#name').val(name);
+								$("#form-create-feed").submit();
+							}				
+						}
+					}else{					
+						alert("The name entered is already in use. Please select a different name");
+					}				
+				});	
+			}
+
 		}
 
 	} )( window, jQuery );
@@ -342,46 +356,10 @@
                 "Create Feed": function() {
                   var name = $("#dialog-name").val();
                   $("#name").val(name);
-                  //$("#form-create-feed").submit();
                   validateFeedName("edit");
                 }
             }
           }); 
-         
-		/*$("#btn-create-feed").click(function() {
-			var feed_date = $('#feed_date').val();
-			var name = $('#name').val();
-			name = $.trim(name);
-			//alert(name);
-			var regx = /^\s*[a-zA-Z0-9,\s]+\s*$/;
-
-			var data = {
-				action: 'get_name_action',
-				name: name
-			};
-
-			$.post(ajaxurl, data, function(response) {
-				//alert('Got this from the server: ' + response);
-				if(response != "true"){
-					if(feed_date == name){
-						$('#dialog-name').val(name);
-						$('#dialog').dialog('open');
-					}else{
-						if(!regx.test(name)){
-							alert("The name entered contains special characters or starts/ends with spaces. Please enter a different name");
-						}else if(name.length < 6){					
-							alert("Feed Name must be minimum six characters");
-						}else {
-							$("#form-create-feed").submit();
-						}				
-					}
-				}else{					
-					alert("Duplicated name");
-				}
-				
-			});		
-
-		}); */
 		 
 	});
 
@@ -640,8 +618,8 @@
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<?php $click = ( isset($_GET['action'])=='edit-feed' ) ? '' : 'onclick="validateFeedName()"' ?>
-						<input type="button" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
+						<?php //$click = ( isset($_GET['action'])=='edit-feed' ) ? '' : 'onclick="validateFeedName()"' ?>
+						<input type="button" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" onclick="validateFeedName('update')"  />
 						<a id="reset-form" href="#">reset form</a>
 						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>				
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>

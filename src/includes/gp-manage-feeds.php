@@ -66,7 +66,6 @@
 				</td>
 				<td>		
 					<?php 
-						//var_dump($feed); echo "<br/><br/>";
 						echo $feed->name;
 					?>							
 				</td>
