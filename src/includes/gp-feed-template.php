@@ -111,7 +111,12 @@
 
 		global.validateFeedName = function(edit){
 			var feed_date = $('#feed_date').val();
-			var name = $.trim($('#name').val());
+			var name = $('#name').val();
+			if(name == ""){
+				$('#name').val(feed_date);
+				$("#form-create-feed").submit();
+			}
+			name = $.trim($('#name').val());
 			var regx_name = /\s/;		
 			var regx = /^\s*[a-zA-Z0-9,\s]+\s*$/;
 
@@ -428,8 +433,8 @@
 					<th scope="row">Feed Name</th>
         		    <td>
         		    	<?php $feed_date = date("YmdHis"); ?>	
-        		    	<input type="hidden" name="feed_date" value="<?php echo $feed_date; ?>" id="feed_date" />
-						<input type="text" name="name" id="name" class="ui-autocomplete-input" value="<?php echo $name = isset($form["name"])? $form["name"] : date("YmdHis"); ?>" maxlength="14" />
+        		    	<input type="hidden" name="feed_date" value="<?php echo $name = isset($form["name"])? $form["name"] : $feed_date; ?>" id="feed_date" />
+						<input type="text" name="name" id="name" class="ui-autocomplete-input" value="<?php echo $name = isset($form["name"])? $form["name"] : $feed_date; ?>" maxlength="14" />
 						<span class="description">Feed Name</span>
 					</td>
         		</tr>
@@ -618,8 +623,8 @@
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<?php //$click = ( isset($_GET['action'])=='edit-feed' ) ? '' : 'onclick="validateFeedName()"' ?>
-						<input type="button" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" onclick="validateFeedName('update')"  />
+						<?php $click = ( isset($_GET['action'])=='edit-feed' ) ? 'onclick="validateFeedName(\'update\')"' : 'onclick="validateFeedName()"' ?>
+						<input type="button" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
 						<a id="reset-form" href="#">reset form</a>
 						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>				
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
