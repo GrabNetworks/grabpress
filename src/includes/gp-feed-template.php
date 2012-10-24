@@ -72,11 +72,13 @@
 				$('#btn-create-feed').removeAttr('disabled');
 				$('#btn-preview-feed').removeAttr('disabled');
 
+				/*
 				if( $( '#btn-create-feed' ).off ){
 					$( '#btn-create-feed' ).off('click');
 				}else{
 					$( '#btn-create-feed' ).unbind('click');
 				}
+				*/
 
 				if( $( '#btn-preview-feed' ).off ){
 					$( '#btn-preview-feed' ).off('click');
@@ -88,11 +90,13 @@
 				$( '#btn-create-feed' ).attr('disabled', 'disabled');
 				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
 				
+				/*
 				if( $( '#btn-create-feed' ).off ){
 					$( '#btn-create-feed' ).off('click');
 				}else{
 					$( '#btn-create-feed' ).unbind('click');
 				}
+				*/
 
 				if( $( '#btn-preview-feed' ).off ){
 					$( '#btn-preview-feed' ).off('click');
@@ -102,6 +106,40 @@
 
 				$('.hide').hide();
 			}
+			
+		}
+
+		global.validateFeedName = function(edit){
+			var feed_date = $('#feed_date').val();
+			var name = $.trim($('#name').val());
+			var regx_name = /\s/;		
+			var regx = /^\s*[a-zA-Z0-9,\s]+\s*$/;
+
+			var data = {
+				action: 'get_name_action',
+				name: name
+			};
+
+			$.post(ajaxurl, data, function(response) {
+				//alert('Got this from the server: ' + response);
+				if(response != "true"){
+					if((feed_date == name) && ((typeof edit === "undefined") || (edit===null))){
+						$('#dialog-name').val(name);
+						$('#dialog').dialog('open');
+					}else{
+						if( (!regx.test(name)) || (regx_name.test(name)) ){
+							alert("The name entered contains special characters or starts/ends with spaces. Please enter a different name");
+						}else if(name.length < 6){					
+							alert("The name entered is less than 6 characters. Please enter a name between 6 and 14 characters");
+						}else {
+							$('#name').val(name);
+							$("#form-create-feed").submit();
+						}				
+					}
+				}else{					
+					alert("The name entered is already in use. Please select a different name");
+				}				
+			});	
 		}
 
 	} )( window, jQuery );
@@ -292,6 +330,59 @@
 		  //$("input").click(doValidation);
 		  //$("select").change(doValidation);
 
+		  $('#dialog').dialog({
+            autoOpen: false,
+            width: 400,
+            modal: true,
+            resizable: false,
+            buttons: {
+            	"Cancel": function() {
+                  $(this).dialog("close");
+                },
+                "Create Feed": function() {
+                  var name = $("#dialog-name").val();
+                  $("#name").val(name);
+                  //$("#form-create-feed").submit();
+                  validateFeedName("edit");
+                }
+            }
+          }); 
+         
+		/*$("#btn-create-feed").click(function() {
+			var feed_date = $('#feed_date').val();
+			var name = $('#name').val();
+			name = $.trim(name);
+			//alert(name);
+			var regx = /^\s*[a-zA-Z0-9,\s]+\s*$/;
+
+			var data = {
+				action: 'get_name_action',
+				name: name
+			};
+
+			$.post(ajaxurl, data, function(response) {
+				//alert('Got this from the server: ' + response);
+				if(response != "true"){
+					if(feed_date == name){
+						$('#dialog-name').val(name);
+						$('#dialog').dialog('open');
+					}else{
+						if(!regx.test(name)){
+							alert("The name entered contains special characters or starts/ends with spaces. Please enter a different name");
+						}else if(name.length < 6){					
+							alert("Feed Name must be minimum six characters");
+						}else {
+							$("#form-create-feed").submit();
+						}				
+					}
+				}else{					
+					alert("Duplicated name");
+				}
+				
+			});		
+
+		}); */
+		 
 	});
 
 	jQuery(window).load(function () {
@@ -355,6 +446,15 @@
 						<h3>Search Criteria</h3>
 					</td>					
 				</tr>
+				<tr valign="bottom">
+					<th scope="row">Feed Name</th>
+        		    <td>
+        		    	<?php $feed_date = date("YmdHis"); ?>	
+        		    	<input type="hidden" name="feed_date" value="<?php echo $feed_date; ?>" id="feed_date" />
+						<input type="text" name="name" id="name" class="ui-autocomplete-input" value="<?php echo $name = isset($form["name"])? $form["name"] : date("YmdHis"); ?>" maxlength="14" />
+						<span class="description">Feed Name</span>
+					</td>
+        		</tr>
 				<tr valign="bottom">
 					<th scope="row">Grab Video Categories<span class="asterisk">*</span></th>
 					<td>
@@ -540,8 +640,8 @@
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						
-						<input type="submit" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" />
+						<?php $click = ( isset($_GET['action'])=='edit-feed' ) ? '' : 'onclick="validateFeedName()"' ?>
+						<input type="button" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
 						<a id="reset-form" href="#">reset form</a>
 						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>				
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
@@ -553,6 +653,13 @@
 <?php if(isset($_GET['action'])=='edit-feed') { ?>
 <span class="edit-form-text display-element" >Please use the form above to edit the settings of the feed marked "editing" below</span>
 <?php } ?>
+
+<div id="dialog" title="Name your feed">
+	<p style="color:red; font-size:14px;"><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>Please Name Your Feed</p>
+	<p>You have not provided a custom feed name. You may keep it
+      as-is, but we recommend customizing it below.</p>
+	<input type="text" name="dialog-name" id="dialog-name" maxlength="14" />
+</div>
 
 <?php
 	$feeds = GrabPress::get_feeds();

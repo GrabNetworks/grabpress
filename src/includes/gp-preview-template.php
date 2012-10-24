@@ -37,6 +37,7 @@
 		<?php } ?>
 		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
 		<input type="hidden" name="active" value="<?php echo $active; ?>" id="active" />
+		<input type="hidden" name="name" value="<?php echo $name; ?>" id="name" />
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
 		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
 		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />

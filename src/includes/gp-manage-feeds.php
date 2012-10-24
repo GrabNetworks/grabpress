@@ -11,6 +11,7 @@
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
 			<th>Active</th>
+			<th>Feed Name</th>
 			<th>Keywords</th>
 			<th>Excluded Keywords</th>
 			<th>Content<br/>Providers</th>			
@@ -62,6 +63,12 @@
 							echo '<input '.$checked.' type="checkbox" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
 						} 
 					?>
+				</td>
+				<td>		
+					<?php 
+						//var_dump($feed); echo "<br/><br/>";
+						echo $feed->name;
+					?>							
 				</td>
 				<td>		
 					<?php 
