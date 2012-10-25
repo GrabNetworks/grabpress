@@ -11,6 +11,8 @@
 	<table class="grabpress-table manage-table" cellspacing="0">
 		<tr>
 			<th>Active</th>
+			<th>Name</th>
+			<th>Video Categories</th>
 			<th>Keywords</th>
 			<th>Excluded Keywords</th>
 			<th>Content<br/>Providers</th>			
@@ -27,8 +29,8 @@
 		<?php
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
-			//$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-			//$categories_list = json_decode( $json );
+			$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+			$categories_list = json_decode( $json );
 
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
 				$feed = $feeds[$n]->feed;
@@ -62,6 +64,24 @@
 							echo '<input '.$checked.' type="checkbox" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
 						} 
 					?>
+				</td>
+				<td>		
+					<?php 
+						echo $feed->name;
+					?>							
+				</td>
+				<td>		
+					<?php 
+						$video_categories_array = explode(",", $url['categories']);
+						$video_categories_num = count($video_categories_array);
+						if($url['categories'] == ""){
+							echo "All Video Categories";
+						}else if($video_categories_num == 1){							
+							echo $video_categories = ($video_categories_num > 15) ? substr($url['categories'],0,15)."..." : $url['categories'];
+						}else{
+							echo $video_categories_num." selected";
+						}
+					?>							
 				</td>
 				<td>		
 					<?php 

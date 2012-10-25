@@ -144,7 +144,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_api_location();
-			$location = 'http://'.$apiLocation.$resource;			
+			$location = 'http://'.$apiLocation.$resource;		
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -165,7 +165,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			switch($method){
 				case 'GET':		
 					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
-					$location.=$params;	
+					$location.=$params;
 					break;
 				case 'POST';
 					curl_setopt( $ch, CURLOPT_POST, true );
@@ -268,6 +268,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$channelsList = '';
 				}
 
+				$name = rawurlencode( $_REQUEST[ 'name' ] );
 				$keywords_and = rawurlencode( $_REQUEST[ 'keywords_and' ] );
 				$keywords_not = rawurlencode( $_REQUEST[ 'keywords_not' ] );
 
@@ -306,7 +307,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 				$post_data = array(
 					'feed' => array(
-						'name' => $channelsList,
+						'name' => $name,
 						'posts_per_update' => $_REQUEST[ 'limit' ],
 						'url' => $url,
 						'custom_options' => array(
@@ -356,6 +357,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					array("form" => array( "referer" => "edit",
 										   "action" => "modify",
 										   "feed_id" => $_REQUEST["feed_id"],
+										   "name" => $_REQUEST["name"],
 										   "channel" => $_REQUEST["channel"],
 										   "keywords_and" => $_REQUEST["keywords_and"],
 										   "keywords_not" => $_REQUEST["keywords_not"],										   
@@ -387,7 +389,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						array("form" => array( "referer" => "edit",
 											   "action" => "modify",
 											   "feed_id" => $feed_id,
-											   "channel" => $feed->feed->name,
+											   "name" => $feed->feed->name,
+											   //"channel" => $feed->feed->name,
+											   "channel" => $url['categories'],
 											   "keywords_and" => $url['keywords_and'],
 											   "keywords_not" => $url['keywords_not'],
 											   "limit" => $feed->feed->posts_per_update,
@@ -712,13 +716,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$cats[] = "";
 				}
 
-				$channel = explode( ',', $feed->feed->name );				 
+				//$channel = explode( ',', $feed->feed->name );		 
 
 				print GrabPress::fetch( "includes/gp-preview-template.php", 
 					array( "referer" => "edit",
 						   "action" => "edit-feed",
 						   "feed_id" => $feed_id,
-						   "channel" => $channel,
+						   "name" => $feed->feed->name,
+						   //"channel" => $channel,
 						   "keywords_and" => $url['keywords_and'],
 						   "keywords_not" => $url['keywords_not'],
 						   "limit" => $feed->feed->posts_per_update,
@@ -787,6 +792,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				case 'modify':
 					$feed_id = $_REQUEST['feed_id'];
+					$name = htmlspecialchars( $_REQUEST['name'] );
 					$keywords_and = htmlspecialchars( $_REQUEST['keywords_and'] );
 					$keywords_not = htmlspecialchars( $_REQUEST['keywords_not'] );
 					//$categories = $_REQUEST[ 'channel' ];
@@ -838,7 +844,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$post_data = array(
 						'feed' => array(
 							'active' => $active,
-							'name' => $channelsList,
+							'name' => $name,
 							'posts_per_update' => $_REQUEST[ 'limit' ],
 							'url' => $url,
 							'custom_options' => array(
@@ -937,7 +943,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								$_REQUEST[ 'action' ] = 'link-user';
 								return GrabPress::dispatcher();
 							}else{
-								GrabPress::$error = 'A user with the supplied email already exists in our system. Please click <a href="http://www.grab-media.com/publisherAdmin/password">here</a> if you forgot your password.';
+								GrabPress::$error = 'Error creating user.';
 								$_REQUEST['action'] = 'create';
 							}
 							break;
@@ -1038,6 +1044,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			die(); // this is required to return a proper result
 		}
 
+		static function get_name_action_callback() {	
+			$name = $_REQUEST['name'];	
+
+			$feeds = GrabPress::get_feeds();
+			$num_feeds = count( $feeds );
+
+			foreach ( $feeds as $record_feed ) {
+				if($record_feed->feed->name == $name){
+					$duplicated_name = "true";
+					break;
+				}else{
+					$duplicated_name = "false";
+				}
+			}
+
+			echo $duplicated_name;
+			die(); // this is required to return a proper result
+		}
+
 	}//class
 }//ifndefclass
 GrabPress::log( '-------------------------------------------------------' );
@@ -1051,5 +1076,6 @@ add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
 add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
+add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
 
 GrabPress::allow_tags();
