@@ -2,7 +2,7 @@
 /*
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
-Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Create or use an existing Grab Media Publisher account to get paid!
+Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
 Version: 1.0.0b93
 Author: Grab Media
 Author URI: http://www.grab-media.com
@@ -943,7 +943,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								$_REQUEST[ 'action' ] = 'link-user';
 								return GrabPress::dispatcher();
 							}else{
-								GrabPress::$error = 'Error creating user.';
+								GrabPress::$error = 'A user with the supplied email already exists in our system. Please click <a href="http://www.grab-media.com/publisherAdmin/password">here</a> if you forgot your password.';
 								$_REQUEST['action'] = 'create';
 							}
 							break;
@@ -1063,6 +1063,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			die(); // this is required to return a proper result
 		}
 
+
 	}//class
 }//ifndefclass
 GrabPress::log( '-------------------------------------------------------' );
@@ -1077,5 +1078,4 @@ add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
-
 GrabPress::allow_tags();
