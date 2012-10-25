@@ -144,7 +144,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_api_location();
-			$location = 'http://'.$apiLocation.$resource;	
+			$location = 'http://'.$apiLocation.$resource;		
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -716,7 +716,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$cats[] = "";
 				}
 
-				$channel = explode( ',', $url['categories'] );	 
+				$channel = explode( ',', $url['categories'] );		 
 
 				print GrabPress::fetch( "includes/gp-preview-template.php", 
 					array( "referer" => "edit",
