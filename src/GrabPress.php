@@ -716,14 +716,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$cats[] = "";
 				}
 
-				//$channel = explode( ',', $feed->feed->name );		 
+				$channel = explode( ',', $url['categories'] );		 
 
 				print GrabPress::fetch( "includes/gp-preview-template.php", 
 					array( "referer" => "edit",
 						   "action" => "edit-feed",
 						   "feed_id" => $feed_id,
 						   "name" => $feed->feed->name,
-						   //"channel" => $channel,
+						   "channel" => $channel,
 						   "keywords_and" => $url['keywords_and'],
 						   "keywords_not" => $url['keywords_not'],
 						   "limit" => $feed->feed->posts_per_update,
