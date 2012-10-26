@@ -25,7 +25,7 @@ www.grab-media.com
 
 **Manual Plugin Installation:**
 
-1.  Download GrabPress from [http://downloads.wordpress.org/plugin/grabpress.1.0.0.1.zip] and save to your hard drive desktop  
+1.  Download GrabPress from [http://wordpress.org/extend/plugins/grabpress/] and save to your hard drive desktop  
 2.  Read the "README" file to insure installation instructions are followed accurately
 3.  Login to your WordPress dashboard  
 4.  Click 'Plugins' from your left side navigation menu  
