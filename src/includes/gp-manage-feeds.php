@@ -199,13 +199,13 @@
 					}
 				?>
 				<td>
-					<a href="#" onclick="previewFeed(<?php echo $feedId; ?>);return false;" id="btn-preview-feed-<?php echo $feedId; ?>" class="<?php echo $class_preview_button; ?>" >preview</a>
+					<a href="admin.php?page=autoposter&action=preview-feed&feed_id=<?php echo $feedId; ?>"  id="btn-preview-feed-<?php echo $feedId; ?>" class="<?php echo $class_preview_button; ?> btn-preview-feed" >preview</a>
 				</td>
 				<td>
 					<?php if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){ 
 						echo $text_edit_button;
 					 }else{ ?>				
-					<a href="#" onclick="editFeed(<?php echo $feedId; ?>);return false;" id="btn-update-<?php echo $feedId; ?>" class="<?php echo $class_edit_button; ?>">						
+					<a href="admin.php?page=autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="<?php echo $class_edit_button; ?> btn-update-feed">						
 						<?php echo $text_edit_button; ?>
 					</a>
 					<?php } ?>

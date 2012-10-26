@@ -365,7 +365,45 @@
                 }
             }
           }); 
-		 
+
+	       $(".btn-update-feed").mousedown(function(event) {
+			   if( event.which == 2 ) {
+			   	  return false;
+			   	  id = this.id.replace('btn-update-','');
+          	      editFeed(id); 
+			   }
+		   });
+	      $('.btn-update-feed').bind("click",function(e){
+          	id = this.id.replace('btn-update-','');
+          	editFeed(id);
+	        return false;
+	      });
+
+          $('.btn-update-feed').bind("contextmenu",function(e){
+          	id = this.id.replace('btn-update-','');
+          	editFeed(id);
+	        return false;
+	      });
+
+	      $(".btn-preview-feed").mousedown(function(event) {
+			   if( event.which == 2 ) {
+			   	  return false;
+			   	  id = this.id.replace('btn-preview-feed-','');
+          	      previewFeed(id); 
+			   }
+		   });
+	      $('.btn-preview-feed').bind("click",function(e){
+          	id = this.id.replace('btn-preview-feed-','');
+          	previewFeed(id);
+	        return false;
+	      });
+
+          $('.btn-preview-feed').bind("contextmenu",function(e){
+          	id = this.id.replace('btn-preview-feed-','');
+          	previewFeed(id);
+	        return false;
+	      });
+
 	});
 
 	jQuery(window).load(function () {
