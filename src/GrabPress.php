@@ -621,6 +621,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 10 );
 			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
 			//GrabPress::grabpress_plugin_messages();			
@@ -632,6 +633,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			//  wp_die( __('You do not have sufficient permissions to access this page.') );
 			// }
 			print GrabPress::fetch( 'includes/gp-account-template.php' );
+		}
+
+		static function render_catalog_management() {
+			GrabPress::log();
+			//if (!current_user_can('manage_options'))  {
+			//  wp_die( __('You do not have sufficient permissions to access this page.') );
+			// }
+			print GrabPress::fetch( 'includes/gp-catalog-template.php' );
 		}
 
 		static function _filter_out_out_providers( $x ) {
@@ -958,6 +967,18 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPress::render_account_management();
 					break;
 				}
+
+			case 'catalog':
+				if(isset($_REQUEST[ 'action' ])){
+					switch ( $_REQUEST[ 'action' ] ) {
+						case '':
+						break;
+						default:
+						GrabPress::render_catalog_management();
+						break;
+					}
+				}
+			break;	
 			}
 		}
 
