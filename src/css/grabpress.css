@@ -423,11 +423,11 @@ line-height: 24px;
     float: center;  
 }
 #message{ /* position: relative; top: 150px; left: 0px;*/ }
-.preview-text-catalog { /*display: block;*/ }
-.preview-text-catalog b{ display: block; width: 150px; float: left; }
-.preview-text-catalog #input-keyword{ width: 600px; float: right; width: 668px; }
+#catalog-page .preview-text-catalog { /*display: block;*/ }
+#catalog-page .preview-text-catalog b{ display: block; width: 150px; float: left; }
+#catalog-page .preview-text-catalog #keywords_and{ width: 600px; float: right; width: 668px; }
 .clear{ clear:both; }
-
+/* Catalog page*/
 #catalog-page .result-tile {
     border-top: 1px solid black;
     float: left;
@@ -483,4 +483,4 @@ line-height: 24px;
 .datepicker{ width: 58px;}
 #catalog-page .label-tile .ui-multiselect{ width: 250px !important; }
 #catalog-page #provider-select{ }
-#catalog-page .datepicker{ margin: 0 5px; }
+#catalog-page .datepicker{ font-size: 11px; margin: 0 5px; width: 63px; }

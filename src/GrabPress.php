@@ -144,7 +144,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			$json = json_encode( $data );
 			$apiLocation = GrabPress::get_api_location();
-			$location = 'http://'.$apiLocation.$resource;		
+			$location = 'http://'.$apiLocation.$resource;
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $location );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -624,7 +624,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
-			//GrabPress::grabpress_plugin_messages();			
+			//GrabPress::grabpress_plugin_messages();
 		}
 
 		static function render_account_management() {
@@ -640,7 +640,18 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			//if (!current_user_can('manage_options'))  {
 			//  wp_die( __('You do not have sufficient permissions to access this page.') );
 			// }
-			print GrabPress::fetch( 'includes/gp-catalog-template.php' );
+			print GrabPress::fetch( 'includes/gp-catalog-template.php' ,
+				array( "form" => $_REQUEST ) );
+			/*
+			print GrabPress::fetch( 'includes/gp-feed-template.php',
+				array( "form" => $_REQUEST,
+					"list_provider" => $list_provider,
+					"providers_total" => $providers_total,
+					"list_channels" => $list_channels,
+					"channels_total" => $channels_total,
+					"blogusers" => $blogusers ) );
+			*/
+
 		}
 
 		static function _filter_out_out_providers( $x ) {
@@ -971,10 +982,22 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			case 'catalog':
 				if(isset($_REQUEST[ 'action' ])){
 					switch ( $_REQUEST[ 'action' ] ) {
-						case '':
+						case 'update':
+						if ( GrabPress::validate_key() && $_REQUEST[ 'channel' ] != '' && $_REQUEST[ 'provider' ] != '' ) {
+							GrabPress::create_feed();
+							GrabPress::render_feed_creation_success();
+						}else {
+							GrabPress::$invalid = true;
+							GrabPress::render_feed_management();
+						}
+						break;
+						case 'catalog-search':
+							$keywords = $_REQUEST['keywords'];
+							echo "KEYWORD: "; var_dump($keywords); echo "<br/><br/>";
+							GrabPress::render_catalog_management();
 						break;
 						default:
-						GrabPress::render_catalog_management();
+							GrabPress::render_catalog_management();
 						break;
 					}
 				}

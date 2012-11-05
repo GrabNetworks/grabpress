@@ -1,29 +1,105 @@
 <?php 
 	//$providers = join($provider, ",");
-    /*
-	$provider_total = count(GrabPress::get_providers());
-	if(($provider_total == count($provider)) || in_array("", $provider)){
-		$provider_text = "All Providers";
-	}else{
-		$provider_text = count($provider)." of ".$provider_total." selected";
+	/*
+	if(isset($form['provider'])){
+		$providers = join($form['provider'], ",");
 	}
 	*/
-
-
 	$list_provider = GrabPress::get_providers();
 	$providers_total = count( $list_provider );
+	if(isset($form['provider'])){
+		//echo "PROVIDERFORM: "; var_dump($form['provider']); echo "<br/><br/>"; 
+
+		$providers = isset($form['provider']) ? join($form['provider'], ","): "";		
+		//$provider_total = count(GrabPress::get_providers());
+
+		if(($providers_total == count($form['provider'])) || in_array("", $form['provider'])){
+			$provider_text = "All Providers";
+			$providers = "";
+		}else{
+			$provider_text = count($form['provider'])." of ".$providers_total." selected";
+		}
+		echo "PROVIDER: "; var_dump($providers); echo "<br/><br/>";   
+	}else{
+		$providers = "";
+	}
 
 	/*
 	$channels = join($channel, ",");
-	$channel_total = count(GrabPress::get_channels());
-	if(($channel_total == count($channel)) || in_array("", $channel)){
-		$channel_text = "All Video Categories";
-	}else{
-		$channel_text = count($channel)." of ".$channel_total." selected";
-	}
 	*/
+	if(isset($form['channel'])){
+		$channels = isset($form['channel']) ? join($form['channel'], ","): "";		
+		$channel_total = count(GrabPress::get_channels());
+
+		if(($channel_total == count($form['channel'])) || in_array("", $form['channel'])){
+			$channel_text = "All Video Categories";
+			$channels = "";
+		}else{
+			$channel_text = count($form['channel'])." of ".$channel_total." selected";
+		}
+		echo "CHANNEL: "; var_dump($channels); echo "<br/><br/>";
+	}else{
+		$channels = "";
+	}	
+	
+	//$channels = join($form['channel'], ",");
+
+	if(isset($form['keywords_and'])){
+		
+		preg_match_all('/"([^"]*)"/', $form['keywords_and'], $result_exact_phrase, PREG_PATTERN_ORDER);
+		for ($i = 0; $i < count($result_exact_phrase[0]); $i++) {
+			# Matched text = $result[0][$i];
+			$matched_exact_phrase[] = stripslashes($result_exact_phrase[0][$i]);
+		}		
+
+		//$keyword_exact_phrase = implode(",", $matched_exact_phrase);	
+
+		$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($form['keywords_and']));
+		echo "SENTENCE: "; var_dump($sentence); echo "<br/><br/>";
+		
+		$keywords = preg_split("/\s+/", $sentence);
+		echo "keywords: "; var_dump($keywords); echo "<br/><br/>";
+		for ($i = 0; $i < count($keywords); $i++) {
+			if (preg_match('/\+/', $keywords[$i])) {
+			  //sscanf($keywords[$i], "+%s", $temp_and); # this is poor
+			  $temp_and = str_replace('+', '', $keywords[$i]);
+	          $keywords_and[] = $temp_and;
+			}elseif (preg_match("/^-/", $keywords[$i])) { 
+			  $temp_not = str_replace('-', '', $keywords[$i]);
+	          $keywords_not[] = $temp_not;	          
+			}else{
+			  $keywords_or[] = $keywords[$i];
+			}	
+		}
+	}
+
+	$keyword_exact_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
+	echo "EXACT PHRASE: "; var_dump($keyword_exact_phrase); echo "<br/>";
+	//echo "AND: "; var_dump($keywords_and); echo "<br/><br/>";
+	$keywords_and = isset($keywords_and) ? implode(",", $keywords_and) : "";
+	//$keywords_and = implode(",", $keywords_and);
+	echo "AND: "; var_dump($keywords_and); echo "<br/><br/>";
+	//echo "NOT: "; var_dump($keywords_not); echo "<br/><br/>";
+	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
+	//$keywords_not = implode(",", $keywords_not);
+	echo "NOT: "; var_dump($keywords_not); echo "<br/><br/>";
+	//echo "NORMAL: ";var_dump($keywords_or); echo "<br/><br/>";
+	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
+	//$keywords_or = implode(",", $keywords_or);
+	echo "NORMAL: ";var_dump($keywords_or); echo "<br/><br/>";
+
+	$created_before = isset($form['created_before']) ? $form['created_before'] : "";
+	$created_after = isset($form['created_after']) ? $form['created_after'] : "";
+	
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
+		.'&keywords_or='.urlencode($keywords_not).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&created_after='.urlencode($created_after).'&created_before='.urlencode($created_before)
+		.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
+	var_dump('http://catalog.'.GrabPress::$environment
+		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
+		.'&keywords_or='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&created_after='.urlencode($created_after).'&created_before='.urlencode($created_before)
 		.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
 	$list_feeds = json_decode($json_preview, true);
 	
@@ -33,7 +109,11 @@
 	
 ?>
 <form method="post" action="" id="catalog-page">
-	<input type="hidden" id="action-preview-feed" name="action" value="" />	
+	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
+	<!--
+	<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
+	<input type="hidden"  name="action" value="<?php echo $value; ?>" />
+	-->
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Find a Video in our Catalog</h2>
@@ -62,6 +142,13 @@
 	  	 }
 	    };
 		jQuery(function($){
+			if($('#provider-select option:selected').length == 0){
+				$('#provider-select option').attr('selected', 'selected');
+			}
+
+			if($('#channel-select option:selected').length == 0){
+				$('#channel-select option').attr('selected', 'selected');
+			}
 			$("#channel-select").multiselect(multiSelectOptionsChannels, {
 			  	 uncheckAll: function(e, ui){			  	 	
 				 },
@@ -78,7 +165,7 @@
 		   }).multiselectfilter();
 
 		   $(".datepicker").datepicker({
-			   showOn: 'button',
+			   showOn: 'both',
 			   buttonImage: '<?php echo plugin_dir_url( __FILE__ ); ?>images/icon-calendar.gif',
 			   buttonImageOnly: true,
 			   changeMonth: true,
@@ -86,11 +173,21 @@
 			   showAnim: 'slideDown',
 			   duration: 'fast'
 			});
+
+		   $('#btn-create-feed').bind('click', function(e){
+			    var form = jQuery('#catalog-page');
+			    var action = jQuery('#action-catalog');
+			    action.val("update");
+			    form.submit();
+			});
+
 		});
 	</script>	
 		<?php if(isset($feed_id)){ ?>
 		<input type="hidden" name="feed_id" value="<?php echo $feed_id; ?>"  />
 		<?php } ?>
+		<?php $feed_date = date("YmdHis"); ?>	
+        <input type="hidden" name="feed_date" value="<?php echo $name = isset($form["name"])? $form["name"] : $feed_date; ?>" id="feed_date" />
 		<?php /*
 		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
 		<input type="hidden" name="active" value="<?php echo $active; ?>" id="active" />
@@ -116,7 +213,7 @@
 		</select>
 						
 		<div class="label-tile-one-column">
-			<span class="preview-text-catalog"><b>Keywords: </b><input id="input-keyword" type="text" value="<?php echo $keywords_and = isset($keywords_and) ? $keywords_and : '' ; ?>" /></span>
+			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="" maxlength="255" /></span>
 		</div>	
 		
 		<div class="label-tile">
@@ -148,8 +245,7 @@
 						}
 					?>
 				</select>
-			</div>
-			
+			</div>			
 		</div>
 		
 		<div class="label-tile">
@@ -179,21 +275,18 @@
 				<span class="preview-text-catalog"><b>Date Range: </b></span>
 			</div>				
 			<div class="tile-right">
-				Between<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;" maxlength="8" id="datepicker-between" class="datepicker" />
-				and<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;" maxlength="8" id="datepicker-and" class="datepicker" />
+				Between<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;" maxlength="8" id="created_after" class="datepicker" />
+				and<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;" maxlength="8" id="created_before" class="datepicker" />
 			</div>
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
-				<input type="button" class="button-primary" disabled="disabled" value="<?php _e( 'Create Feed' ) ?>" id="btn-create-feed" />
-				<input type="button" value="Update Search" class="update-search" id="update-search" >	
-				<a href="#" id="cancel" >cancel</a>
+				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
+				<a href="#" id="cancel" >clear search</a>
+				<input type="submit" value="Update Search" class="update-search" id="update-search" >				
 			</div>
 		</div>
-
-
-		<br/><br/>  	
-	
+		<br/><br/>	
 	<?php
 		foreach ($list_feeds["results"] as $result) {
 	?>
