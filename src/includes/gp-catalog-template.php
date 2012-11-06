@@ -1,32 +1,19 @@
 <?php 
-	//$providers = join($provider, ",");
-	/*
-	if(isset($form['provider'])){
-		$providers = join($form['provider'], ",");
-	}
-	*/
 	$list_provider = GrabPress::get_providers();
 	$providers_total = count( $list_provider );
 	if(isset($form['provider'])){
-		//echo "PROVIDERFORM: "; var_dump($form['provider']); echo "<br/><br/>"; 
-
-		$providers = isset($form['provider']) ? join($form['provider'], ","): "";		
-		//$provider_total = count(GrabPress::get_providers());
+		$providers = isset($form['provider']) ? join($form['provider'], ","): "";
 
 		if(($providers_total == count($form['provider'])) || in_array("", $form['provider'])){
 			$provider_text = "All Providers";
 			$providers = "";
 		}else{
 			$provider_text = count($form['provider'])." of ".$providers_total." selected";
-		}
-		echo "PROVIDER: "; var_dump($providers); echo "<br/><br/>";   
+		}  
 	}else{
 		$providers = "";
 	}
 
-	/*
-	$channels = join($channel, ",");
-	*/
 	if(isset($form['channel'])){
 		$channels = isset($form['channel']) ? join($form['channel'], ","): "";		
 		$channel_total = count(GrabPress::get_channels());
@@ -37,28 +24,20 @@
 		}else{
 			$channel_text = count($form['channel'])." of ".$channel_total." selected";
 		}
-		echo "CHANNEL: "; var_dump($channels); echo "<br/><br/>";
 	}else{
 		$channels = "";
 	}	
-	
-	//$channels = join($form['channel'], ",");
 
 	if(isset($form['keywords_and'])){
 		
 		preg_match_all('/"([^"]*)"/', $form['keywords_and'], $result_exact_phrase, PREG_PATTERN_ORDER);
 		for ($i = 0; $i < count($result_exact_phrase[0]); $i++) {
-			# Matched text = $result[0][$i];
 			$matched_exact_phrase[] = stripslashes($result_exact_phrase[0][$i]);
 		}		
 
-		//$keyword_exact_phrase = implode(",", $matched_exact_phrase);	
-
 		$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($form['keywords_and']));
-		echo "SENTENCE: "; var_dump($sentence); echo "<br/><br/>";
 		
 		$keywords = preg_split("/\s+/", $sentence);
-		echo "keywords: "; var_dump($keywords); echo "<br/><br/>";
 		for ($i = 0; $i < count($keywords); $i++) {
 			if (preg_match('/\+/', $keywords[$i])) {
 			  //sscanf($keywords[$i], "+%s", $temp_and); # this is poor
@@ -74,33 +53,37 @@
 	}
 
 	$keyword_exact_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
-	echo "EXACT PHRASE: "; var_dump($keyword_exact_phrase); echo "<br/>";
-	//echo "AND: "; var_dump($keywords_and); echo "<br/><br/>";
 	$keywords_and = isset($keywords_and) ? implode(",", $keywords_and) : "";
-	//$keywords_and = implode(",", $keywords_and);
-	echo "AND: "; var_dump($keywords_and); echo "<br/><br/>";
-	//echo "NOT: "; var_dump($keywords_not); echo "<br/><br/>";
 	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
-	//$keywords_not = implode(",", $keywords_not);
-	echo "NOT: "; var_dump($keywords_not); echo "<br/><br/>";
-	//echo "NORMAL: ";var_dump($keywords_or); echo "<br/><br/>";
 	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
-	//$keywords_or = implode(",", $keywords_or);
-	echo "NORMAL: ";var_dump($keywords_or); echo "<br/><br/>";
 
-	$created_before = isset($form['created_before']) ? $form['created_before'] : "";
-	$created_after = isset($form['created_after']) ? $form['created_after'] : "";
+	if(isset($form['created_before'])){
+		$created_before_date = new DateTime( $form['created_before'] );	
+		$created_before = $created_before_date->format('Ymd');
+	}else{
+		$created_before = "";
+	}
+
+	if(isset($form['created_after'])){
+		$created_after_date = new DateTime( $form['created_after'] );
+		$created_after = $created_after_date->format('Ymd');	
+	}else{
+		$created_after = "";
+	}
 	
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords_or='.urlencode($keywords_not).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
-		.'&created_after='.urlencode($created_after).'&created_before='.urlencode($created_before)
-		.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
+		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
+		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
+
+	/*
 	var_dump('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords_or='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
-		.'&created_after='.urlencode($created_after).'&created_before='.urlencode($created_before)
-		.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
+		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
+		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
+    */
 	$list_feeds = json_decode($json_preview, true);
 	
 	if(empty($list_feeds["results"])){
@@ -119,101 +102,11 @@
 			<h2>GrabPress: Find a Video in our Catalog</h2>
 			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
 	<fieldset id="preview-feed">
-	<legend>Preview Feed</legend>
-	<script type="text/javascript">
-		var multiSelectOptionsChannels = {
-		  	 noneSelectedText:"Select Video Categories",
-		  	 selectedText:function(selectedCount, totalCount){
-				if (totalCount==selectedCount){
-		  	 		return "All Video Categories";
-		  	 	}else{
-		  	 		return selectedCount + " of " + totalCount + " Video Categories";
-		  	 	}
-		  	 }
-		};
-		var multiSelectOptions = {
-	  	 noneSelectedText:"Select providers",
-	  	 selectedText:function(selectedCount, totalCount){
-			if (totalCount==selectedCount){
-	  	 		return "All providers selected";
-	  	 	}else{
-	  	 		return selectedCount + " providers selected of " + totalCount;
-	  	 	}
-	  	 }
-	    };
-		jQuery(function($){
-			if($('#provider-select option:selected').length == 0){
-				$('#provider-select option').attr('selected', 'selected');
-			}
+	<legend>Preview Feed</legend>		
 
-			if($('#channel-select option:selected').length == 0){
-				$('#channel-select option').attr('selected', 'selected');
-			}
-			$("#channel-select").multiselect(multiSelectOptionsChannels, {
-			  	 uncheckAll: function(e, ui){			  	 	
-				 },
-				 checkAll: function(e, ui){			  	 	
-				 }
-		   });
-		   $("#provider-select").multiselect(multiSelectOptions, {
-		  	 uncheckAll: function(e, ui){
-		  	 	id = this.id.replace('provider-select-update-','');
-			 },
-			 checkAll: function(e, ui){
-		  	 	id = this.id.replace('provider-select-update-','');
-			 }
-		   }).multiselectfilter();
-
-		   $(".datepicker").datepicker({
-			   showOn: 'both',
-			   buttonImage: '<?php echo plugin_dir_url( __FILE__ ); ?>images/icon-calendar.gif',
-			   buttonImageOnly: true,
-			   changeMonth: true,
-			   changeYear: true,
-			   showAnim: 'slideDown',
-			   duration: 'fast'
-			});
-
-		   $('#btn-create-feed').bind('click', function(e){
-			    var form = jQuery('#catalog-page');
-			    var action = jQuery('#action-catalog');
-			    action.val("update");
-			    form.submit();
-			});
-
-		});
-	</script>	
-		<?php if(isset($feed_id)){ ?>
-		<input type="hidden" name="feed_id" value="<?php echo $feed_id; ?>"  />
-		<?php } ?>
-		<?php $feed_date = date("YmdHis"); ?>	
-        <input type="hidden" name="feed_date" value="<?php echo $name = isset($form["name"])? $form["name"] : $feed_date; ?>" id="feed_date" />
-		<?php /*
-		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
-		<input type="hidden" name="active" value="<?php echo $active; ?>" id="active" />
-		<input type="hidden" name="name" value="<?php echo $name; ?>" id="name" />
-		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
-		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
-		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />
-		<input type="hidden" name="limit" value="<?php echo $limit; ?>" id="limit" />
-		<input type="hidden" name="schedule" value="<?php echo $schedule; ?>" id="schedule" />
-		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
-		<input type="hidden" name="click_to_play" value="<?php echo $click_to_play; ?>" id="click_to_play" />
-		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />	
-		*/ ?>
-		<select name="channel[]" style="display:none;" multiple="multiple	">
-			<?php foreach($channel as $cat){ ?>
-				<option value="<?php echo $cat;?>" selected="selected"/>
-			<?php } ?>
-		</select>
-		<select name="provider[]" style="display:none;" multiple="multiple	">
-			<?php foreach($provider as $prov){ ?>
-				<option value="<?php echo $prov;?>" selected="selected"/>
-			<?php } ?>
-		</select>
-						
 		<div class="label-tile-one-column">
 			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="" maxlength="255" /></span>
+			<a href="#" id="help">help</a>
 		</div>	
 		
 		<div class="label-tile">
@@ -275,15 +168,17 @@
 				<span class="preview-text-catalog"><b>Date Range: </b></span>
 			</div>				
 			<div class="tile-right">
-				Between<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;" maxlength="8" id="created_after" class="datepicker" />
-				and<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;" maxlength="8" id="created_before" class="datepicker" />
+				Between<input type="text" value="" maxlength="8" id="created_after" name="created_after" class="datepicker" />
+				and<input type="text" value="" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 			</div>
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
 				<a href="#" id="cancel" >clear search</a>
-				<input type="submit" value="Update Search" class="update-search" id="update-search" >				
+				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
+				
+				<input type="submit" value="Update Search" class="update-search" id="update-search" >
+
 			</div>
 		</div>
 		<br/><br/>	
@@ -320,7 +215,7 @@
 </form>
 <script type="text/javascript">
 <?php $qa = GrabPress::$environment == 'grabqa'; ?>
-if(!window.grabModal){
+	if(!window.grabModal){
       try{
         window.grabModal = new com.grabnetworks.Modal( { id : <?php echo $qa ? '1000014775' : '1720202'; ?>, tgt: '<?php echo GrabPress::$environment; ?>', width: 800, height: 450 } );
         window.grabModal.hide();
@@ -328,26 +223,95 @@ if(!window.grabModal){
         
       }
     }
-	jQuery(function(){	
-		//var feed_id = <?php echo $feed_id  = isset($_GET["feed_id"]) ? $_GET["feed_id"] : "undefined"; ?>;
+
+	var multiSelectOptionsChannels = {
+	  	 noneSelectedText:"Select Video Categories",
+	  	 selectedText:function(selectedCount, totalCount){
+			if (totalCount==selectedCount){
+	  	 		return "All Video Categories";
+	  	 	}else{
+	  	 		return selectedCount + " of " + totalCount + " Video Categories";
+	  	 	}
+	  	 }
+	};
+	var multiSelectOptions = {
+  	 noneSelectedText:"Select providers",
+  	 selectedText:function(selectedCount, totalCount){
+		if (totalCount==selectedCount){
+  	 		return "All providers selected";
+  	 	}else{
+  	 		return selectedCount + " providers selected of " + totalCount;
+  	 	}
+  	 }
+    };
+
+	jQuery(function($){	
 		var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 		if(feed_action == "preview-feed"){
-		  	jQuery(".close-preview").click(function() {		  
+		  	$(".close-preview").click(function() {		  
 		  		window.location = "admin.php?page=autoposter";
 	  		});
 		}else{
-			jQuery(".close-preview").click(function() {		  
-			  var form = jQuery('#preview-feed');	
-			  var action = jQuery('#action-preview-feed');
+			$(".close-preview").click(function() {		  
+			  var form = $('#preview-feed');	
+			  var action = $('#action-preview-feed');
 			  action.val(feed_action);
 			  form.submit();	
 		  	});
 		}			
 
-	  	jQuery("#how-it-works").simpletip({
+	  	$("#how-it-works").simpletip({
 		  	 content: 'The Grabpress plugin gives your editors the power of our constantly updating video catalog from the dashboard of your Wordpress CMS. Leveraging automated delivery, along with keyword feed curation, the Grabpress plugin delivers article templates featuring video articles that compliment the organic content creation your site offers.<br /><br /> As an administrator, you may use Grabpress to set up as many feeds as you desire, delivering content based on intervals you specify. You may also assign these feeds to various owners, if your site has multiple editors, and the articles will wait in your drafts folder until you see a need to publish. Additionally, for smaller sites, you can automate the entire process, publishing automatically and extending the reach of your site without adding work to your busy day. <br /><br /> To get started, select a channel from our catalog, hone your feed by adding keywords, set your posting interval, and check the posting options (post interval, player style, save as draft or publish) for that feed to make sure the specifications meet your needs. Click the preview feed button to see make sure your feed will generate enough content and that the content is what you are looking for. If the feed seems to be right for you, save the feed and you will start getting new articles delivered to your site at the interval you specified. <br /><br />', 
 		  	 fixed: true, 
 		  	 position: 'bottom'
 		});
+
+	  	$("#help").simpletip({
+		  	 content: 'This search input supports Google syntax for advanced search:<br/> Add a "+" before a tearm that must be included in your results.<br/> Add a "-" before any term that must be excluded.<br/> Add quotes around any "exact phrase" to look for <br /><br />', 
+		  	 fixed: true,
+		  	 position: 'bottom'
+		});
+
+		if($('#provider-select option:selected').length == 0){
+			$('#provider-select option').attr('selected', 'selected');
+		}
+
+		if($('#channel-select option:selected').length == 0){
+			$('#channel-select option').attr('selected', 'selected');
+		}
+		$("#channel-select").multiselect(multiSelectOptionsChannels, {
+		  	 uncheckAll: function(e, ui){			  	 	
+			 },
+			 checkAll: function(e, ui){			  	 	
+			 }
+	   });
+	   $("#provider-select").multiselect(multiSelectOptions, {
+	  	 uncheckAll: function(e, ui){
+	  	 	//id = this.id.replace('provider-select-update-','');
+		 },
+		 checkAll: function(e, ui){
+	  	 	//id = this.id.replace('provider-select-update-','');
+		 }
+	   }).multiselectfilter();
+
+	   $(".datepicker").datepicker({
+		   showOn: 'both',
+		   buttonImage: '<?php echo plugin_dir_url( __FILE__ ); ?>images/icon-calendar.gif',
+		   buttonImageOnly: true,
+		   changeMonth: true,
+		   changeYear: true,
+		   showAnim: 'slideDown',
+		   duration: 'fast'
+		});
+
+	   /*
+	   $('#btn-create-feed').bind('click', function(e){
+		    var form = jQuery('#catalog-page');
+		    var action = jQuery('#action-catalog');
+		    action.val("prefill");
+		    form.submit();
+		});
+	   */
+
 	});
 </script>

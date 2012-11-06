@@ -425,7 +425,7 @@ line-height: 24px;
 #message{ /* position: relative; top: 150px; left: 0px;*/ }
 #catalog-page .preview-text-catalog { /*display: block;*/ }
 #catalog-page .preview-text-catalog b{ display: block; width: 150px; float: left; }
-#catalog-page .preview-text-catalog #keywords_and{ width: 600px; float: right; width: 668px; }
+#catalog-page .preview-text-catalog #keywords_and{ float: left; margin-right: 5px; width: 640px;   }
 .clear{ clear:both; }
 /* Catalog page*/
 #catalog-page .result-tile {
@@ -461,20 +461,20 @@ line-height: 24px;
 }
 #catalog-page .label-tile .tile-left {
     float: left;
-    width: 130px;
+    width: 120px;
 }
 #catalog-page .label-tile .tile-right {
     float: right;
     height: 45px;
     overflow: hidden;
-    width: 250px;
+    width: 280px;
     text-align: right;
 }
 #catalog-page .label-tile .tile-right img{
     vertical-align: middle;
 }
 #catalog-page .label-tile #update-search{
-    margin: 0 8px;
+    margin: 0 5px;
 }
 #catalog-page .label-tile-one-column{
     width: 820px;
@@ -484,3 +484,6 @@ line-height: 24px;
 #catalog-page .label-tile .ui-multiselect{ width: 250px !important; }
 #catalog-page #provider-select{ }
 #catalog-page .datepicker{ font-size: 11px; margin: 0 5px; width: 63px; }
+#catalog-page .label-tile-one-column .tooltip{ 
+    width: 350px;
+}

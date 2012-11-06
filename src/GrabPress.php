@@ -415,6 +415,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 
+		static function grabpress_prefill_feed(){
+			GrabPress::log();
+			if ( GrabPress::validate_key() ) {
+				print GrabPress::fetch( "includes/gp-feed-template.php", $_REQUEST );
+			}
+		}	
+
 		static function validate_key() {
 			GrabPress::log();
 			$api_key = get_option( 'grabpress_key' );
@@ -991,9 +998,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							GrabPress::render_feed_management();
 						}
 						break;
+						case 'prefill':
+							GrabPress::grabpress_prefill_feed();
+						break;
 						case 'catalog-search':
-							$keywords = $_REQUEST['keywords'];
-							echo "KEYWORD: "; var_dump($keywords); echo "<br/><br/>";
+							//$keywords = $_REQUEST['keywords'];
 							GrabPress::render_catalog_management();
 						break;
 						default:
