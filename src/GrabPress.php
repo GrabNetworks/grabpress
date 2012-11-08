@@ -425,8 +425,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$channels_total = count( $list_channels );
 
 				$blogusers = get_users();
-
-				echo "REQUEST: "; var_dump($_REQUEST); echo "<br/><br/>";
+				
 				print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "create",
 										   "action" => "update",
