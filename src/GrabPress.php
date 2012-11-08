@@ -418,7 +418,31 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function grabpress_prefill_feed(){
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
-				print GrabPress::fetch( "includes/gp-feed-template.php", $_REQUEST );
+				$list_provider = GrabPress::get_providers();			
+				$providers_total = count( $list_provider );
+
+				$list_channels = GrabPress::get_channels();
+				$channels_total = count( $list_channels );
+
+				$blogusers = get_users();
+
+				echo "REQUEST: "; var_dump($_REQUEST); echo "<br/><br/>";
+				print GrabPress::fetch( "includes/gp-feed-template.php", 
+					array("form" => array( "referer" => "create",
+										   "action" => "update",
+										   "channel" => $_REQUEST["channel"],
+										   "keywords_and" => htmlentities(stripslashes($_REQUEST["keywords_and"])),
+										   "keywords_not" => $_REQUEST["keywords_not"],
+										   "provider" => $_REQUEST["provider"],
+										   "category" => ""
+										   //"author" => $_REQUEST["author"],						   
+											),
+							"list_provider" => $list_provider,
+							"providers_total" => $providers_total,
+							"list_channels" => $list_channels,
+							"channels_total" => $channels_total,
+							"blogusers" => $blogusers
+					 ) );
 			}
 		}	
 
@@ -894,6 +918,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$feed_id = $_REQUEST['feed_id'];
 					GrabPress::grabpress_edit_feed($feed_id);
 					break;	
+				case 'prefill':
+					GrabPress::grabpress_prefill_feed();
+				break;	
 				case 'default':
 				default:
 					GrabPress::render_feed_management();

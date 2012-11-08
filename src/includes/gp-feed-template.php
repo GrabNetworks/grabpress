@@ -496,7 +496,7 @@
 									$name = $channel -> name;
 									$id = $channel -> id;
 									$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
-									echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>\n';
+									echo '<option value = "'.$name.'" '.$selected.'>'.$name.'</option>';
 								}
 							?>
 						</select>
@@ -523,6 +523,13 @@
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
 							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
 							<?php
+								/*
+								if(is_array($form["list_provider"])){
+									$list_provider = $form["list_provider"];
+								}else{
+									$list_provider = explode( ",", $form["list_provider"] ); // Video categories chosen by the user
+								}
+								*/
 								foreach ( $list_provider as $record_provider ) {
 									$provider = $record_provider->provider;
 									$provider_name = $provider->name;

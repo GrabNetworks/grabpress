@@ -423,12 +423,12 @@ line-height: 24px;
     float: center;  
 }
 #message{ /* position: relative; top: 150px; left: 0px;*/ }
-#catalog-page .preview-text-catalog { /*display: block;*/ }
-#catalog-page .preview-text-catalog b{ display: block; width: 150px; float: left; }
-#catalog-page .preview-text-catalog #keywords_and{ float: left; margin-right: 5px; width: 640px;   }
+#form-catalog-page .preview-text-catalog { /*display: block;*/ }
+#form-catalog-page .preview-text-catalog b{ display: block; width: 150px; float: left; }
+#form-catalog-page .preview-text-catalog #keywords_and{ float: left; margin-right: 5px; width: 640px;   }
 .clear{ clear:both; }
 /* Catalog page*/
-#catalog-page .result-tile {
+#form-catalog-page .result-tile {
     border-top: 1px solid black;
     float: left;
     height: 135px;
@@ -436,54 +436,54 @@ line-height: 24px;
     padding: 20px 10px;
     width: 400px;
 }
-#catalog-page .tile-left {
+#form-catalog-page .tile-left {
     float: left;
     width: 130px;
 }
-#catalog-page .tile-right {
+#form-catalog-page .tile-right {
     float: right;
     height: 155px;
     overflow: hidden;
     width: 250px;
 }
-#catalog-page .result-tile .tile-right p.video_summary{
+#form-catalog-page .result-tile .tile-right p.video_summary{
     height: 75px;
 }
 #catalog-page .result-tile h2.video_title {
     height: 28px;
 }
-#catalog-page .label-tile {
+#form-catalog-page .label-tile {
     float: left;
     height: 25px;
     overflow: hidden;
     padding: 15px 10px;
     width: 400px;
 }
-#catalog-page .label-tile .tile-left {
+#form-catalog-page .label-tile .tile-left {
     float: left;
     width: 120px;
 }
-#catalog-page .label-tile .tile-right {
+#form-catalog-page .label-tile .tile-right {
     float: right;
     height: 45px;
     overflow: hidden;
     width: 280px;
     text-align: right;
 }
-#catalog-page .label-tile .tile-right img{
+#form-catalog-page .label-tile .tile-right img{
     vertical-align: middle;
 }
-#catalog-page .label-tile #update-search{
+#form-catalog-page .label-tile #update-search{
     margin: 0 5px;
 }
-#catalog-page .label-tile-one-column{
+#form-catalog-page .label-tile-one-column{
     width: 820px;
     padding: 20px 10px;
 }
 .datepicker{ width: 58px;}
-#catalog-page .label-tile .ui-multiselect{ width: 250px !important; }
-#catalog-page #provider-select{ }
-#catalog-page .datepicker{ font-size: 11px; margin: 0 5px; width: 63px; }
-#catalog-page .label-tile-one-column .tooltip{ 
+#form-catalog-page .label-tile .ui-multiselect{ width: 250px !important; }
+#form-catalog-page #provider-select{ }
+#form-catalog-page .datepicker{ font-size: 11px; margin: 0 5px; width: 63px; }
+#form-catalog-page .label-tile-one-column .tooltip{ 
     width: 350px;
 }

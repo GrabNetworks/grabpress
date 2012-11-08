@@ -14,6 +14,9 @@
 		$providers = "";
 	}
 
+	$list_channels = GrabPress::get_channels();
+	$channels_total = count( $list_channels );
+
 	if(isset($form['channel'])){
 		$channels = isset($form['channel']) ? join($form['channel'], ","): "";		
 		$channel_total = count(GrabPress::get_channels());
@@ -91,8 +94,11 @@
 	}
 	
 ?>
-<form method="post" action="" id="catalog-page">
+<form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
+	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
+	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
+
 	<!--
 	<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 	<input type="hidden"  name="action" value="<?php echo $value; ?>" />
@@ -204,7 +210,7 @@
 			<p class="video_summary">		
 				<?php echo $result["video"]["summary"]; ?>
 			</p>
-			<input type="button" class="button-primary" disabled="disabled" value="<?php _e( 'Create Feed' ) ?>" />
+			<input type="button" class="button-primary" disabled="disabled" value="<?php _e( 'Create Feed' ) ?>" id="btn-create-feed" />
 		</div>
 	</div>
 	<?php
@@ -215,6 +221,44 @@
 </form>
 <script type="text/javascript">
 <?php $qa = GrabPress::$environment == 'grabqa'; ?>
+	( function ( global, $ ) {
+		global.hasValidationErrors = function () {
+			if(($("#channel-select :selected").length == 0) || ($("#provider-select :selected").length == 0)){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		global.doValidation = function(){
+	    	var errors = hasValidationErrors();
+			if ( !errors ){
+				$('#btn-create-feed').removeAttr('disabled');
+				$('#btn-preview-feed').removeAttr('disabled');
+
+				if( $( '#btn-preview-feed' ).off ){
+					$( '#btn-preview-feed' ).off('click');
+				}else{
+					$( '#btn-preview-feed' ).unbind('click');
+				}
+				$('.hide').show();					
+			}else{
+				$( '#btn-create-feed' ).attr('disabled', 'disabled');
+				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
+			
+				if( $( '#btn-preview-feed' ).off ){
+					$( '#btn-preview-feed' ).off('click');
+				}else{
+					$( '#btn-preview-feed' ).unbind('click');
+				}				
+
+				$('.hide').hide();
+			}
+			
+		}
+
+	} )( window, jQuery );	
+
 	if(!window.grabModal){
       try{
         window.grabModal = new com.grabnetworks.Modal( { id : <?php echo $qa ? '1000014775' : '1720202'; ?>, tgt: '<?php echo GrabPress::$environment; ?>', width: 800, height: 450 } );
@@ -280,17 +324,19 @@
 			$('#channel-select option').attr('selected', 'selected');
 		}
 		$("#channel-select").multiselect(multiSelectOptionsChannels, {
-		  	 uncheckAll: function(e, ui){			  	 	
+		  	 uncheckAll: function(e, ui){
+		  	 	doValidation();	 	 	
 			 },
-			 checkAll: function(e, ui){			  	 	
+			 checkAll: function(e, ui){
+			 	doValidation();	  	 	
 			 }
 	   });
 	   $("#provider-select").multiselect(multiSelectOptions, {
 	  	 uncheckAll: function(e, ui){
-	  	 	//id = this.id.replace('provider-select-update-','');
+	  	 	doValidation();
 		 },
 		 checkAll: function(e, ui){
-	  	 	//id = this.id.replace('provider-select-update-','');
+		 	doValidation();
 		 }
 	   }).multiselectfilter();
 
@@ -304,14 +350,20 @@
 		   duration: 'fast'
 		});
 
-	   /*
+	   $("#form-catalog-page").change(doValidation);
+	   
 	   $('#btn-create-feed').bind('click', function(e){
-		    var form = jQuery('#catalog-page');
+		    var form = jQuery('#form-catalog-page');
 		    var action = jQuery('#action-catalog');
 		    action.val("prefill");
+		    form.attr("action", "admin.php?page=autoposter");		    
+		    //window.location = "admin.php?page=autoposter&action=prefill";
 		    form.submit();
-		});
-	   */
+		});	   
 
+	});
+
+	jQuery(window).load(function () {
+	    doValidation();
 	});
 </script>
