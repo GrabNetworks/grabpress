@@ -180,11 +180,9 @@
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
-				<a href="#" id="cancel" >clear search</a>
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
-				
+				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
+				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
 				<input type="submit" value="Update Search" class="update-search" id="update-search" >
-
 			</div>
 		</div>
 		<br/><br/>	
@@ -360,6 +358,10 @@
 		    //window.location = "admin.php?page=autoposter&action=prefill";
 		    form.submit();
 		});	   
+
+	   	$('#clear-search').bind('click', function(e){
+	   		window.location = "admin.php?page=catalog";		    
+		});
 
 	});
 
