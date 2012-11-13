@@ -1141,6 +1141,46 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			echo $duplicated_name;
 			die(); // this is required to return a proper result
 		}
+		
+		static function get_mrss_format_callback() {	
+			$video_id = $_REQUEST['video_id'];
+			$id = GrabPress::get_connector_id();
+			$url= 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/'.$video_id.'.mrss';
+			
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$xml = curl_exec($ch);
+			
+			curl_close($ch);
+
+			$search = array('grab:', 'media:', 'type="flash"');
+			$replace = array('grab', 'media', '');
+
+			$xmlString = str_replace( $search, $replace, $xml);
+			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+			foreach ($objXml->channel->item as $item) {
+			    echo $item->mediagroup->grabembed->grabplayer;
+			}	
+
+			die(); // this is required to return a proper result
+		}
+
+		static function content_by_request( $content, $post )
+		{
+		    if ( ! empty ( $_REQUEST['pre_content'] )
+		        and current_user_can( 'edit_post', $post->ID )
+		        and '' === $content
+		    )
+		    {		        
+		        $content = str_replace('&amp;', '&', $_REQUEST['pre_content']);
+		        return stripslashes($content);
+		    }
+		    $content = str_replace('&amp;', '&', $content);
+		    return $content;
+		}
 
 
 	}//class
@@ -1157,4 +1197,6 @@ add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
 add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
+add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
+add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 GrabPress::allow_tags();

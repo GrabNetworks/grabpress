@@ -78,7 +78,8 @@
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
 		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
+		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1'
+		);
 
 	/*
 	var_dump('http://catalog.'.GrabPress::$environment
@@ -87,22 +88,24 @@
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
 		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
     */
-	$list_feeds = json_decode($json_preview, true);
+	$list_feeds = json_decode($json_preview, true);	
 	
 	if(empty($list_feeds["results"])){
 		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please <a href="#" class="close-preview">modify your settings</a> until you see the kind of videos you want in your feed';
 	}
 	
+	$id = GrabPress::get_connector_id();
+	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
+	$player_data = json_decode( $player_json, true );
+	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
 	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
-
-	<!--
-	<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
-	<input type="hidden"  name="action" value="<?php echo $value; ?>" />
-	-->
+	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
+	<input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
+	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Find a Video in our Catalog</h2>
@@ -189,7 +192,7 @@
 	<?php
 		foreach ($list_feeds["results"] as $result) {
 	?>
-	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">
+	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
 		<div class="tile-left">
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 			<p class="video_date">
@@ -201,14 +204,14 @@
 			<span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
 			</p>
 		</div>
-		<div class="tile-right">
+		<div class="tile-right">			
 			<h2 class="video_title" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 			<?php echo $result["video"]["title"]; ?>
 			</h2>
 			<p class="video_summary">		
 				<?php echo $result["video"]["summary"]; ?>
 			</p>
-			<input type="button" class="button-primary" disabled="disabled" value="<?php _e( 'Create Feed' ) ?>" id="btn-create-feed" />
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Feed' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 		</div>
 	</div>
 	<?php
@@ -357,7 +360,36 @@
 		    form.attr("action", "admin.php?page=autoposter");		    
 		    //window.location = "admin.php?page=autoposter&action=prefill";
 		    form.submit();
-		});	   
+		});
+
+	   	$('.btn-create-feed-single').bind('click', function(e){
+		    var form = $('#form-catalog-page');
+		    var ctp_player_id = $('#player_id').val();
+		    var bloginfo = $('#bloginfo').val();
+		    var video_id = this.id.replace('btn-create-feed-single-','');
+
+		    var data = {
+				action: 'get_mrss_format',
+				video_id: video_id
+			};
+
+			$.post(ajaxurl, data, function(response) {
+				//alert('Got this from the server: ' + response);
+				var content = response.replace(/1825613/g, ctp_player_id);
+				$('#pre_content').val(content);				
+			    form.attr("ACTION", bloginfo+"/wp-admin/post-new.php");
+			    form.submit();				
+			});		  
+
+		});	
+
+		/*
+		$('.btn-preview-feed').bind("click",function(e){
+          	id = this.id.replace('btn-preview-feed-','');
+          	previewFeed(id);
+	        return false;
+	    });  
+	    */ 
 
 	   	$('#clear-search').bind('click', function(e){
 	   		window.location = "admin.php?page=catalog";		    
