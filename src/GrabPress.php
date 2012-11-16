@@ -652,6 +652,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( null, 'CatalogEditor', 'CatalogEditor', 'publish_posts', 'catalogeditor', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
 			//GrabPress::grabpress_plugin_messages();
@@ -671,6 +672,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			//  wp_die( __('You do not have sufficient permissions to access this page.') );
 			// }
 			print GrabPress::fetch( 'includes/gp-catalog-template.php' ,
+				array( "form" => $_REQUEST ) );
+			/*
+			print GrabPress::fetch( 'includes/gp-feed-template.php',
+				array( "form" => $_REQUEST,
+					"list_provider" => $list_provider,
+					"providers_total" => $providers_total,
+					"list_channels" => $list_channels,
+					"channels_total" => $channels_total,
+					"blogusers" => $blogusers ) );
+			*/
+
+		}
+
+		static function render_catalog_editor_management() {
+			GrabPress::log();
+			//if (!current_user_can('manage_options'))  {
+			//  wp_die( __('You do not have sufficient permissions to access this page.') );
+			// }
+			print GrabPress::fetch( 'includes/gp-catalog-template-editor.php' ,
 				array( "form" => $_REQUEST ) );
 			/*
 			print GrabPress::fetch( 'includes/gp-feed-template.php',
@@ -921,7 +941,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPress::grabpress_prefill_feed();
 				break;	
 				case 'default':
-				default:
+				default:				
 					GrabPress::render_feed_management();
 					break;
 				}
@@ -1012,7 +1032,26 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				}
 
+			case 'catalogeditor':
+				if(isset($_REQUEST[ 'action' ])){
+					switch ( $_REQUEST[ 'action' ] ) {
+						/*
+						case 'prefill':
+							GrabPress::grabpress_prefill_feed();
+						break;
+						*/
+						case 'catalog-search-editor':
+							GrabPress::render_catalog_editor_management();
+							//print GrabPress::fetch( 'includes/gp-catalog-template-editor.php');
+						break;
+						default:
+							GrabPress::render_catalog_editor_management();
+							//print GrabPress::fetch( 'includes/gp-catalog-template-editor.php');
+						break;
+					}
+				}
 			case 'catalog':
+
 				if(isset($_REQUEST[ 'action' ])){
 					switch ( $_REQUEST[ 'action' ] ) {
 						case 'update':
@@ -1067,6 +1106,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
 			}
 			
+			//wp_enqueue_script( 'jquery-tinymce', get_bloginfo( 'wpurl' ).'/wp-includes/js/tinymce/tiny_mce_popup.js' );
 		}
 
 		static function print_styles() {
@@ -1182,9 +1222,33 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		    return $content;
 		}
 
+		static function add_mce_buttons($buttons){
+		  array_push($buttons, "hr");
+		  array_push($buttons, "image");
+		  
+		  return $buttons;
+		}
+
+		static function add_button($buttons) {
+			array_push($buttons, "blcss");
+			return $buttons;
+		}
+
+		static function add_plugin($plugin_array) {
+		   $plugin_array['blist'] = get_bloginfo('url').'/wp-content/plugins/src/js/jscustomcodes.js';   
+		   return $plugin_array;
+		}
+
+		static function custom_mce_button() {
+		   if ( current_user_can('edit_posts') &&  current_user_can('edit_pages') ){
+		     add_filter('mce_buttons', array( 'GrabPress', 'add_button' ));
+		     add_filter('mce_external_plugins', array( 'GrabPress', 'add_plugin' ));
+		   }
+		}
 
 	}//class
 }//ifndefclass
+
 GrabPress::log( '-------------------------------------------------------' );
 add_action( 'admin_print_styles', array( 'GrabPress', 'print_styles' ) );
 add_action( 'admin_print_scripts', array( 'GrabPress', 'print_scripts' ) );
@@ -1198,5 +1262,24 @@ add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
 add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
 add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
-add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
+add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
+add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
+add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
+//add_filter('mce_buttons_2', array( 'GrabPress', 'add_mce_buttons' ));
+//$baseUrl = $plugin_url = trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
+//require(get_bloginfo( 'wpurl' ) . '/wp-load.php');
+//require( 'C:/xampp/htdocs/wordpress3/wp-load.php');
+//require( 'http://127.0.0.1/wordpress3/wp-load.php');
+
+//require(ABSPATH . '/wp-load.php'); 
+//require_once(dirname(dirname(__FILE__)) . '\wp-load.php');
+//require_once(dirname(__FILE__) . '\wp-load.php');
+
+if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
+
 GrabPress::allow_tags();
+
+
+
+
+
