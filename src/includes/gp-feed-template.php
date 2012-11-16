@@ -17,6 +17,22 @@
 			}
 		}
 
+		/*
+		global.setup = function(ed){
+		     // Add a custom button
+		     ed.addButton('mybutton', 
+		     {
+		          title : 'My button',
+		          image : 'img/example.gif',
+		          onclick : function() 
+		          {
+		          // Add you own code to execute something on click
+		          ed.focus();
+		          ed.selection.setContent('Hello world!');
+		     }
+		});
+		*/
+
 		global.previewVideos = function () {
 			var errors = hasValidationErrors();
 			if(!errors){
@@ -408,6 +424,7 @@
 
 	jQuery(window).load(function () {
 	    doValidation();
+	    setup();
 	});
 
 	</script>
