@@ -64,22 +64,22 @@
 		$created_before_date = new DateTime( $form['created_before'] );	
 		$created_before = $created_before_date->format('Ymd');
 	}else{
-		$created_before = "";
+		$created_before = "20300101";
 	}
 
 	if(isset($form['created_after'])){
 		$created_after_date = new DateTime( $form['created_after'] );
 		$created_after = $created_after_date->format('Ymd');	
 	}else{
-		$created_after = "";
+		$created_after = "20000101";
 	}
 	
-	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1'
-		);
+	        $json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
+                .'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
+                .'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+                .'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
+                .'&created_after='.$created_after.'&created_before='.$created_before.'&limit=50'
+                );
 
 	/*
 	var_dump('http://catalog.'.GrabPress::$environment
@@ -91,7 +91,7 @@
 	$list_feeds = json_decode($json_preview, true);	
 	
 	if(empty($list_feeds["results"])){
-		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please <a href="#" class="close-preview">modify your settings</a> until you see the kind of videos you want in your feed';
+		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
 	}
 	
 	$id = GrabPress::get_connector_id();
@@ -177,15 +177,15 @@
 				<span class="preview-text-catalog"><b>Date Range: </b></span>
 			</div>				
 			<div class="tile-right">
-				Between<input type="text" value="" maxlength="8" id="created_after" name="created_after" class="datepicker" />
-				and<input type="text" value="" maxlength="8" id="created_before" name="created_before" class="datepicker" />
+				Between<input type="text" value="01/01/2000" maxlength="8" id="created_after" name="created_after" class="datepicker" />
+				and<input type="text" value="01/01/2030" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 			</div>
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
 				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
 				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
-				<input type="submit" value="Update Search" class="update-search" id="update-search" >
+				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
 		<br/><br/>	
@@ -209,9 +209,14 @@
 			<?php echo $result["video"]["title"]; ?>
 			</h2>
 			<p class="video_summary">		
-				<?php echo $result["video"]["summary"]; ?>
-			</p>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Feed' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+				<?php if(strlen($result["video"]["summary"]) > 100) {
+					echo substr($result["video"]["summary"], 0, 97) . '...';}
+else{
+echo $result["video"]["summary"];	  	
+}
+?>			
+</p>
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 		</div>
 	</div>
 	<?php
