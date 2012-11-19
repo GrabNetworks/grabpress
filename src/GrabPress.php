@@ -1266,9 +1266,10 @@ if( is_admin() ){
 	add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 	add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
 	add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
-	add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
 	add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
 	add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
+	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
+
 	//add_filter('mce_buttons_2', array( 'GrabPress', 'add_mce_buttons' ));
 	//$baseUrl = $plugin_url = trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
 	//require(get_bloginfo( 'wpurl' ) . '/wp-load.php');
@@ -1281,6 +1282,7 @@ if( is_admin() ){
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }
+
 GrabPress::allow_tags();
 
 
