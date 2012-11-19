@@ -114,7 +114,7 @@
 	<legend>Preview Feed</legend>		
 
 		<div class="label-tile-one-column">
-			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="" maxlength="255" /></span>
+			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="<?php echo $keywords_and = isset($form['keywords_and']) ? $form['keywords_and'] : '' ?>" maxlength="255" /></span>
 			<a href="#" id="help">help</a>
 		</div>	
 		
@@ -124,26 +124,27 @@
 				<span class="preview-text-catalog"><b>Grab Video Categories: </b>	
 				</span>
 			</div>
-			<div class="tile-right">		
-				<select style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
-					<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
-					<?php
-						/*
-						if(isset($form["channel"]) && (is_array($form["channel"]))){
+			<div class="tile-right">
+				<?php 				
+					if(isset($form["channel"])){
+						if(is_array($form["channel"])){
 							$channels = $form["channel"];
 						}else{
 							$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
 						}
-						*/
-						
-						$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-						$list = json_decode( $json );
+					}					
+					$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+					$list = json_decode( $json );					
+				?>		
+				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+					<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
+					<?php	
 						foreach ( $list as $record ) {
 							$channel = $record -> category;
 							$name = $channel -> name;
 							$id = $channel -> id;
-							//$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
-							echo '<option value = "'.$name.'" >'.$name.'</option>';
+							$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
+							echo '<option value = "'.$name.'" '.$selected.' >'.$name.'</option>';
 						}
 					?>
 				</select>
@@ -162,8 +163,8 @@
 						$provider = $record_provider->provider;
 						$provider_name = $provider->name;
 						$provider_id = $provider->id;
-						//$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
-						echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>';
+						$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
+						echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
 					}
 				?>
 				</select>
@@ -177,14 +178,14 @@
 				<span class="preview-text-catalog"><b>Date Range: </b></span>
 			</div>				
 			<div class="tile-right">
-				Between<input type="text" value="" maxlength="8" id="created_after" name="created_after" class="datepicker" />
-				and<input type="text" value="" maxlength="8" id="created_before" name="created_before" class="datepicker" />
+				Between<input type="text" value="<?php echo $created_after = isset($form['created_after']) ? $form['created_after'] : ''; ?>" maxlength="8" id="created_after" name="created_after" class="datepicker" />
+				and<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 			</div>
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
 				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
+				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Save as Feed' ) ?>" />				
 				<input type="submit" value="Update Search" class="update-search" id="update-search" >
 			</div>
 		</div>
@@ -211,7 +212,7 @@
 			<p class="video_summary">		
 				<?php echo $result["video"]["summary"]; ?>
 			</p>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Feed' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 		</div>
 	</div>
 	<?php
