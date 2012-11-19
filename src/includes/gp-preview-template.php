@@ -45,7 +45,12 @@
 		<input type="hidden" name="schedule" value="<?php echo $schedule; ?>" id="schedule" />
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
 		<input type="hidden" name="click_to_play" value="<?php echo $click_to_play; ?>" id="click_to_play" />
-		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />	
+		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />
+		<select name="category[]" style="display:none;" multiple="multiple	">
+			<?php foreach($category as $categ){ ?>
+				<option value="<?php echo $categ;?>" selected="selected"/>
+			<?php } ?>
+		</select>		
 		<select name="channel[]" style="display:none;" multiple="multiple	">
 			<?php foreach($channel as $cat){ ?>
 				<option value="<?php echo $cat;?>" selected="selected"/>
