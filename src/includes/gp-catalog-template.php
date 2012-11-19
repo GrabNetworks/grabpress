@@ -63,31 +63,31 @@
 	if(isset($form['created_before'])){
 		$created_before_date = new DateTime( $form['created_before'] );	
 		$created_before = $created_before_date->format('Ymd');
+		$created_before_url = '&created_before='.$created_before;
 	}else{
-		$created_before = "";
+		$created_before_url = "";
 	}
+	
 
 	if(isset($form['created_after'])){
 		$created_after_date = new DateTime( $form['created_after'] );
-		$created_after = $created_after_date->format('Ymd');	
+		$created_after = $created_after_date->format('Ymd');
+		$created_after_url = '&created_after='.$created_after;
 	}else{
-		$created_after = "";
+		$created_after_url = "";
 	}
 	
-	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1'
-		);
 
-	/*
-	var_dump('http://catalog.'.GrabPress::$environment
+	$url_catalog = 'http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
 		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
-    */
+		.''.$created_after_url
+		.''.$created_before_url
+	    .'&limit=-1';
+	
+	$json_preview = GrabPress::get_json($url_catalog);
+
 	$list_feeds = json_decode($json_preview, true);	
 	
 	if(empty($list_feeds["results"])){
