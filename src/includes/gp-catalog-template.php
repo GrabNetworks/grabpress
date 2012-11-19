@@ -60,7 +60,7 @@
 	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
 	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
 
-	if(isset($form['created_before'])){
+	if(isset($form['created_before']) && ($form['created_before'] != "")){
 		$created_before_date = new DateTime( $form['created_before'] );	
 		$created_before = $created_before_date->format('Ymd');
 		$created_before_url = '&created_before='.$created_before;
@@ -69,7 +69,7 @@
 	}
 	
 
-	if(isset($form['created_after'])){
+	if(isset($form['created_after']) && ($form['created_after'] != "")){
 		$created_after_date = new DateTime( $form['created_after'] );
 		$created_after = $created_after_date->format('Ymd');
 		$created_after_url = '&created_after='.$created_after;
@@ -106,6 +106,8 @@
 	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
 	<input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
+	<input type="hidden" name="publish" value="1" id="publish" />
+	<input type="hidden" name="click_to_play" value="1" id="click_to_play" />
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Find a Video in our Catalog</h2>

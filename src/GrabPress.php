@@ -433,6 +433,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 										   "keywords_and" => htmlentities(stripslashes($_REQUEST["keywords_and"])),
 										   "keywords_not" => $_REQUEST["keywords_not"],
 										   "provider" => $_REQUEST["provider"],
+										   "publish" => $_REQUEST["publish"],
+										   "click_to_play" => $_REQUEST["click_to_play"],
 										   "category" => ""
 										   //"author" => $_REQUEST["author"],						   
 											),
