@@ -77,7 +77,6 @@
 		$created_after_url = "";
 	}
 	
-
 	$url_catalog = 'http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
 		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
@@ -91,7 +90,7 @@
 	$list_feeds = json_decode($json_preview, true);	
 	
 	if(empty($list_feeds["results"])){
-		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please <a href="#" class="close-preview">modify your settings</a> until you see the kind of videos you want in your feed';
+		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
 	}
 	
 	$id = GrabPress::get_connector_id();
@@ -188,7 +187,7 @@
 			<div class="tile-right">
 				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
 				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Save as Feed' ) ?>" />				
-				<input type="submit" value="Update Search" class="update-search" id="update-search" >
+				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
 		<br/><br/>	
@@ -212,8 +211,13 @@
 			<?php echo $result["video"]["title"]; ?>
 			</h2>
 			<p class="video_summary">		
-				<?php echo $result["video"]["summary"]; ?>
-			</p>
+				<?php if(strlen($result["video"]["summary"]) > 100) {
+					echo substr($result["video"]["summary"], 0, 97) . '...';}
+else{
+echo $result["video"]["summary"];	  	
+}
+?>			
+</p>
 			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 		</div>
 	</div>
