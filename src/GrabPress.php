@@ -772,7 +772,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			if(isset($_REQUEST["referer"]) && ( $_REQUEST["referer"] == "create" || $_REQUEST["referer"] == "edit" )){
 				print GrabPress::fetch( "includes/gp-preview-template.php", $_REQUEST );	
 			}else{
-				$feed_id = $_GET['feed_id'];
+				$feed_id = $_GET['feed_id'];				
 				$providers_total = count(GrabPress::get_providers());
 				$feed = GrabPress::get_feed($feed_id);
 				
@@ -788,13 +788,15 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$cats[] = "";
 				}
 
-				$channel = explode( ',', $url['categories'] );		 
+				$channel = explode( ',', $url['categories'] );
+				$feed_date = $_GET['feed_date']; 
 
 				print GrabPress::fetch( "includes/gp-preview-template.php", 
 					array( "referer" => "edit",
 						   "action" => "edit-feed",
 						   "feed_id" => $feed_id,
 						   "name" => $feed->feed->name,
+						   "feed_date" => $feed->feed->name,
 						   "channel" => $channel,
 						   "keywords_and" => $url['keywords_and'],
 						   "keywords_not" => $url['keywords_not'],

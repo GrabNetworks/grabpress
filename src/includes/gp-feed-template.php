@@ -488,7 +488,7 @@
 					<th scope="row">Feed Name</th>
         		    <td>
         		    	<?php $feed_date = date("YmdHis"); ?>	
-        		    	<input type="hidden" name="feed_date" value="<?php echo $name = isset($form["name"])? $form["name"] : $feed_date; ?>" id="feed_date" />
+        		    	<input type="hidden" name="feed_date" value="<?php echo $feed_date = isset($form["feed_date"])? $form["feed_date"] : $feed_date; ?>" id="feed_date" />
 						<input type="text" name="name" id="name" class="ui-autocomplete-input" value="<?php echo $name = isset($form["name"])? $form["name"] : $feed_date; ?>" maxlength="14" />
 						<span class="description">Feed Name</span>
 					</td>
