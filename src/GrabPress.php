@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 1.0.1-11162012
+Version: 1.0.1-11192012
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '1.0.1-11162012';
+		static $version = '1.0.1-11192012';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -1252,35 +1252,35 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 	}//class
 }//ifndefclass
+if( is_admin() ){
+	GrabPress::log( '-------------------------------------------------------' );
+	add_action( 'admin_print_styles', array( 'GrabPress', 'print_styles' ) );
+	add_action( 'admin_print_scripts', array( 'GrabPress', 'print_scripts' ) );
+	register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
+	register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector' ));
+	add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
+	add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
+	//add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ));
+	add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
+	add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
+	add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
+	add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
+	add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
+	add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
+	add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
+	add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
+	//add_filter('mce_buttons_2', array( 'GrabPress', 'add_mce_buttons' ));
+	//$baseUrl = $plugin_url = trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
+	//require(get_bloginfo( 'wpurl' ) . '/wp-load.php');
+	//require( 'C:/xampp/htdocs/wordpress3/wp-load.php');
+	//require( 'http://127.0.0.1/wordpress3/wp-load.php');
 
-GrabPress::log( '-------------------------------------------------------' );
-add_action( 'admin_print_styles', array( 'GrabPress', 'print_styles' ) );
-add_action( 'admin_print_scripts', array( 'GrabPress', 'print_scripts' ) );
-register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
-register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector' ));
-add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
-add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
-//add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ));
-add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
-add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
-add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
-add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
-add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
-add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
-add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
-add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
-//add_filter('mce_buttons_2', array( 'GrabPress', 'add_mce_buttons' ));
-//$baseUrl = $plugin_url = trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
-//require(get_bloginfo( 'wpurl' ) . '/wp-load.php');
-//require( 'C:/xampp/htdocs/wordpress3/wp-load.php');
-//require( 'http://127.0.0.1/wordpress3/wp-load.php');
+	//require(ABSPATH . '/wp-load.php'); 
+	//require_once(dirname(dirname(__FILE__)) . '\wp-load.php');
+	//require_once(dirname(__FILE__) . '\wp-load.php');
 
-//require(ABSPATH . '/wp-load.php'); 
-//require_once(dirname(dirname(__FILE__)) . '\wp-load.php');
-//require_once(dirname(__FILE__) . '\wp-load.php');
-
-if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
-
+	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
+}
 GrabPress::allow_tags();
 
 
