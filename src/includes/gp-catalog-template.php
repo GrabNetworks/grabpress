@@ -372,14 +372,12 @@ echo $result["video"]["summary"];
 		});
 
 	   	$('.btn-create-feed-single').bind('click', function(e){
-	   		alert("entro");
 		    var form = $('#form-catalog-page');
 		    var ctp_player_id = $('#player_id').val();
 		    var bloginfo = $('#bloginfo').val();
 		    var video_id = this.id.replace('btn-create-feed-single-','');
 		    var pre_content2 = $('#pre_content2').val();
 		    var post_id = $('#post_id').val();
-		    alert(post_id);
 
 		    var data = {
 				action: 'get_mrss_format',
@@ -392,7 +390,6 @@ echo $result["video"]["summary"];
 				if(pre_content2 != ""){
 					content = pre_content2 + "<br/><br/>" + content;
 				}
-				alert(content);
 				$('#pre_content').val(content);	
 				if(post_id != ""){
 					$('#post_ID').val(post_id);	

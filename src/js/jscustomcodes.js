@@ -7,9 +7,7 @@
                 image: url+'/images/icons/g2.png',
                 onclick : function() {
                     var postnumber = document.getElementById('post_ID').value;
-                    alert(postnumber);
                     var content = tinymce.activeEditor.getContent();
-                    alert(content); 
                     var form = jQuery('<form/>').attr('action','admin.php?page=catalog').attr('method','post');            
 
                     jQuery('body').append('<form id="GrabPressForm" action="admin.php?page=catalog" method="post"></form>');
