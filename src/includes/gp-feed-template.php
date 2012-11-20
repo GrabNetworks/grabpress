@@ -134,7 +134,7 @@
 			}
 			name = $.trim($('#name').val());
 			var regx_name = /\s/;		
-			var regx = /^\s*[a-zA-Z0-9,\s]+\s*$/;
+			var regx = /^[a-zA-Z0-9,\s]+$/;
 
 			var data = {
 				action: 'get_name_action',
@@ -143,7 +143,7 @@
 
 			// Update feed
 			if(edit === "update"){ 
-				if( (!regx.test(name)) || (regx_name.test(name)) ){
+				if(!regx.test(name)){
 					alert("The name entered contains special characters or starts/ends with spaces. Please enter a different name");
 				}else if(name.length < 6){					
 					alert("The name entered is less than 6 characters. Please enter a name between 6 and 14 characters");
@@ -160,7 +160,7 @@
 							$('#dialog-name').val(name);
 							$('#dialog').dialog('open');
 				    	}else{
-							if( (!regx.test(name)) || (regx_name.test(name)) ){
+							if(!regx.test(name)){
 								alert("The name entered contains special characters or starts/ends with spaces. Please enter a different name");
 							}else if(name.length < 6){					
 								alert("The name entered is less than 6 characters. Please enter a name between 6 and 14 characters");
@@ -489,8 +489,9 @@
         		    <td>
         		    	<?php $feed_date = date("YmdHis"); ?>	
         		    	<input type="hidden" name="feed_date" value="<?php echo $feed_date = isset($form["feed_date"])? $form["feed_date"] : $feed_date; ?>" id="feed_date" />
-						<input type="text" name="name" id="name" class="ui-autocomplete-input" value="<?php echo $name = isset($form["name"])? $form["name"] : $feed_date; ?>" maxlength="14" />
-						<span class="description">Feed Name</span>
+        		    	<?php $name = isset($form["name"])? urldecode($form["name"]) : $feed_date; ?>
+						<input type="text" name="name" id="name" class="ui-autocomplete-input" value="<?php echo $name; ?>" maxlength="14" />
+						<span clas="description">Feed Name</span>
 					</td>
         		</tr>
 				<tr valign="bottom">

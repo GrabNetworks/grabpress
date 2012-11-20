@@ -67,7 +67,7 @@
 				</td>
 				<td>		
 					<?php 
-						echo $feed->name;
+						echo urldecode($feed->name);
 					?>							
 				</td>
 				<td>		

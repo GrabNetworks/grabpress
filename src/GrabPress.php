@@ -1113,10 +1113,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			//wp_enqueue_script( 'jquery-tinymce', get_bloginfo( 'wpurl' ).'/wp-includes/js/tinymce/tiny_mce_popup.js' );
 		}
 
+		static function grabpress_plugin_url(){
+			return trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
+		}
+
 		static function print_styles() {
 			GrabPress::log();
 			// Plugin url
-			$plugin_url = trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
+			$plugin_url = GrabPress::grabpress_plugin_url();
 
 			// CSS files
 
@@ -1242,7 +1246,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function add_plugin($plugin_array) {
-		   $plugin_array['blist'] = get_bloginfo('url').'/wp-content/plugins/src/js/jscustomcodes.js';   
+		   $url = GrabPress::grabpress_plugin_url();
+		   $plugin_array['blist'] = $url."/js/jscustomcodes.js";
 		   return $plugin_array;
 		}
 
