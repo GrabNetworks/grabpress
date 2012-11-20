@@ -10,9 +10,9 @@
                     alert(postnumber);
                     var content = tinymce.activeEditor.getContent();
                     alert(content); 
-                    var form = jQuery('<form/>').attr('action','admin.php?page=catalogeditor').attr('method','post');            
+                    var form = jQuery('<form/>').attr('action','admin.php?page=catalog').attr('method','post');            
 
-                    jQuery('body').append('<form id="GrabPressForm" action="admin.php?page=catalogeditor" method="post"></form>');
+                    jQuery('body').append('<form id="GrabPressForm" action="admin.php?page=catalog" method="post"></form>');
                     var inputPostId = jQuery('<input/>').attr('type',"hidden").attr("name","post_id").attr("value",postnumber);
                     var inputContentId = jQuery('<input/>').attr('type',"hidden").attr("name","pre_content2").attr("value",content);
                     

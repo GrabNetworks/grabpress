@@ -107,6 +107,8 @@
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
 	<input type="hidden" name="publish" value="1" id="publish" />
 	<input type="hidden" name="click_to_play" value="1" id="click_to_play" />
+	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '' ?>" />
+	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Find a Video in our Catalog</h2>
@@ -370,10 +372,14 @@ echo $result["video"]["summary"];
 		});
 
 	   	$('.btn-create-feed-single').bind('click', function(e){
+	   		alert("entro");
 		    var form = $('#form-catalog-page');
 		    var ctp_player_id = $('#player_id').val();
 		    var bloginfo = $('#bloginfo').val();
 		    var video_id = this.id.replace('btn-create-feed-single-','');
+		    var pre_content2 = $('#pre_content2').val();
+		    var post_id = $('#post_id').val();
+		    alert(post_id);
 
 		    var data = {
 				action: 'get_mrss_format',
@@ -383,7 +389,16 @@ echo $result["video"]["summary"];
 			$.post(ajaxurl, data, function(response) {
 				//alert('Got this from the server: ' + response);
 				var content = response.replace(/1825613/g, ctp_player_id);
-				$('#pre_content').val(content);				
+				if(pre_content2 != ""){
+					content = pre_content2 + "<br/><br/>" + content;
+				}
+				alert(content);
+				$('#pre_content').val(content);	
+				if(post_id != ""){
+					$('#post_ID').val(post_id);	
+				}
+				$('#post_ID').val(post_id);
+						
 			    form.attr("ACTION", bloginfo+"/wp-admin/post-new.php");
 			    form.submit();				
 			});		  

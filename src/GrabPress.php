@@ -1218,7 +1218,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		        and current_user_can( 'edit_post', $post->ID )
 		        and '' === $content
 		    )
-		    {		        
+		    {
+			    if ( ! empty ( $_REQUEST['post_ID'] )){
+	              $post->ID = $_REQUEST['post_ID'];
+	            }		        
 		        $content = str_replace('&amp;', '&', $_REQUEST['pre_content']);
 		        return stripslashes($content);
 		    }
@@ -1270,15 +1273,6 @@ if( is_admin() ){
 	add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 
-	//add_filter('mce_buttons_2', array( 'GrabPress', 'add_mce_buttons' ));
-	//$baseUrl = $plugin_url = trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
-	//require(get_bloginfo( 'wpurl' ) . '/wp-load.php');
-	//require( 'C:/xampp/htdocs/wordpress3/wp-load.php');
-	//require( 'http://127.0.0.1/wordpress3/wp-load.php');
-
-	//require(ABSPATH . '/wp-load.php'); 
-	//require_once(dirname(dirname(__FILE__)) . '\wp-load.php');
-	//require_once(dirname(__FILE__) . '\wp-load.php');
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }
