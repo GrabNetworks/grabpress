@@ -14,9 +14,21 @@
 	}else{
 		$channel_text = count($channel)." of ".$channel_total." selected";
 	}
-	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
+
+	$url_catalog = 'http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
+		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
+		//.''.$created_after_url
+		//.''.$created_before_url
+	    .'&limit=-1';
+
+	//$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
+	//	.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
+	//	.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
+
+	$json_preview = GrabPress::get_json($url_catalog);
+
 	$list_feeds = json_decode($json_preview, true);
 	
 	if(empty($list_feeds["results"])){
@@ -40,13 +52,15 @@
 		<input type="hidden" name="name" value="<?php echo $name; ?>" id="name" />
 		<input type="hidden" name="feed_date" value="<?php echo $feed_date; ?>" id="feed_date" />		
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
-		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
-		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />
 		<input type="hidden" name="limit" value="<?php echo $limit; ?>" id="limit" />
 		<input type="hidden" name="schedule" value="<?php echo $schedule; ?>" id="schedule" />
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
 		<input type="hidden" name="click_to_play" value="<?php echo $click_to_play; ?>" id="click_to_play" />
 		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />
+		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
+		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />
+		<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
+	    <input type="hidden" id="keyword_exact_phrase" name="keyword_exact_phrase" value="<?php echo $keyword_exact_phrase; ?>" />
 		<select name="category[]" style="display:none;" multiple="multiple	">
 			<?php foreach($category as $categ){ ?>
 				<option value="<?php echo $categ;?>" selected="selected"/>

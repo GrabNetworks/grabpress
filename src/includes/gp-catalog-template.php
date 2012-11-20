@@ -56,9 +56,12 @@
 	}
 
 	$keyword_exact_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
+	$keyword_exact_phrase = str_replace('"', "", $keyword_exact_phrase);
 	$keywords_and = isset($keywords_and) ? implode(",", $keywords_and) : "";
 	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
 	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
+	$keywords_or = str_replace(',', "", $keywords_or);
+	$keywords_all = str_replace(',', "", $keywords_or)." ".$keywords_and." ".str_replace('"', "", $keyword_exact_phrase);
 
 	if(isset($form['created_before']) && ($form['created_before'] != "")){
 		$created_before_date = new DateTime( $form['created_before'] );	
@@ -100,7 +103,6 @@
 ?>
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
-	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
 	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
 	<input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
@@ -109,6 +111,12 @@
 	<input type="hidden" name="click_to_play" value="1" id="click_to_play" />
 	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '' ?>" />
 	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
+	<input type="hidden" id="keywords_all" name="keywords_all" value="<?php echo $keywords_all = isset($keywords_all) ? $keywords_all : '' ?>" />
+	<input type="hidden" id="keywords_and2" name="keywords_and2" value="<?php echo $keywords_and; ?>" />	
+	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
+	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
+	<input type="hidden" id="keyword_exact_phrase" name="keyword_exact_phrase" value="<?php echo $keyword_exact_phrase; ?>" />
+	
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Find a Video in our Catalog</h2>
@@ -117,7 +125,7 @@
 	<legend>Preview Feed</legend>		
 
 		<div class="label-tile-one-column">
-			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="<?php echo $keywords_and = isset($form['keywords_and']) ? $form['keywords_and'] : '' ?>" maxlength="255" /></span>
+			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="<?php echo $keywords_and = isset($form['keywords_and']) ? htmlentities(stripslashes($form['keywords_and']), ENT_QUOTES)  : '' ?>" maxlength="255" /></span>
 			<a href="#" id="help">help</a>
 		</div>	
 		
@@ -365,9 +373,13 @@ echo $result["video"]["summary"];
 	   $('#btn-create-feed').bind('click', function(e){
 		    var form = jQuery('#form-catalog-page');
 		    var action = jQuery('#action-catalog');
+		    var keywords = jQuery('#keywords_and').val();
+		    keywords = keywords.replace(/\+/g, '');
+		    keywords = keywords.replace(/\ -?[a-z]*\ /g," ")
+		    keywords = keywords.replace(/"/g, '');
+		    jQuery('#keywords_and').val(keywords);
 		    action.val("prefill");
-		    form.attr("action", "admin.php?page=autoposter");		    
-		    //window.location = "admin.php?page=autoposter&action=prefill";
+		    form.attr("action", "admin.php?page=autoposter");
 		    form.submit();
 		});
 

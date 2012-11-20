@@ -464,6 +464,8 @@
 
 		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
+		<input type="hidden" name="keywords_or" id="keywords_or" value="<?php echo $form["keywords_or"];?>" />
+		<input type="hidden" name="keyword_exact_phrase" id="keyword_exact_phrase" value="<?php echo $form["keyword_exact_phrase"];?>" />
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
 	                <tr valign="bottom">
@@ -531,7 +533,7 @@
         		<tr valign="bottom">
 					<th scope="row">Exclude these keywords</th>
         		           	<td >
-						<input type="text" name="keywords_not" id="keywords_not" class="ui-autocomplete-input" value="<?php echo $form["keywords_not"];?>" />
+						<input type="text" name="keywords_not" id="keywords_not" value="<?php echo $form["keywords_not"];?>" />						
 						<span class="description">Exclude these keywords</span>
 					</td>
         		</tr>

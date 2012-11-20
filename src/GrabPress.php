@@ -271,6 +271,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$name = rawurlencode( $_REQUEST[ 'name' ] );
 				$keywords_and = rawurlencode( $_REQUEST[ 'keywords_and' ] );
 				$keywords_not = rawurlencode( $_REQUEST[ 'keywords_not' ] );
+				$keywords_or = rawurlencode( $_REQUEST[ 'keywords_or' ] );
+				$keyword_exact_phrase = rawurlencode( $_REQUEST[ 'keyword_exact_phrase' ] );
 
 				$providers = $_REQUEST['provider'];
 				$providersList = implode( ',', $providers );
@@ -279,7 +281,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
-				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$channelsList.'&order=DESC&order_by=created_at&providers='.$providersList.'&keywords_not='.$keywords_not;
+				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and
+						.'&categories='.$channelsList.'&order=DESC&order_by=created_at&providers='.$providersList
+						.'&keywords_not='.$keywords_not.'&keywords_or='.$keywords_or
+						.'&keyword_exact_phrase='.$keyword_exact_phrase;
 				$connector_id = GrabPress::get_connector_id();
 				$category_list = $_REQUEST[ 'category' ];
 				$category_length = count( $category_list );
@@ -360,7 +365,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 										   "name" => $_REQUEST["name"],
 										   "channel" => $_REQUEST["channel"],
 										   "keywords_and" => $_REQUEST["keywords_and"],
-										   "keywords_not" => $_REQUEST["keywords_not"],										   
+										   "keywords_not" => $_REQUEST["keywords_not"],
+										   "keywords_or" => $url['keywords_or'],
+						   				   "keyword_exact_phrase" => $url['keyword_exact_phrase'],										   
 										   "limit" => $_REQUEST["limit"],
 										   "schedule" => $_REQUEST["schedule"],
 										   "active" => $_REQUEST["active"],
@@ -394,6 +401,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "channel" => $url['categories'],
 											   "keywords_and" => $url['keywords_and'],
 											   "keywords_not" => $url['keywords_not'],
+											   "keywords_or" => $url['keywords_or'],
+						   				       "keyword_exact_phrase" => $url['keyword_exact_phrase'],	
 											   "limit" => $feed->feed->posts_per_update,
 											   "schedule" => $feed->feed->update_frequency,
 											   "active" => $feed->feed->active,
@@ -432,6 +441,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 										   "channel" => $_REQUEST["channel"],
 										   "keywords_and" => htmlentities(stripslashes($_REQUEST["keywords_and"])),
 										   "keywords_not" => $_REQUEST["keywords_not"],
+										   "keywords_or" => $_REQUEST['keywords_or'],
+						   				   "keyword_exact_phrase" => $_REQUEST['keyword_exact_phrase'],
 										   "provider" => $_REQUEST["provider"],
 										   "publish" => $_REQUEST["publish"],
 										   "click_to_play" => $_REQUEST["click_to_play"],
@@ -800,6 +811,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						   "channel" => $channel,
 						   "keywords_and" => $url['keywords_and'],
 						   "keywords_not" => $url['keywords_not'],
+						   "keywords_or" => $url['keywords_or'],
+						   "keyword_exact_phrase" => $url['keyword_exact_phrase'],
 						   "limit" => $feed->feed->posts_per_update,
 						   "schedule" => $feed->feed->update_frequency,
 						   "publish" => $feed->feed->custom_options->publish,
@@ -832,7 +845,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"category" => array(),
 				"provider" => array(),
 				"keywords_and" => "",
-				"keywords_not" => "" );
+				"keywords_not" => "",
+				"keywords_or" => "",
+				"keyword_exact_phrase" => "");
 			foreach ( $defaults as $key => $value ) {
 				if ( !array_key_exists( $key, $params ) ) {
 					$params[$key] = $value;
@@ -869,6 +884,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$name = htmlspecialchars( $_REQUEST['name'] );
 					$keywords_and = htmlspecialchars( $_REQUEST['keywords_and'] );
 					$keywords_not = htmlspecialchars( $_REQUEST['keywords_not'] );
+					$keywords_or = htmlspecialchars( $_REQUEST['keywords_or'] );
+					$keyword_exact_phrase = htmlspecialchars( $_REQUEST['keyword_exact_phrase'] );		
 					//$categories = $_REQUEST[ 'channel' ];
 					$channels = $_REQUEST[ 'channel' ];
 					$channelsList = implode( ',', $channels );
@@ -886,7 +903,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $providersListTotal == $providers_total ) {
 						$providersList = '';
 					}
-					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$channelsList.'&order=DESC&order_by=created_at&providers='.$providersList.'&keywords_not='.$keywords_not;
+					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$channelsList.'&order=DESC&order_by=created_at&providers='.$providersList
+						.'&keywords_not='.$keywords_not.'&keywords_or='.$keywords_or
+						.'&keyword_exact_phrase='.$keyword_exact_phrase;
+						
 					$connector_id = GrabPress::get_connector_id();
 					$active = (bool)$_REQUEST['active'];
 
