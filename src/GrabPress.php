@@ -1219,8 +1219,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		        and '' === $content
 		    )
 		    {
-			    if ( ! empty ( $_REQUEST['post_ID'] )){
-	              $post->ID = $_REQUEST['post_ID'];
+			    if ( ! empty ( $_REQUEST['post_id'] )){
+	              $post->ID = $_REQUEST['post_id'];
 	            }		        
 		        $content = str_replace('&amp;', '&', $_REQUEST['pre_content']);
 		        return stripslashes($content);
