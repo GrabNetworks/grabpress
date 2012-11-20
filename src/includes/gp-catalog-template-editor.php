@@ -1,4 +1,100 @@
 <?php 
+	//var_dump(bloginfo('wpurl'));
+	//include ('../GrabPress.php');
+
+/**************************************************/
+	/*
+	function api_call( $method, $resource, $data=array(), $auth=false ){
+		//GrabPress::log();
+		if(isset($auth) && isset($data['user']) && isset($data['pass'])){
+			GrabPress::log("HTTP AUTH <> ". $data['user'] . ":" . $data['pass']);
+		}
+		
+		$json = json_encode( $data );
+		$apiLocation = GrabPress::get_api_location();
+		$location = 'http://'.$apiLocation.$resource;
+		$ch = curl_init();
+		curl_setopt( $ch, CURLOPT_URL, $location );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		//curl_setopt( $ch, CURLOPT_VERBOSE, true );
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
+			'Content-type: application/json'
+		) );
+		$params = '';
+		if( isset($auth) && isset($data['user']) && isset($data['pass'])){
+			curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
+		}else{
+			$params = strstr($resource, '?') ? '&' : '?';
+			foreach ($data as $key => $value) {
+				$params .=$key.'='.$value.'&';
+			}
+			$params = substr($params, 0, -1);
+		}
+		switch($method){
+			case 'GET':		
+				curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
+				$location.=$params;
+				break;
+			case 'POST';
+				curl_setopt( $ch, CURLOPT_POST, true );
+				curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
+				break;
+			case 'PUT';
+				//curl_setopt( $ch, CURLOPT_PUT, true );
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+				curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
+				break;
+			case 'DELETE';
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+				break;
+		}
+		$response = curl_exec( $ch );
+		$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+		curl_close( $ch );
+		GrabPress::log( 'status = ' . $status . ', response =' . $response );
+		return $response;
+	}
+
+	function get_json( $url, $optional_headers = null ) {
+		GrabPress::log();
+		$ch = curl_init();
+		$timeout = 5;
+		curl_setopt( $ch, CURLOPT_URL, $url );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-type: application/json\r\n' ) );
+		$response = curl_exec( $ch );
+		curl_close( $ch );
+
+		return $response;
+	}
+
+	function get_providers() {
+		if( isset(GrabPress::$providers) ){
+			return GrabPress::$providers;
+		}
+		$json_provider = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1' );
+		$list = json_decode( $json_provider );
+		$list = array_filter( $list, array( "GrabPress", "_filter_out_out_providers" ) );
+		GrabPress::$providers = $list;
+		return $list;
+	}
+
+	function get_channels() {
+		if( isset(GrabPress::$channels) ){
+			return GrabPress::$channels;
+		}
+		$json_channel = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );			
+		$list = json_decode( $json_channel );
+		GrabPress::$channels = $list;
+		return $list;
+	}
+
+	*/
+
+
+/**************************************************/
+
 	$list_provider = GrabPress::get_providers();
 	$providers_total = count( $list_provider );
 	if(isset($form['provider'])){
@@ -60,37 +156,38 @@
 	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
 	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
 
-	if(isset($form['created_before']) && ($form['created_before'] != "")){
+	if(isset($form['created_before'])){
 		$created_before_date = new DateTime( $form['created_before'] );	
 		$created_before = $created_before_date->format('Ymd');
-		$created_before_url = '&created_before='.$created_before;
 	}else{
-		$created_before_url = "";
+		$created_before = "";
 	}
-	
 
-	if(isset($form['created_after']) && ($form['created_after'] != "")){
+	if(isset($form['created_after'])){
 		$created_after_date = new DateTime( $form['created_after'] );
-		$created_after = $created_after_date->format('Ymd');
-		$created_after_url = '&created_after='.$created_after;
+		$created_after = $created_after_date->format('Ymd');	
 	}else{
-		$created_after_url = "";
+		$created_after = "";
 	}
 	
-	$url_catalog = 'http://catalog.'.GrabPress::$environment
+	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
 		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.''.$created_after_url
-		.''.$created_before_url
-	    .'&limit=-1';
-	
-	$json_preview = GrabPress::get_json($url_catalog);
+		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1'
+		);
 
+	/*
+	var_dump('http://catalog.'.GrabPress::$environment
+		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
+		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
+		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
+    */
 	$list_feeds = json_decode($json_preview, true);	
 	
 	if(empty($list_feeds["results"])){
-		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please <a href="#" class="close-preview">modify your settings</a> until you see the kind of videos you want in your feed';
 	}
 	
 	$id = GrabPress::get_connector_id();
@@ -98,17 +195,38 @@
 	$player_data = json_decode( $player_json, true );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
-<form method="post" action="" id="form-catalog-page">
-	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
+
+<style>
+/*
+#adminmenuwrap {
+    display: none !important;
+    background-color:#FFF !important;
+    border-color: #FFF !important;
+}
+#adminmenushadow, #adminmenuback{
+	background-image: none !important;
+    background-position: right top !important;
+    background-repeat: repeat-y !important;
+    background-color: #FFF !important;
+    border-color: #FFF !important;
+    border-width: 0 !important;
+    border-style: none !important;    
+}
+#wpadminbar{
+ 	display: none !important;
+}
+*/
+</style>
+
+<form method="post" action="" id="form-catalog-page" name="form_catalog_page">
+	<input type="hidden" id="action-catalog" name="action" value="catalog-search-editor" />
 	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
 	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
 	<input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
-	<input type="hidden" name="publish" value="1" id="publish" />
-	<input type="hidden" name="click_to_play" value="1" id="click_to_play" />
 	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '' ?>" />
-	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
+	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $post_id = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Find a Video in our Catalog</h2>
@@ -117,7 +235,7 @@
 	<legend>Preview Feed</legend>		
 
 		<div class="label-tile-one-column">
-			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="<?php echo $keywords_and = isset($form['keywords_and']) ? $form['keywords_and'] : '' ?>" maxlength="255" /></span>
+			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="" maxlength="255" /></span>
 			<a href="#" id="help">help</a>
 		</div>	
 		
@@ -127,27 +245,26 @@
 				<span class="preview-text-catalog"><b>Grab Video Categories: </b>	
 				</span>
 			</div>
-			<div class="tile-right">
-				<?php 				
-					if(isset($form["channel"])){
-						if(is_array($form["channel"])){
+			<div class="tile-right">		
+				<select style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+					<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
+					<?php
+						/*
+						if(isset($form["channel"]) && (is_array($form["channel"]))){
 							$channels = $form["channel"];
 						}else{
 							$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
 						}
-					}					
-					$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-					$list = json_decode( $json );					
-				?>		
-				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
-					<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
-					<?php	
+						*/
+						
+						$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+						$list = json_decode( $json );
 						foreach ( $list as $record ) {
 							$channel = $record -> category;
 							$name = $channel -> name;
 							$id = $channel -> id;
-							$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
-							echo '<option value = "'.$name.'" '.$selected.' >'.$name.'</option>';
+							//$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
+							echo '<option value = "'.$name.'" >'.$name.'</option>';
 						}
 					?>
 				</select>
@@ -166,8 +283,8 @@
 						$provider = $record_provider->provider;
 						$provider_name = $provider->name;
 						$provider_id = $provider->id;
-						$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
-						echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
+						//$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
+						echo '<option value = "'.$provider_id.'">'.$provider_name.'</option>';
 					}
 				?>
 				</select>
@@ -181,15 +298,15 @@
 				<span class="preview-text-catalog"><b>Date Range: </b></span>
 			</div>				
 			<div class="tile-right">
-				Between<input type="text" value="<?php echo $created_after = isset($form['created_after']) ? $form['created_after'] : ''; ?>" maxlength="8" id="created_after" name="created_after" class="datepicker" />
-				and<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
+				Between<input type="text" value="" maxlength="8" id="created_after" name="created_after" class="datepicker" />
+				and<input type="text" value="" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 			</div>
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
 				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Save as Feed' ) ?>" />				
-				<input type="submit" value=" Search " class="update-search" id="update-search" >
+				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
+				<input type="submit" value="Update Search" class="update-search" id="update-search" >
 			</div>
 		</div>
 		<br/><br/>	
@@ -213,14 +330,9 @@
 			<?php echo $result["video"]["title"]; ?>
 			</h2>
 			<p class="video_summary">		
-				<?php if(strlen($result["video"]["summary"]) > 100) {
-					echo substr($result["video"]["summary"], 0, 97) . '...';}
-else{
-echo $result["video"]["summary"];	  	
-}
-?>			
-</p>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+				<?php echo $result["video"]["summary"]; ?>
+			</p>
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Feed' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 		</div>
 	</div>
 	<?php
@@ -229,6 +341,41 @@ echo $result["video"]["summary"];
 	</fieldset>
 </div>
 </form>
+
+<script type="text/javascript">
+
+var FileBrowserDialogue = {
+    init : function () {
+        // Here goes your code for setting your custom things onLoad.
+        alert("entro a init");
+    },
+    mySubmit : function () {
+    	alert("entro a mySubmit)";
+        var URL = document.form_catalog_page.keywords_and.value;
+        var win = tinyMCEPopup.getWindowArg("window");
+
+        // insert information now
+        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
+
+        // are we an image browser
+        /*
+        if (typeof(win.ImageDialog) != "undefined")
+        {
+            // we are, so update image dimensions and preview if necessary
+            if (win.ImageDialog.getImageData) win.ImageDialog.getImageData();
+            if (win.ImageDialog.showPreviewImage) win.ImageDialog.showPreviewImage(URL);
+        }
+        */
+
+        // close popup window
+        tinyMCEPopup.close();
+    }
+}
+alert("entro a FileBrowserDialogue");
+tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
+</script>
+
+
 <script type="text/javascript">
 <?php $qa = GrabPress::$environment == 'grabqa'; ?>
 	( function ( global, $ ) {
@@ -371,13 +518,12 @@ echo $result["video"]["summary"];
 		    form.submit();
 		});
 
+	   
 	   	$('.btn-create-feed-single').bind('click', function(e){
 		    var form = $('#form-catalog-page');
 		    var ctp_player_id = $('#player_id').val();
 		    var bloginfo = $('#bloginfo').val();
 		    var video_id = this.id.replace('btn-create-feed-single-','');
-		    var pre_content2 = $('#pre_content2').val();
-		    var post_id = $('#post_id').val();
 
 		    var data = {
 				action: 'get_mrss_format',
@@ -387,18 +533,17 @@ echo $result["video"]["summary"];
 			$.post(ajaxurl, data, function(response) {
 				//alert('Got this from the server: ' + response);
 				var content = response.replace(/1825613/g, ctp_player_id);
-				if(pre_content2 != ""){
-					content = pre_content2 + "<br/><br/>" + content;
-				}
+				alert(content);
+
 				$('#pre_content').val(content);	
-				if(post_id != ""){
-					$('#post_ID').val(post_id);	
-				}
-				$('#post_ID').val(post_id);
-						
+
+				alert("entro al boton");			
 			    form.attr("ACTION", bloginfo+"/wp-admin/post-new.php");
-			    form.submit();				
-			});		  
+			    form.submit();		
+			    //form.FileBrowserDialogue.mySubmit();
+			    //FileBrowserDialogue.mySubmit();		
+			});		
+			*/  
 
 		});	
 
