@@ -425,7 +425,7 @@ line-height: 24px;
 #message{ /* position: relative; top: 150px; left: 0px;*/ }
 #form-catalog-page .preview-text-catalog { /*display: block;*/ }
 #form-catalog-page .preview-text-catalog b{ display: block; width: 150px; float: left; }
-#form-catalog-page .preview-text-catalog #keywords_and{ float: left; margin-right: 5px; width: 640px;   }
+#form-catalog-page .preview-text-catalog #keywords{ float: left; margin-right: 5px; width: 640px;   }
 .clear{ clear:both; }
 /* Catalog page*/
 #form-catalog-page .result-tile {

@@ -466,6 +466,7 @@
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
 		<input type="hidden" name="keywords_or" id="keywords_or" value="<?php echo $form["keywords_or"];?>" />
 		<input type="hidden" name="keyword_exact_phrase" id="keyword_exact_phrase" value="<?php echo $form["keyword_exact_phrase"];?>" />
+		<input type="hidden" name="keywords_and" id="keywords_and" value="<?php echo $form["keywords_and"];?>" />
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
 	                <tr valign="bottom">
@@ -526,7 +527,7 @@
 	        	<tr valign="bottom">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_and"];?>" maxlength="255" />
+						<input type="text" name="keywords" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords"];?>" maxlength="255" />
 						<span class="description">Default search setting is 'all of these words'</span>
 					</td>
         		</tr>
