@@ -55,13 +55,13 @@
 		}
 	}
 
-	$keyword_exact_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
-	$keyword_exact_phrase = str_replace('"', "", $keyword_exact_phrase);
+	$keywords_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
+	$keywords_phrase = str_replace('"', "", $keywords_phrase);
 	$keywords_and = isset($keywords_and) ? implode(",", $keywords_and) : "";
 	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
 	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
 	$keywords_or = str_replace(',', "", $keywords_or);
-	$keywords_all = str_replace(',', "", $keywords_or)." ".$keywords_and." ".str_replace('"', "", $keyword_exact_phrase);
+	$keywords_all = str_replace(',', "", $keywords_or)." ".$keywords_and." ".str_replace('"', "", $keywords_phrase);
 
 	if(isset($form['created_before']) && ($form['created_before'] != "")){
 		$created_before_date = new DateTime( $form['created_before'] );	
@@ -82,7 +82,7 @@
 	
 	$url_catalog = 'http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
 		.''.$created_after_url
 		.''.$created_before_url
@@ -115,7 +115,7 @@
 	<input type="hidden" id="keywords_and" name="keywords_and" value="<?php echo $keywords_and; ?>" />	
 	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
 	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
-	<input type="hidden" id="keyword_exact_phrase" name="keyword_exact_phrase" value="<?php echo $keyword_exact_phrase; ?>" />
+	<input type="hidden" id="keywords_phrase" name="keywords_phrase" value="<?php echo $keywords_phrase; ?>" />
 	
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>

@@ -151,7 +151,7 @@
 		}
 	}
 
-	$keyword_exact_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
+	$keywords_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
 	$keywords_and = isset($keywords_and) ? implode(",", $keywords_and) : "";
 	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
 	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
@@ -172,7 +172,7 @@
 	
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
 		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1'
 		);
@@ -180,7 +180,7 @@
 	/*
 	var_dump('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
 		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
     */

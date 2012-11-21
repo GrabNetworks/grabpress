@@ -16,8 +16,8 @@
 	}
 
 	$url_catalog = 'http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords_or='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'.com/catalogs/1/videos/search.json?keywords='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
+		.'&keywords_or='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
 		//.''.$created_after_url
 		//.''.$created_before_url
@@ -61,7 +61,7 @@
 		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
 		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />
 		<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
-	    <input type="hidden" id="keyword_exact_phrase" name="keyword_exact_phrase" value="<?php echo $keyword_exact_phrase; ?>" />
+	    <input type="hidden" id="keywords_phrase" name="keywords_phrase" value="<?php echo $keywords_phrase; ?>" />
 		<select name="category[]" style="display:none;" multiple="multiple	">
 			<?php foreach($category as $categ){ ?>
 				<option value="<?php echo $categ;?>" selected="selected"/>
@@ -80,7 +80,7 @@
 		
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview" >
 		<span class="preview-text"><b>Video Channel: </b><?php echo $channel_text; ?></span><br/>
-		<span class="preview-text"><b>Keywords: </b><?php echo $keywords; ?></span><br/>
+		<span class="preview-text"><b>Keywords: </b><?php echo $keywords_and; ?></span><br/>
 		<span class="preview-text"><b>Keywords excluded: </b><?php echo $keywords_not; ?></span><br/>
 		<span class="preview-text"><b>Providers: </b><?php echo $provider_text; ?></span><br/>
 		<span class="preview-text">This preview shows the kinds of videos that will be auto-posted for you when they arrive in the Grab Media catalog in the future. If you want to get the embed code for one of these videos to feature in one of your posts, log in to <a href="http://grab-media.com/premium-videos">grab-media.com/premium-videos</a> and find the video you are looking for, and grab the embed code.</span><br/><br/>  	
