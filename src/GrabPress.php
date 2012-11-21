@@ -282,7 +282,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$providersList = '';
 				}
 				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and
-						.'&categories='.$channelsList.'&order=DESC&order_by=created_at&providers='.$providersList
+						.'&categories='.rawurlencode($channelsList).'&order=DESC&order_by=created_at&providers='.$providersList
 						.'&keywords_not='.$keywords_not.'&keywords_or='.$keywords_or
 						.'&keywords_phrase='.$keywords_phrase;
 				$connector_id = GrabPress::get_connector_id();
@@ -975,7 +975,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $providersListTotal == $providers_total ) {
 						$providersList = '';
 					}
-					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.$channelsList.'&order=DESC&order_by=created_at&providers='.$providersList
+					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.rawurlencode($channelsList).'&order=DESC&order_by=created_at&providers='.$providersList
 						.'&keywords_not='.$keywords_not.'&keywords_or='.$keywords_or
 						.'&keywords_phrase='.$keywords_phrase;
 						
