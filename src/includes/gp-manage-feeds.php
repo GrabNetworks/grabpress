@@ -88,7 +88,7 @@
 						$Keywords = isset($url['keywords_or'])? $url['keywords_or'].' ' : '';
 						$Keywords .= isset($url['keywords_and'])? $url['keywords_and'].' ' : '';						
 						$Keywords .= isset($url['keyword_exact_phrase'])? $url['keyword_exact_phrase'].' ' : '';
-						var_dump($Keywords); echo "<br/><br/>";
+						
 						$keywords_num = strlen($Keywords);
 						echo $keywords = ($keywords_num > 15) ? substr($Keywords,0,15)."..." : $Keywords;
 					?>							

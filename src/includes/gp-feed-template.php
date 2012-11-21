@@ -500,14 +500,14 @@
 				<tr valign="bottom">
 					<th scope="row">Grab Video Categories<span class="asterisk">*</span></th>
 					<td>
-						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />
+						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />					
 						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 							<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
-							<?php
+							<?php								
 								if(is_array($form["channel"])){
 									$channels = $form["channel"];
 								}else{
-									$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
+									$channels = explode( ",", rawurldecode($form["channel"])); // Video categories chosen by the user
 								}
 								
 								$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
