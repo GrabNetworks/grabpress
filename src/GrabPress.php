@@ -402,7 +402,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "keywords_and" => $url['keywords_and'],
 											   "keywords_not" => $url['keywords_not'],
 											   "keywords_or" => $url['keywords_or'],
-						   				       "keywords_phrase" => $url['keywords_phrase'],	
+						   				       "keywords_phrase" => stripslashes($url['keywords_phrase']),	
 											   "limit" => $feed->feed->posts_per_update,
 											   "schedule" => $feed->feed->update_frequency,
 											   "active" => $feed->feed->active,
@@ -434,20 +434,21 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$channels_total = count( $list_channels );
 
 				$blogusers = get_users();
-				
+
+				$keywords = GrabPress::parse_adv_search_string($_REQUEST["keywords"]);
+
 				print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "create",
 										   "action" => "update",
 										   "channel" => $_REQUEST["channel"],
-										   "keywords_and" => htmlentities(stripslashes($_REQUEST["keywords_and"])),
-										   "keywords_not" => $_REQUEST["keywords_not"],
-										   "keywords_or" => $_REQUEST['keywords_or'],
-						   				   "keywords_phrase" => $_REQUEST['keywords_phrase'],
+										   "keywords_and" => $keywords["keywords_and"],
+										   "keywords_not" => $keywords["keywords_not"],
+										   "keywords_or" => $keywords['keywords_or'],
+						   				   "keywords_phrase" => $keywords['keywords_phrase'],
 										   "provider" => $_REQUEST["provider"],
 										   "publish" => $_REQUEST["publish"],
 										   "click_to_play" => $_REQUEST["click_to_play"],
-										   "category" => ""
-										   //"author" => $_REQUEST["author"],						   
+										   "category" => ""				   
 											),
 							"list_provider" => $list_provider,
 							"providers_total" => $providers_total,
@@ -854,6 +855,71 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 			}
 			return $params;
+		}
+		static function generate_catalog_url($options, $unlimited = false){
+
+			array_map(function($x){return urlencode($x);}, $options);
+
+			$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?'.
+					'keywords_and='.$options["keywords_and"].
+					'&categories='.$options["categories"].
+					'&providers='.$options["providers"].
+					'&keywords_not='.$options["keywords_not"].
+					"&keywords_or=".$options["keywords_or"].
+					"&keywords_phrase=".$options["keywords_phrase"];
+			if($options["sort_by"]){
+				$url .= "&sort_by=".$options["sort_by"];
+			}else{
+				$url .= "&sort_by=created_at";
+			}
+			if($options["created_after"]){
+				$url .= "&created_after=".$options["created_after"];
+			}
+			if($options["created_before"]){
+				$url .= "&created_before=".$options["created_before"];	
+			}
+			if($unlimited){
+				$url .= "&limit=-1";
+			}
+			return $url;
+		}
+
+		static function parse_adv_search_string($adv_search ){
+		
+			preg_match_all('/\"([^\"]*)\"/', $adv_search, $result_exact_phrase, PREG_PATTERN_ORDER);
+			for ($i = 0; $i < count($result_exact_phrase[0]); $i++) {
+				$matched_exact_phrase[] = stripslashes($result_exact_phrase[0][$i]);
+			}		
+
+			$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($adv_search));
+			
+			$keywords = preg_split("/\s+/", $sentence);
+			for ($i = 0; $i < count($keywords); $i++) {
+				if (preg_match('/\+/', $keywords[$i])) {
+				  //sscanf($keywords[$i], "+%s", $temp_and); # this is poor
+				  $temp_and = str_replace('+', '', $keywords[$i]);
+		          $keywords_and[] = $temp_and;
+				}elseif (preg_match("/^-/", $keywords[$i])) { 
+				  $temp_not = str_replace('-', '', $keywords[$i]);
+		          $keywords_not[] = $temp_not;	          
+				}else{
+				  $keywords_or[] = $keywords[$i];
+				}	
+			}
+
+			$keywords_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
+			$keywords_phrase = $keywords_phrase;
+			$keywords_and = isset($keywords_and) ? implode(",", $keywords_and) : "";
+			$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
+			$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
+			$keywords_or = str_replace(',', " ", $keywords_or);
+
+			return array(
+				"keywords_phrase" => $keywords_phrase,
+				"keywords_and" => $keywords_and,
+				"keywords_not" => $keywords_not,
+				"keywords_or" => $keywords_or
+				);
 		}
 		static function dispatcher() {			
 			GrabPress::log();

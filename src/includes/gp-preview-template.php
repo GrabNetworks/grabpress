@@ -22,7 +22,7 @@
 		//.''.$created_after_url
 		//.''.$created_before_url
 	    .'&limit=-1';
-
+	throw new Exception($url_catalog);
 	//$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
 	//	.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
 	//	.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
