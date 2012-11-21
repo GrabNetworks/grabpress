@@ -544,7 +544,7 @@
         		</tr>
         		<tr valign="bottom">
 					<th scope="row">Exact phrase</th>
-        		           	<td >
+        		        <td >
 						<input type="text" name="keywords_phrase" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_phrase"];?>" maxlength="255" />
 						<span class="description">Exact phrase</span>
 					</td>

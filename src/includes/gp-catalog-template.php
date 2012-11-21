@@ -31,63 +31,23 @@
 		$channels = "";
 	}	
 
-	if(isset($form['keywords'])){
-		
-		preg_match_all('/"([^"]*)"/', $form['keywords'], $result_exact_phrase, PREG_PATTERN_ORDER);
-		for ($i = 0; $i < count($result_exact_phrase[0]); $i++) {
-			$matched_exact_phrase[] = stripslashes($result_exact_phrase[0][$i]);
-		}		
-
-		$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($form['keywords']));
-		
-		$keywords = preg_split("/\s+/", $sentence);
-		for ($i = 0; $i < count($keywords); $i++) {
-			if (preg_match('/\+/', $keywords[$i])) {
-			  //sscanf($keywords[$i], "+%s", $temp_and); # this is poor
-			  $temp_and = str_replace('+', '', $keywords[$i]);
-	          $keywords_and[] = $temp_and;
-			}elseif (preg_match("/^-/", $keywords[$i])) { 
-			  $temp_not = str_replace('-', '', $keywords[$i]);
-	          $keywords_not[] = $temp_not;	          
-			}else{
-			  $keywords_or[] = $keywords[$i];
-			}	
-		}
-	}
-
-	$keywords_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
-	$keywords_phrase = str_replace('"', "", $keywords_phrase);
-	$keywords_and = isset($keywords_and) ? implode(",", $keywords_and) : "";
-	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
-	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
-	$keywords_or = str_replace(',', "", $keywords_or);
-	$keywords_all = str_replace(',', "", $keywords_or)." ".$keywords_and." ".str_replace('"', "", $keywords_phrase);
+	$adv_search_params = GrabPress::parse_adv_search_string($form["keywords"]);
 
 	if(isset($form['created_before']) && ($form['created_before'] != "")){
 		$created_before_date = new DateTime( $form['created_before'] );	
 		$created_before = $created_before_date->format('Ymd');
-		$created_before_url = '&created_before='.$created_before;
-	}else{
-		$created_before_url = "";
+		$adv_search_params['created_before'] = $created_before;
 	}
 	
-
 	if(isset($form['created_after']) && ($form['created_after'] != "")){
 		$created_after_date = new DateTime( $form['created_after'] );
 		$created_after = $created_after_date->format('Ymd');
-		$created_after_url = '&created_after='.$created_after;
-	}else{
-		$created_after_url = "";
+		$adv_search_params['created_after'] = $created_after;
 	}
-	
-	$url_catalog = 'http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.''.$created_after_url
-		.''.$created_before_url
-	    .'&limit=-1';
-	
+	$adv_search_params["providers"] = $providers;
+	$adv_search_params["categories"] = $channels;
+	$url_catalog = GrabPress::generate_catalog_url($adv_search_params, true);
+	//throw new Exception($url_catalog);
 	$json_preview = GrabPress::get_json($url_catalog);
 
 	$list_feeds = json_decode($json_preview, true);	
@@ -373,11 +333,7 @@ echo $result["video"]["summary"];
 	   $('#btn-create-feed').bind('click', function(e){
 		    var form = jQuery('#form-catalog-page');
 		    var action = jQuery('#action-catalog');
-		    var keywords = jQuery('#keywords').val();
-		    keywords = keywords.replace(/\+/g, '');
-		    keywords = keywords.replace(/\ -?[a-z]*\ /g," ")
-		    keywords = keywords.replace(/"/g, '');
-		    jQuery('#keywords').val(keywords);
+		    
 		    action.val("prefill");
 		    form.attr("action", "admin.php?page=autoposter");
 		    form.submit();
