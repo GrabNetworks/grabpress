@@ -31,14 +31,14 @@
 		$channels = "";
 	}	
 
-	if(isset($form['keywords_and'])){
+	if(isset($form['keywords'])){
 		
-		preg_match_all('/"([^"]*)"/', $form['keywords_and'], $result_exact_phrase, PREG_PATTERN_ORDER);
+		preg_match_all('/"([^"]*)"/', $form['keywords'], $result_exact_phrase, PREG_PATTERN_ORDER);
 		for ($i = 0; $i < count($result_exact_phrase[0]); $i++) {
 			$matched_exact_phrase[] = stripslashes($result_exact_phrase[0][$i]);
 		}		
 
-		$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($form['keywords_and']));
+		$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($form['keywords']));
 		
 		$keywords = preg_split("/\s+/", $sentence);
 		for ($i = 0; $i < count($keywords); $i++) {
@@ -112,7 +112,7 @@
 	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '' ?>" />
 	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
 	<input type="hidden" id="keywords_all" name="keywords_all" value="<?php echo $keywords_all = isset($keywords_all) ? $keywords_all : '' ?>" />
-	<input type="hidden" id="keywords_and2" name="keywords_and2" value="<?php echo $keywords_and; ?>" />	
+	<input type="hidden" id="keywords_and" name="keywords_and" value="<?php echo $keywords_and; ?>" />	
 	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
 	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
 	<input type="hidden" id="keyword_exact_phrase" name="keyword_exact_phrase" value="<?php echo $keyword_exact_phrase; ?>" />
@@ -125,7 +125,7 @@
 	<legend>Preview Feed</legend>		
 
 		<div class="label-tile-one-column">
-			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="<?php echo $keywords_and = isset($form['keywords_and']) ? htmlentities(stripslashes($form['keywords_and']), ENT_QUOTES)  : '' ?>" maxlength="255" /></span>
+			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? htmlentities(stripslashes($form['keywords']), ENT_QUOTES)  : '' ?>" maxlength="255" /></span>
 			<a href="#" id="help">help</a>
 		</div>	
 		
@@ -373,11 +373,11 @@ echo $result["video"]["summary"];
 	   $('#btn-create-feed').bind('click', function(e){
 		    var form = jQuery('#form-catalog-page');
 		    var action = jQuery('#action-catalog');
-		    var keywords = jQuery('#keywords_and').val();
+		    var keywords = jQuery('#keywords').val();
 		    keywords = keywords.replace(/\+/g, '');
 		    keywords = keywords.replace(/\ -?[a-z]*\ /g," ")
 		    keywords = keywords.replace(/"/g, '');
-		    jQuery('#keywords_and').val(keywords);
+		    jQuery('#keywords').val(keywords);
 		    action.val("prefill");
 		    form.attr("action", "admin.php?page=autoposter");
 		    form.submit();

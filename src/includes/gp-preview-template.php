@@ -17,7 +17,7 @@
 
 	$url_catalog = 'http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&keywords_or='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
 		//.''.$created_after_url
 		//.''.$created_before_url
