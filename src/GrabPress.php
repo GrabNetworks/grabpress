@@ -909,6 +909,24 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"keywords_or" => $keywords_or
 				);
 		}
+		static function generate_adv_search_string($params){
+			$defaults = array(
+				"keywords_or" => "",
+				"keywords_and" => "",
+				"keywords_not" => "",
+				"keywords_phrase" => ""
+			);
+			$params = array_merge($defaults, $params);
+
+			$keywords = join(" ", split(" ", $params["keywords_or"]));
+			$keywords .= join(" +", split(" ", $params["keywords_and"]));
+			$keywords .= join(" -", split(" ", $params["keywords_not"]));
+			if($params["keywords_phrase"]){
+				$keywords .= "\"".$params["keywords_phrase"]."\"";
+			}
+			return $keywords;
+		}
+
 		static function dispatcher() {			
 			GrabPress::log();
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";

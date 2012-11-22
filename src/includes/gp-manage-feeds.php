@@ -14,7 +14,6 @@
 			<th>Name</th>
 			<th>Video Categories</th>
 			<th>Keywords</th>
-			<th>Excluded Keywords</th>
 			<th>Content<br/>Providers</th>			
 			<th>Schedule</th>
 			<th>Max<br/>Results</th>
@@ -85,12 +84,9 @@
 				</td>
 				<td>		
 					<?php 						
-						$Keywords = isset($url['keywords_or'])? $url['keywords_or'].' ' : '';
-						$Keywords .= isset($url['keywords_and'])? $url['keywords_and'].' ' : '';						
-						$Keywords .= isset($url['keywords_phrase'])? $url['keywords_phrase'].' ' : '';
-						var_dump($Keywords); echo "<br/><br/>";
-						$keywords_num = strlen($Keywords);
-						echo $keywords = ($keywords_num > 15) ? substr($Keywords,0,15)."..." : $Keywords;
+						$keywords = GrabPress::generate_adv_search_string($url);
+
+						echo $keywords = (strlen($keywords) > 15) ? substr($keywords,0,15)."..." : $keywords;
 					?>							
 				</td>
 				<td>		
