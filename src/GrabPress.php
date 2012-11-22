@@ -398,12 +398,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "feed_id" => $feed_id,
 											   "name" => $feed->feed->name,
 											   //"channel" => $feed->feed->name,
-<<<<<<< HEAD
 											   "channel" => $url['categories'],
-=======
-											   "channel" => rawurlencode($url['categories']),
-											   "keywords" => $_REQUEST['keywords'],
->>>>>>> dev-cs
 											   "keywords_and" => $url['keywords_and'],
 											   "keywords_not" => $url['keywords_not'],
 											   "keywords_or" => $url['keywords_or'],
