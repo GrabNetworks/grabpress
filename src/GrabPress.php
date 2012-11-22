@@ -648,7 +648,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 				if ( $active_feeds > 0 || $num_feeds > 0 ) {
 					$noun = 'feed';
-					if ( $active_feeds > 1 || $active_feeds == 0 ) {
+					if ( $active_feeds > 1 || $num_feeds == 0 ) {
 						$noun .= 's';
 					}
 					$user = GrabPress::get_user();	
@@ -657,7 +657,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
 					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
 					$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
-					GrabPress::$message = 'Grab Autoposter is ON with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active. '.$linked_message .$environment;
+					if( $active_feeds == 0 ){
+						$active_feeds = $num_feeds;
+						$autoposter_status = 'OFF';
+						$feeds_status = 'inactive';
+					}else{
+						$autoposter_status = 'ON';
+						$feeds_status = 'active';
+					}
+					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;
+										
 				}
 			}
 		}
@@ -1180,7 +1189,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 			}
 
-			echo $active_feeds;
+			echo $active_feeds.'-'.$num_feeds;
 
 			die(); // this is required to return a proper result
 		}
