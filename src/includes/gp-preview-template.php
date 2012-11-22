@@ -3,6 +3,7 @@
 	$provider_total = count(GrabPress::get_providers());
 	if(($provider_total == count($provider)) || in_array("", $provider)){
 		$provider_text = "All Providers";
+		$providers = "";
 	}else{
 		$provider_text = count($provider)." of ".$provider_total." selected";
 	}
@@ -11,24 +12,20 @@
 	$channel_total = count(GrabPress::get_channels());
 	if(($channel_total == count($channel)) || in_array("", $channel)){
 		$channel_text = "All Video Categories";
+		$channels = "";
 	}else{
 		$channel_text = count($channel)." of ".$channel_total." selected";
 	}
 
 	$url_catalog = 'http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords_or='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
+		.'.com/catalogs/1/videos/search.json?keywords_and='.rawurlencode($keywords_and).'&keywords_not='.rawurlencode($keywords_not)
+		.'&keywords_or='.rawurlencode($keywords_or).'&keyword_exact_phrase='.rawurlencode($keyword_exact_phrase)
+		.'&categories='.rawurlencode($channels).'&order=DESC&order_by=created_at&providers='.$providers
 		//.''.$created_after_url
 		//.''.$created_before_url
 	    .'&limit=-1';
 
-	//$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-	//	.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-	//	.'&categories='.urlencode($channels).'&order=DESC&order_by=created_at&providers='.urlencode($providers));
-
 	$json_preview = GrabPress::get_json($url_catalog);
-
 	$list_feeds = json_decode($json_preview, true);
 	
 	if(empty($list_feeds["results"])){
