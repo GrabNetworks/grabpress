@@ -15,11 +15,20 @@
 		$channel_text = count($channel)." of ".$channel_total." selected";
 	}
 
-	$url_catalog = 'http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords_or='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-	    .'&limit=-1';
+	// $url_catalog = 'http://catalog.'.GrabPress::$environment
+	// 	.'.com/catalogs/1/videos/search.json?keywords='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
+	// 	.'&keywords_or='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
+	// 	.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
+	//     .'&limit=-1';
+   $url_catalog = GrabPress::generate_catalog_url(array(
+   		"keywords_and" => $keywords_and,
+   		"keywords_not" => $keywords_not,
+   		"keywords_or" => $keywords_or,
+   		"keywords_phrase" => $keywords_phrase,
+   		"providers" => $providers,
+   		"categories" => $channels
+   	));
+   error_log("DEBUG: ".$url_catalog);
 
 	$json_preview = GrabPress::get_json($url_catalog);
 

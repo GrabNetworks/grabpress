@@ -682,21 +682,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function render_catalog_management() {
 			GrabPress::log();
-			//if (!current_user_can('manage_options'))  {
-			//  wp_die( __('You do not have sufficient permissions to access this page.') );
-			// }
+
 			print GrabPress::fetch( 'includes/gp-catalog-template.php' ,
 				array( "form" => $_REQUEST ) );
-			/*
-			print GrabPress::fetch( 'includes/gp-feed-template.php',
-				array( "form" => $_REQUEST,
-					"list_provider" => $list_provider,
-					"providers_total" => $providers_total,
-					"list_channels" => $list_channels,
-					"channels_total" => $channels_total,
-					"blogusers" => $blogusers ) );
-			*/
-
 		}
 
 		static function render_catalog_editor_management() {
@@ -722,6 +710,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return !$x->provider->opt_out;
 		}
 
+		// returns cached results after 1rst call
 		static function get_providers() {
 			if( isset(GrabPress::$providers) ){
 				return GrabPress::$providers;
@@ -885,11 +874,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function parse_adv_search_string($adv_search ){
-		
+
 			preg_match_all('/\"([^\"]*)\"/', $adv_search, $result_exact_phrase, PREG_PATTERN_ORDER);
 			for ($i = 0; $i < count($result_exact_phrase[0]); $i++) {
-				$matched_exact_phrase[] = stripslashes($result_exact_phrase[0][$i]);
-			}		
+				$matched_exact_phrase[] = str_replace("\"","",stripslashes($result_exact_phrase[0][$i]));
+			}
 
 			$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($adv_search));
 			
@@ -913,7 +902,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
 			$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
 			$keywords_or = str_replace(',', " ", $keywords_or);
-
 			return array(
 				"keywords_phrase" => $keywords_phrase,
 				"keywords_and" => $keywords_and,
