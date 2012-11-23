@@ -1,5 +1,5 @@
 <?php
-	$feeds = GrabPress::get_feeds();
+	$feeds = GrabPress::api_get_feeds();
 	$num_feeds = count( $feeds ); 
 	$active_feeds = 0;
 
@@ -14,7 +14,6 @@
 			<th>Name</th>
 			<th>Video Categories</th>
 			<th>Keywords</th>
-			<th>Excluded Keywords</th>
 			<th>Content<br/>Providers</th>			
 			<th>Schedule</th>
 			<th>Max<br/>Results</th>
@@ -27,9 +26,9 @@
 			<th></th>
 		</tr>
 		<?php
-			$feeds = GrabPress::get_feeds();
+			$feeds = GrabPress::api_get_feeds();
 			$num_feeds = count( $feeds );
-			$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+			$json = GrabPress::api_get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 			$categories_list = json_decode( $json );
 
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
@@ -85,12 +84,9 @@
 				</td>
 				<td>		
 					<?php 						
-						$Keywords = isset($url['keywords_or'])? $url['keywords_or'].' ' : '';
-						$Keywords .= isset($url['keywords_and'])? $url['keywords_and'].' ' : '';						
-						$Keywords .= isset($url['keywords_phrase'])? $url['keywords_phrase'].' ' : '';
-						var_dump($Keywords); echo "<br/><br/>";
-						$keywords_num = strlen($Keywords);
-						echo $keywords = ($keywords_num > 15) ? substr($Keywords,0,15)."..." : $Keywords;
+						$keywords = GrabPress::generate_adv_search_string($url);
+
+						echo $keywords = (strlen($keywords) > 15) ? substr($keywords,0,15)."..." : $keywords;
 					?>							
 				</td>
 				<td>		
