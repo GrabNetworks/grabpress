@@ -931,10 +931,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			for($i = 0; $i < count($keywords_plus); $i++){
 				$keywords .= " +".$keywords_plus[$i]." ";
 			}
-			$keywords_minus = explode(" ", $params["keywords_not"]);
-			for($i = 0; $i < count($keywords_minus); $i++){
-				$keywords .= " -".$keywords_minus[$i]." ";
-			}
 			if($params["keywords_phrase"]){
 				$keywords .= " \"".$params["keywords_phrase"]."\" ";
 			}
