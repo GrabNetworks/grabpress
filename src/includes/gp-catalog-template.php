@@ -46,10 +46,9 @@
 	}
 	$adv_search_params["providers"] = $providers;
 	$adv_search_params["categories"] = $channels;
+
 	$url_catalog = GrabPress::generate_catalog_url($adv_search_params, true);
-
 	$json_preview = GrabPress::api_get_json($url_catalog);
-
 	$list_feeds = json_decode($json_preview, true);	
 	
 	if(empty($list_feeds["results"])){
@@ -57,8 +56,8 @@
 	}
 	
 	$id = GrabPress::api_get_connector_id();
-	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
-	$player_data = json_decode( $player_json, true );
+	$player_data = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
+	
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
 <form method="post" action="" id="form-catalog-page">
@@ -103,8 +102,7 @@
 							$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
 						}
 					}					
-					$json = GrabPress::api_get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-					$list = json_decode( $json );					
+					$list = GrabPress::get_channels();
 				?>		
 				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 					<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							

@@ -74,20 +74,17 @@
 		$created_after = "";
 	}
 	
-	$json_preview = GrabPress::api_get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1'
-		);
+	$json_preview = GrabPress::api_get_json(GrabPress::generate_catalog_url(array(
+		"keywords_and" => $keywords_and,
+		"keywords_or" => $keywords_or,
+		"keywords_not" => $keywords_not,
+		"keywords_phrase" => $keywords_phrase,
+		"categories" => $channels,
+		"providers" => $providers,
+		"created_after" => $created_after,
+		"created_before" => $created_before 
+		)), true);
 
-	/*
-	var_dump('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
-    */
 	$list_feeds = json_decode($json_preview, true);	
 	
 	if(empty($list_feeds["results"])){
@@ -95,33 +92,9 @@
 	}
 	
 	$id = GrabPress::api_get_connector_id();
-	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
-	$player_data = json_decode( $player_json, true );
+	$player_data = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
-
-<style>
-/*
-#adminmenuwrap {
-    display: none !important;
-    background-color:#FFF !important;
-    border-color: #FFF !important;
-}
-#adminmenushadow, #adminmenuback{
-	background-image: none !important;
-    background-position: right top !important;
-    background-repeat: repeat-y !important;
-    background-color: #FFF !important;
-    border-color: #FFF !important;
-    border-width: 0 !important;
-    border-style: none !important;    
-}
-#wpadminbar{
- 	display: none !important;
-}
-*/
-</style>
-
 <form method="post" action="" id="form-catalog-page" name="form_catalog_page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search-editor" />
 	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
@@ -161,8 +134,7 @@
 						}
 						*/
 						
-						$json = GrabPress::api_get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-						$list = json_decode( $json );
+						$list = GrabPress::get_channels();
 						foreach ( $list as $record ) {
 							$channel = $record -> category;
 							$name = $channel -> name;

@@ -28,8 +28,6 @@
 		<?php
 			$feeds = GrabPress::api_get_feeds();
 			$num_feeds = count( $feeds );
-			$json = GrabPress::api_get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-			$categories_list = json_decode( $json );
 
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
 				$feed = $feeds[$n]->feed;

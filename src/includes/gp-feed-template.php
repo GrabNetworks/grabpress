@@ -1,4 +1,3 @@
-<!--<form method="post" action="" id="form-create-feed">-->
 <div class="wrap">
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Category and Keywords</h2>
@@ -16,22 +15,6 @@
 				return false;
 			}
 		}
-
-		/*
-		global.setup = function(ed){
-		     // Add a custom button
-		     ed.addButton('mybutton', 
-		     {
-		          title : 'My button',
-		          image : 'img/example.gif',
-		          onclick : function() 
-		          {
-		          // Add you own code to execute something on click
-		          ed.focus();
-		          ed.selection.setContent('Hello world!');
-		     }
-		});
-		*/
 
 		global.previewVideos = function () {
 			var errors = hasValidationErrors();
@@ -88,13 +71,6 @@
 				$('#btn-create-feed').removeAttr('disabled');
 				$('#btn-preview-feed').removeAttr('disabled');
 
-				/*
-				if( $( '#btn-create-feed' ).off ){
-					$( '#btn-create-feed' ).off('click');
-				}else{
-					$( '#btn-create-feed' ).unbind('click');
-				}
-				*/
 
 				if( $( '#btn-preview-feed' ).off ){
 					$( '#btn-preview-feed' ).off('click');
@@ -106,13 +82,6 @@
 				$( '#btn-create-feed' ).attr('disabled', 'disabled');
 				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
 				
-				/*
-				if( $( '#btn-create-feed' ).off ){
-					$( '#btn-create-feed' ).off('click');
-				}else{
-					$( '#btn-create-feed' ).unbind('click');
-				}
-				*/
 
 				if( $( '#btn-preview-feed' ).off ){
 					$( '#btn-preview-feed' ).off('click');
@@ -507,8 +476,7 @@
 									$channels = explode( ",", rawurldecode($form["channel"])); // Video categories chosen by the user
 								}
 								
-								$json = GrabPress::api_get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-								$list = json_decode( $json );
+								$list = GrabPress::get_channels();
 								foreach ( $list as $record ) {
 									$channel = $record -> category;
 									$name = $channel -> name;
