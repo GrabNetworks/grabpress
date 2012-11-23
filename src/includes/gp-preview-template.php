@@ -27,7 +27,7 @@
    		"categories" => $channels
    	));
 
-	$json_preview = GrabPress::get_json($url_catalog);
+	$json_preview = GrabPress::api_get_json($url_catalog);
 	$list_feeds = json_decode($json_preview, true);
 	
 	if(empty($list_feeds["results"])){

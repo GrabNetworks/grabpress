@@ -430,7 +430,7 @@
 	</script>
 	<?php
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
-		$connector_id = GrabPress::get_connector_id();
+		$connector_id = GrabPress::api_get_connector_id();
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
@@ -507,7 +507,7 @@
 									$channels = explode( ",", rawurldecode($form["channel"])); // Video categories chosen by the user
 								}
 								
-								$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+								$json = GrabPress::api_get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 								$list = json_decode( $json );
 								foreach ( $list as $record ) {
 									$channel = $record -> category;
@@ -722,7 +722,7 @@
 </div>
 
 <?php
-	$feeds = GrabPress::get_feeds();
+	$feeds = GrabPress::api_get_feeds();
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',

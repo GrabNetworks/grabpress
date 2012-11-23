@@ -74,7 +74,7 @@
 		$created_after = "";
 	}
 	
-	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
+	$json_preview = GrabPress::api_get_json('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
 		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
@@ -94,7 +94,7 @@
 		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please <a href="#" class="close-preview">modify your settings</a> until you see the kind of videos you want in your feed';
 	}
 	
-	$id = GrabPress::get_connector_id();
+	$id = GrabPress::api_get_connector_id();
 	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_data = json_decode( $player_json, true );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
@@ -161,7 +161,7 @@
 						}
 						*/
 						
-						$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+						$json = GrabPress::api_get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 						$list = json_decode( $json );
 						foreach ( $list as $record ) {
 							$channel = $record -> category;

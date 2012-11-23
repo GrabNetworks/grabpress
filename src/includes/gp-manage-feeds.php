@@ -1,5 +1,5 @@
 <?php
-	$feeds = GrabPress::get_feeds();
+	$feeds = GrabPress::api_get_feeds();
 	$num_feeds = count( $feeds ); 
 	$active_feeds = 0;
 
@@ -26,9 +26,9 @@
 			<th></th>
 		</tr>
 		<?php
-			$feeds = GrabPress::get_feeds();
+			$feeds = GrabPress::api_get_feeds();
 			$num_feeds = count( $feeds );
-			$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
+			$json = GrabPress::api_get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
 			$categories_list = json_decode( $json );
 
 			for ( $n = 0; $n < $num_feeds; $n++ ) {

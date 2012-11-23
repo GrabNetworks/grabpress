@@ -12,7 +12,7 @@ IMPORTANT: it is a strict design decision that the only value to be stored   in 
 
 GrabPress already provides a getJSON and postJSON pair of methods for communicating with outside APIs
 
-Application-specific functionality can be built upon these methods. See GrabPress::get_feeds() as an example. That method contacts the Autoposter API and retrieves the list of created feeds associated with the value stored in GrabPress::$api_key.
+Application-specific functionality can be built upon these methods. See GrabPress::api_get_feeds() as an example. That method contacts the Autoposter API and retrieves the list of created feeds associated with the value stored in GrabPress::$api_key.
 
 The return value is used later in the HTML section of the PHP file to retrieve the Array from which the Manage Feeds table is built.
 
