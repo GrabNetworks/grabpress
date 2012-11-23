@@ -14,6 +14,7 @@
 			<th>Name</th>
 			<th>Video Categories</th>
 			<th>Keywords</th>
+			<th>Exclude<br/>keywords</th>
 			<th>Content<br/>Providers</th>			
 			<th>Schedule</th>
 			<th>Max<br/>Results</th>
@@ -83,7 +84,7 @@
 					?>							
 				</td>
 				<td>		
-					<?php 						
+					<?php
 						$keywords = GrabPress::generate_adv_search_string($url);
 
 						echo $keywords = (strlen($keywords) > 15) ? substr($keywords,0,15)."..." : $keywords;
