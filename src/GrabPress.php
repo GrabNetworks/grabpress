@@ -435,7 +435,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 				$blogusers = get_users();
 
-				$keywords = GrabPress::parse_adv_search_string($_REQUEST["keywords"]);
+				$keywords = GrabPress::parse_adv_search_string(isset($_REQUEST["keywords"])?$_REQUEST["keywords"]:"");
 
 				print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "create",
@@ -831,15 +831,15 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					'&keywords_not='.$options["keywords_not"].
 					"&keywords_or=".$options["keywords_or"].
 					"&keywords_phrase=".$options["keywords_phrase"];
-			if($options["sort_by"]){
+			if(isset($options["sort_by"]) && $options["sort_by"] != ""){
 				$url .= "&sort_by=".$options["sort_by"];
 			}else{
 				$url .= "&sort_by=created_at";
 			}
-			if($options["created_after"]){
+			if(isset($options["created_after"]) && $options["created_after"] != ""){
 				$url .= "&created_after=".$options["created_after"];
 			}
-			if($options["created_before"]){
+			if(isset($options["created_before"]) && $options["created_before"] != ""){
 				$url .= "&created_before=".$options["created_before"];	
 			}
 			if($unlimited){
