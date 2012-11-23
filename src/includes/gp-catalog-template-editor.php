@@ -1,100 +1,4 @@
 <?php 
-	//var_dump(bloginfo('wpurl'));
-	//include ('../GrabPress.php');
-
-/**************************************************/
-	/*
-	function api_call( $method, $resource, $data=array(), $auth=false ){
-		//GrabPress::log();
-		if(isset($auth) && isset($data['user']) && isset($data['pass'])){
-			GrabPress::log("HTTP AUTH <> ". $data['user'] . ":" . $data['pass']);
-		}
-		
-		$json = json_encode( $data );
-		$apiLocation = GrabPress::get_api_location();
-		$location = 'http://'.$apiLocation.$resource;
-		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_URL, $location );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		//curl_setopt( $ch, CURLOPT_VERBOSE, true );
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
-			'Content-type: application/json'
-		) );
-		$params = '';
-		if( isset($auth) && isset($data['user']) && isset($data['pass'])){
-			curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
-		}else{
-			$params = strstr($resource, '?') ? '&' : '?';
-			foreach ($data as $key => $value) {
-				$params .=$key.'='.$value.'&';
-			}
-			$params = substr($params, 0, -1);
-		}
-		switch($method){
-			case 'GET':		
-				curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
-				$location.=$params;
-				break;
-			case 'POST';
-				curl_setopt( $ch, CURLOPT_POST, true );
-				curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
-				break;
-			case 'PUT';
-				//curl_setopt( $ch, CURLOPT_PUT, true );
-				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-				curl_setopt( $ch, CURLOPT_POSTFIELDS, $json );
-				break;
-			case 'DELETE';
-				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-				break;
-		}
-		$response = curl_exec( $ch );
-		$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-		curl_close( $ch );
-		GrabPress::log( 'status = ' . $status . ', response =' . $response );
-		return $response;
-	}
-
-	function get_json( $url, $optional_headers = null ) {
-		GrabPress::log();
-		$ch = curl_init();
-		$timeout = 5;
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-type: application/json\r\n' ) );
-		$response = curl_exec( $ch );
-		curl_close( $ch );
-
-		return $response;
-	}
-
-	function get_providers() {
-		if( isset(GrabPress::$providers) ){
-			return GrabPress::$providers;
-		}
-		$json_provider = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1' );
-		$list = json_decode( $json_provider );
-		$list = array_filter( $list, array( "GrabPress", "_filter_out_out_providers" ) );
-		GrabPress::$providers = $list;
-		return $list;
-	}
-
-	function get_channels() {
-		if( isset(GrabPress::$channels) ){
-			return GrabPress::$channels;
-		}
-		$json_channel = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );			
-		$list = json_decode( $json_channel );
-		GrabPress::$channels = $list;
-		return $list;
-	}
-
-	*/
-
-
-/**************************************************/
-
 	$list_provider = GrabPress::get_providers();
 	$providers_total = count( $list_provider );
 	if(isset($form['provider'])){
@@ -151,7 +55,7 @@
 		}
 	}
 
-	$keyword_exact_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
+	$keywords_phrase = isset($matched_exact_phrase) ? implode(",", $matched_exact_phrase) : "";
 	$keywords_and = isset($keywords_and) ? implode(",", $keywords_and) : "";
 	$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
 	$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
@@ -172,7 +76,7 @@
 	
 	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
 		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1'
 		);
@@ -180,7 +84,7 @@
 	/*
 	var_dump('http://catalog.'.GrabPress::$environment
 		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keyword_exact_phrase='.urlencode($keyword_exact_phrase)
+		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
 		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
 		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
     */

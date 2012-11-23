@@ -469,9 +469,6 @@
 
 		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
-		<input type="hidden" name="keywords_or" id="keywords_or" value="<?php echo $form["keywords_or"];?>" />
-		<input type="hidden" name="keyword_exact_phrase" id="keyword_exact_phrase" value="<?php echo $form["keyword_exact_phrase"];?>" />
-		<input type="hidden" name="keywords_and" id="keywords_and" value="<?php echo $form["keywords_and"];?>" />
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
 	                <tr valign="bottom">
@@ -532,7 +529,7 @@
 	        	<tr valign="bottom">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keywords" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords"];?>" maxlength="255" />
+						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_and"];?>" maxlength="255" />
 						<span class="description">Default search setting is 'all of these words'</span>
 					</td>
         		</tr>
@@ -541,6 +538,20 @@
         		           	<td >
 						<input type="text" name="keywords_not" id="keywords_not" value="<?php echo $form["keywords_not"];?>" />						
 						<span class="description">Exclude these keywords</span>
+					</td>
+        		</tr>
+        		<tr valign="bottom">
+					<th scope="row">Any of the keywords</th>
+        		           	<td >
+						<input type="text" name="keywords_or" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_or"];?>" maxlength="255" />
+						<span class="description">Any of these keywords</span>
+					</td>
+        		</tr>
+        		<tr valign="bottom">
+					<th scope="row">Exact phrase</th>
+        		        <td >
+						<input type="text" name="keywords_phrase" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_phrase"];?>" maxlength="255" />
+						<span class="description">Exact phrase</span>
 					</td>
         		</tr>
         		<tr valign="bottom">
