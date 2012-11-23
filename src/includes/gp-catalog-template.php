@@ -31,7 +31,7 @@
 		$channels = "";
 	}	
 
-	$adv_search_params = GrabPress::parse_adv_search_string($form["keywords"]);
+	$adv_search_params = GrabPress::parse_adv_search_string($form["keywords"]?$form["keywords"]:"");
 
 	if(isset($form['created_before']) && ($form['created_before'] != "")){
 		$created_before_date = new DateTime( $form['created_before'] );	
