@@ -436,7 +436,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 				$blogusers = get_users();
 
-				$keywords = GrabPress::parse_adv_search_string($_REQUEST["keywords"]);
+				$keywords = GrabPress::parse_adv_search_string(isset($_REQUEST["keywords"])?$_REQUEST["keywords"]:"");
 
 				print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "create",
@@ -647,7 +647,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 				if ( $active_feeds > 0 || $num_feeds > 0 ) {
 					$noun = 'feed';
-					if ( $active_feeds > 1 || $active_feeds == 0 ) {
+					if ( $active_feeds > 1 || $num_feeds == 0 ) {
 						$noun .= 's';
 					}
 					$user = GrabPress::get_user();	
@@ -656,7 +656,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
 					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
 					$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
-					GrabPress::$message = 'Grab Autoposter is ON with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="noun-active-feeds"> '.$noun.'</span> active. '.$linked_message .$environment;
+					if( $active_feeds == 0 ){
+						$active_feeds = $num_feeds;
+						$autoposter_status = 'OFF';
+						$feeds_status = 'inactive';
+					}else{
+						$autoposter_status = 'ON';
+						$feeds_status = 'active';
+					}
+					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;
+										
 				}
 			}
 		}
@@ -683,21 +692,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function render_catalog_management() {
 			GrabPress::log();
-			//if (!current_user_can('manage_options'))  {
-			//  wp_die( __('You do not have sufficient permissions to access this page.') );
-			// }
+
 			print GrabPress::fetch( 'includes/gp-catalog-template.php' ,
 				array( "form" => $_REQUEST ) );
-			/*
-			print GrabPress::fetch( 'includes/gp-feed-template.php',
-				array( "form" => $_REQUEST,
-					"list_provider" => $list_provider,
-					"providers_total" => $providers_total,
-					"list_channels" => $list_channels,
-					"channels_total" => $channels_total,
-					"blogusers" => $blogusers ) );
-			*/
-
 		}
 
 		static function render_catalog_editor_management() {
@@ -723,6 +720,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return !$x->provider->opt_out;
 		}
 
+		// returns cached results after 1rst call
 		static function get_providers() {
 			if( isset(GrabPress::$providers) ){
 				return GrabPress::$providers;
@@ -857,9 +855,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $params;
 		}
+		static function _escape_params($x){return rawurlencode($x);}
 		static function generate_catalog_url($options, $unlimited = false){
-
-			array_map(function($x){return urlencode($x);}, $options);
+			array_map(array("GrabPress", "_escape_params"), $options);
 
 			$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?'.
 					'keywords_and='.$options["keywords_and"].
@@ -868,15 +866,15 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					'&keywords_not='.$options["keywords_not"].
 					"&keywords_or=".$options["keywords_or"].
 					"&keywords_phrase=".$options["keywords_phrase"];
-			if($options["sort_by"]){
+			if(isset($options["sort_by"]) && $options["sort_by"] != ""){
 				$url .= "&sort_by=".$options["sort_by"];
 			}else{
 				$url .= "&sort_by=created_at";
 			}
-			if($options["created_after"]){
+			if(isset($options["created_after"]) && $options["created_after"] != ""){
 				$url .= "&created_after=".$options["created_after"];
 			}
-			if($options["created_before"]){
+			if(isset($options["created_before"]) && $options["created_before"] != ""){
 				$url .= "&created_before=".$options["created_before"];	
 			}
 			if($unlimited){
@@ -886,11 +884,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function parse_adv_search_string($adv_search ){
-		
+
 			preg_match_all('/\"([^\"]*)\"/', $adv_search, $result_exact_phrase, PREG_PATTERN_ORDER);
 			for ($i = 0; $i < count($result_exact_phrase[0]); $i++) {
-				$matched_exact_phrase[] = stripslashes($result_exact_phrase[0][$i]);
-			}		
+				$matched_exact_phrase[] = str_replace("\"","",stripslashes($result_exact_phrase[0][$i]));
+			}
 
 			$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($adv_search));
 			
@@ -914,7 +912,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$keywords_not = isset($keywords_not) ? implode(",", $keywords_not) : "";
 			$keywords_or = isset($keywords_or) ? implode(",", $keywords_or) : "";
 			$keywords_or = str_replace(',', " ", $keywords_or);
-
 			return array(
 				"keywords_phrase" => $keywords_phrase,
 				"keywords_and" => $keywords_and,
@@ -922,6 +919,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"keywords_or" => $keywords_or
 				);
 		}
+		static function generate_adv_search_string($params){
+			$defaults = array(
+				"keywords_or" => "",
+				"keywords_and" => "",
+				"keywords_not" => "",
+				"keywords_phrase" => ""
+			);
+			$params = array_merge($defaults, $params);
+			$keywords = join(" ", explode(" ", $params["keywords_or"]));
+			$keywords_plus = explode(" ", $params["keywords_and"]);
+			for($i = 0; $i < count($keywords_plus); $i++){
+				$keywords .= " +".$keywords_plus[$i]." ";
+			}
+			if($params["keywords_phrase"]){
+				$keywords .= " \"".$params["keywords_phrase"]."\" ";
+			}
+			return $keywords;
+		}
+
 		static function dispatcher() {			
 			GrabPress::log();
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
@@ -1242,7 +1258,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 			}
 
-			echo $active_feeds;
+			echo $active_feeds.'-'.$num_feeds;
 
 			die(); // this is required to return a proper result
 		}
