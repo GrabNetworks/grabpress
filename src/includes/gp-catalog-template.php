@@ -31,7 +31,7 @@
 		$channels = "";
 	}	
 
-	$adv_search_params = GrabPress::parse_adv_search_string($form["keywords"]?$form["keywords"]:"");
+	$adv_search_params = GrabPress::parse_adv_search_string(isset($form["keywords"])?$form["keywords"]:"");
 
 	if(isset($form['created_before']) && ($form['created_before'] != "")){
 		$created_before_date = new DateTime( $form['created_before'] );	
@@ -103,8 +103,7 @@
 							$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
 						}
 					}					
-					$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-					$list = json_decode( $json );					
+					$list = GrabPress::get_channels();		
 				?>		
 				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 					<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
@@ -148,14 +147,14 @@
 				<span class="preview-text-catalog"><b>Date Range: </b></span>
 			</div>				
 			<div class="tile-right">
-				Between<input type="text" value="<?php echo $created_after = isset($form['created_after']) ? $form['created_after'] : ''; ?>" maxlength="8" id="created_after" name="created_after" class="datepicker" />
-				and<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
+				From<input type="text" value="<?php echo $created_after = isset($form['created_after']) ? $form['created_after'] : ''; ?>" maxlength="8" id="created_after" name="created_after" class="datepicker" />
+				To<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 			</div>
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
 				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Save as Feed' ) ?>" />				
+				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
 				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
@@ -177,7 +176,12 @@
 		</div>
 		<div class="tile-right">			
 			<h2 class="video_title" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
-			<?php echo $result["video"]["title"]; ?>
+			<?php if(strlen($result["video"]["title"]) > 60) {
+					echo substr($result["video"]["title"], 0, 57) . '...';}
+				  else{
+					echo $result["video"]["title"];	  	
+			}
+			?>	
 			</h2>
 			<p class="video_summary">		
 				<?php if(strlen($result["video"]["summary"]) > 100) {
