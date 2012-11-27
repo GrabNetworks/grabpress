@@ -926,11 +926,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"keywords_phrase" => ""
 			);
 			$params = array_merge($defaults, $params);
-			$keywords = join(" ", explode(" ", $params["keywords_or"]));
-			$keywords_plus = explode(" ", $params["keywords_and"]);
+			$keywords = join(" ", explode(" ", $params["keywords_or"]));			
+			$keywords_plus = explode(" ", $params["keywords_and"]);			
 			for($i = 0; $i < count($keywords_plus); $i++){
-				$keywords .= " +".$keywords_plus[$i]." ";
-			}
+				if( $keywords_plus[$i] != "" ){
+					$keywords .= " ".$keywords_plus[$i]." ";
+				}
+			}			
+			
 			if($params["keywords_phrase"]){
 				$keywords .= " \"".$params["keywords_phrase"]."\" ";
 			}
