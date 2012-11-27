@@ -719,6 +719,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return !$x->provider->opt_out;
 		}
 
+		static function _sort_providers($a, $b){
+			return strcasecmp($a->provider->name, $b->provider->name);
+		}
 		// returns cached results after 1rst call
 		static function get_providers() {
 			if( isset(GrabPress::$providers) ){
@@ -727,16 +730,21 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$json_provider = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1' );
 			$list = json_decode( $json_provider );
 			$list = array_filter( $list, array( "GrabPress", "_filter_out_out_providers" ) );
+			uasort($list, array("GrabPress", "_sort_providers"));
 			GrabPress::$providers = $list;
 			return $list;
 		}
-
+		///Alphabetically
+		static function _sort_channels($a, $b){
+			return strcasecmp($a->category->name, $b->category->name);
+		}
 		static function get_channels() {
 			if( isset(GrabPress::$channels) ){
 				return GrabPress::$channels;
 			}
 			$json_channel = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );			
 			$list = json_decode( $json_channel );
+			uasort($list, array("GrabPress", "_sort_channels"));
 			GrabPress::$channels = $list;
 			return $list;
 		}
