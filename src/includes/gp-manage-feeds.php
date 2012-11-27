@@ -14,7 +14,9 @@
 			<th>Name</th>
 			<th>Video Categories</th>
 			<th>Keywords</th>
-			<th>Exclude<br/>keywords</th>
+			<th>Exclude<br/>Keywords</th>
+			<th>Exact<br/>Phrase</th>
+			<th>Any<br/>keyword</th>
 			<th>Content<br/>Providers</th>			
 			<th>Schedule</th>
 			<th>Max<br/>Results</th>
@@ -84,16 +86,27 @@
 					?>							
 				</td>
 				<td>		
-					<?php
-						$keywords = GrabPress::generate_adv_search_string($url);
-
-						echo $keywords = (strlen($keywords) > 15) ? substr($keywords,0,15)."..." : $keywords;
+					<?php 
+						$keywords_and_num = strlen($url['keywords_and']);
+						echo $keywords_and = ($keywords_and_num > 15) ? substr($url['keywords_and'],0,15)."..." : $url['keywords_and'];
 					?>							
 				</td>
 				<td>		
 					<?php 
 						$keywords_not_num = strlen($url['keywords_not']);
 						echo $keywords_not = ($keywords_not_num > 15) ? substr($url['keywords_not'],0,15)."..." : $url['keywords_not'];
+					?>							
+				</td>
+				<td>		
+					<?php 
+						$keywords_phrase_num = strlen($url['keywords_phrase']);
+						echo $keywords_phrase = ($keywords_phrase_num > 15) ? substr($url['keywords_phrase'],0,15)."..." : $url['keywords_phrase'];
+					?>							
+				</td>
+				<td>		
+					<?php 
+						$keywords_or_num = strlen($url['keywords_or']);
+						echo $keywords_or = ($keywords_or_num > 15) ? substr($url['keywords_or'],0,15)."..." : $url['keywords_or'];
 					?>							
 				</td>
 				<td>
