@@ -801,6 +801,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$channel = explode( ',', $url['categories'] );
 				$feed_date = $_GET['feed_date']; 
 
+				echo "URL: "; var_dump($url); echo "<br/><br/>";
+
 				print GrabPress::fetch( "includes/gp-preview-template.php", 
 					array( "referer" => "edit",
 						   "action" => "edit-feed",
