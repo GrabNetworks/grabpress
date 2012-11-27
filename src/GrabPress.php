@@ -873,7 +873,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					'&categories='.$options["categories"].
 					'&providers='.$options["providers"].
 					'&keywords_not='.$options["keywords_not"].
-					"&keywords_or=".$options["keywords_or"].
+					"&keywords=".$options["keywords_or"].
 					"&keywords_phrase=".$options["keywords_phrase"];
 			if(isset($options["sort_by"]) && $options["sort_by"] != ""){
 				$url .= "&sort_by=".$options["sort_by"];
