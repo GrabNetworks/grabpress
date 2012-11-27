@@ -8,7 +8,7 @@
 		$provider_text = count($provider)." of ".$provider_total." selected";
 	}
 
-	$channels = join($channel, ",");
+	$channels = rawurlencode(join($channel, ","));
 	$channel_total = count(GrabPress::get_channels());
 	if(($channel_total == count($channel)) || in_array("", $channel)){
 		$channel_text = "All Video Categories";
@@ -33,6 +33,7 @@
 	if(empty($list_feeds["results"])){
 		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please <a href="#" class="close-preview">modify your settings</a> until you see the kind of videos you want in your feed';
 	}
+
 	
 ?>
 <form method="post" action="" id="preview-feed">
