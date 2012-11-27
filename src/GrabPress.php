@@ -269,10 +269,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 
 				$name = rawurlencode( $_REQUEST[ 'name' ] );
-				$keywords_and = rawurlencode( $_REQUEST[ 'keywords_and' ] );
-				$keywords_not = rawurlencode( $_REQUEST[ 'keywords_not' ] );
-				$keywords_or = rawurlencode( $_REQUEST[ 'keywords_or' ] );
-				$keywords_phrase = rawurlencode( $_REQUEST[ 'keywords_phrase' ] );
 
 				$providers = $_REQUEST['provider'];
 				$providersList = implode( ',', $providers );
@@ -281,10 +277,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
-				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and
-						.'&categories='.rawurlencode($channelsList).'&order=DESC&order_by=created_at&providers='.$providersList
-						.'&keywords_not='.$keywords_not.'&keywords_or='.$keywords_or
-						.'&keywords_phrase='.$keywords_phrase;
+
+				$url = GrabPress::generate_catalog_url(array(
+			   		"keywords_and" => $keywords_and,
+			   		"keywords_not" => $keywords_not,
+			   		"keywords_or" => $keywords_or,
+			   		"keywords_phrase" => $keywords_phrase,
+			   		"providers" => $providersList,
+			   		"categories" => $channelsList
+			   	));
+
 				$connector_id = GrabPress::get_connector_id();
 				$category_list = $_REQUEST[ 'category' ];
 				$category_length = count( $category_list );
@@ -864,7 +866,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		static function _escape_params($x){return rawurlencode($x);}
 		static function generate_catalog_url($options, $unlimited = false){
-			array_map(array("GrabPress", "_escape_params"), $options);
+			$options = array_map(array("GrabPress", "_escape_params"), $options);
 
 			$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?'.
 					'keywords_and='.$options["keywords_and"].
@@ -972,10 +974,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'modify':
 					$feed_id = $_REQUEST['feed_id'];
 					$name = htmlspecialchars( $_REQUEST['name'] );
-					$keywords_and = htmlspecialchars( $_REQUEST['keywords_and'] );
-					$keywords_not = htmlspecialchars( $_REQUEST['keywords_not'] );
-					$keywords_or = htmlspecialchars( $_REQUEST['keywords_or'] );
-					$keywords_phrase = htmlspecialchars( $_REQUEST['keywords_phrase'] );		
+						
 					//$categories = $_REQUEST[ 'channel' ];
 					$channels = $_REQUEST[ 'channel' ];
 					$channelsList = implode( ',', $channels );
@@ -993,9 +992,15 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $providersListTotal == $providers_total ) {
 						$providersList = '';
 					}
-					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.rawurlencode($channelsList).'&order=DESC&order_by=created_at&providers='.$providersList
-						.'&keywords_not='.$keywords_not.'&keywords_or='.$keywords_or
-						.'&keywords_phrase='.$keywords_phrase;
+					
+					$url = GrabPress::generate_catalog_url(array(
+				   		"keywords_and" => $keywords_and,
+				   		"keywords_not" => $keywords_not,
+				   		"keywords_or" => $keywords_or,
+				   		"keywords_phrase" => $keywords_phrase,
+				   		"providers" => $providersList,
+				   		"categories" => $channelsList
+				   	));
 						
 					$connector_id = GrabPress::get_connector_id();
 					$active = (bool)$_REQUEST['active'];
