@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 1.0.1-11242012
+Version: 1.0.1-11202012
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '1.0.1-11242012';
+		static $version = '1.0.1-11202012';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -398,8 +398,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "feed_id" => $feed_id,
 											   "name" => $feed->feed->name,
 											   //"channel" => $feed->feed->name,
-											   "channel" => rawurlencode($url['categories']),
-											   "keywords" => $_REQUEST['keywords'],
+											   "channel" => $url['categories'],
 											   "keywords_and" => $url['keywords_and'],
 											   "keywords_not" => $url['keywords_not'],
 											   "keywords_or" => $url['keywords_or'],
@@ -918,24 +917,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"keywords_not" => $keywords_not,
 				"keywords_or" => $keywords_or
 				);
-		}
-		static function generate_adv_search_string($params){
-			$defaults = array(
-				"keywords_or" => "",
-				"keywords_and" => "",
-				"keywords_not" => "",
-				"keywords_phrase" => ""
-			);
-			$params = array_merge($defaults, $params);
-			$keywords = join(" ", explode(" ", $params["keywords_or"]));
-			$keywords_plus = explode(" ", $params["keywords_and"]);
-			for($i = 0; $i < count($keywords_plus); $i++){
-				$keywords .= " +".$keywords_plus[$i]." ";
-			}
-			if($params["keywords_phrase"]){
-				$keywords .= " \"".$params["keywords_phrase"]."\" ";
-			}
-			return $keywords;
 		}
 
 		static function dispatcher() {			
