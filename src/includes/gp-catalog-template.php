@@ -177,7 +177,13 @@
 		</div>
 		<div class="tile-right">			
 			<h2 class="video_title" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
-			<?php echo $result["video"]["title"]; ?>
+			<?php //echo $result["video"]["title"]; ?>
+			<?php if(strlen($result["video"]["title"]) > 60) {
+					echo substr($result["video"]["title"], 0, 57) . '...';}
+				  else{
+					echo $result["video"]["title"];	  	
+			}
+			?>	
 			</h2>
 			<p class="video_summary">		
 				<?php if(strlen($result["video"]["summary"]) > 100) {
