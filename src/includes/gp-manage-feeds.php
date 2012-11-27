@@ -114,7 +114,7 @@
 								}
 							}
 						}else{
-							echo $providers_selected." providers selected of ".$providers_total;
+							echo $providers_selected." selected";
 						}
 					?>
 				</td>
