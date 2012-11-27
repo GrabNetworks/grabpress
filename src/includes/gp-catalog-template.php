@@ -155,7 +155,7 @@
 		<div class="label-tile">	
 			<div class="tile-right">
 				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Save as Feed' ) ?>" />				
+				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
 				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
