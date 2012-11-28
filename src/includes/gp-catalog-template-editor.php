@@ -370,7 +370,7 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 		});
 
 	  	$("#help").simpletip({
-		  	 content: 'This search input supports Google syntax for advanced search:<br/> Add a "+" before a term that must be included in your results.<br/> Add a "-" before any term that must be excluded.<br/> Add quotes around any "exact phrase" to look for <br /><br />', 
+		  	 content: 'This input supports the following search syntax:<br/> Add a "+" before a term that must be included in your results.<br/> Add a "-" before any term that must be excluded.<br/> Add quotes around any "exact phrase" to look for <br /><br />', 
 		  	 fixed: true,
 		  	 position: 'bottom'
 		});
