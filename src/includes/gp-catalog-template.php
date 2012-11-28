@@ -112,8 +112,8 @@
 						foreach ( $list as $record ) {
 							$channel = $record -> category;
 							$name = $channel -> name;
-							$id = $channel -> id;
-							$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
+							$id = $channel -> id;							
+							$selected = (is_array($channels) && ( in_array( $name, $channels ) )) ? 'selected="selected"':"";							
 							echo '<option value = "'.$name.'" '.$selected.' >'.$name.'</option>';
 						}
 					?>
