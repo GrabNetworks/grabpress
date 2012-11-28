@@ -1207,7 +1207,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
 			}
 			
-			//wp_enqueue_script( 'jquery-tinymce', get_bloginfo( 'wpurl' ).'/wp-includes/js/tinymce/tiny_mce_popup.js' );
 		}
 
 		static function grabpress_plugin_url(){
@@ -1330,29 +1329,21 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		    return $content;
 		}
 
-		static function add_mce_buttons($buttons){
-		  array_push($buttons, "hr");
-		  array_push($buttons, "image");
-		  
-		  return $buttons;
-		}
+		static function add_my_custom_button($context){
+			//path to my icon
+			$img = GrabPress::get_g_icon_src();
 
-		static function add_button($buttons) {
-			array_push($buttons, "blcss");
-			return $buttons;
+			//our popup's title
+			$title = 'Insert GrabMedia Video';
+			$onclick = 'tb_show("catalog", "admin-ajax.php?action=get_catalog&height=800&width=600" );';
+			//append the icon
+			$context .= "<a title='{$title}' href='#' onclick='{$onclick}' ><img src='{$img}' /></a>";
+			return $context;
 		}
-
-		static function add_plugin($plugin_array) {
-		   $url = GrabPress::grabpress_plugin_url();
-		   $plugin_array['blist'] = $url."/js/jscustomcodes.js";
-		   return $plugin_array;
-		}
-
-		static function custom_mce_button() {
-		   if ( current_user_can('edit_posts') &&  current_user_can('edit_pages') ){
-		     add_filter('mce_buttons', array( 'GrabPress', 'add_button' ));
-		     add_filter('mce_external_plugins', array( 'GrabPress', 'add_plugin' ));
-		   }
+		
+		static function get_catalog_callback(){
+			print GrabPress::fetch("includes/gp-catalog-ajax.php");
+			die();
 		}
 
 	}//class
@@ -1365,16 +1356,15 @@ if( is_admin() ){
 	register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector' ));
 	add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 	add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
-	//add_action( 'plugins_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ));
 	add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
-	add_action('wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
-	add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
-	add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
-	add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
-	add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
-	add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
+	add_action( 'wp_ajax_my_action', array( 'GrabPress', 'my_action_callback' ));
+	add_action( 'wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
+	add_action( 'wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
+	add_action( 'wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
+	add_action( 'wp_ajax_get_catalog', array( 'GrabPress', 'get_catalog_callback' ));
+	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
-
+	
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }

@@ -61,14 +61,6 @@
 	$player_data = json_decode( $player_json, true );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
-<script type="text/javascript">
-	function poc(){
-		var win = window.dialogArguments || opener || parent || top;
-		win.send_to_editor("poc text");
-		win.tb_remove();
-		return false;
-	}	
-</script>
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
@@ -90,9 +82,6 @@
 			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
 	<fieldset id="preview-feed">
 	<legend>Preview Feed</legend>		
-		<div class="label-tile-one-column">
-			POC SILLYNESS <input type="button" onclick="poc();" value="click"></input>
-		</div>
 		<div class="label-tile-one-column">
 			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? htmlentities(stripslashes($form['keywords']), ENT_QUOTES)  : '' ?>" maxlength="255" /></span>
 			<a href="#" id="help">help</a>
@@ -371,25 +360,13 @@ echo $result["video"]["summary"];
 				if(pre_content2 != ""){
 					content = pre_content2 + "<br/><br/>" + content;
 				}
-				$('#pre_content').val(content);	
-				if(post_id != ""){
-					$('#post_ID').val(post_id);	
-				}
-				$('#post_ID').val(post_id);
-						
-			    form.attr("ACTION", bloginfo+"/wp-admin/post-new.php");
-			    form.submit();				
+				var win = window.dialogArguments || opener || parent || top;
+               win.send_to_editor(content);
+               win.tb_remove();
+               return false;
 			});		  
 
 		});	
-
-		/*
-		$('.btn-preview-feed').bind("click",function(e){
-          	id = this.id.replace('btn-preview-feed-','');
-          	previewFeed(id);
-	        return false;
-	    });  
-	    */ 
 
 	   	$('#clear-search').bind('click', function(e){
 	   		window.location = "admin.php?page=catalog";		    
@@ -401,3 +378,5 @@ echo $result["video"]["summary"];
 	    doValidation();
 	});
 </script>
+
+
