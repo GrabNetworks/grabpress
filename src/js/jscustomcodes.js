@@ -3,7 +3,7 @@
     tinymce.create('tinymce.plugins.blist', {
         init : function(ed, url){
             ed.addButton('blcss', {
-                title: 'GrabPress',
+                title: 'Insert Video',
                 image: url+'/images/icons/g2.png',
                 onclick : function() {
                     var postnumber = document.getElementById('post_ID').value;
