@@ -74,20 +74,19 @@
 		$created_after = "";
 	}
 	
-	$json_preview = GrabPress::get_json('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1'
-		);
+	
+	$url = GrabPress::generate_catalog_url(array(
+			"keywords_and" => $keywords_and,
+			"keywords_not" => $keywords_not,
+			"keywords_or" => $keywords_or,
+			"keywords_phrase" => $keywords_phrase,
+			"providers" => $providers,
+			"categories" => $channels,
+			"created_after" => $created_after,
+			"created_before" => $created_before,
+		), true);
 
-	/*
-	var_dump('http://catalog.'.GrabPress::$environment
-		.'.com/catalogs/1/videos/search.json?keywords_and='.urlencode($keywords_and).'&keywords_not='.urlencode($keywords_not)
-		.'&keywords='.urlencode($keywords_or).'&keywords_phrase='.urlencode($keywords_phrase)
-		.'&categories='.$channels.'&order=DESC&order_by=created_at&providers='.$providers
-		.'&created_after='.$created_after.'&created_before='.$created_before.'&limit=-1');
-    */
+	$json_preview = GrabPress::get_json($url);
 	$list_feeds = json_decode($json_preview, true);	
 	
 	if(empty($list_feeds["results"])){
@@ -136,7 +135,7 @@
 			<h2>GrabPress: Find a Video in our Catalog</h2>
 			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
 	<fieldset id="preview-feed">
-	<legend>Preview Feed</legend>		
+	<legend>Search Video</legend>		
 
 		<div class="label-tile-one-column">
 			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords_and" id="keywords_and" type="text" value="" maxlength="255" /></span>
@@ -161,8 +160,7 @@
 						}
 						*/
 						
-						$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-						$list = json_decode( $json );
+						$list = GrabPress::get_channels();
 						foreach ( $list as $record ) {
 							$channel = $record -> category;
 							$name = $channel -> name;

@@ -512,8 +512,7 @@
 									$channels = explode( ",", rawurldecode($form["channel"])); // Video categories chosen by the user
 								}
 								
-								$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-								$list = json_decode( $json );
+								$list = GrabPress::get_channels();
 								foreach ( $list as $record ) {
 									$channel = $record -> category;
 									$name = $channel -> name;
