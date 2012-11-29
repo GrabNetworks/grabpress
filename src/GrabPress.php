@@ -892,12 +892,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$sentence = preg_replace('/"([^"]*)"/', '', stripslashes($adv_search));
 
-			preg_match_all('/OR\s+[a-zA-Z0-9_]*/', $sentence, $result_or, PREG_PATTERN_ORDER);
+			preg_match_all('/[a-zA-Z0-9_]*\s+OR\s+[a-zA-Z0-9_]*/', $sentence, $result_or, PREG_PATTERN_ORDER);
 			for ($i = 0; $i < count($result_or[0]); $i++) {
-				$matched_or[] = str_replace("OR ","",stripslashes($result_or[0][$i]));
+				$matched_or[] = str_replace(" OR "," ",stripslashes($result_or[0][$i]));
 			}
 
-			$sentence_without_or = preg_replace('/OR\s+[a-zA-Z0-9_]*/', '', stripslashes($sentence));
+			$sentence_without_or = preg_replace('/[a-zA-Z0-9_]*\s+OR\s+[a-zA-Z0-9_]*/', '', stripslashes($sentence));
 
 			$keywords = preg_split("/\s+/", $sentence_without_or);
 
