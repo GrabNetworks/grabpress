@@ -1335,7 +1335,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			//our popup's title
 			$title = 'Insert GrabMedia Video';
-			$onclick = 'tb_show("catalog", "admin-ajax.php?action=get_catalog&height=800&width=900" );';
+			$onclick = 'tb_show("catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );';
 			//append the icon
 			$context .= "<a title='{$title}' href='#' onclick='{$onclick}' ><img src='{$img}' /></a>";
 			return $context;
@@ -1365,6 +1365,11 @@ if( is_admin() ){
 	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	
+	function add_themescript(){
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('thickbox');
+	}
+	add_action('init','add_themescript');
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }

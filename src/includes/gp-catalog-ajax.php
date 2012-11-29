@@ -153,7 +153,6 @@
 		<div class="label-tile">	
 			<div class="tile-right">
 				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
 				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
@@ -190,7 +189,7 @@ echo $result["video"]["summary"];
 }
 ?>			
 </p>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Insert' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 		</div>
 	</div>
 	<?php
@@ -202,6 +201,7 @@ echo $result["video"]["summary"];
 <script type="text/javascript">
 <?php $qa = GrabPress::$environment == 'grabqa'; ?>
 	( function ( global, $ ) {
+		global.defaultthickboxresizehandler = null;
 		global.hasValidationErrors = function () {
 			if(($("#channel-select :selected").length == 0) || ($("#provider-select :selected").length == 0)){
 				return true;
@@ -209,6 +209,17 @@ echo $result["video"]["summary"];
 			else {
 				return false;
 			}
+		}
+		global.backup_tb_position = tb_position;
+		global.tb_position = function(){
+			var SpartaPaymentWidth			= 900;
+			var TB_newWidth			= jQuery(window).width() < (SpartaPaymentWidth + 40) ? jQuery(window).width() - 40 : SpartaPaymentWidth;
+			var TB_newHeight		= jQuery(window).height() - 70;
+			var TB_newMargin		= (jQuery(window).width() - SpartaPaymentWidth) / 2;
+
+			jQuery('#TB_window').css({'marginLeft': -(TB_newWidth / 2), "marginTop": -(TB_newHeight / 2)});
+			jQuery('#TB_window, #TB_iframeContent').width(TB_newWidth).height(TB_newHeight);
+
 		}
 		global.doValidation = function(){
 	    	var errors = hasValidationErrors();
@@ -268,8 +279,23 @@ echo $result["video"]["summary"];
   	 	}
   	 }
     };
-
+	    
 	jQuery(function($){	
+		// jQuery.each( jQuery(window).data('events')['resize'], function(i, event) {
+		// 	if(event){
+		// 		var thisEvent		= event.handler.toString().replace(/\n/g, '').replace(/\t/g, '').split(' ').join('');
+		// 		var expectedEvent	= 'function(){tb_position()}';
+
+		// 	    if (thisEvent == expectedEvent) {
+		// 			jQuery(window).unbind("resize", event.handler);
+		// 			defaultthickboxresizehandler = event.handler;
+		// 			return;
+		// 		}
+		// 	}
+		// });
+
+		
+
 		var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 		if(feed_action == "preview-feed"){
 		  	$(".close-preview").click(function() {		  
@@ -363,6 +389,7 @@ echo $result["video"]["summary"];
 				var win = window.dialogArguments || opener || parent || top;
 				win.send_to_editor(content);
 				win.tb_remove();
+				tb_position = backup_tb_position
 				return false;
 			});		  
 
@@ -371,12 +398,14 @@ echo $result["video"]["summary"];
 	   	$('#clear-search').bind('click', function(e){
 	   		window.location = "admin.php?page=catalog";		    
 		});
+	
 
 	});
 
 	jQuery(window).load(function () {
 	    doValidation();
 	});
+	
 </script>
 
 
