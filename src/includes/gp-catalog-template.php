@@ -31,35 +31,38 @@
 		$channels = "";
 	}	
 
-	$adv_search_params = GrabPress::parse_adv_search_string(isset($form["keywords"])?$form["keywords"]:"");
+	if(isset($form["keywords"])){
+		$adv_search_params = GrabPress::parse_adv_search_string(isset($form["keywords"])?$form["keywords"]:"");
 
-	if(isset($form['created_before']) && ($form['created_before'] != "")){
-		$created_before_date = new DateTime( $form['created_before'] );	
-		$created_before = $created_before_date->format('Ymd');
-		$adv_search_params['created_before'] = $created_before;
-	}
-	
-	if(isset($form['created_after']) && ($form['created_after'] != "")){
-		$created_after_date = new DateTime( $form['created_after'] );
-		$created_after = $created_after_date->format('Ymd');
-		$adv_search_params['created_after'] = $created_after;
-	}
-	$adv_search_params["providers"] = $providers;
-	$adv_search_params["categories"] = $channels;
-	$url_catalog = GrabPress::generate_catalog_url($adv_search_params, true);
+		if(isset($form['created_before']) && ($form['created_before'] != "")){
+			$created_before_date = new DateTime( $form['created_before'] );	
+			$created_before = $created_before_date->format('Ymd');
+			$adv_search_params['created_before'] = $created_before;
+		}
+		
+		if(isset($form['created_after']) && ($form['created_after'] != "")){
+			$created_after_date = new DateTime( $form['created_after'] );
+			$created_after = $created_after_date->format('Ymd');
+			$adv_search_params['created_after'] = $created_after;
+		}
+		$adv_search_params["providers"] = $providers;
+		$adv_search_params["categories"] = $channels;
+		$url_catalog = GrabPress::generate_catalog_url($adv_search_params, true);
 
-	$json_preview = GrabPress::get_json($url_catalog);
+		$json_preview = GrabPress::get_json($url_catalog);
 
-	$list_feeds = json_decode($json_preview, true);	
-	
-	if(empty($list_feeds["results"])){
-		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+		$list_feeds = json_decode($json_preview, true);	
+		
+		if(empty($list_feeds["results"])){
+			GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+		}
+		
+		$id = GrabPress::get_connector_id();
+		$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
+		$player_data = json_decode( $player_json, true );
+		$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
+
 	}
-	
-	$id = GrabPress::get_connector_id();
-	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
-	$player_data = json_decode( $player_json, true );
-	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
@@ -161,7 +164,8 @@
 		</div>
 		<br/><br/>	
 	<?php
-		foreach ($list_feeds["results"] as $result) {
+		if(isset($form["keywords"])){
+			foreach ($list_feeds["results"] as $result) {
 	?>
 	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
 		<div class="tile-left">
@@ -187,16 +191,17 @@
 			<p class="video_summary">		
 				<?php if(strlen($result["video"]["summary"]) > 100) {
 					echo substr($result["video"]["summary"], 0, 97) . '...';}
-else{
-echo $result["video"]["summary"];	  	
-}
-?>			
+				else{
+				echo $result["video"]["summary"];	  	
+				}
+				?>			
 </p>
 			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 		</div>
 	</div>
 	<?php
-		} 	
+			} // end foreach
+		} // end if	
 	?>
 	</fieldset>
 </div>
