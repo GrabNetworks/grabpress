@@ -1335,7 +1335,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			//our popup's title
 			$title = 'Insert GrabMedia Video';
-			$onclick = 'tb_show("catalog", "admin-ajax.php?action=get_catalog&height=800&width=600" );';
+			$onclick = 'tb_show("catalog", "admin-ajax.php?action=get_catalog&height=800&width=900" );';
 			//append the icon
 			$context .= "<a title='{$title}' href='#' onclick='{$onclick}' ><img src='{$img}' /></a>";
 			return $context;

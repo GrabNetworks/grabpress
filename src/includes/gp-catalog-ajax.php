@@ -361,9 +361,9 @@ echo $result["video"]["summary"];
 					content = pre_content2 + "<br/><br/>" + content;
 				}
 				var win = window.dialogArguments || opener || parent || top;
-               win.send_to_editor(content);
-               win.tb_remove();
-               return false;
+				win.send_to_editor(content);
+				win.tb_remove();
+				return false;
 			});		  
 
 		});	
