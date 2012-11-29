@@ -45,7 +45,7 @@
 		$adv_search_params['created_after'] = $created_after;
 	}
 	$adv_search_params["providers"] = $providers;
-	$adv_search_params["categories"] = rawurlencode($channels);
+	$adv_search_params["categories"] = $channels;
 	$url_catalog = GrabPress::generate_catalog_url($adv_search_params, true);
 
 	$json_preview = GrabPress::get_json($url_catalog);

@@ -856,7 +856,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		static function _escape_params($x){return rawurlencode($x);}
 		static function generate_catalog_url($options, $unlimited = false){
-			array_map(array("GrabPress", "_escape_params"), $options);
+			$options = array_map(array("GrabPress", "_escape_params"), $options);
 
 			$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?'.
 					'keywords_and='.$options["keywords_and"].
