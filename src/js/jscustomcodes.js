@@ -8,7 +8,7 @@
                 onclick : function() {
                     var postnumber = document.getElementById('post_ID').value;
                     var content = tinymce.activeEditor.getContent();
-                    var form = jQuery('<form/>').attr('action','admin.php?page=catalog').attr('method','post');            
+                    var form = jQuery('<form/>').attr('action','admin.php?page=catalog').attr('method','post');
 
                     jQuery('body').append('<form id="GrabPressForm" action="admin.php?page=catalog" method="post"></form>');
                     var inputPostId = jQuery('<input/>').attr('type',"hidden").attr("name","post_id").attr("value",postnumber);
@@ -17,12 +17,12 @@
                     jQuery('#GrabPressForm').append(inputPostId);
                     jQuery('#GrabPressForm').append(inputContentId);
                     jQuery('#GrabPressForm').submit();
-                }                
+                }
             });
         },
         createControl : function(n, cm){
             return null;
-        },
+        }
     });
     tinymce.PluginManager.add('blist', tinymce.plugins.blist);
 })();
