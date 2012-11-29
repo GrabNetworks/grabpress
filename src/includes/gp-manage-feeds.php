@@ -111,9 +111,9 @@
 				</td>
 				<td>		
 					<?php 
-						if(isset($url['keywords_or'])){
-							$keywords_or_num = strlen($url['keywords_or']);
-							echo $keywords_or = ($keywords_or_num > 15) ? substr($url['keywords_or'],0,15)."..." : $url['keywords_or'];
+						if(isset($url['keywords'])){
+							$keywords_or_num = strlen($url['keywords']);
+							echo $keywords_or = ($keywords_or_num > 15) ? substr($url['keywords'],0,15)."..." : $url['keywords'];
 						}
 					?>							
 				</td>
