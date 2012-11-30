@@ -863,7 +863,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $params;
 		}
-		static function _escape_params($x){return rawurlencode($x);}
+		static function _escape_params($x){return str_replace("%2C", ",", rawurlencode($x));}
 		static function generate_catalog_url($options, $unlimited = false){
 			$options = array_map(array("GrabPress", "_escape_params"), $options);
 
@@ -873,7 +873,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					'&providers='.$options["providers"].
 					'&keywords_not='.$options["keywords_not"].
 					"&keywords=".$options["keywords_or"].
-					"&keywords_phrase=".$options["keywords_phrase"];			
+					"&keywords_phrase=".$options["keywords_phrase"];
 			if(isset($options["sort_by"]) && $options["sort_by"] != ""){
 				$url .= "&sort_by=".$options["sort_by"];
 			}else{
