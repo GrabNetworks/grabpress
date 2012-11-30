@@ -277,10 +277,15 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
-				$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and
-						.'&categories='.rawurlencode($channelsList).'&order=DESC&order_by=created_at&providers='.$providersList
-						.'&keywords_not='.$keywords_not.'&keywords='.$keywords_or
-						.'&keywords_phrase='.$keywords_phrase;
+				$url = GrabPress::generate_catalog_url(array(
+			   		"keywords_and" => $_REQUEST["keywords_and"],
+			   		"keywords_not" => $_REQUEST["keywords_not"],
+			   		"keywords_or" => $_REQUEST["keywords_or"],
+			   		"keywords_phrase" => $_REQUEST["keywords_phrase"],
+			   		"providers" => $providersList,
+			   		"categories" => $channelsList
+			   	));
+
 				$connector_id = GrabPress::get_connector_id();
 				$category_list = $_REQUEST[ 'category' ];
 				$category_length = count( $category_list );
@@ -961,8 +966,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$channelsListTotal = count( $channels ); // Total providers chosen by the user
 					$channels_total = $_REQUEST['channels_total']; // Total providers from the catalog list
 					if ( $channelsListTotal == $channels_total ) {
-						$channelsList = '';
-					}
+						$channelsList = '';					}
 
 
 					$providers = $_REQUEST['provider'];
@@ -972,9 +976,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $providersListTotal == $providers_total ) {
 						$providersList = '';
 					}
-					$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?keywords_and='.$keywords_and.'&categories='.rawurlencode($channelsList).'&order=DESC&order_by=created_at&providers='.$providersList
-						.'&keywords_not='.$keywords_not.'&keywords='.$keywords_or
-						.'&keywords_phrase='.$keywords_phrase;
+						$url = GrabPress::generate_catalog_url(array(
+				   		"keywords_and" => $_REQUEST["keywords_and"],
+				   		"keywords_not" => $_REQUEST["keywords_not"],
+				   		"keywords_or" => $_REQUEST["keywords_or"],
+				   		"keywords_phrase" => $_REQUEST["keywords_phrase"],
+				   		"providers" => $providersList,
+				   		"categories" => $channelsList
+				   	));
 						
 					$connector_id = GrabPress::get_connector_id();
 					$active = (bool)$_REQUEST['active'];
