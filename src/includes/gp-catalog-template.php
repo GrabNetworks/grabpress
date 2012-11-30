@@ -298,7 +298,7 @@
 		});
 
 	  	$("#help").simpletip({
-		  	 content: 'This search input supports Google syntax for advanced search:<br/> Add a "+" before a term that must be included in your results.<br/> Add a "-" before any term that must be excluded.<br/> Add quotes around any "exact phrase" to look for <br /><br />', 
+		  	 content: "This search input supports Google syntax for advanced search:<br/><b>Every</b> term separated only by a space will be required in your results.<br/>At least one of any terms separated by an ' OR ' will be included in your results.<br/>Add a '-' before any term that must be <b>excluded</b>.<br/> Add quotes around any \"exact phrase\" to look for.<br /><br />", 
 		  	 fixed: true,
 		  	 position: 'bottom'
 		});
