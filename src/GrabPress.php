@@ -1372,8 +1372,8 @@ if( is_admin() ){
 	add_action('wp_ajax_delete_action', array( 'GrabPress', 'delete_action_callback' ));
 	add_action('wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
 	add_action('wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
-	add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
-	add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
+	//add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
+	//add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 
 
