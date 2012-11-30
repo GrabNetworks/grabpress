@@ -106,8 +106,7 @@
 							$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
 						}
 					}					
-					$json = GrabPress::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );
-					$list = json_decode( $json );					
+					$list = GrabPress::get_channels();		
 				?>		
 				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 					<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
