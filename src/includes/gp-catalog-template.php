@@ -394,5 +394,7 @@
 
 	jQuery(window).load(function () {
 	    doValidation();
+	    var action = jQuery('#action-catalog');	    
+	    action.val("catalog-search");
 	});
 </script>
