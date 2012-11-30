@@ -56,28 +56,28 @@
 		if(empty($list_feeds["results"])){
 			GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
 		}
-		
+	}
 		$id = GrabPress::get_connector_id();
 		$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 		$player_data = json_decode( $player_json, true );
 		$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 
-	}
+	
 ?>
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
 	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
-	<input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
+	<input type="hidden" name="player_id" value="<?php echo $player_id = isset($player_id) ? $player_id : '' ; ?>"  id="player_id" />
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
 	<input type="hidden" name="publish" value="1" id="publish" />
 	<input type="hidden" name="click_to_play" value="1" id="click_to_play" />
 	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '' ?>" />
 	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
-	<input type="hidden" id="keywords_and" name="keywords_and" value="<?php echo $keywords_and; ?>" />	
-	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
-	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
-	<input type="hidden" id="keywords_phrase" name="keywords_phrase" value="<?php echo $keywords_phrase; ?>" />
+	<input type="hidden" id="keywords_and" name="keywords_and" value="<?php echo $keywords_and = isset($keywords_and) ? $keywords_and : ''; ?>" />	
+	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not = isset($keywords_not) ? $keywords_not : ''; ?>" />
+	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or = isset($keywords_or) ? $keywords_or : ''; ?>" />
+	<input type="hidden" id="keywords_phrase" name="keywords_phrase" value="<?php echo $keywords_phrase = isset($keywords_phrase) ? $keywords_phrase : ''; ?>" />
 	
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
