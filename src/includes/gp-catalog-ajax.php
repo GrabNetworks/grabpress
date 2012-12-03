@@ -151,39 +151,26 @@
 			foreach ($list_feeds["results"] as $result) {
 		?>
 		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
-			<div class="tile-left">
-				<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
-				<p class="video_date">
-					<?php $date = new DateTime( $result["video"]["created_at"] );
-					$stamp = $date->format('m/d/Y') ?>
-				<span><?php echo $stamp; ?></span>
-				</p>
-				<p class="video_logo">
-				<span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-				</p>
-			</div>
-			<div class="tile-right">			
-				<h2 class="video_title" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
-				<?php if(strlen($result["video"]["title"]) > 60) {
-						echo substr($result["video"]["title"], 0, 57) . '...';}
-					  else{
-						echo $result["video"]["title"];	  	
-				}
-				?>	
-				</h2>
-				<p class="video_summary">		
-					<?php if(strlen($result["video"]["summary"]) > 100) {
-						echo substr($result["video"]["summary"], 0, 97) . '...';}
-	else{
-	echo $result["video"]["summary"];	  	
-	}
-	?>			
-	</p>
-				<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Insert' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
-			</div>
+		<div class="tile-left">
+			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 		</div>
+		<div class="tile-right">			
+			<h2 class="video_title">
+			<?php echo $result["video"]["title"]; ?>	
+			</h2>
+			<p class="video_summary">		
+				<?php echo $result["video"]["summary"];?>			
+			</p>
+			<p class="video_date">
+				<?php $date = new DateTime( $result["video"]["created_at"] );
+				$stamp = $date->format('m/d/Y') ?>
+			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+			
+		</div>
+	</div>
 		<?php
-			} 	
+			}
 		?>
 		</fieldset>
 	</div>

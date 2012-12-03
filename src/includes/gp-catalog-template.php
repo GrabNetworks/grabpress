@@ -64,14 +64,6 @@
 
 	
 ?>
-<script type="text/javascript">
-	function poc(){
-		var win = window.dialogArguments || opener || parent || top;
-		win.send_to_editor("poc text");
-		win.tb_remove();
-		return false;
-	}	
-</script>
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
@@ -92,10 +84,7 @@
 			<h2>GrabPress: Find a Video in our Catalog</h2>
 			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
 	<fieldset id="preview-feed">
-	<legend>Preview Feed</legend>		
-		<div class="label-tile-one-column">
-			POC SILLYNESS <input type="button" onclick="poc();" value="click"></input>
-		</div>
+	<legend>Preview Feed</legend>
 		<div class="label-tile-one-column">
 			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? htmlentities(stripslashes($form['keywords']), ENT_QUOTES)  : '' ?>" maxlength="255" /></span>
 			<a href="#" id="help">help</a>
@@ -179,33 +168,20 @@
 	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
 		<div class="tile-left">
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
+		</div>
+		<div class="tile-right">			
+			<h2 class="video_title">
+			<?php echo $result["video"]["title"]; ?>	
+			</h2>
+			<p class="video_summary">		
+				<?php echo $result["video"]["summary"];?>			
+			</p>
 			<p class="video_date">
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
-			<span><?php echo $stamp; ?></span>
-			</p>
-			<p class="video_logo">
-			<span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			</p>
-		</div>
-		<div class="tile-right">			
-			<h2 class="video_title" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
-			<?php if(strlen($result["video"]["title"]) > 60) {
-					echo substr($result["video"]["title"], 0, 57) . '...';}
-				  else{
-					echo $result["video"]["title"];	  	
-			}
-			?>	
-			</h2>
-			<p class="video_summary">		
-				<?php if(strlen($result["video"]["summary"]) > 100) {
-					echo substr($result["video"]["summary"], 0, 97) . '...';}
-				else{
-				echo $result["video"]["summary"];	  	
-				}
-				?>			
-</p>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+			
 		</div>
 	</div>
 	<?php
