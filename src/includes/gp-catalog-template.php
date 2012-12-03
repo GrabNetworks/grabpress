@@ -31,35 +31,38 @@
 		$channels = "";
 	}	
 
-	$adv_search_params = GrabPress::parse_adv_search_string(isset($form["keywords"])?$form["keywords"]:"");
+	if(isset($form["keywords"])){
+		$adv_search_params = GrabPress::parse_adv_search_string(isset($form["keywords"])?$form["keywords"]:"");
 
-	if(isset($form['created_before']) && ($form['created_before'] != "")){
-		$created_before_date = new DateTime( $form['created_before'] );	
-		$created_before = $created_before_date->format('Ymd');
-		$adv_search_params['created_before'] = $created_before;
-	}
-	
-	if(isset($form['created_after']) && ($form['created_after'] != "")){
-		$created_after_date = new DateTime( $form['created_after'] );
-		$created_after = $created_after_date->format('Ymd');
-		$adv_search_params['created_after'] = $created_after;
-	}
-	$adv_search_params["providers"] = $providers;
-	$adv_search_params["categories"] = $channels;
-	$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
+		if(isset($form['created_before']) && ($form['created_before'] != "")){
+			$created_before_date = new DateTime( $form['created_before'] );	
+			$created_before = $created_before_date->format('Ymd');
+			$adv_search_params['created_before'] = $created_before;
+		}
+		
+		if(isset($form['created_after']) && ($form['created_after'] != "")){
+			$created_after_date = new DateTime( $form['created_after'] );
+			$created_after = $created_after_date->format('Ymd');
+			$adv_search_params['created_after'] = $created_after;
+		}
+		$adv_search_params["providers"] = $providers;
+		$adv_search_params["categories"] = $channels;
+		$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
-	$json_preview = GrabPress::get_json($url_catalog);
+		$json_preview = GrabPress::get_json($url_catalog);
 
-	$list_feeds = json_decode($json_preview, true);	
-	
-	if(empty($list_feeds["results"])){
-		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+		$list_feeds = json_decode($json_preview, true);	
+		
+		if(empty($list_feeds["results"])){
+			GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+		}
 	}
+		$id = GrabPress::get_connector_id();
+		$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
+		$player_data = json_decode( $player_json, true );
+		$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
+
 	
-	$id = GrabPress::get_connector_id();
-	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
-	$player_data = json_decode( $player_json, true );
-	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
 <script type="text/javascript">
 	function poc(){
@@ -73,16 +76,16 @@
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
 	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
-	<input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
+	<input type="hidden" name="player_id" value="<?php echo $player_id = isset($player_id) ? $player_id : '' ; ?>"  id="player_id" />
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
 	<input type="hidden" name="publish" value="1" id="publish" />
 	<input type="hidden" name="click_to_play" value="1" id="click_to_play" />
 	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '' ?>" />
 	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
-	<input type="hidden" id="keywords_and" name="keywords_and" value="<?php echo $keywords_and; ?>" />	
-	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not; ?>" />
-	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
-	<input type="hidden" id="keywords_phrase" name="keywords_phrase" value="<?php echo $keywords_phrase; ?>" />
+	<input type="hidden" id="keywords_and" name="keywords_and" value="<?php echo $keywords_and = isset($keywords_and) ? $keywords_and : ''; ?>" />	
+	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not = isset($keywords_not) ? $keywords_not : ''; ?>" />
+	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or = isset($keywords_or) ? $keywords_or : ''; ?>" />
+	<input type="hidden" id="keywords_phrase" name="keywords_phrase" value="<?php echo $keywords_phrase = isset($keywords_phrase) ? $keywords_phrase : ''; ?>" />
 	
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
@@ -121,8 +124,8 @@
 						foreach ( $list as $record ) {
 							$channel = $record -> category;
 							$name = $channel -> name;
-							$id = $channel -> id;
-							$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
+							$id = $channel -> id;							
+							$selected = (is_array($channels) && ( in_array( $name, $channels ) )) ? 'selected="selected"':"";							
 							echo '<option value = "'.$name.'" '.$selected.' >'.$name.'</option>';
 						}
 					?>
@@ -170,7 +173,8 @@
 		</div>
 		<br/><br/>	
 	<?php
-		foreach ($list_feeds["results"] as $result) {
+		if(isset($form["keywords"])){
+			foreach ($list_feeds["results"] as $result) {
 	?>
 	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
 		<div class="tile-left">
@@ -196,16 +200,17 @@
 			<p class="video_summary">		
 				<?php if(strlen($result["video"]["summary"]) > 100) {
 					echo substr($result["video"]["summary"], 0, 97) . '...';}
-else{
-echo $result["video"]["summary"];	  	
-}
-?>			
+				else{
+				echo $result["video"]["summary"];	  	
+				}
+				?>			
 </p>
 			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 		</div>
 	</div>
 	<?php
-		} 	
+			} // end foreach
+		} // end if	
 	?>
 	</fieldset>
 </div>
@@ -302,7 +307,7 @@ echo $result["video"]["summary"];
 		});
 
 	  	$("#help").simpletip({
-		  	 content: 'This input supports the following search syntax:<br/> Add a "+" before a term that must be included in your results.<br/> Add a "-" before any term that must be excluded.<br/> Add quotes around any "exact phrase" to look for <br /><br />', 
+		  	 content: "This search input supports Google syntax for advanced search:<br/><b>Every</b> term separated only by a space will be required in your results.<br/>At least one of any terms separated by an ' OR ' will be included in your results.<br/>Add a '-' before any term that must be <b>excluded</b>.<br/> Add quotes around any \"exact phrase\" to look for.<br /><br />", 
 		  	 fixed: true,
 		  	 position: 'bottom'
 		});
@@ -399,5 +404,7 @@ echo $result["video"]["summary"];
 
 	jQuery(window).load(function () {
 	    doValidation();
+	    var action = jQuery('#action-catalog');	    
+	    action.val("catalog-search");
 	});
 </script>
