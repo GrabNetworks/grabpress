@@ -673,8 +673,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function grabpress_plugin_menu() {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
-			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );			
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( null, 'CatalogEditor', 'CatalogEditor', 'publish_posts', 'catalogeditor', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
@@ -1321,21 +1321,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		        and '' === $content
 		    )
 		    {
-			    echo "POST: "; var_dump($post); echo "<br/><br/>";
-			    $post->post_title = 'hola';
-			    $title = "hola";
-			    //$post->title = "hola2";
-			    //$content['title'] = 'Post Title ';
 			    if ( ! empty ( $_REQUEST['post_id'] )){
 	              $post->ID = $_REQUEST['post_id'];
 	            }		        
 		        $content = str_replace('&amp;', '&', $_REQUEST['pre_content']);
 		        return stripslashes($content);
 		    }
-		    $post->post_title = 'hola2';
-		    $title = "hola2";
-		    //$post->title = "hola4";
-		    //$content['title'] = 'Post Title 2';
 		    $content = str_replace('&amp;', '&', $content);
 		    return $content;
 		}
