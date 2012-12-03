@@ -1343,7 +1343,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		
 		static function get_catalog_callback(){
-			print GrabPress::fetch("includes/gp-catalog-ajax.php");
+			print GrabPress::fetch("includes/gp-catalog-ajax.php", array("form" => $_REQUEST));
 			die();
 		}
 
