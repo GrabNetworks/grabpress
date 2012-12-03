@@ -1321,12 +1321,21 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		        and '' === $content
 		    )
 		    {
+			    echo "POST: "; var_dump($post); echo "<br/><br/>";
+			    $post->post_title = 'hola';
+			    $title = "hola";
+			    //$post->title = "hola2";
+			    //$content['title'] = 'Post Title ';
 			    if ( ! empty ( $_REQUEST['post_id'] )){
 	              $post->ID = $_REQUEST['post_id'];
 	            }		        
 		        $content = str_replace('&amp;', '&', $_REQUEST['pre_content']);
 		        return stripslashes($content);
 		    }
+		    $post->post_title = 'hola2';
+		    $title = "hola2";
+		    //$post->title = "hola4";
+		    //$content['title'] = 'Post Title 2';
 		    $content = str_replace('&amp;', '&', $content);
 		    return $content;
 		}

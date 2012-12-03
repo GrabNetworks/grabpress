@@ -496,7 +496,7 @@
         		    	<input type="hidden" name="feed_date" value="<?php echo $feed_date = isset($form["feed_date"])? $form["feed_date"] : $feed_date; ?>" id="feed_date" />
         		    	<?php $name = isset($form["name"])? urldecode($form["name"]) : $feed_date; ?>
 						<input type="text" name="name" id="name" class="ui-autocomplete-input" value="<?php echo $name; ?>" maxlength="14" />
-						<span clas="description">Feed Name</span>
+						<span class="description">A unique name of 6-14 characters. We encourage customizing it.</span>
 					</td>
         		</tr>
 				<tr valign="bottom">
