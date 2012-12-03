@@ -1331,6 +1331,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		    return $content;
 		}
 
+		static function modified_post_title ($title) {
+
+		  if ( ! empty ( $_REQUEST['post_title'] )){
+		  	return $title = stripslashes($_REQUEST['post_title']);
+		  }
+		  
+		}
+
 		static function add_mce_buttons($buttons){
 		  array_push($buttons, "hr");
 		  array_push($buttons, "image");
@@ -1375,7 +1383,7 @@ if( is_admin() ){
 	//add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
 	//add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
-
+	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }
