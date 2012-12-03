@@ -599,14 +599,14 @@
 											$times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
 										}
 										else {
-											$times = array( '12 hrs', '01 day', '02 days', '03 days' );
+											$times = array( '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
 										}	
 
 										if ( GrabPress::$environment == 'grabqa' ) {												
 											$values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
 										}
 										else {
-											$values = array( 720, 1440, 2880, 4320 );
+											$values = array( 360, 720, 1440, 2880, 4320 );
 										}
 
 										if(!isset($form["schedule"])){

@@ -146,8 +146,8 @@
 							$values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
 						}
 						else {
-							$times = array( '12 hrs', '01 day', '02 days', '03 days' );
-							$values = array( 720, 1440, 2880, 4320 );
+							$times = array( '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+							$values = array( 360, 720, 1440, 2880, 4320 );
 						}
 						for ( $o = 0; $o < count( $times ); $o++ ) {
 							$time = $times[$o];
