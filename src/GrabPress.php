@@ -1207,6 +1207,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}else{				
 				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
 			}
+			wp_enqueue_script( 'thickbox' );
 			
 		}
 
@@ -1223,6 +1224,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			wp_enqueue_style( 'jquery-css', $plugin_url.'/css/grabpress.css' );
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
+			wp_enqueue_style( 'thickbox' );
 
 		}
 

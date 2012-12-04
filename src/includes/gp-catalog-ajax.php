@@ -258,20 +258,6 @@
 	    };
 		    
 		jQuery(function($){	
-			// jQuery.each( jQuery(window).data('events')['resize'], function(i, event) {
-			// 	if(event){
-			// 		var thisEvent		= event.handler.toString().replace(/\n/g, '').replace(/\t/g, '').split(' ').join('');
-			// 		var expectedEvent	= 'function(){tb_position()}';
-
-			// 	    if (thisEvent == expectedEvent) {
-			// 			jQuery(window).unbind("resize", event.handler);
-			// 			defaultthickboxresizehandler = event.handler;
-			// 			return;
-			// 		}
-			// 	}
-			// });
-
-			
 
 			var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 			if(feed_action == "preview-feed"){
