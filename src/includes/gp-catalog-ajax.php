@@ -159,9 +159,7 @@
 			<?php echo $result["video"]["title"]; ?>	
 			</h2>
 			<p class="video_summary">		
-				<?php 
-				echo substr($result["video"]["summary"], 0, 100)."..."
-				//echo $result["video"]["summary"];?>			
+				<?php echo substr($result["video"]["summary"], 0, 100)."..."; ?>			
 			</p>
 			<p class="video_date">
 				<?php $date = new DateTime( $result["video"]["created_at"] );
