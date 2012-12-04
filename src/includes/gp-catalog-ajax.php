@@ -189,7 +189,7 @@
 			}
 			global.backup_tb_position = tb_position;
 			global.tb_position = function(){
-				var SpartaPaymentWidth			= 900;
+				var SpartaPaymentWidth			= 930;
 				var TB_newWidth			= jQuery(window).width() < (SpartaPaymentWidth + 40) ? jQuery(window).width() - 40 : SpartaPaymentWidth;
 				var TB_newHeight		= jQuery(window).height() - 70;
 				var TB_newMargin		= (jQuery(window).width() - SpartaPaymentWidth) / 2;
