@@ -487,3 +487,17 @@ line-height: 24px;
 #form-catalog-page .label-tile-one-column .tooltip{ 
     width: auto !important;
 }
+
+/* Catalog: Add new page pop-up*/
+#TB_window #preview-feed a:link, #TB_window #preview-feed a:hover {
+    color: #21759B !important;
+}
+#TB_window .preview-text-catalog #keywords {
+    width: 636px;
+}
+#TB_ajaxContent {
+    line-height: 1.3em;
+}
+#TB_ajaxContent p {
+    color: #333;
+}
