@@ -1207,6 +1207,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}else{				
 				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
 			}
+			wp_enqueue_script( 'thickbox' );
 			
 		}
 
@@ -1223,6 +1224,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			wp_enqueue_style( 'jquery-css', $plugin_url.'/css/grabpress.css' );
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
+			wp_enqueue_style( 'thickbox' );
 
 		}
 
@@ -1336,7 +1338,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			//our popup's title
 			$title = 'Insert GrabMedia Video';
-			$onclick = 'tb_show("catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );';
+			$onclick = 'tb_show("Grab Media Catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );';
 			//append the icon
 			$context .= "<a title='{$title}' href='#' onclick='{$onclick}' ><img src='{$img}' /></a>";
 			return $context;

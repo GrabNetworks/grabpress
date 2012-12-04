@@ -67,11 +67,8 @@
     <input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
 
 	<div class="wrap" >
-				<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
-				<h2>GrabPress: Find a Video in our Catalog</h2>
-				<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
 		<fieldset id="preview-feed">
-		<legend>Preview Feed</legend>		
+		<legend>Insert Video</legend>		
 			<div class="label-tile-one-column">
 				<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? htmlentities(stripslashes($form['keywords']), ENT_QUOTES)  : '' ?>" maxlength="255" /></span>
 				<a href="#" id="help">help</a>
@@ -258,20 +255,6 @@
 	    };
 		    
 		jQuery(function($){	
-			// jQuery.each( jQuery(window).data('events')['resize'], function(i, event) {
-			// 	if(event){
-			// 		var thisEvent		= event.handler.toString().replace(/\n/g, '').replace(/\t/g, '').split(' ').join('');
-			// 		var expectedEvent	= 'function(){tb_position()}';
-
-			// 	    if (thisEvent == expectedEvent) {
-			// 			jQuery(window).unbind("resize", event.handler);
-			// 			defaultthickboxresizehandler = event.handler;
-			// 			return;
-			// 		}
-			// 	}
-			// });
-
-			
 
 			var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 			if(feed_action == "preview-feed"){
