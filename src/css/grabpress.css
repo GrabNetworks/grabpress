@@ -500,4 +500,5 @@ line-height: 24px;
 }
 #TB_ajaxContent p {
     color: #333;
+    padding: 0;
 }
