@@ -1337,7 +1337,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function modified_post_title ($title) {
 
 		  if ( ! empty ( $_REQUEST['post_title'] )){
-		  	return $title = stripslashes($_REQUEST['post_title']);
+		  	return $title = "VIDEO: ".stripslashes($_REQUEST['post_title']);
 		  }
 		  
 		}
