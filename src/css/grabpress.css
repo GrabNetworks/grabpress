@@ -505,3 +505,6 @@ line-height: 24px;
     color: #333;
     padding: 0;
 }
+.results-divider{
+    margin: -7px 29px 0 64px;
+}

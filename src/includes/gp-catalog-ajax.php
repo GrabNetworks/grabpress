@@ -98,7 +98,7 @@
 								$channel = $record -> category;
 								$name = $channel -> name;
 								$id = $channel -> id;
-								$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
+								$selected = ((is_array($channels)) && ( in_array( $name, $channels ) )) ? 'selected="selected"':"";
 								echo '<option value = "'.$name.'" '.$selected.' >'.$name.'</option>';
 							}
 						?>
@@ -118,7 +118,7 @@
 							$provider = $record_provider->provider;
 							$provider_name = $provider->name;
 							$provider_id = $provider->id;
-							$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
+							$provider_selected = ((isset($form["provider"])) && (is_array($form["provider"])) && ( in_array( $provider_id, $form["provider"] ))) ?'selected="selected"':"";
 							echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
 						}
 					?>
@@ -143,7 +143,14 @@
 					<input type="submit" value=" Search " class="update-search" id="update-search" >
 				</div>
 			</div>
-			<br/><br/>	
+			<br/><br/>
+		<legend>Results</legend>
+		<hr class="results-divider">	
+		<div class="label-tile-one-column">
+			Sort by: 
+			<input type="radio" name="sort_by" value="created_at" checked> Date
+			<input type="radio" name="sort_by" value="relevance" > Relevance<br>
+		</div>	
 		<?php
 			foreach ($list_feeds["results"] as $result) {
 		?>
@@ -323,6 +330,7 @@
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#providers").val(),
 		   					 "channels" : $("#channels").val(),
+		   					 "sort_by" : $("#sort_by").val(),		   					 
 		   					 "created_before" : $("#created_before").val(),
 		   					 "created_after" : $("#created_after").val()};
 		   		$.post(ajaxurl, data, function(response) {
