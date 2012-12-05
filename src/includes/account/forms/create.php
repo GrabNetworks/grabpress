@@ -9,7 +9,15 @@
 			<tr><td>Re-enter Password*</td><td><input type="password" name="password2" id="id_password2"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="pass2_ok"/></td></tr>
 			<tr><td>First Name*</td><td><input id="id_first_name" type="text" name="first_name" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="first_ok"/></td></tr>
 			<tr><td>Last Name*</td><td><input id="id_last_name" type="text" name="last_name" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="last_ok"/></td></tr>
-			<tr><td>Company</td><td><input id="company" type="text" name="company" maxlength="255"></td><td></td></tr>			
+			<tr><td>Company</td><td><input id="company" type="text" name="company" maxlength="255"></td></tr>			
+			<tr><td>Content Category</td><td><select name="publisher_category_id" id="publisher_category_id"><?php
+    			$category_arr = array('2'=>"Entertainment",'3'=>"Fashion & Beauty",'4'=>"Food & Beverage",'5'=>"Gaming",'6'=>"Health",'8'=>"Lifestyle General",'9'=>"Men's Lifestyle",'10'=>"Business & Finance",'11'=>"News",'15'=>"Sports",'16'=>"Technology",'17'=>"Woman's Lifestyle");
+				$string_category = '<option value="1">Multiple Categories</option>';
+		        foreach($category_arr as $key => $val){
+		            $string_category .= '<option value="'.$key.'">'.$val.'</option>'."\n";
+		        }
+		        echo $string_category;
+			?></select></td></tr>
 			<tr><td>Address 1*</td><td><input id="id_address1" type="text" name="address1" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="address_ok"/></td></tr>
 			<tr><td>Address 2</td><td><input id="id_address2" type="text" name="address2" maxlength="255"></td></tr>
 			<tr><td>City*</td><td><input id="id_city" type="text" name="city" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="city_ok"/></td></tr>
@@ -22,7 +30,7 @@
 		        echo $string;
 			?></select></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="state_ok"/></td></tr>
 			<tr><td>Zip*</td><td><input id="id_zip" type="text" name="zip" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="zip_ok"/></td></tr>
-			<tr><td>Phone Number</td><td><input id="id_phone_number" type="text" name="phone_number" maxlength="255"></td><td></td></tr>
+			<tr><td>Phone Number</td><td><input id="id_phone_number" type="text" name="phone_number" maxlength="255"></td></tr>
 			<tr><td>Paypal ID</td><td><input id="id_paypal_id" type="text" name="paypal_id" maxlength="255"></td></tr>
 			<tr><td>Website Domain*<select id= "id_protocol"><option>http://</option><option>https://</option></select></td><td><input id="id_site" type="text" maxlength="255"></td><td><img src="<?php echo GrabPress::get_green_icon_src( 'Ok' ); ?>" style="visibility:hidden" id="url_ok"/></td></tr>
 			<input type="hidden" name = 'url' id='id_url' />

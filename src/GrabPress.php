@@ -1097,8 +1097,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							         'password'=>$_REQUEST['password'],
 							         'first_name'=>$_REQUEST['first_name'],
 							         'last_name'=>$_REQUEST['last_name'],
+							         'publisher_category_id'=>$_REQUEST['publisher_category_id'],
 							         'payment_detail' => array(
 							         	'payee' => $_REQUEST['first_name'] . ' ' . $_REQUEST['last_name'],
+							         	'company'=>$_REQUEST['company'],
 								        'address1'=>$_REQUEST['address1'],
 								        'address2'=>$_REQUEST['address2'],
 								        'city'=>$_REQUEST['city'],
@@ -1114,6 +1116,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$user_json = json_encode($user_data);
 							$result_json = GrabPress::api_call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
 							$result_data = json_decode( $result_json);
+
 							if(!isset( $result_data->error ) ){
 								$_REQUEST[ 'action' ] = 'link-user';
 								return GrabPress::dispatcher();
