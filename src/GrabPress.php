@@ -673,8 +673,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function grabpress_plugin_menu() {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
-			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );			
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( null, 'CatalogEditor', 'CatalogEditor', 'publish_posts', 'catalogeditor', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
@@ -1097,8 +1097,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							         'password'=>$_REQUEST['password'],
 							         'first_name'=>$_REQUEST['first_name'],
 							         'last_name'=>$_REQUEST['last_name'],
+							         'publisher_category_id'=>$_REQUEST['publisher_category_id'],
 							         'payment_detail' => array(
 							         	'payee' => $_REQUEST['first_name'] . ' ' . $_REQUEST['last_name'],
+							         	'company'=>$_REQUEST['company'],
 								        'address1'=>$_REQUEST['address1'],
 								        'address2'=>$_REQUEST['address2'],
 								        'city'=>$_REQUEST['city'],
@@ -1114,6 +1116,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$user_json = json_encode($user_data);
 							$result_json = GrabPress::api_call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
 							$result_data = json_decode( $result_json);
+
 							if(!isset( $result_data->error ) ){
 								$_REQUEST[ 'action' ] = 'link-user';
 								return GrabPress::dispatcher();
@@ -1331,6 +1334,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		    return $content;
 		}
 
+		static function modified_post_title ($title) {
+
+		  if ( ! empty ( $_REQUEST['post_title'] )){
+		  	return $title = "VIDEO: ".stripslashes($_REQUEST['post_title']);
+		  }
+		  
+		}
+
 		static function add_mce_buttons($buttons){
 		  array_push($buttons, "hr");
 		  array_push($buttons, "image");
@@ -1375,7 +1386,7 @@ if( is_admin() ){
 	//add_filter('mce_buttons', array( 'GrabPress', 'add_mce_buttons' ));
 	//add_action('init', array( 'GrabPress', 'custom_mce_button' ) );
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
-
+	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }
