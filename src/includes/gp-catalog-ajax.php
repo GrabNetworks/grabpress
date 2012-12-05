@@ -155,7 +155,7 @@
 			<h2 class="video_title">
 			<?php echo $result["video"]["title"]; ?>	
 			</h2>
-			<p class="video_summary">		
+			<p class="video_summary">
 				<?php echo $result["video"]["summary"] ?>
 			</p>
 			<p class="video_date">
@@ -359,7 +359,8 @@
 		   	$('#clear-search').bind('click', function(e){
 		   		window.location = "admin.php?page=catalog";		    
 			});
-		
+			
+			$(".video_summary").ellipsis(2, true, "more", "less");
 
 		});
 
