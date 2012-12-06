@@ -3,7 +3,7 @@ Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.0.1   
 Tested up to: 3.4.2  
-Stable tag: 1.0.1  
+Stable tag: 2.0.0  
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,18 @@ We hope to allow users to edit the layout / posting template in future updates o
 5. Video results are automatically posted to your Blog.
 
 == Changelog ==  
+
+= 2.0.0 =
+*Features:*
+ * AUTO-334: As a publisher, I want the embed in auto-posted content to use Grab's JavaScript embed.
+ * AUTO-249: As an editor, I want to execute a simple or advanced search against the Grab-Media Catalog, to find relevant videos for a post.
+ * AUTO-250: As a WordPress publisher, I want to post a single video to my blog from the Video Catalog search results page.
+ * AUTO-252: As an editor, I want to save my search results as a new feed using a 'Save as Feed' button on the Video Catalog page.
+ 
+
+*Bug Fixes:*
+ * AUTO-408: When I create a feed using a category with spaces, I do not reveieve any posts.
+ * AUTO-405: After installing the GrabPress plug-in, my media tab from the admin menu disappears.
 
 = 1.0.1 =
 *Features:*

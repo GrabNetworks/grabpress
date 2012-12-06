@@ -483,7 +483,7 @@
         		    	<input type="hidden" name="feed_date" value="<?php echo $feed_date = isset($form["feed_date"])? $form["feed_date"] : $feed_date; ?>" id="feed_date" />
         		    	<?php $name = isset($form["name"])? urldecode($form["name"]) : $feed_date; ?>
 						<input type="text" name="name" id="name" class="ui-autocomplete-input" value="<?php echo $name; ?>" maxlength="14" />
-						<span clas="description">Feed Name</span>
+						<span class="description">A unique name of 6-14 characters. We encourage customizing it.</span>
 					</td>
         		</tr>
 				<tr valign="bottom">
@@ -586,14 +586,14 @@
 											$times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
 										}
 										else {
-											$times = array( '12 hrs', '01 day', '02 days', '03 days' );
+											$times = array( '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
 										}	
 
 										if ( GrabPress::$environment == 'grabqa' ) {												
 											$values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
 										}
 										else {
-											$values = array( 720, 1440, 2880, 4320 );
+											$values = array( 360, 720, 1440, 2880, 4320 );
 										}
 
 										if(!isset($form["schedule"])){

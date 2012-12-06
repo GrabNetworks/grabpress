@@ -78,6 +78,7 @@
 	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not = isset($keywords_not) ? $keywords_not : ''; ?>" />
 	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or = isset($keywords_or) ? $keywords_or : ''; ?>" />
 	<input type="hidden" id="keywords_phrase" name="keywords_phrase" value="<?php echo $keywords_phrase = isset($keywords_phrase) ? $keywords_phrase : ''; ?>" />
+	<input type="hidden" name="post_title" value=""  id="post_title" />
 	
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
@@ -169,7 +170,7 @@
 		<div class="tile-left">
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 		</div>
-		<div class="tile-right">			
+		<div class="tile-right">
 			<h2 class="video_title">
 			<?php echo $result["video"]["title"]; ?>	
 			</h2>
@@ -340,14 +341,17 @@
 		    var video_id = this.id.replace('btn-create-feed-single-','');
 		    var pre_content2 = $('#pre_content2').val();
 		    var post_id = $('#post_id').val();
+		    var video_title = $.trim($(this).parent().children('h2').text());
 
 		    var data = {
 				action: 'get_mrss_format',
 				video_id: video_id
 			};
 
+			
 			$.post(ajaxurl, data, function(response) {
 				//alert('Got this from the server: ' + response);
+				$('#post_title').val(video_title);	
 				var content = response.replace(/1825613/g, ctp_player_id);
 				if(pre_content2 != ""){
 					content = pre_content2 + "<br/><br/>" + content;
@@ -356,11 +360,11 @@
 				if(post_id != ""){
 					$('#post_ID').val(post_id);	
 				}
-				$('#post_ID').val(post_id);
 						
 			    form.attr("ACTION", bloginfo+"/wp-admin/post-new.php");
 			    form.submit();				
-			});		  
+			});	
+			  
 
 		});	
 
