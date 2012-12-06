@@ -1200,6 +1200,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js' );
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' );
+			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' );
 			
 			$wpversion = floatval(get_bloginfo('version'));
 			if ( $wpversion <= 3.1 ) {		
@@ -1345,7 +1346,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		
 		static function get_catalog_callback(){
-			$defaults = array("provider" => array());
+			$defaults = array(
+				"provider" => array(),
+				"sort_by" => "created_at");
 			$req = array_merge($defaults, $_REQUEST);
 			print GrabPress::fetch("includes/gp-catalog-ajax.php", array("form" => $req));
 			die();

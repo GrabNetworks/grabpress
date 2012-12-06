@@ -232,8 +232,7 @@ cursor: pointer;
 .result-tile {
     float: left;
     width: 400px;
-    padding: 20px 10px;
-    height: 110px;
+    padding: 10px;
     overflow: hidden;
     border-top: 1px solid black;
 }
@@ -448,6 +447,7 @@ line-height: 24px;
 }
 #form-catalog-page .result-tile .tile-right p.video_summary{
     height: 2em;
+    overflow: hidden;
 }
 #catalog-page .result-tile h2.video_title {
     height: 28px;
@@ -504,4 +504,7 @@ line-height: 24px;
 #TB_ajaxContent p {
     color: #333;
     padding: 0;
+}
+.results-divider{
+    margin: -7px 29px 0 64px;
 }

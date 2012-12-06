@@ -46,6 +46,7 @@
 	}
 	$adv_search_params["providers"] = $providers;
 	$adv_search_params["categories"] = $channels;
+	$adv_search_params["sort_by"] = $form["sort_by"];
 	$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
 	$json_preview = GrabPress::get_json($url_catalog);
@@ -62,7 +63,6 @@
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
 <div id="gp-catalog-container">
-
 	<form method="post" action="" id="form-catalog-page">
     <input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
 
@@ -98,7 +98,7 @@
 								$channel = $record -> category;
 								$name = $channel -> name;
 								$id = $channel -> id;
-								$selected = ( in_array( $name, $channels ) ) ? 'selected="selected"':"";
+								$selected = ((is_array($channels)) && ( in_array( $name, $channels ) )) ? 'selected="selected"':"";
 								echo '<option value = "'.$name.'" '.$selected.' >'.$name.'</option>';
 							}
 						?>
@@ -118,7 +118,7 @@
 							$provider = $record_provider->provider;
 							$provider_name = $provider->name;
 							$provider_id = $provider->id;
-							$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
+							$provider_selected = ((isset($form["provider"])) && (is_array($form["provider"])) && ( in_array( $provider_id, $form["provider"] ))) ?'selected="selected"':"";
 							echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
 						}
 					?>
@@ -143,7 +143,18 @@
 					<input type="submit" value=" Search " class="update-search" id="update-search" >
 				</div>
 			</div>
-			<br/><br/>	
+			<br/><br/>
+		<legend>Results</legend>
+		<hr class="results-divider">	
+		<div class="label-tile-one-column">
+			Sort by: 
+			<?php  $created_checked = ($form["sort_by"]!="relevance")?'checked="checked";':"";
+					$relevance_checked = ($form["sort_by"]=="relevance")?'checked="checked";':"";
+
+			?>
+			<input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
+			<input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
+		</div>	
 		<?php
 			foreach ($list_feeds["results"] as $result) {
 		?>
@@ -155,14 +166,14 @@
 			<h2 class="video_title">
 			<?php echo $result["video"]["title"]; ?>	
 			</h2>
-			<p class="video_summary">		
-				<?php echo substr($result["video"]["summary"], 0, 100)."..."; ?>			
+			<p class="video_summary">
+				<?php echo $result["video"]["summary"] ?>
 			</p>
 			<p class="video_date">
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
 			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Insert into Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+			<input type="button" value="<?php _e( 'Insert into Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
 			
 		</div>
 	</div>
@@ -315,20 +326,26 @@
 			   showAnim: 'slideDown',
 			   duration: 'fast'
 			});
-
-		   $("#form-catalog-page").change(doValidation);
-		   $("#form-catalog-page").submit(function(e){
-		   		e.preventDefault();
-		   		var data = { "action" : "get_catalog", 
+		   var submitSearch = function(){
+		   	var data = { "action" : "get_catalog", 
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#providers").val(),
 		   					 "channels" : $("#channels").val(),
+		   					 "sort_by" : $('.sort_by:checked').val(),
 		   					 "created_before" : $("#created_before").val(),
 		   					 "created_after" : $("#created_after").val()};
 		   		$.post(ajaxurl, data, function(response) {
 		   			$("#gp-catalog-container").replaceWith(response);
 		   		});
+		   }
+		   $("#form-catalog-page").change(doValidation);
+		   $("#form-catalog-page").submit(function(e){
+		   		e.preventDefault();
+		   		submitSearch();
 		   		return false;
+		   });
+		   $(".sort_by").change(function(e){
+		   		submitSearch();
 		   });
 		   
 		   
@@ -359,7 +376,8 @@
 		   	$('#clear-search').bind('click', function(e){
 		   		window.location = "admin.php?page=catalog";		    
 			});
-		
+			
+			$(".video_summary").ellipsis(2, true, "more", "less");
 
 		});
 
