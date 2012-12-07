@@ -1295,6 +1295,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		
 		static function get_mrss_format_callback() {	
 			$video_id = $_REQUEST['video_id'];
+			$format = $_REQUEST['format'];
 			$id = GrabPress::get_connector_id();
 			$url= 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/'.$video_id.'.mrss';
 			
@@ -1313,8 +1314,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
 
 			foreach ($objXml->channel->item as $item) {   
-				
-				echo $html = "<div id=\"grabpreview\"> 
+				if($format == 'post'){
+					echo $html = "<div id=\"grabpreview\"> 
 						<p><img src='".$item->mediagroup->mediathumbnail[0]->attributes()->url."' /></p> 
 						</div>
 						<p>".$item->description."</p> 
@@ -1336,6 +1337,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						_gaq.push(['_trackPageview']);
 						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
 						</script>"; 
+				}elseif($format == 'embed'){
+					echo $html = "<div id=\"grabembed\">
+						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.grabqa.com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=".$item->guid."&width=600&height=450&tgt=grabqa\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
+						</div>";
+				}		
 			    		    
 			}	
 

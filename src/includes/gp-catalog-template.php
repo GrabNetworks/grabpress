@@ -345,6 +345,7 @@
 
 		    var data = {
 				action: 'get_mrss_format',
+				format : 'post',
 				video_id: video_id
 			};
 
