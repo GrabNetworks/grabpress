@@ -1312,8 +1312,31 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$xmlString = str_replace( $search, $replace, $xml);
 			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-			foreach ($objXml->channel->item as $item) {
-			    echo $item->mediagroup->grabembed->grabplayer;
+			foreach ($objXml->channel->item as $item) {   
+				
+				echo $html = "<div id=\"grabpreview\"> 
+						<p><img src='".$item->mediagroup->mediathumbnail[0]->attributes()->url."' /></p> 
+						</div>
+						<p>".$item->description."</p> 
+						<!--more-->
+						<div id=\"grabembed\">
+						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.grabqa.com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=".$item->guid."&width=600&height=450&tgt=grabqa\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
+						</div>
+						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
+						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
+						<p>To stay in the loop, bookmark <a href=\"/\">our homepage</a>.</p>
+						<style>
+						div#grabpreview {
+						display:none !important;
+						}
+						</style>
+						<script type=\"text/javascript\">
+						var _gaq = _gaq || [];
+						_gaq.push(['_setAccount', 'UA-31934587-1']);
+						_gaq.push(['_trackPageview']);
+						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
+						</script>"; 
+			    		    
 			}	
 
 			die(); // this is required to return a proper result
