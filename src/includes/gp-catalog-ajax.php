@@ -364,9 +364,8 @@
 					//alert('Got this from the server: ' + response);
 					var content = response.replace(/1825613/g, ctp_player_id);
 
-					var win = window.dialogArguments || opener || parent || top;
-					win.send_to_editor(content);
-					win.tb_remove();
+					window.send_to_editor(content);
+					window.tb_remove();
 					tb_position = backup_tb_position
 					return false;
 				});		  
