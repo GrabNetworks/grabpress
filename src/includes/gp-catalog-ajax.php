@@ -353,11 +353,12 @@
 			    var form = $('#form-catalog-page');
 			    var ctp_player_id = $('#player_id').val();
 			    var bloginfo = $('#bloginfo').val();
-			    var video_id = this.id.replace('btn-create-feed-single-','');
+			    var v_id = this.id.replace('btn-create-feed-single-','');
 
 			    var data = {
 					action: 'get_mrss_format',
-					video_id: video_id
+					format : 'embed',
+					video_id: v_id
 				};
 
 				$.post(ajaxurl, data, function(response) {
@@ -365,7 +366,6 @@
 					var content = response.replace(/1825613/g, ctp_player_id);
 
 					window.send_to_editor(content);
-					window.tb_remove();
 					tb_position = backup_tb_position
 					return false;
 				});		  

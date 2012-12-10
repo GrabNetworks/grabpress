@@ -425,11 +425,12 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 		    var form = $('#form-catalog-page');
 		    var ctp_player_id = $('#player_id').val();
 		    var bloginfo = $('#bloginfo').val();
-		    var video_id = this.id.replace('btn-create-feed-single-','');
+		    var v_id = this.id.replace('btn-create-feed-single-','');
 
 		    var data = {
 				action: 'get_mrss_format',
-				video_id: video_id
+				format: "embed"
+				video_id: v_id
 			};
 
 			$.post(ajaxurl, data, function(response) {
