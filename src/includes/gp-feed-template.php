@@ -18,13 +18,8 @@
 		}
 
 		global.previewVideos = function () {
-			var errors = hasValidationErrors();
-			if(!errors){
-				$("#form-create-feed input[name=action]").val("preview-feed");
-				$("#form-create-feed").submit();
-			}else{
-				alert(errors);
-			}
+			tb_show("catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );
+			return false;
 		}
 
 		global.deleteFeed = function(id){
@@ -49,18 +44,10 @@
 				}
 		}
 		global.selectedCategories = <?php echo json_encode( $form["category"] );?>;
-		<?php if(isset($_GET["feed_id"])) { ?>
-			global.previewFeed = function(id) {			
-			    var form = jQuery('#form-'+id);
-			    var action = jQuery('#action-'+id);
-			    action.val("edit-feed");
-			    form.submit();
-			}
-			<?php }else{ ?>
-			global.previewFeed = function(id) {			
-				window.location = "admin.php?page=autoposter&action=preview-feed&feed_id="+id;
-			}
-		<?php } ?>		
+
+		global.previewFeed = function(id) {
+			tb_show("catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );
+		}	
 
 		global.editFeed = function(id) {
 			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
