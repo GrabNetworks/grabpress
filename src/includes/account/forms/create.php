@@ -12,7 +12,7 @@
 			<tr><td>Company</td><td><input id="company" type="text" name="company" maxlength="255"></td></tr>			
 			<tr><td>Content Category</td><td><select name="publisher_category_id" id="publisher_category_id"><?php
     			$category_arr = array('2'=>"Entertainment",'3'=>"Fashion & Beauty",'4'=>"Food & Beverage",'5'=>"Gaming",'6'=>"Health",'8'=>"Lifestyle General",'9'=>"Men's Lifestyle",'10'=>"Business & Finance",'11'=>"News",'15'=>"Sports",'16'=>"Technology",'17'=>"Woman's Lifestyle");
-				$string_category = '<option value="1">Multiple Categories</option>';
+				$string_category = '<option value="1">All Categories</option>';
 		        foreach($category_arr as $key => $val){
 		            $string_category .= '<option value="'.$key.'">'.$val.'</option>'."\n";
 		        }

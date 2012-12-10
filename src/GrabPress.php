@@ -1295,6 +1295,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		
 		static function get_mrss_format_callback() {	
 			$video_id = $_REQUEST['video_id'];
+			$format = $_REQUEST['format'];
 			$id = GrabPress::get_connector_id();
 			$url= 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/'.$video_id.'.mrss';
 			
@@ -1312,8 +1313,34 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$xmlString = str_replace( $search, $replace, $xml);
 			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-			foreach ($objXml->channel->item as $item) {
-			    echo $item->mediagroup->grabembed->grabplayer;
+			foreach ($objXml->channel->item as $item) {   
+				if($format == 'post'){
+					echo "<div id=\"grabpreview\"> 
+						<p><img src='".$item->mediagroup->mediathumbnail[0]->attributes()->url."' /></p> 
+						</div>
+						<p>".$item->description."</p> 
+						<!--more-->
+						<div id=\"grabembed\">
+						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.grabqa.com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=".$item->guid."&width=600&height=450&tgt=grabqa\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
+						</div>
+						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
+						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
+						<p>To stay in the loop, bookmark <a href=\"/\">our homepage</a>.</p>
+						<style>
+						div#grabpreview {
+						display:none !important;
+						}
+						</style>
+						<script type=\"text/javascript\">
+						var _gaq = _gaq || [];
+						_gaq.push(['_setAccount', 'UA-31934587-1']);
+						_gaq.push(['_trackPageview']);
+						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
+						</script>"; 
+				}elseif($format == 'embed'){
+					echo '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.grabqa.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content='.$item->guid.'&width=420&height=256&tgt=grabqa"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>';
+				}		
+			    		    
 			}	
 
 			die(); // this is required to return a proper result
@@ -1363,6 +1390,17 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			print GrabPress::fetch("includes/gp-catalog-ajax.php", array("form" => $req));
 			die();
 		}
+		static function mce_settings($settings){
+			if(!isset($settings["valid_elements"])){
+				$settings["valid_elements"] = "script[language|type|src]";
+			}
+			$settings["valid_elements"] .= $settings["valid_elements"].",script[language|type|src]";
+			if(!isset($settings["extended_valid_elements"])){
+				$settings["extended_valid_elements"] = "div[id|class]";
+			}
+			$settings["extended_valid_elements"] .= $settings["extended_valid_elements"].",div[id|class]";
+			return $settings;
+		}
 
 	}//class
 }//ifndefclass
@@ -1383,6 +1421,7 @@ if( is_admin() ){
 	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
+	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }

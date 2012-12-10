@@ -353,14 +353,15 @@
 		    var form = $('#form-catalog-page');
 		    var ctp_player_id = $('#player_id').val();
 		    var bloginfo = $('#bloginfo').val();
-		    var video_id = this.id.replace('btn-create-feed-single-','');
+		    var v_id = this.id.replace('btn-create-feed-single-','');
 		    var pre_content2 = $('#pre_content2').val();
 		    var post_id = $('#post_id').val();
 		    var video_title = $.trim($(this).parent().children('h2').text());
 
 		    var data = {
 				action: 'get_mrss_format',
-				video_id: video_id
+				format : 'post',
+				video_id: v_id
 			};
 
 			
