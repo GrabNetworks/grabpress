@@ -1390,6 +1390,17 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			print GrabPress::fetch("includes/gp-catalog-ajax.php", array("form" => $req));
 			die();
 		}
+		static function mce_settings($settings){
+			if(!isset($settings["valid_elements"])){
+				$settings["valid_elements"] = "script[language|type|src]";
+			}
+			$settings["valid_elements"] .= $settings["valid_elements"].",script[language|type|src]";
+			if(!isset($settings["extended_valid_elements"])){
+				$settings["extended_valid_elements"] = "div[id|class]";
+			}
+			$settings["extended_valid_elements"] .= $settings["extended_valid_elements"].",div[id|class]";
+			return $settings;
+		}
 
 	}//class
 }//ifndefclass
@@ -1410,6 +1421,7 @@ if( is_admin() ){
 	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
+	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }

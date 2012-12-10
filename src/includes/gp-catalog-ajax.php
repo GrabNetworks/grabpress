@@ -366,7 +366,6 @@
 					var content = response.replace(/1825613/g, ctp_player_id);
 
 					window.send_to_editor(content);
-					window.tb_remove();
 					tb_position = backup_tb_position
 					return false;
 				});		  
