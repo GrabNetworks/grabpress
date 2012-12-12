@@ -47,7 +47,6 @@
 		}
 		$adv_search_params["providers"] = $providers;
 		$adv_search_params["categories"] = $channels;
-		$adv_search_params["sort_by"] = $form["sort_by"];
 		$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
 		$json_preview = GrabPress::get_json($url_catalog);
@@ -65,7 +64,6 @@
 
 	
 ?>
-<div id="gp-catalog-container">
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_provider; ?>" />
@@ -163,22 +161,9 @@
 				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
-		<br/><br/>		
+		<br/><br/>	
 	<?php
 		if(isset($form["keywords"])){
-	?>
-	<legend>Results</legend>
-	<hr class="results-divider">		
-	<div class="label-tile-one-column">
-		Sort by: 
-		<?php  
-			$created_checked = ((isset($form["sort_by"])) && ($form["sort_by"]!="relevance")) ? 'checked="checked";':"";
-			$relevance_checked = ((isset($form["sort_by"])) &&($form["sort_by"]=="relevance")) ?'checked="checked";':"";
-		?>
-		<input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
-		<input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
-	</div>	
-	<?php		
 			foreach ($list_feeds["results"] as $result) {
 	?>
 	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
@@ -396,30 +381,6 @@
 	   		window.location = "admin.php?page=catalog";		    
 		});
 
-		var submitSearch = function(){
-	   	var data = { "action" : "get_catalog", 
-	   					 "keywords" : $("#keywords").val(),
-	   					 "providers" : $("#providers").val(),
-	   					 "channels" : $("#channels").val(),
-	   					 "sort_by" : $('.sort_by:checked').val(),
-	   					 "created_before" : $("#created_before").val(),
-	   					 "created_after" : $("#created_after").val()};
-	   		$.post(ajaxurl, data, function(response) {
-	   			$("#gp-catalog-container").replaceWith(response);
-	   		});
-	   }
-
-   	   $("#form-catalog-page").change(doValidation);
-	   $("#form-catalog-page").submit(function(e){
-	   		e.preventDefault();
-	   		submitSearch();
-	   		return false;
-	   });
-
-		$(".sort_by").change(function(e){
-			submitSearch();
-		});
-
 	});
 
 	jQuery(window).load(function () {
@@ -428,5 +389,3 @@
 	    action.val("catalog-search");
 	});
 </script>
-
-</div>
