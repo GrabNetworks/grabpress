@@ -47,6 +47,8 @@
 		}
 		$adv_search_params["providers"] = $providers;
 		$adv_search_params["categories"] = $channels;
+		$adv_search_params["sort_by"] = $form["sort_by"];
+
 		$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
 		$json_preview = GrabPress::get_json($url_catalog);
@@ -162,8 +164,21 @@
 			</div>
 		</div>
 		<br/><br/>	
+		
+
 	<?php
 		if(isset($form["keywords"])){
+	?>
+	 <div class="label-tile-one-column">
+               Sort by: 
+               <?php  
+                       $created_checked = ((isset($form["sort_by"])) && ($form["sort_by"]!="relevance")) ? 'checked="checked";':"";
+                       $relevance_checked = ((isset($form["sort_by"])) &&($form["sort_by"]=="relevance")) ?'checked="checked";':"";
+               ?>
+               <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
+               <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
+       </div>
+	<?php
 			foreach ($list_feeds["results"] as $result) {
 	?>
 	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile" id="video-<?php echo $result['video']['id']; ?>">		
@@ -333,6 +348,11 @@
 		    form.attr("action", "admin.php?page=autoposter");
 		    form.submit();
 		});
+		$(".sort_by").change(function(e){
+			var form = jQuery('#form-catalog-page');
+			form.submit();
+		});
+
 
 	   	$('.btn-create-feed-single').bind('click', function(e){
 		    var form = $('#form-catalog-page');
