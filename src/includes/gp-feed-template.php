@@ -18,8 +18,14 @@
 		}
 
 		global.previewVideos = function () {
-			tb_show("catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );
-			return false;
+			var errors = hasValidationErrors();
+
+			if(!errors){
+				$("#form-create-feed input[name=action]").val("preview-feed");
+				$("#form-create-feed").submit();
+			}else{
+				alert(errors);
+			}
 		}
 
 		global.deleteFeed = function(id){
