@@ -369,7 +369,7 @@
 			};
 			
 			$.post(ajaxurl, data, function(response) {
-				var video_title = $('#video-title-' + v_id).text();
+				var video_title = $.trim($('#video-title-' + v_id).text());
 				$('#post_title').val(video_title);	
 				var content = response.replace(/1825613/g, ctp_player_id);
 				if(pre_content2 != ""){
