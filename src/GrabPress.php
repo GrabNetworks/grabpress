@@ -1320,7 +1320,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
 					echo "<div id=\"grabpreview\"> 
-						<p><img src='".$item->mediagroup->mediathumbnail[0]->attributes()->url."' /></p> 
+						<p><img src='".$item->mediagroup->mediathumbnail[1]->attributes()->url."' /></p> 
 						</div>
 						<p>".$item->description."</p> 
 						<!--more-->
@@ -1344,8 +1344,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}elseif($format == 'embed'){
 					echo '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.grabqa.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content='.$item->guid.'&width=420&height=256&tgt=grabqa"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>';
 				}		
-			    
-			    var_dump($item->mediagroup->mediakeywords);	    
+			    //var_dump($item->mediagroup->mediathumbnail[1]->attributes()->url); echo "<br/><br/>";
+			    //var_dump($item->mediagroup->mediakeywords);	  echo "<br/><br/>";  
 			}	
 
 			die(); // this is required to return a proper result
@@ -1437,7 +1437,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		            //echo "</ul>";
 		            //echo $tags;
-		            var_dump($term_ids);
+		            //var_dump($term_ids);
 		            
 		        }
 		    }
