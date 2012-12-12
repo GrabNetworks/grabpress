@@ -692,28 +692,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function render_catalog_management() {
 			GrabPress::log();
+			$defaults = array("sort_by" => "created_at");
 
 			print GrabPress::fetch( 'includes/gp-catalog-template.php' ,
-				array( "form" => $_REQUEST ) );
-		}
-
-		static function render_catalog_editor_management() {
-			GrabPress::log();
-			//if (!current_user_can('manage_options'))  {
-			//  wp_die( __('You do not have sufficient permissions to access this page.') );
-			// }
-			print GrabPress::fetch( 'includes/gp-catalog-template-editor.php' ,
-				array( "form" => $_REQUEST ) );
-			/*
-			print GrabPress::fetch( 'includes/gp-feed-template.php',
-				array( "form" => $_REQUEST,
-					"list_provider" => $list_provider,
-					"providers_total" => $providers_total,
-					"list_channels" => $list_channels,
-					"channels_total" => $channels_total,
-					"blogusers" => $blogusers ) );
-			*/
-
+				array( "form" => array_merge($defaults, $_REQUEST )) );
 		}
 
 		static function _filter_out_out_providers( $x ) {
@@ -1138,23 +1120,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 
 			case 'catalogeditor':
-				if(isset($_REQUEST[ 'action' ])){
-					switch ( $_REQUEST[ 'action' ] ) {
-						/*
-						case 'prefill':
-							GrabPress::grabpress_prefill_feed();
-						break;
-						*/
-						case 'catalog-search-editor':
-							GrabPress::render_catalog_editor_management();
-							//print GrabPress::fetch( 'includes/gp-catalog-template-editor.php');
-						break;
-						default:
-							GrabPress::render_catalog_editor_management();
-							//print GrabPress::fetch( 'includes/gp-catalog-template-editor.php');
-						break;
-					}
-				}
+				GrabPress::render_catalog_management();
 			case 'catalog':
 
 				if(isset($_REQUEST[ 'action' ])){
@@ -1172,10 +1138,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							GrabPress::grabpress_prefill_feed();
 						break;
 						case 'catalog-search':
-							//$keywords = $_REQUEST['keywords'];
-							GrabPress::render_catalog_management();
-						break;
-						default:
+						default:							
 							GrabPress::render_catalog_management();
 						break;
 					}
