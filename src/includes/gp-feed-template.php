@@ -18,8 +18,14 @@
 		}
 
 		global.previewVideos = function () {
-			tb_show("catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );
-			return false;
+			var errors = hasValidationErrors();
+
+			if(!errors){
+				$("#form-create-feed input[name=action]").val("preview-feed");
+				$("#form-create-feed").submit();
+			}else{
+				alert(errors);
+			}
 		}
 
 		global.deleteFeed = function(id){
@@ -44,10 +50,6 @@
 				}
 		}
 		global.selectedCategories = <?php echo json_encode( $form["category"] );?>;
-
-		global.previewFeed = function(id) {
-			tb_show("catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );
-		}	
 
 		global.editFeed = function(id) {
 			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
@@ -394,25 +396,6 @@
 	        return false;
 	      });
 
-	      $(".btn-preview-feed").mousedown(function(event) {
-			   if( event.which == 2 ) {
-			   	  return false;
-			   	  id = this.id.replace('btn-preview-feed-','');
-          	      previewFeed(id); 
-			   }
-		   });
-	      $('.btn-preview-feed').bind("click",function(e){
-          	id = this.id.replace('btn-preview-feed-','');
-          	previewFeed(id);
-	        return false;
-	      });
-
-          $('.btn-preview-feed').bind("contextmenu",function(e){
-          	id = this.id.replace('btn-preview-feed-','');
-          	previewFeed(id);
-	        return false;
-	      });
-
 	});
 
 	jQuery(window).load(function () {
@@ -491,7 +474,6 @@
 					<td>
 						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />					
 						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
-							<!--<option <?php  //( !array_key_exists( "channel", $form ) || !$form["channel"] )?'selected="selected"':"";?> value="">Choose One</option>-->							
 							<?php								
 								if(is_array($form["channel"])){
 									$channels = $form["channel"];
@@ -499,8 +481,7 @@
 									$channels = explode( ",", rawurldecode($form["channel"])); // Video categories chosen by the user
 								}
 								
-								$list = GrabPress::get_channels();
-								foreach ( $list as $record ) {
+								foreach ( $list_channels as $record ) {
 									$channel = $record -> category;
 									$name = $channel -> name;
 									$id = $channel -> id;
@@ -515,7 +496,7 @@
 	        	<tr valign="bottom">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_and"];?>" maxlength="255" />
+						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form['keywords_and']; ?>" maxlength="255" />
 						<span class="description">Default search setting is 'all of these words'</span>
 					</td>
         		</tr>
@@ -546,14 +527,7 @@
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
 							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
 							<?php
-								/*
-								if(is_array($form["list_provider"])){
-									$list_provider = $form["list_provider"];
-								}else{
-									$list_provider = explode( ",", $form["list_provider"] ); // Video categories chosen by the user
-								}
-								*/
-								foreach ( $list_provider as $record_provider ) {
+								foreach ( $list_providers as $record_provider ) {
 									$provider = $record_provider->provider;
 									$provider_name = $provider->name;
 									$provider_id = $provider->id;
