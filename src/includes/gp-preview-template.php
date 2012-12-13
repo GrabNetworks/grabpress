@@ -50,7 +50,6 @@
 		<input type="hidden" name="feed_id" value="<?php echo $feed_id; ?>"  />
 		<?php } ?>
 		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
-		<input type="hidden" name="active" value="<?php echo $active; ?>" id="active" />
 		<input type="hidden" name="name" value="<?php echo $name; ?>" id="name" />
 		<input type="hidden" name="feed_date" value="<?php echo $feed_date; ?>" id="feed_date" />		
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
@@ -59,7 +58,6 @@
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
 		<input type="hidden" name="click_to_play" value="<?php echo $click_to_play; ?>" id="click_to_play" />
 		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />
-		<input type="hidden" name="keywords" value="<?php //echo $keywords; ?>" id="keywords" />
 		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
 		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />
 		<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
