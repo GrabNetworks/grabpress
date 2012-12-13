@@ -692,7 +692,7 @@
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
 			array( "form" => $_REQUEST,
-				"list_provider" => $list_provider,
+				"list_providers" => $list_providers,
 				"providers_total" => $providers_total,
 				"list_channels" => $list_channels,
 				"channels_total" => $channels_total,
