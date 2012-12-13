@@ -67,7 +67,7 @@
 		<fieldset id="preview-feed">
 		<legend>Insert Video</legend>		
 			<div class="label-tile-one-column">
-				<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords']) : '' ?>" maxlength="255" /></span>
+				<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords'] : '' ?>" maxlength="255" /></span>
 				<a href="#" id="help">help</a>
 			</div>	
 			
