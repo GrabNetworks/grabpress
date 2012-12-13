@@ -392,6 +392,7 @@
 	   	$('#clear-search').bind('click', function(e){
 	   		window.location = "admin.php?page=catalog";		    
 		});
+		$(".video_summary").ellipsis(2, true, "more", "less");
 
 	});
 

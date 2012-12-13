@@ -50,6 +50,7 @@
 		<input type="hidden" name="feed_id" value="<?php echo $feed_id; ?>"  />
 		<?php } ?>
 		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
+		<input type="hidden" name="active" value="<?php if(isset($active)){ echo $active;} ?>" id="active" />
 		<input type="hidden" name="name" value="<?php echo $name; ?>" id="name" />
 		<input type="hidden" name="feed_date" value="<?php echo $feed_date; ?>" id="feed_date" />		
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />

@@ -61,14 +61,6 @@
 				$('#btn-create-feed').removeAttr('disabled');
 				$('#btn-preview-feed').removeAttr('disabled');
 
-				/*
-				if( $( '#btn-create-feed' ).off ){
-					$( '#btn-create-feed' ).off('click');
-				}else{
-					$( '#btn-create-feed' ).unbind('click');
-				}
-				*/
-
 				if( $( '#btn-preview-feed' ).off ){
 					$( '#btn-preview-feed' ).off('click');
 				}else{
@@ -78,14 +70,6 @@
 			}else{
 				$( '#btn-create-feed' ).attr('disabled', 'disabled');
 				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
-				
-				/*
-				if( $( '#btn-create-feed' ).off ){
-					$( '#btn-create-feed' ).off('click');
-				}else{
-					$( '#btn-create-feed' ).unbind('click');
-				}
-				*/
 
 				if( $( '#btn-preview-feed' ).off ){
 					$( '#btn-preview-feed' ).off('click');
@@ -692,7 +676,7 @@
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
 			array( "form" => $_REQUEST,
-				"list_provider" => $list_provider,
+				"list_providers" => $list_providers,
 				"providers_total" => $providers_total,
 				"list_channels" => $list_channels,
 				"channels_total" => $channels_total,
