@@ -1,6 +1,6 @@
 <?php 
 	$providers = join($provider, ",");
-	$provider_total = count(GrabPress::get_providers());
+	$provider_total = count($list_providers);
 	if(($provider_total == count($provider)) || in_array("", $provider)){
 		$provider_text = "All Providers";
 		$providers = "";
@@ -9,7 +9,7 @@
 	}
 
 	$channels = rawurlencode(join($channel, ","));
-	$channel_total = count(GrabPress::get_channels());
+	$channel_total = count($list_channels);
 	if(($channel_total == count($channel)) || in_array("", $channel)){
 		$channel_text = "All Video Categories";
 		$channels = "";
@@ -26,6 +26,8 @@
    		"providers" => $providers,
    		"categories" => $channels
    	));
+
+   //$url_catalog = GrabPress::_escape_params_template($url_catalog);
 
 	$json_preview = GrabPress::get_json($url_catalog);
 	$list_feeds = json_decode($json_preview, true);
@@ -48,7 +50,6 @@
 		<input type="hidden" name="feed_id" value="<?php echo $feed_id; ?>"  />
 		<?php } ?>
 		<input type="hidden" name="referer" value="<?php echo $referer; ?>"  />
-		<input type="hidden" name="active" value="<?php echo $active; ?>" id="active" />
 		<input type="hidden" name="name" value="<?php echo $name; ?>" id="name" />
 		<input type="hidden" name="feed_date" value="<?php echo $feed_date; ?>" id="feed_date" />		
 		<input type="hidden" name="channel" value="<?php echo $channel; ?>" id="channel" />
@@ -57,7 +58,6 @@
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
 		<input type="hidden" name="click_to_play" value="<?php echo $click_to_play; ?>" id="click_to_play" />
 		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />
-		<input type="hidden" name="keywords" value="<?php echo $keywords; ?>" id="keywords" />
 		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
 		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />
 		<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
@@ -130,6 +130,7 @@ if(!window.grabModal){
 	jQuery(function(){	
 		//var feed_id = <?php echo $feed_id  = isset($_GET["feed_id"]) ? $_GET["feed_id"] : "undefined"; ?>;
 		var feed_action = '<?php echo $action  = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
+		
 		if(feed_action == "preview-feed"){
 		  	jQuery(".close-preview").click(function() {		  
 		  		window.location = "admin.php?page=autoposter";
