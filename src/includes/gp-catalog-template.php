@@ -181,12 +181,12 @@
 	<?php
 			foreach ($list_feeds["results"] as $result) {
 	?>
-	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
+	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile" id="video-<?php echo $result['video']['id']; ?>">		
 		<div class="tile-left">
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 		</div>
 		<div class="tile-right">
-			<h2 class="video_title">
+			<h2 class="video_title" id="video-title-<?php echo $result['video']['id']; ?>">
 			<?php echo $result["video"]["title"]; ?>	
 			</h2>
 			<p class="video_summary">		
@@ -361,17 +361,15 @@
 		    var v_id = this.id.replace('btn-create-feed-single-','');
 		    var pre_content2 = $('#pre_content2').val();
 		    var post_id = $('#post_id').val();
-		    var video_title = $.trim($(this).parent().children('h2').text());
 
 		    var data = {
 				action: 'get_mrss_format',
 				format : 'post',
 				video_id: v_id
 			};
-
 			
 			$.post(ajaxurl, data, function(response) {
-				//alert('Got this from the server: ' + response);
+				var video_title = $.trim($('#video-title-' + v_id).text());
 				$('#post_title').val(video_title);	
 				var content = response.replace(/1825613/g, ctp_player_id);
 				if(pre_content2 != ""){
