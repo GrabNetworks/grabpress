@@ -341,6 +341,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function grabpress_edit_feed($feed_id){
 			GrabPress::log();
+			$list_channels = GrabPress::get_channels();
+			$channels_total = count( $list_channels );				
+			$list_providers = GrabPress::get_providers();
+			$providers_total = count( $list_providers );
+
 			if ( GrabPress::validate_key() ) {
 
 				$feed = GrabPress::get_feed($feed_id);
@@ -348,14 +353,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$url = array();
 				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
 				$providers = explode( ",", $url["providers"] ); // providers chosen by the user
-				$list_provider = GrabPress::get_providers();
-				$providers_total = count( $list_provider );
+
 
 				
 				$channels = explode( ",", $url["categories"] ); // Categories or channels chosen by the user
-				$list_channels = GrabPress::get_channels();
-				$channels_total = count( $list_channels );				
-
+				
 				$blogusers = get_users();
 
 				if(isset($_REQUEST) && isset($_REQUEST["channel"]) != "" && isset($_REQUEST["provider"]) != ""){
@@ -378,7 +380,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 										   "provider" => $_REQUEST["provider"],
 										   "category" => $_REQUEST["category"]								   
 											),
-							"list_provider" => $list_provider,
+							"list_providers" => $list_providers,
 							"providers_total" => $providers_total,
 							"list_channels" => $list_channels,
 							"channels_total" => $channels_total,
@@ -403,7 +405,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "keywords_and" => $url['keywords_and'],
 											   "keywords_not" => $url['keywords_not'],
 											   "keywords_or" => $url['keywords'],
-						   				       "keywords_phrase" => stripslashes($url['keywords_phrase']),	
+						   				       "keywords_phrase" => $url['keywords_phrase'],	
 											   "limit" => $feed->feed->posts_per_update,
 											   "schedule" => $feed->feed->update_frequency,
 											   "active" => $feed->feed->active,
@@ -413,7 +415,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 											   "provider" => $providers,
 											   "category" => $cats
 												),
-								"list_provider" => $list_provider,
+								"list_providers" => $list_providers,
 								"providers_total" => $providers_total,
 								"list_channels" => $list_channels,
 								"channels_total" => $channels_total,
@@ -428,8 +430,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function grabpress_prefill_feed(){
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
-				$list_provider = GrabPress::get_providers();			
-				$providers_total = count( $list_provider );
+				$list_providers = GrabPress::get_providers();			
+				$providers_total = count( $list_providers );
 
 				$list_channels = GrabPress::get_channels();
 				$channels_total = count( $list_channels );
@@ -451,7 +453,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 										   "click_to_play" => $_REQUEST["click_to_play"],
 										   "category" => ""				   
 											),
-							"list_provider" => $list_provider,
+							"list_providers" => $list_providers,
 							"providers_total" => $providers_total,
 							"list_channels" => $list_channels,
 							"channels_total" => $channels_total,
@@ -693,9 +695,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function render_catalog_management() {
 			GrabPress::log();
 			$defaults = array("sort_by" => "created_at");
-
 			print GrabPress::fetch( 'includes/gp-catalog-template.php' ,
-				array( "form" => array_merge($defaults, $_REQUEST )) );
+				array( "form" => array_merge($defaults, $_REQUEST ),
+					"list_channels" => GrabPress::get_channels(),
+					"list_providers" => GrabPress::get_providers()
+					));
 		}
 
 		static function _filter_out_out_providers( $x ) {
@@ -743,8 +747,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			*/
 
-			$list_provider = GrabPress::get_providers();			
-			$providers_total = count( $list_provider );
+			$list_providers = GrabPress::get_providers();			
+			$providers_total = count( $list_providers );
 
 			$list_channels = GrabPress::get_channels();
 			$channels_total = count( $list_channels );
@@ -752,7 +756,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$blogusers = get_users();
 			print GrabPress::fetch( 'includes/gp-feed-template.php',
 				array( "form" => $_REQUEST,
-					"list_provider" => $list_provider,
+					"list_providers" => $list_providers,
 					"providers_total" => $providers_total,
 					"list_channels" => $list_channels,
 					"channels_total" => $channels_total,
@@ -765,16 +769,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function grabpress_preview_videos() {
 			GrabPress::log();
-			/*
-			if (!current_user_can('manage_options'))  {
-				wp_die( __('You do not have sufficient permissions to access this page.') );
-			}
-			*/
+
+			$list_providers =  GrabPress::get_providers();			
+			$providers_total = count($list_providers);
+
+			$list_channels = GrabPress::get_channels();
+			$channels_total = count($list_channels);
+
 			if(isset($_REQUEST["referer"]) && ( $_REQUEST["referer"] == "create" || $_REQUEST["referer"] == "edit" )){
-				print GrabPress::fetch( "includes/gp-preview-template.php", $_REQUEST );	
+				print GrabPress::fetch( "includes/gp-preview-template.php", 
+					array_merge(
+						$_REQUEST,
+						array("list_providers" => $list_providers,
+							"list_channels" => $list_channels
+							)
+						)
+					 );	
 			}else{
-				$feed_id = $_GET['feed_id'];				
-				$providers_total = count(GrabPress::get_providers());
+				$feed_id = $_GET['feed_id'];	
+
 				$feed = GrabPress::get_feed($feed_id);
 				
 				$url = array();
@@ -791,6 +804,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 				$channel = explode( ',', $url['categories'] );
 				$feed_date = isset($_GET['feed_date']) ? $_GET['feed_date'] : ""; 
+
+				
 
 				print GrabPress::fetch( "includes/gp-preview-template.php", 
 					array( "referer" => "edit",
@@ -809,14 +824,27 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						   "click_to_play" => $feed->feed->auto_play,
 						   "author" => $feed->feed->custom_options->author_id,
 						   "provider" => $providers,
+						   "list_providers" => $list_providers,
+						   "list_channels" => $list_channels,
 						   "providers_total" => $providers_total,
 						   "category" => $cats
 					) );
 			}
 			
 		}
-
+		static function _escape_params_template(&$data){
+			if(is_array($data)||is_object($data)){
+				foreach ($data as $key => &$value) {
+					GrabPress::_escape_params_template($value);
+				}
+			}else{
+				$data = htmlentities(stripslashes($data), ENT_QUOTES);
+			}
+		}
 		static function fetch( $file = null, $data = array() ) {
+			
+			GrabPress::_escape_params_template($data);
+						
 			GrabPress::log();
 			if ( !$file ) $file = $this->file;
 			extract( $data ); // Extract the vars to local namespace
@@ -845,7 +873,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $params;
 		}
-		static function _escape_params($x){return str_replace("%2C", ",", rawurlencode($x));}
+		static function _escape_params($x){return rawurlencode(stripslashes(urldecode($x)));}
 		static function generate_catalog_url($options, $unlimited = false){
 			$options = array_map(array("GrabPress", "_escape_params"), $options);
 
@@ -1267,8 +1295,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			curl_setopt($ch, CURLOPT_HEADER, false);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$xml = curl_exec($ch);
-
-			//var_dump($xml);
 			
 			curl_close($ch);
 
@@ -1277,8 +1303,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$xmlString = str_replace( $search, $replace, $xml);
 			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-			//var_dump($objXml);
 
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
@@ -1339,12 +1363,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function modified_post_tags ($tags) {
-		  echo "ENTRO: ";	
-		  var_dump($nothing); echo "<br/><br/>";
-		  return $tags = 'hola:';
+		  //return $tags = 'hola:';
 		  if ( ! empty ( $_REQUEST['post_tags'] )){
 		  	//return $tags = $_REQUEST['post_tags'];
-		  	return $tags = "hola";
+		  	//return $tags = "hola";
 		  }		  
 		}
 
@@ -1424,7 +1446,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"provider" => array(),
 				"sort_by" => "created_at");
 			$req = array_merge($defaults, $_REQUEST);
-			print GrabPress::fetch("includes/gp-catalog-ajax.php", array("form" => $req));
+			print GrabPress::fetch("includes/gp-catalog-ajax.php", array(
+				"form" => $req,
+				"list_providers" => GrabPress::get_providers(),
+				"list_channels" => GrabPress::get_channels()
+				));
 			die();
 		}
 		static function mce_settings($settings){

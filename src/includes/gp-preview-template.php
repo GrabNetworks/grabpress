@@ -1,6 +1,6 @@
 <?php 
 	$providers = join($provider, ",");
-	$provider_total = count(GrabPress::get_providers());
+	$provider_total = count($list_providers);
 	if(($provider_total == count($provider)) || in_array("", $provider)){
 		$provider_text = "All Providers";
 		$providers = "";
@@ -9,7 +9,7 @@
 	}
 
 	$channels = rawurlencode(join($channel, ","));
-	$channel_total = count(GrabPress::get_channels());
+	$channel_total = count($list_channels);
 	if(($channel_total == count($channel)) || in_array("", $channel)){
 		$channel_text = "All Video Categories";
 		$channels = "";
@@ -26,6 +26,8 @@
    		"providers" => $providers,
    		"categories" => $channels
    	));
+
+   //$url_catalog = GrabPress::_escape_params_template($url_catalog);
 
 	$json_preview = GrabPress::get_json($url_catalog);
 	$list_feeds = json_decode($json_preview, true);
@@ -57,7 +59,7 @@
 		<input type="hidden" name="publish" value="<?php echo $publish; ?>" id="publish" />
 		<input type="hidden" name="click_to_play" value="<?php echo $click_to_play; ?>" id="click_to_play" />
 		<input type="hidden" name="author" value="<?php echo $author; ?>" id="author" />
-		<input type="hidden" name="keywords" value="<?php echo $keywords; ?>" id="keywords" />
+		<input type="hidden" name="keywords" value="<?php //echo $keywords; ?>" id="keywords" />
 		<input type="hidden" name="keywords_and" value="<?php echo $keywords_and; ?>" id="keywords_and" />
 		<input type="hidden" name="keywords_not" value="<?php echo $keywords_not; ?>" id="keywords_not" />
 		<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or; ?>" />
@@ -80,10 +82,10 @@
 		
 		<input type="button" value="Close Preview" class="close-preview" id="close-preview" >
 		<span class="preview-text"><b>Video Channel: </b><?php echo $channel_text; ?></span><br/>
-		<span class="preview-text"><b>All Keywords: </b><?php echo htmlentities(stripslashes($keywords_and)); ?></span><br/>
-		<span class="preview-text"><b>Any Keywords: </b><?php echo htmlentities(stripslashes($keywords_or)); ?></span><br/>
-		<span class="preview-text"><b>Keywords excluded: </b><?php echo htmlentities(stripslashes($keywords_not)); ?></span><br/>
-		<span class="preview-text"><b>Exact phrase: </b><?php echo htmlentities(stripslashes($keywords_phrase)); ?></span><br/>
+		<span class="preview-text"><b>All Keywords: </b><?php echo $keywords_and; ?></span><br/>
+		<span class="preview-text"><b>Any Keywords: </b><?php echo $keywords_or; ?></span><br/>
+		<span class="preview-text"><b>Keywords excluded: </b><?php echo $keywords_not; ?></span><br/>
+		<span class="preview-text"><b>Exact phrase: </b><?php echo $keywords_phrase; ?></span><br/>
 		<span class="preview-text"><b>Providers: </b><?php echo $provider_text; ?></span><br/>
 		<span class="preview-text">This preview shows the kinds of videos that will be auto-posted for you when they arrive in the Grab Media catalog in the future. If you want to get the embed code for one of these videos to feature in one of your posts, log in to <a href="http://grab-media.com/premium-videos">grab-media.com/premium-videos</a> and find the video you are looking for, and grab the embed code.</span><br/><br/>  	
 	
@@ -130,6 +132,7 @@ if(!window.grabModal){
 	jQuery(function(){	
 		//var feed_id = <?php echo $feed_id  = isset($_GET["feed_id"]) ? $_GET["feed_id"] : "undefined"; ?>;
 		var feed_action = '<?php echo $action  = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
+		
 		if(feed_action == "preview-feed"){
 		  	jQuery(".close-preview").click(function() {		  
 		  		window.location = "admin.php?page=autoposter";

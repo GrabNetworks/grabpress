@@ -32,12 +32,12 @@
 			$feeds = GrabPress::get_feeds();
 			$num_feeds = count( $feeds );
 			
-			$categories_list = GrabPress::get_channels();
 
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
 				$feed = $feeds[$n]->feed;
 				$url = array();
 				parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
+				GrabPress::_escape_params_template($url);
 				$feedId = $feed->id;
 				$providers = explode( ",", $url["providers"] ); // providers chosen by the user
 				$channels = explode( ",", $url["categories"] ); // Video categories chosen by the user
@@ -89,7 +89,8 @@
 					<?php 
 						if(isset($url['keywords_and'])){
 							$keywords_and_num = strlen($url['keywords_and']);
-							echo $keywords_and = ($keywords_and_num > 15) ? substr($url['keywords_and'],0,15)."..." : $url['keywords_and'];
+							$keywords_and = $url['keywords_and'];
+							echo $keywords_and = ($keywords_and_num > 15) ? substr($keywords_and,0,15)."..." : $keywords_and;
 						}
 					?>							
 				</td>
@@ -97,7 +98,8 @@
 					<?php 
 						if(isset($url['keywords_not'])){
 							$keywords_not_num = strlen($url['keywords_not']);
-							echo $keywords_not = ($keywords_not_num > 15) ? substr($url['keywords_not'],0,15)."..." : $url['keywords_not'];
+							$keywords_not = $url['keywords_not'];
+							echo ($keywords_not_num > 15) ? substr($keywords_not,0,15)."..." : $keywords_not;
 						}
 					?>							
 				</td>
@@ -105,7 +107,8 @@
 					<?php 
 						if(isset($url['keywords_phrase'])){
 							$keywords_phrase_num = strlen($url['keywords_phrase']);
-							echo $keywords_phrase = ($keywords_phrase_num > 15) ? substr($url['keywords_phrase'],0,15)."..." : $url['keywords_phrase'];
+							$keywords_phrase = $url['keywords_phrase'];
+							echo $keywords_phrase = ($keywords_phrase_num > 15) ? substr($keywords_phrase,0,15)."..." : $keywords_phrase;
 						}
 					?>							
 				</td>
@@ -113,7 +116,8 @@
 					<?php 
 						if(isset($url['keywords'])){
 							$keywords_or_num = strlen($url['keywords']);
-							echo $keywords_or = ($keywords_or_num > 15) ? substr($url['keywords'],0,15)."..." : $url['keywords'];
+							$keywords = $url['keywords'];
+							echo $keywords_or = ($keywords_or_num > 15) ? substr($keywords,0,15)."..." : $keywords;
 						}
 					?>							
 				</td>
@@ -125,7 +129,7 @@
 							if ( in_array( "", $providers ) ) {
 								echo "All providers";
 							}else{	
-								foreach ( $list_provider as $record_provider ) {
+								foreach ( $list_providers as $record_provider ) {
 									$provider = $record_provider->provider;
 									$provider_name = $provider->name;
 									$provider_id = $provider->id;											
