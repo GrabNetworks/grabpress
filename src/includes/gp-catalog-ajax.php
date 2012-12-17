@@ -1,13 +1,13 @@
 <?php 
 	$providers_total = count( $list_providers );
-	if(isset($form['provider'])){
-		$providers = isset($form['provider']) ? join($form['provider'], ","): "";
+	if(isset($form['providers'])){
+		$providers = isset($form['providers']) ? join($form['providers'], ","): "";
 
-		if(($providers_total == count($form['provider'])) || in_array("", $form['provider'])){
+		if(($providers_total == count($form['providers'])) || in_array("", $form['providers'])){
 			$provider_text = "All Providers";
 			$providers = "";
 		}else{
-			$provider_text = count($form['provider'])." of ".$providers_total." selected";
+			$provider_text = count($form['providers'])." of ".$providers_total." selected";
 		}  
 	}else{
 		$providers = "";
@@ -15,18 +15,16 @@
 
 	$channels_total = count( $list_channels );
 
-	if(isset($form['channel'])){
-		$channels = isset($form['channel']) ? join($form['channel'], ","): "";		
-
-		if(($channels_total == count($form['channel'])) || in_array("", $form['channel'])){
+	if(isset($form['channels'])){
+		if(($channels_total == count($form['channels'])) || in_array("", $form['channels'])){
 			$channel_text = "All Video Categories";
-			$channels = "";
 		}else{
-			$channel_text = count($form['channel'])." of ".$channels_total." selected";
+			$channel_text = count($form['channels'])." of ".$channels_total." selected";
 		}
+		$channels = is_array($form["channels"])?$form["channels"]:explode( ",", $form["channels"] );
 	}else{
-		$channels = "";
-	}	
+		$channels = array();
+	}
 
 	$adv_search_params = GrabPress::parse_adv_search_string(isset($form["keywords"])?$form["keywords"]:"");
 
@@ -78,15 +76,7 @@
 					</span>
 				</div>
 				<div class="tile-right">
-					<?php 				
-						if(isset($form["channel"])){
-							if(is_array($form["channel"])){
-								$channels = $form["channel"];
-							}else{
-								$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
-							}
-						}					
-					?>		
+
 					<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 						<?php	
 							foreach ( $list_channels as $record ) {
@@ -113,7 +103,7 @@
 							$provider = $record_provider->provider;
 							$provider_name = $provider->name;
 							$provider_id = $provider->id;
-							$provider_selected = ((isset($form["provider"])) && (is_array($form["provider"])) && ( in_array( $provider_id, $form["provider"] ))) ?'selected="selected"':"";
+							$provider_selected = ((isset($form["providers"])) && (is_array($form["providers"])) && ( in_array( $provider_id, $form["providers"] ))) ?'selected="selected"':"";
 							echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
 						}
 					?>
@@ -324,8 +314,8 @@
 		   var submitSearch = function(){
 		   	var data = { "action" : "get_catalog", 
 		   					 "keywords" : $("#keywords").val(),
-		   					 "providers" : $("#providers").val(),
-		   					 "channels" : $("#channels").val(),
+		   					 "providers" : $("#provider-select").val(),
+		   					 "channels" : $("#channel-select").val(),
 		   					 "sort_by" : $('.sort_by:checked').val(),
 		   					 "created_before" : $("#created_before").val(),
 		   					 "created_after" : $("#created_after").val()};

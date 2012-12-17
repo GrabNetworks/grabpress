@@ -64,7 +64,7 @@
 ?>
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
-	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_providers; ?>" />
+	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo (string)$list_providers; ?>" />
 	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
 	<input type="hidden" name="player_id" value="<?php echo $player_id = isset($player_id) ? $player_id : '' ; ?>"  id="player_id" />
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
