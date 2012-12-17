@@ -368,7 +368,15 @@
 			});	
 
 		   	$('#clear-search').bind('click', function(e){
-		   		window.location = "admin.php?page=catalog";		    
+		   		$("#keywords").val("");
+				$("#providers option").attr("selected", "selected");
+				$("#channels option").attr("selected", "selected");
+				$('.sort_by[value=created_at]').attr("checked", "checked");
+				$('.sort_by[value=relevance]').removeAttr("checked");
+				$("#created_before").val("");
+				$("#created_after").val("");
+				submitSearch();
+		    
 			});
 			
 			$(".video_summary").ellipsis(2, true, "more", "less");
