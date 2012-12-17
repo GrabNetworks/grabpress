@@ -129,12 +129,12 @@
 				</div>
 			</div>
 			<br/><br/>
-		<legend>Results</legend>
+		
 		<hr class="results-divider">	
 		<div class="label-tile-one-column">
 			Sort by: 
-			<?php  $created_checked = ($form["sort_by"]!="relevance")?'checked="checked";':"";
-					$relevance_checked = ($form["sort_by"]=="relevance")?'checked="checked";':"";
+			<?php  $created_checked = ($form["sort_by"]!="relevance")?'checked="checked"':"";
+					$relevance_checked = ($form["sort_by"]=="relevance")?'checked="checked"':"";
 
 			?>
 			<input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
@@ -145,7 +145,7 @@
 		?>
 		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
 		<div class="tile-left">
-			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
+			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72" width="123" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 		</div>
 		<div class="tile-right">			
 			<h2 class="video_title">
@@ -157,8 +157,9 @@
 			<p class="video_date">
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
-			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<input type="button" class="insert_into_post" value="<?php _e( 'Insert into Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+			<span><?php echo $stamp; ?>&nbsp;&nbsp;</span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+			<input type="button" class="insert_into_post" value="<?php _e( 'Insert into Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
 			
 		</div>
 	</div>
