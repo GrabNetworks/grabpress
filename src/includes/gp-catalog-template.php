@@ -232,7 +232,7 @@
 					$( '#btn-preview-feed' ).off('click');
 				}else{
 					$( '#btn-preview-feed' ).unbind('click');
-				}				
+				}
 
 				$('.hide').hide();
 			}

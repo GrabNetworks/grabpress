@@ -125,7 +125,7 @@
 				To<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 				<div class="tile-right">					
 					<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-					<input type="submit" value=" Search " class="update-search" id="update-search" >
+					<input type="submit" value="Search " class="update-search" id="update-search" >
 				</div>
 			</div>
 			<br/><br/>
@@ -194,28 +194,10 @@
 			global.doValidation = function(){
 		    	var errors = hasValidationErrors();
 				if ( !errors ){
-					$('#btn-create-feed').removeAttr('disabled');
-					$('#btn-preview-feed').removeAttr('disabled');
-
-					if( $( '#btn-preview-feed' ).off ){
-						$( '#btn-preview-feed' ).off('click');
-					}else{
-						$( '#btn-preview-feed' ).unbind('click');
-					}
-					$('.hide').show();					
+					$("#update-search").removeAttr("disabled");	
 				}else{
-					$( '#btn-create-feed' ).attr('disabled', 'disabled');
-					$( '#btn-preview-feed' ).attr('disabled', 'disabled');
-				
-					if( $( '#btn-preview-feed' ).off ){
-						$( '#btn-preview-feed' ).off('click');
-					}else{
-						$( '#btn-preview-feed' ).unbind('click');
-					}				
-
-					$('.hide').hide();
+					$("#update-search").attr("disabled", "disabled");
 				}
-				
 			}
 
 		} )( window, jQuery );	
@@ -311,8 +293,8 @@
 			   showAnim: 'slideDown',
 			   duration: 'fast'
 			});
-		   var submitSearch = function(){
-		   	var data = { "action" : "get_catalog", 
+			var submitSearch = function(){
+		   		var data = { "action" : "get_catalog", 
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#provider-select").val(),
 		   					 "channels" : $("#channel-select").val(),
@@ -371,7 +353,7 @@
 			$(".video_summary").ellipsis(2, true, "more", "less");
 
 		});
-
+		
 		jQuery(window).load(function () {
 		    doValidation();
 		});
