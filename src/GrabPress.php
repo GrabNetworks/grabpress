@@ -873,7 +873,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $params;
 		}
-		static function _escape_params($x){return rawurlencode(stripslashes(urldecode($x)));}
+		static function _escape_params($x){
+			if(is_array($x)){
+				$x = serialize($x);
+			}
+			return rawurlencode(stripslashes(urldecode($x)));
+
+		}
 		static function generate_catalog_url($options, $unlimited = false){
 			$options = array_map(array("GrabPress", "_escape_params"), $options);
 
@@ -1374,7 +1380,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		
 		static function get_catalog_callback(){
 			$defaults = array(
-				"provider" => array(),
+				"providers" => array(),
 				"sort_by" => "created_at");
 			$req = array_merge($defaults, $_REQUEST);
 			print GrabPress::fetch("includes/gp-catalog-ajax.php", array(
