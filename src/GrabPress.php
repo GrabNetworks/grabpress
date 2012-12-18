@@ -28,7 +28,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $version = '2.0.1';
 		static $api_key;
 		static $invalid = false;
-		static $environment =  'grabqa';
+		static $environment =  'grabnetworks';
 		static $debug = true;
 		static $message = false;
 		static $error = false;
@@ -1318,7 +1318,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						<p>".$item->description."</p> 
 						<!--more-->
 						<div id=\"grabembed\">
-						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.grabqa.com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=v".$item->guid."&width=600&height=450&tgt=grabqa\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
+						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=v".$item->guid."&width=600&height=450&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
 						</div>
 						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
 						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
@@ -1335,7 +1335,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
 						</script>"; 
 				}elseif($format == 'embed'){
-					echo '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.grabqa.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width=420&height=256&tgt=grabqa"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>';
+					echo '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width=420&height=256&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>';
 				}		
 			}	
 
