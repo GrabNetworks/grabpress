@@ -10,3 +10,4 @@ bin/
 # system garbage
 ###########################
 .DS_Store*
+selenium-server-standalone-2.25.0.jar
