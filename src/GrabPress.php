@@ -768,70 +768,18 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}		
 
 		static function grabpress_preview_videos() {
-			GrabPress::log();
-
-			$list_providers =  GrabPress::get_providers();			
-			$providers_total = count($list_providers);
-
-			$list_channels = GrabPress::get_channels();
-			$channels_total = count($list_channels);
-
-			if(isset($_REQUEST["referer"]) && ( $_REQUEST["referer"] == "create" || $_REQUEST["referer"] == "edit" )){
-				print GrabPress::fetch( "includes/gp-preview-template.php", 
-					array_merge(
-						$_REQUEST,
-						array("list_providers" => $list_providers,
-							"list_channels" => $list_channels
-							)
-						)
-					 );	
-			}else{
-				$feed_id = $_GET['feed_id'];	
-
-				$feed = GrabPress::get_feed($feed_id);
-				
-				$url = array();
-				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
-				$providers = explode( ",", $url["providers"] ); // providers chosen by the user
-
-				if ( is_array( $feed->feed->custom_options->category ) && (!empty($feed->feed->custom_options->category)) ) {
-					foreach ( $feed->feed->custom_options->category as $cat ) {
-						$cats[] = get_cat_id( $cat );
-					}
-				}else{
-					$cats[] = "";
-				}
-
-				$channel = explode( ',', $url['categories'] );
-				$feed_date = isset($_GET['feed_date']) ? $_GET['feed_date'] : ""; 
-
-				
-
-				print GrabPress::fetch( "includes/gp-preview-template.php", 
-					array( "referer" => "edit",
-						   "action" => "edit-feed",
-						   "feed_id" => $feed_id,
-						   "name" => $feed->feed->name,
-						   "feed_date" => $feed->feed->name,
-						   "channel" => $channel,
-						   "keywords_and" => $url['keywords_and'],
-						   "keywords_not" => $url['keywords_not'],
-						   "keywords_or" => $url['keywords'],
-						   "keywords_phrase" => $url['keywords_phrase'],
-						   "limit" => $feed->feed->posts_per_update,
-						   "schedule" => $feed->feed->update_frequency,
-						   "publish" => $feed->feed->custom_options->publish,
-						   "click_to_play" => $feed->feed->auto_play,
-						   "author" => $feed->feed->custom_options->author_id,
-						   "provider" => $providers,
-						   "list_providers" => $list_providers,
-						   "list_channels" => $list_channels,
-						   "providers_total" => $providers_total,
-						   "category" => $cats
-					) );
-			}
-			
+			$defaults = array(
+				"providers" => array(),
+				"sort_by" => "created_at");
+			$req = array_merge($defaults, $_REQUEST);
+			print GrabPress::fetch("includes/gp-preview-ajax.php", array(
+				"form" => $req,
+				"list_providers" => GrabPress::get_providers(),
+				"list_channels" => GrabPress::get_channels()
+				));
+			die();
 		}
+
 		static function _escape_params_template(&$data){
 			if(is_array($data)||is_object($data)){
 				foreach ($data as $key => &$value) {
@@ -841,6 +789,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$data = htmlentities(stripslashes($data), ENT_QUOTES);
 			}
 		}
+
 		static function fetch( $file = null, $data = array() ) {
 			
 			GrabPress::_escape_params_template($data);
@@ -906,7 +855,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $url;
 		}
-
+		
 		static function parse_adv_search_string($adv_search ){
 
 			preg_match_all('/\"([^\"]*)\"/', $adv_search, $result_exact_phrase, PREG_PATTERN_ORDER);
@@ -1402,6 +1351,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				));
 			die();
 		}
+		static function get_preview_callback(){
+			GrabPress::grabpress_preview_videos();
+			die();
+		}
 		static function mce_settings($settings){
 			if(!isset($settings["valid_elements"])){
 				$settings["valid_elements"] = "script[language|type|src]";
@@ -1430,6 +1383,7 @@ if( is_admin() ){
 	add_action( 'wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
 	add_action( 'wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
 	add_action( 'wp_ajax_get_catalog', array( 'GrabPress', 'get_catalog_callback' ));
+	add_action( 'wp_ajax_get_preview', array( 'GrabPress', 'get_preview_callback' ));
 	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );

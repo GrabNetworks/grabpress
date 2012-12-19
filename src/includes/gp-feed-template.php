@@ -21,8 +21,7 @@
 			var errors = hasValidationErrors();
 
 			if(!errors){
-				$("#form-create-feed input[name=action]").val("preview-feed");
-				$("#form-create-feed").submit();
+				tb_show("Grab Media Catalog", "admin-ajax.php?action=get_preview&amp;width=900&amp;height=900" );
 			}else{
 				alert(errors);
 			}
