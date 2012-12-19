@@ -1312,7 +1312,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
-					echo "<div id=\"grabpreview\"> 
+					$text = "<div id=\"grabpreview\"> 
 						<p><img src='".$item->mediagroup->mediathumbnail[1]->attributes()->url."' /></p> 
 						</div>
 						<p>".$item->description."</p> 
@@ -1334,8 +1334,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						_gaq.push(['_trackPageview']);
 						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
 						</script>"; 
+					$post_id = wp_insert_post(array(
+						"post_content" => $text,
+						"post_title" => $item->title,
+						"post_type" => "post",
+						"post_status" => "draft",
+						"tags_input" => $item->mediagroup->mediakeywords
+					));
+					echo json_encode(array(
+						"status" => "redirect", 
+						"url" => "post.php?post=".$post_id."&action=edit"));
 				}elseif($format == 'embed'){
-					echo '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width=420&height=256&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>';
+					echo json_encode(array(
+						"status" => "ok",
+					 	"content" => '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width=420&height=256&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
 				}		
 			}	
 
