@@ -214,6 +214,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			
 			return GrabPress::$player_settings;
 		}
+		static function get_player_settings_for_embed(){
+			$sett = GrabPress::get_player_settings();
+			$defaults = array("width" => 600, "height"=> 270);
+
+			return array_merge($defaults, array("width" => $sett->width, "height" => $sett->height));
+		}
 
 		static function get_connector() {
 			GrabPress::log();
@@ -1412,16 +1418,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$xmlString = str_replace( $search, $replace, $xml);
 			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
-
+			$settings = GrabPress::get_player_settings_for_embed();
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
-					echo "<div id=\"grabpreview\"> 
+					$text = "<div id=\"grabpreview\"> 
 						<p><img src='".$item->mediagroup->mediathumbnail[1]->attributes()->url."' /></p> 
 						</div>
 						<p>".$item->description."</p> 
 						<!--more-->
 						<div id=\"grabembed\">
-						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=v".$item->guid."&width=600&height=450&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
+						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=v".$item->guid."&width=".$settings["width"]."&height=".$settings["height"]."&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
 						</div>
 						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
 						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
@@ -1437,8 +1443,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						_gaq.push(['_trackPageview']);
 						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
 						</script>"; 
+					$post_id = wp_insert_post(array(
+						"post_content" => $text,
+						"post_title" => $item->title,
+						"post_type" => "post",
+						"post_status" => "draft",
+						"tags_input" => $item->mediagroup->mediakeywords
+					));
+					echo json_encode(array(
+						"status" => "redirect", 
+						"url" => "post.php?post=".$post_id."&action=edit"));
 				}elseif($format == 'embed'){
-					echo '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width=420&height=256&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>';
+					echo json_encode(array(
+						"status" => "ok",
+					 	"content" => '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
 				}		
 			}	
 
