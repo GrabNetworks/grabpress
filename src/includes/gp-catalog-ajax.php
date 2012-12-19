@@ -1,13 +1,13 @@
 <?php 
 	$providers_total = count( $list_providers );
-	if(isset($form['provider'])){
-		$providers = isset($form['provider']) ? join($form['provider'], ","): "";
+	if(isset($form['providers'])){
+		$providers = isset($form['providers']) ? join($form['providers'], ","): "";
 
-		if(($providers_total == count($form['provider'])) || in_array("", $form['provider'])){
+		if(($providers_total == count($form['providers'])) || in_array("", $form['providers'])){
 			$provider_text = "All Providers";
 			$providers = "";
 		}else{
-			$provider_text = count($form['provider'])." of ".$providers_total." selected";
+			$provider_text = count($form['providers'])." of ".$providers_total." selected";
 		}  
 	}else{
 		$providers = "";
@@ -15,18 +15,16 @@
 
 	$channels_total = count( $list_channels );
 
-	if(isset($form['channel'])){
-		$channels = isset($form['channel']) ? join($form['channel'], ","): "";		
-
-		if(($channels_total == count($form['channel'])) || in_array("", $form['channel'])){
+	if(isset($form['channels'])){
+		if(($channels_total == count($form['channels'])) || in_array("", $form['channels'])){
 			$channel_text = "All Video Categories";
-			$channels = "";
 		}else{
-			$channel_text = count($form['channel'])." of ".$channels_total." selected";
+			$channel_text = count($form['channels'])." of ".$channels_total." selected";
 		}
+		$channels = is_array($form["channels"])?$form["channels"]:explode( ",", $form["channels"] );
 	}else{
-		$channels = "";
-	}	
+		$channels = array();
+	}
 
 	$adv_search_params = GrabPress::parse_adv_search_string(isset($form["keywords"])?$form["keywords"]:"");
 
@@ -78,15 +76,7 @@
 					</span>
 				</div>
 				<div class="tile-right">
-					<?php 				
-						if(isset($form["channel"])){
-							if(is_array($form["channel"])){
-								$channels = $form["channel"];
-							}else{
-								$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
-							}
-						}					
-					?>		
+
 					<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 						<?php	
 							foreach ( $list_channels as $record ) {
@@ -113,7 +103,7 @@
 							$provider = $record_provider->provider;
 							$provider_name = $provider->name;
 							$provider_id = $provider->id;
-							$provider_selected = ((isset($form["provider"])) && (is_array($form["provider"])) && ( in_array( $provider_id, $form["provider"] ))) ?'selected="selected"':"";
+							$provider_selected = ((isset($form["providers"])) && (is_array($form["providers"])) && ( in_array( $provider_id, $form["providers"] ))) ?'selected="selected"':"";
 							echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
 						}
 					?>
@@ -135,16 +125,16 @@
 				To<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 				<div class="tile-right">					
 					<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-					<input type="submit" value=" Search " class="update-search" id="update-search" >
+					<input type="submit" value="Search " class="update-search" id="update-search" >
 				</div>
 			</div>
 			<br/><br/>
-		<legend>Results</legend>
+		
 		<hr class="results-divider">	
 		<div class="label-tile-one-column">
 			Sort by: 
-			<?php  $created_checked = ($form["sort_by"]!="relevance")?'checked="checked";':"";
-					$relevance_checked = ($form["sort_by"]=="relevance")?'checked="checked";':"";
+			<?php  $created_checked = ($form["sort_by"]!="relevance")?'checked="checked"':"";
+					$relevance_checked = ($form["sort_by"]=="relevance")?'checked="checked"':"";
 
 			?>
 			<input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
@@ -155,7 +145,7 @@
 		?>
 		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
 		<div class="tile-left">
-			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
+			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72" width="123" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 		</div>
 		<div class="tile-right">			
 			<h2 class="video_title">
@@ -167,8 +157,9 @@
 			<p class="video_date">
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
-			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<input type="button" class="insert_into_post" value="<?php _e( 'Insert into Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+			<span><?php echo $stamp; ?>&nbsp;&nbsp;</span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+			<input type="button" class="insert_into_post" value="<?php _e( 'Insert into Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
 			
 		</div>
 	</div>
@@ -204,28 +195,10 @@
 			global.doValidation = function(){
 		    	var errors = hasValidationErrors();
 				if ( !errors ){
-					$('#btn-create-feed').removeAttr('disabled');
-					$('#btn-preview-feed').removeAttr('disabled');
-
-					if( $( '#btn-preview-feed' ).off ){
-						$( '#btn-preview-feed' ).off('click');
-					}else{
-						$( '#btn-preview-feed' ).unbind('click');
-					}
-					$('.hide').show();					
+					$("#update-search").removeAttr("disabled");	
 				}else{
-					$( '#btn-create-feed' ).attr('disabled', 'disabled');
-					$( '#btn-preview-feed' ).attr('disabled', 'disabled');
-				
-					if( $( '#btn-preview-feed' ).off ){
-						$( '#btn-preview-feed' ).off('click');
-					}else{
-						$( '#btn-preview-feed' ).unbind('click');
-					}				
-
-					$('.hide').hide();
+					$("#update-search").attr("disabled", "disabled");
 				}
-				
 			}
 
 		} )( window, jQuery );	
@@ -321,11 +294,11 @@
 			   showAnim: 'slideDown',
 			   duration: 'fast'
 			});
-		   var submitSearch = function(){
-		   	var data = { "action" : "get_catalog", 
+			var submitSearch = function(){
+		   		var data = { "action" : "get_catalog", 
 		   					 "keywords" : $("#keywords").val(),
-		   					 "providers" : $("#providers").val(),
-		   					 "channels" : $("#channels").val(),
+		   					 "providers" : $("#provider-select").val(),
+		   					 "channels" : $("#channel-select").val(),
 		   					 "sort_by" : $('.sort_by:checked').val(),
 		   					 "created_before" : $("#created_before").val(),
 		   					 "created_after" : $("#created_after").val()};
@@ -345,9 +318,6 @@
 		   
 		   
 		   	$('.insert_into_post').bind('click', function(e){
-			    var form = $('#form-catalog-page');
-			    var ctp_player_id = $('#player_id').val();
-			    var bloginfo = $('#bloginfo').val();
 			    var v_id = this.id.replace('btn-create-feed-single-','');
 
 			    var data = {
@@ -357,32 +327,30 @@
 				};
 
 				$.post(ajaxurl, data, function(response) {
-					//alert('Got this from the server: ' + response);
-					var content = response.replace(/1825613/g, ctp_player_id);
-
-					window.send_to_editor(content);
+					if(response.status == "ok"){
+						window.send_to_editor(response.content);	
+					}
 					tb_position = backup_tb_position
 					return false;
-				});		  
+				}, "json");		  
 
 			});	
 
 		   	$('#clear-search').bind('click', function(e){
-		   		$("#keywords").val("");
-				$("#providers option").attr("selected", "selected");
-				$("#channels option").attr("selected", "selected");
-				$('.sort_by[value=created_at]').attr("checked", "checked");
-				$('.sort_by[value=relevance]').removeAttr("checked");
-				$("#created_before").val("");
-				$("#created_after").val("");
-				submitSearch();
-		    
+				 $("#keywords").val("");
+				 $("#providers option").attr("selected", "selected");
+				 $("#channels option").attr("selected", "selected");
+				 $('.sort_by[value=created_at]').attr("checked", "checked");
+				 $('.sort_by[value=relevance]').removeAttr("checked");
+				 $("#created_before").val("");
+				 $("#created_after").val("");
+		   		submitSearch();
 			});
 			
 			$(".video_summary").ellipsis(2, true, "more", "less");
 
 		});
-
+		
 		jQuery(window).load(function () {
 		    doValidation();
 		});

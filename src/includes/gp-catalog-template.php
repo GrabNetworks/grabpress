@@ -64,7 +64,7 @@
 ?>
 <form method="post" action="" id="form-catalog-page">
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
-	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo $list_providers; ?>" />
+	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo (string)$list_providers; ?>" />
 	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
 	<input type="hidden" name="player_id" value="<?php echo $player_id = isset($player_id) ? $player_id : '' ; ?>"  id="player_id" />
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
@@ -232,7 +232,7 @@
 					$( '#btn-preview-feed' ).off('click');
 				}else{
 					$( '#btn-preview-feed' ).unbind('click');
-				}				
+				}
 
 				$('.hide').hide();
 			}
@@ -349,12 +349,7 @@
 
 
 	   	$('.btn-create-feed-single').bind('click', function(e){
-		    var form = $('#form-catalog-page');
-		    var ctp_player_id = $('#player_id').val();
-		    var bloginfo = $('#bloginfo').val();
 		    var v_id = this.id.replace('btn-create-feed-single-','');
-		    var pre_content2 = $('#pre_content2').val();
-		    var post_id = $('#post_id').val();
 
 		    var data = {
 				action: 'get_mrss_format',
@@ -363,35 +358,17 @@
 			};
 			
 			$.post(ajaxurl, data, function(response) {
-				var video_title = $.trim($('#video-title-' + v_id).text());
-				$('#post_title').val(video_title);	
-				var content = response.replace(/1825613/g, ctp_player_id);
-				if(pre_content2 != ""){
-					content = pre_content2 + "<br/><br/>" + content;
+				debugger;
+				if(response.status == "redirect"){
+					window.location = response.url;
 				}
-				$('#pre_content').val(content);	
-				if(post_id != ""){
-					$('#post_ID').val(post_id);	
-				}
-						
-			    form.attr("ACTION", bloginfo+"/wp-admin/post-new.php");
-			    form.submit();				
-			});	
-			  
-
+			}, "json");	
 		});	
-
-		/*
-		$('.btn-preview-feed').bind("click",function(e){
-          	id = this.id.replace('btn-preview-feed-','');
-          	previewFeed(id);
-	        return false;
-	    });  
-	    */ 
 
 	   	$('#clear-search').bind('click', function(e){
 	   		window.location = "admin.php?page=catalog";		    
 		});
+		$(".video_summary").ellipsis(2, true, "more", "less");
 
 	});
 

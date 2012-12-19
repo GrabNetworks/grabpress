@@ -61,14 +61,6 @@
 				$('#btn-create-feed').removeAttr('disabled');
 				$('#btn-preview-feed').removeAttr('disabled');
 
-				/*
-				if( $( '#btn-create-feed' ).off ){
-					$( '#btn-create-feed' ).off('click');
-				}else{
-					$( '#btn-create-feed' ).unbind('click');
-				}
-				*/
-
 				if( $( '#btn-preview-feed' ).off ){
 					$( '#btn-preview-feed' ).off('click');
 				}else{
@@ -78,14 +70,6 @@
 			}else{
 				$( '#btn-create-feed' ).attr('disabled', 'disabled');
 				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
-				
-				/*
-				if( $( '#btn-create-feed' ).off ){
-					$( '#btn-create-feed' ).off('click');
-				}else{
-					$( '#btn-create-feed' ).unbind('click');
-				}
-				*/
 
 				if( $( '#btn-preview-feed' ).off ){
 					$( '#btn-preview-feed' ).off('click');

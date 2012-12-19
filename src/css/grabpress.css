@@ -476,6 +476,9 @@ line-height: 24px;
 #form-catalog-page .label-tile #update-search{
     margin: 0 5px;
 }
+#update-search[disabled]{
+    color: #ccc;
+}
 #form-catalog-page .label-tile-one-column{
     width: 820px;
     padding: 20px 10px;

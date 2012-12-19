@@ -3,13 +3,15 @@ Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.0.1   
 Tested up to: 3.4.2  
-Stable tag: 2.0.0  
+Stable tag: 2.0.1  
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Configure Grab's AutoPoster software to deliver fresh video direct to your Blog.
 
 == Description ==
+
+**NOTICE: WordPress 3.5 is NOT supported at this time**
 
 GrabPress from Grab Media is the solution for publishers on the Wordpress platform using video to drive engagement and revenue on their sites. It allows website editors to publish high quality video content within their Wordpress sites. The integration of the Grab Media video catalog with your content management system via the GrabPress plug-in enables all assets of the content catalog-including the video titles, descriptions, keywords, and preview images to be published along with the video content, or to be leveraged in content promotional themes and widgets.
 
@@ -22,6 +24,8 @@ For additional documentation, contact your account manager or email us at suppor
 www.grab-media.com
 
 == Installation ==  
+
+**NOTICE: WordPress 3.5 is NOT supported at this time**
 
 **Manual Plugin Installation:**
 
@@ -59,6 +63,8 @@ www.grab-media.com
 *NOTE: Upgrading through the WordPress Plugins Page will keep your existing feeds and publisher account connection intact.*
 
 == Frequently Asked Questions ==
+
+**NOTICE: WordPress 3.5 is NOT supported at this time**
 
 **Getting Started...**
 
@@ -143,6 +149,8 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Screenshots ==  
 
+**NOTICE: WordPress 3.5 is NOT supported at this time**
+
 1. Create and edit feed(s) for auto-posting to your Blog.
 2. View and manage your existing feed(s).
 3. Preview the results of your configured feed(s).
@@ -151,15 +159,31 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Changelog ==  
 
+**NOTICE: WordPress 3.5 is NOT supported at this time**
+
+= 2.0.1 =
+*Features:*
+
+ * AUTO-361: As the product owner of GrabPress, I want to track when publishers register GrabPress, in our CRM.
+ * AUTO-371: As an editor, I want to execute a simple or advanced search against the Grab-Media Catalog, from the Create Post page, so I can insert a video into my post.
+ * AUTO-382: As an editor, I want to sort my search results by relevance and date.
+ * AUTO-384: As an editor, I want the title of the video to populate the post's title, when I create a new post from the Catalog tab.
+ * AUTO-410: As a GrabPress user, I want the option to set up my feed with a schedule of AutoPosting every 6 hours.
+ * AUTO-417: As an editor, I want postings from the catalog tab to include the same elements as AutoPosted content.
+ * AUTO-418: As a WordPress publisher, I want the embed from all single posts to use Grab's JavaScript embed, so the video appears on mobile devices.
+
+
 = 2.0.0 =
 *Features:*
- * AUTO-334: As a publisher, I want the embed in auto-posted content to use Grab's JavaScript embed.
+
+ * AUTO-334: As a publisher, I want the embed in auto-posted content to use Grab's JavaScript embed, so the video appears on mobile devices.
  * AUTO-249: As an editor, I want to execute a simple or advanced search against the Grab-Media Catalog, to find relevant videos for a post.
  * AUTO-250: As a WordPress publisher, I want to post a single video to my blog from the Video Catalog search results page.
  * AUTO-252: As an editor, I want to save my search results as a new feed using a 'Save as Feed' button on the Video Catalog page.
  
 
 *Bug Fixes:*
+
  * AUTO-408: When I create a feed using a category with spaces, I do not reveieve any posts.
  * AUTO-405: After installing the GrabPress plug-in, my media tab from the admin menu disappears.
 
