@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.0.0-12122012
+Version: 2.0.2-12192012
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.0.0-12122012';
+		static $version = '2.0.2-12192012';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -900,7 +900,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $params;
 		}
-		static function _escape_params($x){return rawurlencode(stripslashes(urldecode($x)));}
+		static function _escape_params($x){
+			if(is_array($x)){
+				$x = serialize($x);
+			}
+			return rawurlencode(stripslashes(urldecode($x)));
+
+		}
 		static function generate_catalog_url($options, $unlimited = false){
 			$options = array_map(array("GrabPress", "_escape_params"), $options);
 
@@ -1333,13 +1339,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
-					echo "<div id=\"grabpreview\"> 
+					$text = "<div id=\"grabpreview\"> 
 						<p><img src='".$item->mediagroup->mediathumbnail[1]->attributes()->url."' /></p> 
 						</div>
 						<p>".$item->description."</p> 
 						<!--more-->
 						<div id=\"grabembed\">
-						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.grabqa.com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=".$item->guid."&width=600&height=450&tgt=grabqa\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
+						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=v".$item->guid."&width=600&height=450&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
 						</div>
 						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
 						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
@@ -1355,8 +1361,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						_gaq.push(['_trackPageview']);
 						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
 						</script>"; 
+					$post_id = wp_insert_post(array(
+						"post_content" => $text,
+						"post_title" => $item->title,
+						"post_type" => "post",
+						"post_status" => "draft",
+						"tags_input" => $item->mediagroup->mediakeywords
+					));
+					echo json_encode(array(
+						"status" => "redirect", 
+						"url" => "post.php?post=".$post_id."&action=edit"));
 				}elseif($format == 'embed'){
-					echo '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.grabqa.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content='.$item->guid.'&width=420&height=256&tgt=grabqa"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>';
+					echo json_encode(array(
+						"status" => "ok",
+					 	"content" => '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width=420&height=256&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
 				}		
 			}	
 
@@ -1393,7 +1411,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			//our popup's title
 			$title = 'Insert GrabMedia Video';
-			$onclick = 'tb_show("Grab Media Catalog", "admin-ajax.php?action=get_catalog&width=900&height=900" );';
+			$onclick = 'tb_show("Grab Media Catalog", "admin-ajax.php?action=get_catalog&amp;width=900&amp;height=900" );';
 			//append the icon
 			$context .= "<a title='{$title}' href='#' onclick='{$onclick}' ><img src='{$img}' /></a>";
 			return $context;
@@ -1401,7 +1419,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		
 		static function get_catalog_callback(){
 			$defaults = array(
-				"provider" => array(),
+				"providers" => array(),
 				"sort_by" => "created_at");
 			$req = array_merge($defaults, $_REQUEST);
 			print GrabPress::fetch("includes/gp-catalog-ajax.php", array(
