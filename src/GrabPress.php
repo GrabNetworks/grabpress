@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.0.1
+Version: 2.0.2-12212012
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,10 +25,10 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.0.1';
+		static $version = '2.0.2-12212012';
 		static $api_key;
 		static $invalid = false;
-		static $environment =  'grabnetworks';
+		static $environment =  'grabqa';
 		static $debug = true;
 		static $message = false;
 		static $error = false;
@@ -636,9 +636,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$here = '<a href="'.$admin_page.'">here</a>';
 				}else {
 					$here = 'here';
-				}
-	
-				GrabPress::$message = 'Thank you for activating GrabPress. Try creating your first Autoposter feed '.$here.'.';
+				}								
+				GrabPress::$message = 'Thank you for activating GrabPress. Try creating your first Autoposter feed '.$here.'.';				
 			}else{
 				$active_feeds = 0;
 			
@@ -652,7 +651,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $active_feeds > 1 || $num_feeds == 0 ) {
 						$noun .= 's';
 					}
-					$user = GrabPress::get_user();	
+					$user = GrabPress::get_user();
 					$linked = isset($user->email);
 					$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
 					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
@@ -666,8 +665,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						$autoposter_status = 'ON';
 						$feeds_status = 'active';
 					}
-					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;
-										
+					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;						
+														
 				}
 			}
 		}
@@ -1289,7 +1288,34 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						"post_type" => "post",
 						"post_status" => "draft",
 						"tags_input" => $item->mediagroup->mediakeywords
-					));
+					));				
+
+					$upload_dir = wp_upload_dir();
+					$image_url = $item->mediagroup->mediathumbnail[1]->attributes()->url;
+					$image_data = file_get_contents($image_url);
+					$filename = basename($image_url);
+					if(wp_mkdir_p($upload_dir['path']))
+					    $file = $upload_dir['path'] . '/' . $filename;
+					else
+					    $file = $upload_dir['basedir'] . '/' . $filename;
+					file_put_contents($file, $image_data);
+
+					$wp_filetype = wp_check_filetype($filename, null );
+					$attachment = array(
+						'guid' => sanitize_file_name($filename),
+						'guid' => "endworld",
+					    'post_mime_type' => $wp_filetype['type'],
+					    'post_title' => sanitize_file_name($filename),
+					    'post_content' => '',
+					    'post_status' => 'inherit'
+					);
+					$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+					require_once(ABSPATH . 'wp-admin/includes/image.php');
+					$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+					wp_update_attachment_metadata( $attach_id, $attach_data );
+
+					set_post_thumbnail( $post_id, $attach_id );
+
 					echo json_encode(array(
 						"status" => "redirect", 
 						"url" => "post.php?post=".$post_id."&action=edit"));
