@@ -26,3 +26,34 @@ jQuery(function(){
     Feed created successfully.  Redirecting in 5 seconds ...  If you are not redirected automatically, please press <a href="admin.php?page=autoposter">here</a>
   </p>
 </div>
+
+<?php 
+    if(isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'autoposter' && isset($_REQUEST[ 'action']) &&  (($_REQUEST[ 'action'] == 'update') || ($_REQUEST[ 'action'] == 'modify')) )
+      {
+        if ( GrabPress::$environment == 'grabqa' ) {
+          $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+        }
+        else {
+          $times = array( '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+        } 
+
+        if ( GrabPress::$environment == 'grabqa' ) {                        
+          $values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
+        }
+        else {
+          $values = array( 360, 720, 1440, 2880, 4320 );
+        }
+
+        if(isset($_REQUEST['schedule'])){
+          for ( $o = 0; $o < count( $times ); $o++ ) {
+            $time = $times[$o];
+            $value = $values[$o];
+            if($value == $_REQUEST["schedule"]){
+              GrabPress::$message = 'A new draft or post will be created every '.$time.' if videos that meet your search criteria have been added to our catalog.';           
+            }
+          }
+        }
+    }
+        //echo GrabPress::$message = 'A new draft or post will be created every '.$time.' if videos that meet your search criteria have been added to our catalog.'; 
+?>
+
