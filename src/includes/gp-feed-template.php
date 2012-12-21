@@ -570,7 +570,7 @@
 										}
 									?>
 								</select>
-								<span class="description">Determine how often to search for new videos</span>
+								<span class="description">Determine how often to search (posts created only if new matching videos have been added Grab's catalog)</span>
 							</td>
 				</tr>
 				<tr valign="bottom">
