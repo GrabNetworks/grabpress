@@ -652,21 +652,48 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					if ( $active_feeds > 1 || $num_feeds == 0 ) {
 						$noun .= 's';
 					}
-					$user = GrabPress::get_user();	
-					$linked = isset($user->email);
-					$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
-					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
-					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
-					$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
-					if( $active_feeds == 0 ){
-						$active_feeds = $num_feeds;
-						$autoposter_status = 'OFF';
-						$feeds_status = 'inactive';
+					$user = GrabPress::get_user();
+					if(isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'autoposter' && isset($_REQUEST[ 'action']) &&  (($_REQUEST[ 'action'] == 'update') || ($_REQUEST[ 'action'] == 'modify')) )
+					{
+						if ( GrabPress::$environment == 'grabqa' ) {
+							$times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+						}
+						else {
+							$times = array( '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
+						}	
+
+						if ( GrabPress::$environment == 'grabqa' ) {												
+							$values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
+						}
+						else {
+							$values = array( 360, 720, 1440, 2880, 4320 );
+						}
+
+						if(isset($_REQUEST['schedule'])){
+							for ( $o = 0; $o < count( $times ); $o++ ) {
+								$time = $times[$o];
+								$value = $values[$o];
+								if($value == $_REQUEST["schedule"]){
+									GrabPress::$message = 'A new draft or post will be created every '.$time.' if videos that meet your search criteria have been added to our catalog.';						
+								}
+							}
+						}						
 					}else{
-						$autoposter_status = 'ON';
-						$feeds_status = 'active';
+						$linked = isset($user->email);
+						$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
+						$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
+						$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
+						$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
+						if( $active_feeds == 0 ){
+							$active_feeds = $num_feeds;
+							$autoposter_status = 'OFF';
+							$feeds_status = 'inactive';
+						}else{
+							$autoposter_status = 'ON';
+							$feeds_status = 'active';
+						}
+						GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;						
 					}
-					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;
 										
 				}
 			}
@@ -1340,7 +1367,34 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						"post_type" => "post",
 						"post_status" => "draft",
 						"tags_input" => $item->mediagroup->mediakeywords
-					));
+					));				
+
+					$upload_dir = wp_upload_dir();
+					$image_url = $item->mediagroup->mediathumbnail[1]->attributes()->url;
+					$image_data = file_get_contents($image_url);
+					$filename = basename($image_url);
+					if(wp_mkdir_p($upload_dir['path']))
+					    $file = $upload_dir['path'] . '/' . $filename;
+					else
+					    $file = $upload_dir['basedir'] . '/' . $filename;
+					file_put_contents($file, $image_data);
+
+					$wp_filetype = wp_check_filetype($filename, null );
+					$attachment = array(
+						'guid' => sanitize_file_name($filename),
+						'guid' => "endworld",
+					    'post_mime_type' => $wp_filetype['type'],
+					    'post_title' => sanitize_file_name($filename),
+					    'post_content' => '',
+					    'post_status' => 'inherit'
+					);
+					$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+					require_once(ABSPATH . 'wp-admin/includes/image.php');
+					$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+					wp_update_attachment_metadata( $attach_id, $attach_data );
+
+					set_post_thumbnail( $post_id, $attach_id );
+
 					echo json_encode(array(
 						"status" => "redirect", 
 						"url" => "post.php?post=".$post_id."&action=edit"));
