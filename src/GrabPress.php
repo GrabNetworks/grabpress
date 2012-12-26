@@ -212,6 +212,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$connector = $connectors_data[$n]->connector;
 					if ( $connector -> destination_address == $rpc_url ) {
 						$connector_id = $connector -> id;
+						GrabPress::report_versions($connector);
 					}
 				}
 				if ( ! isset( $connector_id ) ) {//create connector
@@ -478,6 +479,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				return GrabPress::create_API_connection();
 			}
 			return false;
+		}
+
+		static function report_versions($connector){
+			$gpv = GrabPress::$version;
+ 			$wpv = get_bloginfo("version");
+
+			if(GrabPress::_needs_version_update($connector, $gpv, $wpv)){
+
+				//$connector_json = GrabPress::api_call( 'PUT',  '/connectors?api_key='.GrabPress::$api_key, $connector_post );
+				GrabPress::api_call("PUT", "/connectors/".$connector->id."?api_key=".GrabPress::$api_key, 
+					 array(
+						"wordpress_version" => $wpv,
+						"grabpress_version" => $gpv
+					));
+			}
+		}
+		static function _needs_version_update($connector, $currentGP, $currentWP){
+			return (!$connector->grabpress_version  || !$connector->wordpress_version) //connector does not have a version for either one
+				|| ($connector->grabpress_version != $currentGP || $connector->wordpress_version != $currentWP); //outdated
 		}
 
 		static function get_feeds() {
