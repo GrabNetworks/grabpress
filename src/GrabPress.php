@@ -1418,10 +1418,10 @@ if( is_admin() ){
 	add_action( 'wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
 	add_action( 'wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
 	add_action( 'wp_ajax_get_catalog', array( 'GrabPress', 'get_catalog_callback' ));
-	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
+	//add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
-	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
+	//add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }
