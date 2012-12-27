@@ -3,7 +3,7 @@ Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.0.1   
 Tested up to: 3.4.2  
-Stable tag: 2.0.2  
+Stable tag: 2.0.3  
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,8 +160,11 @@ We hope to allow users to edit the layout / posting template in future updates o
 == Changelog ==  
 
 **NOTICE: WordPress 3.5 is NOT supported at this time**
+= 2.0.3 =
 
-= 2.0.1 =
+ * Removed feature to insert video while creating a new post, as it was breaking core WordPress functionality.
+
+= 2.0.2 =
 
  * Hot fix for an issue with player environments
 
