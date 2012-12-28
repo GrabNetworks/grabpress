@@ -1188,19 +1188,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			// jQuery files
 
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( 'jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js' );
-			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
-			wp_enqueue_script( 'jquery-ui-filter', $plugin_url.'/js/ui/multi/jquery.multiselect.filter.min.js' );
-			wp_enqueue_script( 'jquery-ui-multiselect', $plugin_url.'/js/ui/multi/jquery.multiselect.min.js' );
+			wp_enqueue_script( 'jquery-ui-core' );
+			wp_enqueue_script( 'jquery-ui-widget' );
+			wp_enqueue_script( 'jquery-ui-position' );
+			wp_enqueue_script( 'jquery-ui-dialog' );
+			wp_enqueue_script( 'jquery-ui-datepicker' );
 
-			wp_enqueue_script( 'jquery-uicore', $plugin_url.'/js/ui/jquery.ui.core.js' );
-			wp_enqueue_script( 'jquery-uiwidget', $plugin_url.'/js/ui/jquery.ui.widget.js' );
-			wp_enqueue_script( 'jquery-uiposition', $plugin_url.'/js/ui/jquery.ui.position.js' );
-
+			wp_enqueue_script( 'jquery-ui-filter', $plugin_url.'/js/ui/multi/jquery.multiselect.filter.min.js' , array("jquery-ui-widget"));
+			wp_enqueue_script( 'jquery-ui-multiselect', $plugin_url.'/js/ui/multi/jquery.multiselect.min.js', array("jquery-ui-widget" ));
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js' );
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' );
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' );
-			
+
+			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
+
 			$wpversion = floatval(get_bloginfo('version'));
 			if ( $wpversion <= 3.1 ) {		
 			    wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.1.8.7.js' );
