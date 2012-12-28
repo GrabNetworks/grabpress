@@ -33,10 +33,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $message = false;
 		static $error = false;
 		static $feed_message = 'items marked with an asterisk * are required.';
-		static $connector_id;
+		static $connector;
 		static $connector_user;
 		static $providers;
 		static $channels;
+		static $player_settings;
 
 		static function log( $message = false ) {
 			if ( GrabPress::$debug ) {
@@ -199,10 +200,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $user_data;
 		}
 
-		static function get_connector_id() {
+		static function get_player_settings(){
+			if(!GrabPress::$player_settings){
+				$settings_json =  GrabPress::api_call( 'GET',  '/connectors/'.GrabPress::get_connector_id().'/player_settings?api_key='.GrabPress::$api_key );
+				$settings = json_decode( $settings_json );
+
+				if(isset($settings->error)&& $settings->error->status_code == 404){//nonexistent. set defaults.
+					GrabPress::$player_settings = array();
+				}else{
+					GrabPress::$player_settings = $settings->player_setting;
+				}
+			}
+			
+			return GrabPress::$player_settings;
+		}
+
+		static function get_connector() {
 			GrabPress::log();
-			if(GrabPress::$connector_id){
-				return GrabPress::$connector_id;
+			if(GrabPress::$connector){
+				return GrabPress::$connector;
 			}
 			if ( GrabPress::validate_key() ) {
 				$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
@@ -212,8 +228,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$connector = $connectors_data[$n]->connector;
 					if ( $connector -> destination_address == $rpc_url ) {
 						$connector_id = $connector -> id;
+						GrabPress::$connector = $connector;	
 					}
 				}
+
 				if ( ! isset( $connector_id ) ) {//create connector
 					$connector_types_json = GrabPress::api_call( 'GET',  '/connector_types?api_key='.GrabPress::$api_key );
 					$connector_types = json_decode( $connector_types_json );
@@ -242,14 +260,17 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 					$connector_json = GrabPress::api_call( 'POST',  '/connectors?api_key='.GrabPress::$api_key, $connector_post );
 					$connector_data = json_decode( $connector_json );
-					$connector_id = $connector_data -> connector -> id;
+					GrabPress::$connector = $connector_data -> connector;	
 				}
-				GrabPress::$connector_id - $connector_id;
-				return $connector_id;
+				
+				return GrabPress::$connector;
 			}else {
 				GrabPress::$feed_message = 'Your API key is no longer valid. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
 				return false;
 			}
+		}
+		static function get_connector_id(){
+			return GrabPress::get_connector()->id;
 		}
 		static function get_g_icon_src(){
 				return plugin_dir_url( __FILE__ ).'images/icons/g.png';
@@ -677,6 +698,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );			
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( null, 'CatalogEditor', 'CatalogEditor', 'publish_posts', 'catalogeditor', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
@@ -829,8 +851,66 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						   "category" => $cats
 					) );
 			}
-			
 		}
+
+		static function render_template_management($request){
+			$defaults = array(
+				"width" => 480,
+				"ratio" => "widescreen",
+				"playback" => "auto",
+				"action" => "new"
+				);
+
+			if(isset($request["action"]) && $request["action"]!="default"){
+				$ratio = $request["ratio"]=="widescreen"?"16:9":"4:3";
+				$width = $request["width"];
+	  			if($ratio == "16:9"){
+			 		$height = (int)($request["width"]/16)*9;
+			 	}else{
+					$height = (int)($request["width"]/4)*3;
+			 	}
+				$result = GrabPress::api_call( $request["action"]=="edit"?'PUT':"POST",
+				 '/connectors/'.GrabPress::get_connector_id().'/player_settings?api_key='.GrabPress::$api_key, array(
+				 	"player_setting" => array(
+					 	"ratio" => $ratio,
+					 	"width" => $width,
+					 	"height" => $height
+				 	))
+				  );
+
+				print GrabPress::fetch("includes/gp-template-modified.php");
+			}else{
+				$settings = $defaults;
+				$player = GrabPress::get_player_settings();
+
+				if($player){
+					$settings["width"] = $player->width;
+					$settings["height"] = $player->height;
+					$settings["ratio"] = $player->ratio=="16:9"?"widescreen":"standard";
+					$settings["action"] = "edit";
+				}
+
+				if($settings["ratio"] =="widescreen"){
+					$settings["widescreen_selected"] = true;
+					$settings["standard_selected"] = false;
+				}else{
+					$settings["widescreen_selected"] = false;
+					$settings["standard_selected"] = true;
+				}
+				if($settings["playback"] == "auto"){
+					$settings["auto_selected"] = true;
+					$settings["click_selected"] = false;
+				}else{
+					$settings["auto_selected"] = false;
+					$settings["click_selected"] = true;
+				}
+
+			print GrabPress::fetch("includes/gp-template.php", array(
+				"form" => $settings
+				));
+			}
+		}
+
 		static function _escape_params_template(&$data){
 			if(is_array($data)||is_object($data)){
 				foreach ($data as $key => &$value) {
@@ -1177,6 +1257,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 				}
 			break;	
+			case 'gp-template':
+				GrabPress::render_template_management($_REQUEST);
 			}
 		}
 

@@ -189,6 +189,33 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
 .grabpress-table #channel-select, .grabpress-table .channel-select{ width: 230px !important; }
 .grabpress-table .ui-widget { font-family: 'Trebuchet MS',Tahoma,Verdana,Arial,sans-serif; font-size: 12px; }
 
+.template-form{
+    width:400px;
+    float:left;
+}
+.template-preview{
+    width:500px;
+    height:400px;
+    border: 1px solid black;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    float:left;
+    margin-left: 20px;
+}
+.template-preview .widescreen{
+    width: 480px;
+    height: 270px;
+    border: 2px dotted red;
+    position: absolute;
+    display: block;
+}
+.template-preview .standard{
+    width: 480px;
+    height: 360px;
+    border: 2px dotted blue;
+    display: block;
+}
 .result-tile:hover {
 cursor: pointer;
 }
