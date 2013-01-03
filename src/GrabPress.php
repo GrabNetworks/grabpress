@@ -25,7 +25,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.0.301032012';
+		static $version = '2.0.3-01032012';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
