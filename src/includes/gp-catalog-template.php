@@ -358,7 +358,6 @@
 			};
 			
 			$.post(ajaxurl, data, function(response) {
-				debugger;
 				if(response.status == "redirect"){
 					window.location = response.url;
 				}
