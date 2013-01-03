@@ -23,7 +23,7 @@
 			<tr valign="bottom">
 	   			<th scope="row">Height</th>
 				<td>
-					<span class="height"><?php echo $form["height"]?$form["height"]:"270";?></span>
+					<span class="height"><?php echo isset($form["height"])?$form["height"]:"270";?></span>
 				</td>
 			</tr>
 			<!-- <tr valign="bottom">
