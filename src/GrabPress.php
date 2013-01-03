@@ -3,7 +3,7 @@
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.0.3
+Version: 2.0.3-01022013
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -25,10 +25,10 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.0.3';
+		static $version = '2.0.301032012';
 		static $api_key;
 		static $invalid = false;
-		static $environment =  'grabnetworks';
+		static $environment =  'grabqa';
 		static $debug = true;
 		static $message = false;
 		static $error = false;
