@@ -3,7 +3,7 @@ Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.0.1   
 Tested up to: 3.4.2  
-Stable tag: 2.0.3  
+Stable tag: 2.0.4  
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,6 +160,16 @@ We hope to allow users to edit the layout / posting template in future updates o
 == Changelog ==  
 
 **NOTICE: WordPress 3.5 is NOT supported at this time**
+= 2.0.4 =
+*Features:*
+
+ * AUTO-401: Creating a post from the catalog tab will add the video keywords to the tags of the post.
+ * AUTO-434: As a WordPress Editor, I want the preview image of the video to be used as the Featured Image of my post, when creating a post via AutoPoster or through the Catalog Tab.
+ * AUTO-447: As a Product Owner, I want to track the WordPress version of each GrabPress installation.
+ * AUTO-448: As a Product Ownver, I want to track the GrabPress version of each installation.
+ * AUTO-465: As a publisher, I want to set the default width and height for all player embeds, so I can better control the look and feel of my site.
+ * AUTO-480: As a WordPress Plug-in Developer, I want to use the version of JQueryUI packaged with WordPress.
+
 = 2.0.3 =
 
  * Removed feature to insert video while creating a new post, as it was breaking core WordPress functionality.
