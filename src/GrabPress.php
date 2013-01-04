@@ -33,10 +33,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $message = false;
 		static $error = false;
 		static $feed_message = 'items marked with an asterisk * are required.';
-		static $connector_id;
+		static $connector;
 		static $connector_user;
 		static $providers;
 		static $channels;
+		static $player_settings;
 
 		static function log( $message = false ) {
 			if ( GrabPress::$debug ) {
@@ -199,10 +200,31 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $user_data;
 		}
 
-		static function get_connector_id() {
+		static function get_player_settings(){
+			if(!GrabPress::$player_settings){
+				$settings_json =  GrabPress::api_call( 'GET',  '/connectors/'.GrabPress::get_connector_id().'/player_settings?api_key='.GrabPress::$api_key );
+				$settings = json_decode( $settings_json );
+
+				if(isset($settings->error)&& $settings->error->status_code == 404){//nonexistent. set defaults.
+					GrabPress::$player_settings = array();
+				}else{
+					GrabPress::$player_settings = $settings->player_setting;
+				}
+			}
+			
+			return GrabPress::$player_settings;
+		}
+		static function get_player_settings_for_embed(){
+			$sett = GrabPress::get_player_settings();
+			$defaults = array("width" => 600, "height"=> 270);
+
+			return array_merge($defaults, array("width" => $sett->width, "height" => $sett->height));
+		}
+
+		static function get_connector() {
 			GrabPress::log();
-			if(GrabPress::$connector_id){
-				return GrabPress::$connector_id;
+			if(GrabPress::$connector){
+				return GrabPress::$connector;
 			}
 			if ( GrabPress::validate_key() ) {
 				$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
@@ -212,8 +234,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$connector = $connectors_data[$n]->connector;
 					if ( $connector -> destination_address == $rpc_url ) {
 						$connector_id = $connector -> id;
+						GrabPress::report_versions($connector);
+						GrabPress::$connector = $connector;	
 					}
 				}
+
 				if ( ! isset( $connector_id ) ) {//create connector
 					$connector_types_json = GrabPress::api_call( 'GET',  '/connector_types?api_key='.GrabPress::$api_key );
 					$connector_types = json_decode( $connector_types_json );
@@ -242,14 +267,17 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 					$connector_json = GrabPress::api_call( 'POST',  '/connectors?api_key='.GrabPress::$api_key, $connector_post );
 					$connector_data = json_decode( $connector_json );
-					$connector_id = $connector_data -> connector -> id;
+					GrabPress::$connector = $connector_data -> connector;	
 				}
-				GrabPress::$connector_id - $connector_id;
-				return $connector_id;
+				
+				return GrabPress::$connector;
 			}else {
 				GrabPress::$feed_message = 'Your API key is no longer valid. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
 				return false;
 			}
+		}
+		static function get_connector_id(){
+			return GrabPress::get_connector()->id;
 		}
 		static function get_g_icon_src(){
 				return plugin_dir_url( __FILE__ ).'images/icons/g.png';
@@ -480,6 +508,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return false;
 		}
 
+		static function report_versions($connector){
+			$gpv = GrabPress::$version;
+ 			$wpv = get_bloginfo("version");
+
+			if(GrabPress::_needs_version_update($connector, $gpv, $wpv)){
+
+				//$connector_json = GrabPress::api_call( 'PUT',  '/connectors?api_key='.GrabPress::$api_key, $connector_post );
+				GrabPress::api_call("PUT", "/connectors/".$connector->id."?api_key=".GrabPress::$api_key, 
+					 array(
+						"wordpress_version" => $wpv,
+						"grabpress_version" => $gpv
+					));
+			}
+		}
+		static function _needs_version_update($connector, $currentGP, $currentWP){
+			return (!$connector->grabpress_version  || !$connector->wordpress_version) //connector does not have a version for either one
+				|| ($connector->grabpress_version != $currentGP || $connector->wordpress_version != $currentWP); //outdated
+		}
+
 		static function get_feeds() {
 			GrabPress::log();
 			if ( GrabPress::validate_key() ) {
@@ -678,6 +725,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );			
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( null, 'CatalogEditor', 'CatalogEditor', 'publish_posts', 'catalogeditor', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
@@ -830,8 +878,66 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						   "category" => $cats
 					) );
 			}
-			
 		}
+
+		static function render_template_management($request){
+			$defaults = array(
+				"width" => 480,
+				"ratio" => "widescreen",
+				"playback" => "auto",
+				"action" => "new"
+				);
+
+			if(isset($request["action"]) && $request["action"]!="default"){
+				$ratio = $request["ratio"]=="widescreen"?"16:9":"4:3";
+				$width = $request["width"];
+	  			if($ratio == "16:9"){
+			 		$height = (int)($request["width"]/16)*9;
+			 	}else{
+					$height = (int)($request["width"]/4)*3;
+			 	}
+				$result = GrabPress::api_call( $request["action"]=="edit"?'PUT':"POST",
+				 '/connectors/'.GrabPress::get_connector_id().'/player_settings?api_key='.GrabPress::$api_key, array(
+				 	"player_setting" => array(
+					 	"ratio" => $ratio,
+					 	"width" => $width,
+					 	"height" => $height
+				 	))
+				  );
+
+				print GrabPress::fetch("includes/gp-template-modified.php");
+			}else{
+				$settings = $defaults;
+				$player = GrabPress::get_player_settings();
+
+				if($player){
+					$settings["width"] = $player->width;
+					$settings["height"] = $player->height;
+					$settings["ratio"] = $player->ratio=="16:9"?"widescreen":"standard";
+					$settings["action"] = "edit";
+				}
+
+				if($settings["ratio"] =="widescreen"){
+					$settings["widescreen_selected"] = true;
+					$settings["standard_selected"] = false;
+				}else{
+					$settings["widescreen_selected"] = false;
+					$settings["standard_selected"] = true;
+				}
+				if($settings["playback"] == "auto"){
+					$settings["auto_selected"] = true;
+					$settings["click_selected"] = false;
+				}else{
+					$settings["auto_selected"] = false;
+					$settings["click_selected"] = true;
+				}
+
+			print GrabPress::fetch("includes/gp-template.php", array(
+				"form" => $settings
+				));
+			}
+		}
+
 		static function _escape_params_template(&$data){
 			if(is_array($data)||is_object($data)){
 				foreach ($data as $key => &$value) {
@@ -1178,6 +1284,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 				}
 			break;	
+			case 'gp-template':
+				GrabPress::render_template_management($_REQUEST);
 			}
 		}
 
@@ -1189,19 +1297,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			// jQuery files
 
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( 'jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js' );
-			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
-			wp_enqueue_script( 'jquery-ui-filter', $plugin_url.'/js/ui/multi/jquery.multiselect.filter.min.js' );
-			wp_enqueue_script( 'jquery-ui-multiselect', $plugin_url.'/js/ui/multi/jquery.multiselect.min.js' );
+			wp_enqueue_script( 'jquery-ui-core' );
+			wp_enqueue_script( 'jquery-ui-widget' );
+			wp_enqueue_script( 'jquery-ui-position' );
+			wp_enqueue_script( 'jquery-ui-dialog' );
+			wp_enqueue_script( 'jquery-ui-datepicker' );
 
-			wp_enqueue_script( 'jquery-uicore', $plugin_url.'/js/ui/jquery.ui.core.js' );
-			wp_enqueue_script( 'jquery-uiwidget', $plugin_url.'/js/ui/jquery.ui.widget.js' );
-			wp_enqueue_script( 'jquery-uiposition', $plugin_url.'/js/ui/jquery.ui.position.js' );
-
+			wp_enqueue_script( 'jquery-ui-filter', $plugin_url.'/js/ui/multi/jquery.multiselect.filter.min.js' , array("jquery-ui-widget"));
+			wp_enqueue_script( 'jquery-ui-multiselect', $plugin_url.'/js/ui/multi/jquery.multiselect.min.js', array("jquery-ui-widget" ));
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js' );
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' );
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' );
-			
+
+			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
+
 			$wpversion = floatval(get_bloginfo('version'));
 			if ( $wpversion <= 3.1 ) {		
 			    wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.1.8.7.js' );
@@ -1309,16 +1418,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$xmlString = str_replace( $search, $replace, $xml);
 			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
-
+			$settings = GrabPress::get_player_settings_for_embed();
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
-					echo "<div id=\"grabpreview\"> 
+					$text = "<div id=\"grabpreview\"> 
 						<p><img src='".$item->mediagroup->mediathumbnail[1]->attributes()->url."' /></p> 
 						</div>
 						<p>".$item->description."</p> 
 						<!--more-->
 						<div id=\"grabembed\">
-						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=v".$item->guid."&width=600&height=450&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
+						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=v".$item->guid."&width=".$settings["width"]."&height=".$settings["height"]."&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
 						</div>
 						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
 						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
@@ -1334,8 +1443,47 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						_gaq.push(['_trackPageview']);
 						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
 						</script>"; 
+					$post_id = wp_insert_post(array(
+						"post_content" => $text,
+						"post_title" => $item->title,
+						"post_type" => "post",
+						"post_status" => "draft",
+						"tags_input" => $item->mediagroup->mediakeywords
+					));				
+
+					$upload_dir = wp_upload_dir();
+					$image_url = $item->mediagroup->mediathumbnail[1]->attributes()->url;
+					$image_data = file_get_contents($image_url);
+					$filename = basename($image_url);
+					if(wp_mkdir_p($upload_dir['path']))
+					    $file = $upload_dir['path'] . '/' . $filename;
+					else
+					    $file = $upload_dir['basedir'] . '/' . $filename;
+					file_put_contents($file, $image_data);
+
+					$wp_filetype = wp_check_filetype($filename, null );
+					$attachment = array(
+						'guid' => sanitize_file_name($filename),
+						'guid' => "endworld",
+					    'post_mime_type' => $wp_filetype['type'],
+					    'post_title' => sanitize_file_name($filename),
+					    'post_content' => '',
+					    'post_status' => 'inherit'
+					);
+					$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+					require_once(ABSPATH . 'wp-admin/includes/image.php');
+					$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+					wp_update_attachment_metadata( $attach_id, $attach_data );
+
+					set_post_thumbnail( $post_id, $attach_id );
+
+					echo json_encode(array(
+						"status" => "redirect", 
+						"url" => "post.php?post=".$post_id."&action=edit"));
 				}elseif($format == 'embed'){
-					echo '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width=420&height=256&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>';
+					echo json_encode(array(
+						"status" => "ok",
+					 	"content" => '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
 				}		
 			}	
 

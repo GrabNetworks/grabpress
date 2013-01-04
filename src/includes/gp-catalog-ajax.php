@@ -318,9 +318,6 @@
 		   
 		   
 		   	$('.insert_into_post').bind('click', function(e){
-			    var form = $('#form-catalog-page');
-			    var ctp_player_id = $('#player_id').val();
-			    var bloginfo = $('#bloginfo').val();
 			    var v_id = this.id.replace('btn-create-feed-single-','');
 
 			    var data = {
@@ -330,13 +327,12 @@
 				};
 
 				$.post(ajaxurl, data, function(response) {
-					//alert('Got this from the server: ' + response);
-					var content = response.replace(/1825613/g, ctp_player_id);
-
-					window.send_to_editor(content);
+					if(response.status == "ok"){
+						window.send_to_editor(response.content);	
+					}
 					tb_position = backup_tb_position
 					return false;
-				});		  
+				}, "json");		  
 
 			});	
 
