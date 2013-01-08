@@ -195,7 +195,7 @@
 							$author_name = $user->display_name;
 							$author_id = $user->ID;									
 							if($author_id == $feed->custom_options->author_id){
-								echo $author_name;
+								echo $author_name = (strlen($author_name) > 8) ? substr($author_name,0,8)."..." : $author_name;
 							}									
 						}
 					?>
