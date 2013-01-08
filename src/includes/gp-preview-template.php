@@ -108,7 +108,7 @@
 			<?php echo $result["video"]["title"]; ?>
 			</h2>
 			<p class="video_summary">		
-			<?php echo $result["video"]["summary"]; ?>
+			<?php echo $video_summary = (strlen($result["video"]["summary"]) > 115) ? substr($result["video"]["summary"],0,115)."..." : $result["video"]["summary"]; ?>
 			</p>
 		</div>
 	</div>
