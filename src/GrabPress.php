@@ -1487,7 +1487,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}elseif($format == 'embed'){
 					echo json_encode(array(
 						"status" => "ok",
-					 	"content" => '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script language="javascript" type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
+					 	"content" => '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
 				}		
 			}	
 
@@ -1543,14 +1543,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			die();
 		}
 		static function mce_settings($settings){
-			if(!isset($settings["valid_elements"])){
-				$settings["valid_elements"] = "script[language|type|src]";
-			}
-			$settings["valid_elements"] .= $settings["valid_elements"].",script[language|type|src]";
+			
 			if(!isset($settings["extended_valid_elements"])){
-				$settings["extended_valid_elements"] = "div[id|class]";
+				$settings["extended_valid_elements"] = "div[*],script[*]";
+			}else{
+				$settings["extended_valid_elements"] .= $settings["extended_valid_elements"].",script[*],div[*]";
 			}
-			$settings["extended_valid_elements"] .= $settings["extended_valid_elements"].",div[id|class]";
 			return $settings;
 		}
 
@@ -1570,10 +1568,10 @@ if( is_admin() ){
 	add_action( 'wp_ajax_get_name_action', array( 'GrabPress', 'get_name_action_callback' ));
 	add_action( 'wp_ajax_get_mrss_format', array( 'GrabPress', 'get_mrss_format_callback' ));
 	add_action( 'wp_ajax_get_catalog', array( 'GrabPress', 'get_catalog_callback' ));
-	//add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
+	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
-	//add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
+	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
 
 	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }
