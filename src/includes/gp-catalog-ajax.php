@@ -338,12 +338,18 @@
 
 		   	$('#clear-search').bind('click', function(e){
 				 $("#keywords").val("");
-				 $("#providers option").attr("selected", "selected");
-				 $("#channels option").attr("selected", "selected");
-				 $('.sort_by[value=created_at]').attr("checked", "checked");
+				 $('#provider-select option').attr('selected', 'selected');
+				 $("#provider-select").multiselect({
+				   selectedText: "All providers selected"
+				});	
+				 $('#channel-select option').attr('selected', 'selected');
+				 $("#channel-select").multiselect({
+				   selectedText: "All Video Categories"
+				}); 
 				 $('.sort_by[value=relevance]').removeAttr("checked");
+				 $('.sort_by[value=created_at]').attr("checked", "checked");
 				 $("#created_before").val("");
-				 $("#created_after").val("");
+				 $("#created_after").val("");				 			 
 		   		submitSearch();
 			});
 			
