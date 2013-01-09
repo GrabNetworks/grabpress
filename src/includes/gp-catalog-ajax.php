@@ -284,7 +284,7 @@
 			 	doValidation();
 			 }
 		   }).multiselectfilter();
-
+		   
 		   $(".datepicker").datepicker({
 			   showOn: 'both',
 			   buttonImage: '<?php echo plugin_dir_url( __FILE__ ); ?>images/icon-calendar.gif',

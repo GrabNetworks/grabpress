@@ -205,20 +205,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$settings_json =  GrabPress::api_call( 'GET',  '/connectors/'.GrabPress::get_connector_id().'/player_settings?api_key='.GrabPress::$api_key );
 				$settings = json_decode( $settings_json );
 
-				if(isset($settings->error)&& $settings->error->status_code == 404){//nonexistent. set defaults.
+				if( empty($settings) || (isset($settings->error) && $settings->error->status_code == 404)){//nonexistent. set defaults.
 					GrabPress::$player_settings = array();
 				}else{
-					GrabPress::$player_settings = $settings->player_setting;
+					GrabPress::$player_settings = array(
+						"width" => $settings->player_setting->width,
+					 	"height" => $settings->player_setting->height,
+					 	"ratio" => $settings->player_setting->ratio
+					 	);
 				}
+				
 			}
 			
 			return GrabPress::$player_settings;
 		}
 		static function get_player_settings_for_embed(){
 			$sett = GrabPress::get_player_settings();
-			$defaults = array("width" => 600, "height"=> 270);
+			$defaults = array("width" => 600, "height"=> 270, "ratio" => "16:9");
 
-			return array_merge($defaults, array("width" => $sett->width, "height" => $sett->height));
+			return array_merge($defaults, $sett);
 		}
 
 		static function get_connector() {
@@ -910,9 +915,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$player = GrabPress::get_player_settings();
 
 				if($player){
-					$settings["width"] = $player->width;
-					$settings["height"] = $player->height;
-					$settings["ratio"] = $player->ratio=="16:9"?"widescreen":"standard";
+					$settings["width"] = $player["width"];
+					$settings["height"] = $player["height"];
+					$settings["ratio"] = $player["ratio"]=="16:9"?"widescreen":"standard";
 					$settings["action"] = "edit";
 				}
 
@@ -1214,7 +1219,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							$payment = isset( $_REQUEST['paypal_id']) ? 'paypal' : '';
 							$user_data = array(
 							   	'user'=>array(
-							   		'email'=>$_REQUEST['email'],
+							   		'email'=>trim($_REQUEST['email']),
 							         'password'=>$_REQUEST['password'],
 							         'first_name'=>$_REQUEST['first_name'],
 							         'last_name'=>$_REQUEST['last_name'],

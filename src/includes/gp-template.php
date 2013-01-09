@@ -1,5 +1,8 @@
 <?php $checked = 'checked="checked"';?>
 <div class="wrap">
+	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
+	<h2>GrabPress: Edit the player template for video posts</h2>	
+	<p>Video that fits your site design</p>
 <form action="" method="POST" class="template-form">
 	<input type="hidden" name="action" value="<?php echo $form["action"];?>" />
 	<fieldset>
@@ -29,15 +32,15 @@
 			<!-- <tr valign="bottom">
 	   			<th scope="row">Playback <span class="asterisk">*</span></th>
 				<td>
-					<input type="radio" name="playback" value="auto" <?php echo $form["auto_selected"]?$checked:""; ?> /> Auto
-					<input type="radio" name="playback" value="click" <?php echo $form["click_selected"]?$checked:""; ?> /> Click 
+					<input type="radio" name="playback" value="auto" <?php //echo $form["auto_selected"]?$checked:""; ?> /> Auto
+					<input type="radio" name="playback" value="click" <?php //echo $form["click_selected"]?$checked:""; ?> /> Click 
 				</td>
 			</tr> -->
 			<tr valign="bottom">					
-					<td class="button-tip" colspan="2">						
-						<input type="submit" class="button-primary" value="Save" id="btn-create-feed" />
-					</td>
-				</tr>
+				<td class="button-tip" colspan="2">						
+					<input type="submit" class="button-primary" value="Save" id="btn-create-feed" />
+				</td>
+			</tr>
 		</tbody></table>
 	</fieldset>
 </form>

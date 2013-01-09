@@ -542,3 +542,7 @@ line-height: 24px;
 #TB_window .label-tile-one-column .tooltip{ 
     left: 533px !important;
 }
+#form-create-feed .grabpress-table .ui-multiselect{
+    width: 230px !important;
+    *width: 244px !important;
+}
