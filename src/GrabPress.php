@@ -1533,7 +1533,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function get_catalog_callback(){
 			$defaults = array(
 				"providers" => array(),
-				"sort_by" => "created_at");
+				"sort_by" => "created_at",
+				"empty" => "true");
 			$req = array_merge($defaults, $_REQUEST);
 			print GrabPress::fetch("includes/gp-catalog-ajax.php", array(
 				"form" => $req,
