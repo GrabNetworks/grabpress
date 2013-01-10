@@ -42,20 +42,28 @@
 	$adv_search_params["providers"] = $providers;
 	$adv_search_params["categories"] = $channels;
 	$adv_search_params["sort_by"] = $form["sort_by"];
-	$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
+		
+	if($form["empty"] == "true"){
+		$list_feeds["results"] = array();
+		$empty = "true";
+	}else{
+		$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
-	$json_preview = GrabPress::get_json($url_catalog);
+		$json_preview = GrabPress::get_json($url_catalog);
 
-	$list_feeds = json_decode($json_preview, true);	
-	
-	if(empty($list_feeds["results"])){
-		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+		$list_feeds = json_decode($json_preview, true);	
+
+		if(empty($list_feeds["results"])){
+			GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+		}
+
+		$empty = "false";
 	}
-	
+
 	$id = GrabPress::get_connector_id();
 	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_data = json_decode( $player_json, true );
-	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
+	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';
 ?>
 <div id="gp-catalog-container">
 	<form method="post" action="" id="form-catalog-page">
@@ -295,7 +303,21 @@
 			   duration: 'fast'
 			});
 			var submitSearch = function(){
-		   		var data = { "action" : "get_catalog", 
+		   		var data = { "action" : "get_catalog",
+		   					 "empty" : false,
+		   					 "keywords" : $("#keywords").val(),
+		   					 "providers" : $("#provider-select").val(),
+		   					 "channels" : $("#channel-select").val(),
+		   					 "sort_by" : $('.sort_by:checked').val(),
+		   					 "created_before" : $("#created_before").val(),
+		   					 "created_after" : $("#created_after").val()};
+		   		$.post(ajaxurl, data, function(response) {
+		   			$("#gp-catalog-container").replaceWith(response);
+		   		});
+		   }
+		   	var submitClear = function(){
+		   		var data = { "action" : "get_catalog",
+		   					 "empty" : true,
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#provider-select").val(),
 		   					 "channels" : $("#channel-select").val(),
@@ -338,13 +360,21 @@
 
 		   	$('#clear-search').bind('click', function(e){
 				 $("#keywords").val("");
-				 $("#providers option").attr("selected", "selected");
-				 $("#channels option").attr("selected", "selected");
-				 $('.sort_by[value=created_at]').attr("checked", "checked");
+				 $('#provider-select option').attr('selected', 'selected');
+				 $("#provider-select").multiselect("refresh");
+				 $("#provider-select").multiselect({
+				   selectedText: "All providers selected"
+				});	
+				 $('#channel-select option').attr('selected', 'selected');
+				 $("#channel-select").multiselect("refresh");
+				 $("#channel-select").multiselect({
+				   selectedText: "All Video Categories"
+				}); 
 				 $('.sort_by[value=relevance]').removeAttr("checked");
+				 $('.sort_by[value=created_at]').attr("checked", "checked");
 				 $("#created_before").val("");
-				 $("#created_after").val("");
-		   		submitSearch();
+				 $("#created_after").val("");				 			 
+		   		submitClear();
 			});
 			
 			$(".video_summary").ellipsis(2, true, "more", "less");
