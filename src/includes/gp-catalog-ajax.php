@@ -346,7 +346,6 @@
 		   	$('#clear-search').bind('click', function(e){
 				 $("#keywords").val("");
 				 $('#provider-select option').attr('selected', 'selected');
-				 //$("#provider-select").append(toAppend).multiselect("refresh");
 				 $("#provider-select").multiselect("refresh");
 				 $("#provider-select").multiselect({
 				   selectedText: "All providers selected"
