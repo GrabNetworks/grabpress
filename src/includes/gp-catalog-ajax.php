@@ -42,16 +42,22 @@
 	$adv_search_params["providers"] = $providers;
 	$adv_search_params["categories"] = $channels;
 	$adv_search_params["sort_by"] = $form["sort_by"];
-	$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
-
-	$json_preview = GrabPress::get_json($url_catalog);
-
-	$list_feeds = json_decode($json_preview, true);	
 	
-	if(empty($list_feeds["results"])){
-		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+	if($form["empty"] == "true"){
+		$list_feeds["results"] = array();
+	}else{
+		$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
+
+		$json_preview = GrabPress::get_json($url_catalog);
+
+		$list_feeds = json_decode($json_preview, true);	
+
+		if(empty($list_feeds["results"])){
+			GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+		}
+
 	}
-	
+
 	$id = GrabPress::get_connector_id();
 	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_data = json_decode( $player_json, true );
@@ -295,7 +301,8 @@
 			   duration: 'fast'
 			});
 			var submitSearch = function(){
-		   		var data = { "action" : "get_catalog", 
+		   		var data = { "action" : "get_catalog",
+		   					 "empty" : false,
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#provider-select").val(),
 		   					 "channels" : $("#channel-select").val(),
