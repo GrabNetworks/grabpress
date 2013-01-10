@@ -42,9 +42,10 @@
 	$adv_search_params["providers"] = $providers;
 	$adv_search_params["categories"] = $channels;
 	$adv_search_params["sort_by"] = $form["sort_by"];
-	
+		
 	if($form["empty"] == "true"){
 		$list_feeds["results"] = array();
+		$empty = "true";
 	}else{
 		$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
@@ -56,12 +57,13 @@
 			GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
 		}
 
+		$empty = "false";
 	}
 
 	$id = GrabPress::get_connector_id();
 	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_data = json_decode( $player_json, true );
-	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
+	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';
 ?>
 <div id="gp-catalog-container">
 	<form method="post" action="" id="form-catalog-page">
@@ -313,6 +315,19 @@
 		   			$("#gp-catalog-container").replaceWith(response);
 		   		});
 		   }
+		   	var submitClear = function(){
+		   		var data = { "action" : "get_catalog",
+		   					 "empty" : true,
+		   					 "keywords" : $("#keywords").val(),
+		   					 "providers" : $("#provider-select").val(),
+		   					 "channels" : $("#channel-select").val(),
+		   					 "sort_by" : $('.sort_by:checked').val(),
+		   					 "created_before" : $("#created_before").val(),
+		   					 "created_after" : $("#created_after").val()};
+		   		$.post(ajaxurl, data, function(response) {
+		   			$("#gp-catalog-container").replaceWith(response);
+		   		});
+		   }
 		   $("#form-catalog-page").change(doValidation);
 		   $("#form-catalog-page").submit(function(e){
 		   		e.preventDefault();
@@ -359,7 +374,7 @@
 				 $('.sort_by[value=created_at]').attr("checked", "checked");
 				 $("#created_before").val("");
 				 $("#created_after").val("");				 			 
-		   		submitSearch();
+		   		submitClear();
 			});
 			
 			$(".video_summary").ellipsis(2, true, "more", "less");
