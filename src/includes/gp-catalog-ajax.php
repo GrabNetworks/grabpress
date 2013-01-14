@@ -1,31 +1,20 @@
 <?php 
-	$providers_total = count( $list_providers );
-	if(isset($form['providers'])){
-		$providers = isset($form['providers']) ? join($form['providers'], ","): "";
 
-		if(($providers_total == count($form['providers'])) || in_array("", $form['providers'])){
-			$provider_text = "All Providers";
-			$providers = "";
-		}else{
-			$provider_text = count($form['providers'])." of ".$providers_total." selected";
-		}  
-	}else{
+	$providers_total = count( $list_providers );
+	if(($providers_total == count($providers)) || in_array("", $providers)){
+		$provider_text = "All Providers";
 		$providers = "";
-	}
+	}else{
+		$provider_text = count($providers)." of ".$providers_total." selected";
+	}  
 
 	$channels_total = count( $list_channels );
 
-	if(isset($form['channels'])){
-		if(($channels_total == count($form['channels'])) || in_array("", $form['channels'])){
-			$channel_text = "All Video Categories";
-		}else{
-			$channel_text = count($form['channels'])." of ".$channels_total." selected";
-		}
-		$channels = is_array($form["channels"])?$form["channels"]:explode( ",", $form["channels"] );
+	if(($channels_total == count($channels)) || in_array("", $channels)){
+		$channel_text = "All Video Categories";
 	}else{
-		$channels = array();
+		$channel_text = count($channels)." of ".$channels_total." selected";
 	}
-
 
 	$id = GrabPress::get_connector_id();
 	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
@@ -78,7 +67,7 @@
 							$provider = $record_provider->provider;
 							$provider_name = $provider->name;
 							$provider_id = $provider->id;
-							$provider_selected = ((isset($form["providers"])) && (is_array($form["providers"])) && ( in_array( $provider_id, $form["providers"] ))) ?'selected="selected"':"";
+							$provider_selected = ((isset($providers)) && (is_array($providers)) && ( in_array( $provider_id, $providers ))) ?'selected="selected"':"";
 							echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
 						}
 					?>
