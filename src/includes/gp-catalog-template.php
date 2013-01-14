@@ -1,34 +1,20 @@
 <?php 
 
 	$providers_total = count( $list_providers );
-	if(isset($form['provider'])){
-		$providers = isset($form['provider']) ? join($form['provider'], ","): "";
-
-		if(($providers_total == count($form['provider'])) || in_array("", $form['provider'])){
-			$provider_text = "All Providers";
-			$providers = "";
-		}else{
-			$provider_text = count($form['provider'])." of ".$providers_total." selected";
-		}  
-	}else{
+	if(($providers_total == count($providers)) || in_array("", $providers)){
+		$provider_text = "All Providers";
 		$providers = "";
-	}
+	}else{
+		$provider_text = count($providers)." of ".$providers_total." selected";
+	}  
 
 	$channels_total = count( $list_channels );
 
-	if(isset($form['channel'])){
-		$channels = isset($form['channel']) ? join($form['channel'], ","): "";		
-
-		if(($channels_total == count($form['channel'])) || in_array("", $form['channel'])){
-			$channel_text = "All Video Categories";
-			$channels = "";
-		}else{
-			$channel_text = count($form['channel'])." of ".$channels_total." selected";
-		}
+	if(($channels_total == count($channels)) || in_array("", $channels)){
+		$channel_text = "All Video Categories";
 	}else{
-		$channels = "";
-	}	
-
+		$channel_text = count($channels)." of ".$channels_total." selected";
+	}
 
 	$id = GrabPress::get_connector_id();
 	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
@@ -69,15 +55,6 @@
 				</span>
 			</div>
 			<div class="tile-right">
-				<?php
-					if(isset($form["channel"])){
-						if(is_array($form["channel"])){
-							$channels = $form["channel"];
-						}else{
-							$channels = explode( ",", $form["channel"] ); // Video categories chosen by the user
-						}
-					}
-				?>
 				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 					<?php
 						foreach ( $list_channels as $record ) {
@@ -104,7 +81,7 @@
 						$provider = $record_provider->provider;
 						$provider_name = $provider->name;
 						$provider_id = $provider->id;
-						$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
+						$provider_selected = ( in_array( $provider_id, $providers ) )?'selected="selected"':"";
 						echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
 					}
 				?>

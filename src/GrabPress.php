@@ -746,8 +746,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function render_catalog_management() {
 			GrabPress::log();
-			$defaults = array("sort_by" => "created_at");
-			$request = $_REQUEST;
+			$defaults = array(
+				"sort_by" => "created_at",
+				"providers" => array(),
+				"channels" => array());
+			$request = array_merge($defaults, $_REQUEST);
 
 			if(isset($request["keywords"])){
 				$adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
@@ -763,8 +766,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$created_after = $created_after_date->format('Ymd');
 					$adv_search_params['created_after'] = $created_after;
 				}
-				$adv_search_params["providers"] = $providers;
-				$adv_search_params["categories"] = $channels;
+				if(count($request["providers"]) != count(GrabPress::get_providers())){
+					$adv_search_params["providers"] =  is_array($request['providers']) ? join($request['providers'], ","): "";
+				}
+				if(count($request["channels"]) != count(GrabPress::get_channels())){
+					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
+				}
 				$adv_search_params["sort_by"] = $form["sort_by"];
 
 				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
@@ -781,11 +788,70 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 
 			print GrabPress::fetch( 'includes/gp-catalog-template.php' ,
-				array( "form" => array_merge($defaults, $request ),
+				array( "form" => $request ,
 					"list_channels" => GrabPress::get_channels(),
 					"list_providers" => GrabPress::get_providers(),
-					"list_feeds" => $list_feeds
+					"list_feeds" => $list_feeds,
+					"providers" => $request["providers"],
+					"channels" => $request["channels"]
 					));
+		}
+
+		static function get_catalog_callback(){
+			$defaults = array(
+				"providers" => array(),
+				"channels" => array(),
+				"sort_by" => "created_at",
+				"empty" => "true");
+			$request = array_merge($defaults, $_REQUEST);
+			
+			if($request["empty"] == "true"){
+				$list_feeds["results"] = array();
+				$empty = "true";
+			}else{
+				$adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
+
+				if(isset($request['created_before']) && ($request['created_before'] != "")){
+					$created_before_date = new DateTime( $request['created_before'] );	
+					$created_before = $created_before_date->format('Ymd');
+					$adv_search_params['created_before'] = $created_before;
+				}
+				
+				if(isset($request['created_after']) && ($request['created_after'] != "")){
+					$created_after_date = new DateTime( $request['created_after'] );
+					$created_after = $created_after_date->format('Ymd');
+					$adv_search_params['created_after'] = $created_after;
+				}
+				if(count($request["providers"]) != count(GrabPress::get_providers())){
+					$adv_search_params["providers"] =  isset($request['providers']) ? join($request['providers'], ","): "";
+				}
+				if(count($request["channels"]) != count(GrabPress::get_channels())){
+					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
+				}
+				
+				$adv_search_params["sort_by"] = $request["sort_by"];
+				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
+
+				$json_preview = GrabPress::get_json($url_catalog);
+
+				$list_feeds = json_decode($json_preview, true);	
+
+				if(empty($list_feeds["results"])){
+					GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+				}
+
+				$empty = "false";
+			}
+			print GrabPress::fetch("includes/gp-catalog-ajax.php", array(
+				"form" => $request,
+				"list_providers" => GrabPress::get_providers(),
+				"list_channels" => GrabPress::get_channels(),
+				"list_feeds" => $list_feeds,
+				"empty" => $empty,
+				"providers" => $request["providers"],
+				"channels" => $request["channels"]
+				));
+			die();
 		}
 
 		static function _filter_out_out_providers( $x ) {
@@ -1565,55 +1631,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $context;
 		}
 		
-		static function get_catalog_callback(){
-			$defaults = array(
-				"providers" => array(),
-				"sort_by" => "created_at",
-				"empty" => "true");
-			$req = array_merge($defaults, $_REQUEST);
-			
-				
-			if($req["empty"] == "true"){
-				$list_feeds["results"] = array();
-				$empty = "true";
-			}else{
-				$adv_search_params = GrabPress::parse_adv_search_string(isset($req["keywords"])?$req["keywords"]:"");
 
-				if(isset($req['created_before']) && ($req['created_before'] != "")){
-					$created_before_date = new DateTime( $req['created_before'] );	
-					$created_before = $created_before_date->format('Ymd');
-					$adv_search_params['created_before'] = $created_before;
-				}
-				
-				if(isset($req['created_after']) && ($req['created_after'] != "")){
-					$created_after_date = new DateTime( $req['created_after'] );
-					$created_after = $created_after_date->format('Ymd');
-					$adv_search_params['created_after'] = $created_after;
-				}
-				$adv_search_params["providers"] = $providers;
-				$adv_search_params["categories"] = $channels;
-				$adv_search_params["sort_by"] = $req["sort_by"];
-				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
-
-				$json_preview = GrabPress::get_json($url_catalog);
-
-				$list_feeds = json_decode($json_preview, true);	
-
-				if(empty($list_feeds["results"])){
-					GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
-				}
-
-				$empty = "false";
-			}
-			print GrabPress::fetch("includes/gp-catalog-ajax.php", array(
-				"form" => $req,
-				"list_providers" => GrabPress::get_providers(),
-				"list_channels" => GrabPress::get_channels(),
-				"list_feeds" => $list_feeds,
-				"empty" => $empty
-				));
-			die();
-		}
 		static function mce_settings($settings){
 			
 			if(!isset($settings["extended_valid_elements"])){
