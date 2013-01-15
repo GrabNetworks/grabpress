@@ -154,6 +154,8 @@
 
 				jQuery('#TB_window').css({'marginLeft': -(TB_newWidth / 2), "marginTop": -(TB_newHeight / 2)});
 				jQuery('#TB_window, #TB_iframeContent').width(TB_newWidth).height(TB_newHeight);
+				jQuery('#TB_ajaxContent').height(TB_newHeight - 29);
+				jQuery('#TB_ajaxContent').width(TB_newWidth - 33);
 
 			}
 			global.doValidation = function(){
