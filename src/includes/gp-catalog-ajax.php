@@ -83,10 +83,10 @@
 				</div>				
 				<div class="tile-right">
 					From<input type="text" value="<?php echo $created_after = isset($form['created_after']) ? $form['created_after'] : ''; ?>" maxlength="8" id="created_after" name="created_after" class="datepicker" />					
+					To<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 				</div>
 			</div>	
-			<div class="label-tile">	
-				To<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
+			<div class="label-tile">				
 				<div class="tile-right">					
 					<a href="#" id="clear-search" onclick="return false;" >clear search</a>
 					<input type="submit" value="Search " class="update-search" id="update-search" >
@@ -154,6 +154,8 @@
 
 				jQuery('#TB_window').css({'marginLeft': -(TB_newWidth / 2), "marginTop": -(TB_newHeight / 2)});
 				jQuery('#TB_window, #TB_iframeContent').width(TB_newWidth).height(TB_newHeight);
+				jQuery('#TB_ajaxContent').height(TB_newHeight - 29);
+				jQuery('#TB_ajaxContent').width(TB_newWidth - 33);
 
 			}
 			global.doValidation = function(){
