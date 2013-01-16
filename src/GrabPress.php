@@ -769,6 +769,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if(count($request["providers"]) != count(GrabPress::get_providers())){
 					$adv_search_params["providers"] =  is_array($request['providers']) ? join($request['providers'], ","): "";
 				}
+
 				if(count($request["channels"]) != count(GrabPress::get_channels())){
 					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
 				}
@@ -1091,6 +1092,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		}
 		static function generate_catalog_url($options, $unlimited = false){
+			$defaults = array("providers" => "", "categories" => "");
+			$options = array_merge($defaults, $options);
 			$options = array_map(array("GrabPress", "_escape_params"), $options);
 
 			$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?'.
@@ -1348,7 +1351,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								$_REQUEST[ 'action' ] = 'link-user';
 								return GrabPress::dispatcher();
 							}else{
-								GrabPress::$error = 'A user with the supplied email already exists in our system. Please click <a href="http://www.grab-media.com/publisherAdmin/password">here</a> if you forgot your password.';
+								GrabPress::$error = 'We already have a registered user with the email address '.$_REQUEST["email"].'. If you would like to update your account information, please login to the <a href="http://www.grab-media.com/publisherAdmin/">Grab Publisher Dashboard</a>, or contact our <a href="http://www.grab-media.com/support/">support</a> if you need assistance.';
 								$_REQUEST['action'] = 'create';
 							}
 							break;
