@@ -773,7 +773,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if(count($request["channels"]) != count(GrabPress::get_channels())){
 					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
 				}
-				$adv_search_params["sort_by"] = $form["sort_by"];
+				$adv_search_params["sort_by"] = $request["sort_by"];
 
 				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
