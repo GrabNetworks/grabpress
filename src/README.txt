@@ -2,16 +2,14 @@
 Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.0.1   
-Tested up to: 3.4.2  
-Stable tag: 2.0.4  
+Tested up to: 3.5  
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Configure Grab's AutoPoster software to deliver fresh video direct to your Blog.
 
 == Description ==
-
-**NOTICE: WordPress 3.5 is NOT supported at this time**
 
 GrabPress from Grab Media is the solution for publishers on the Wordpress platform using video to drive engagement and revenue on their sites. It allows website editors to publish high quality video content within their Wordpress sites. The integration of the Grab Media video catalog with your content management system via the GrabPress plug-in enables all assets of the content catalog-including the video titles, descriptions, keywords, and preview images to be published along with the video content, or to be leveraged in content promotional themes and widgets.
 
@@ -24,8 +22,6 @@ For additional documentation, contact your account manager or email us at suppor
 www.grab-media.com
 
 == Installation ==  
-
-**NOTICE: WordPress 3.5 is NOT supported at this time**
 
 **Manual Plugin Installation:**
 
@@ -63,8 +59,6 @@ www.grab-media.com
 *NOTE: Upgrading through the WordPress Plugins Page will keep your existing feeds and publisher account connection intact.*
 
 == Frequently Asked Questions ==
-
-**NOTICE: WordPress 3.5 is NOT supported at this time**
 
 **Getting Started...**
 
@@ -149,8 +143,6 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Screenshots ==  
 
-**NOTICE: WordPress 3.5 is NOT supported at this time**
-
 1. Create and edit feed(s) for auto-posting to your Blog.
 2. View and manage your existing feed(s).
 3. Preview the results of your configured feed(s).
@@ -159,7 +151,13 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Changelog ==  
 
-**NOTICE: WordPress 3.5 is NOT supported at this time**
+= 2.1.0 =
+*Features:*
+
+ * AUTO-436: Add support for WordPress version 3.5.
+ * AUTO-492: Re-enable "Insert into Post" functionality (AUTO-371).
+ * Various bug fixes.
+
 = 2.0.4 =
 *Features:*
 
