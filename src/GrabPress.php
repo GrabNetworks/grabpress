@@ -769,6 +769,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				if(count($request["providers"]) != count(GrabPress::get_providers())){
 					$adv_search_params["providers"] =  is_array($request['providers']) ? join($request['providers'], ","): "";
 				}
+
 				if(count($request["channels"]) != count(GrabPress::get_channels())){
 					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
 				}
@@ -1091,6 +1092,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		}
 		static function generate_catalog_url($options, $unlimited = false){
+			$defaults = array("providers" => "", "categories" => "");
+			$options = array_merge($defaults, $options);
 			$options = array_map(array("GrabPress", "_escape_params"), $options);
 
 			$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?'.
