@@ -530,6 +530,7 @@ line-height: 24px;
 }
 #TB_ajaxContent {
     line-height: 1.3em;
+    /*height: 581px !important;*/
 }
 #TB_ajaxContent p {
     color: #333;
@@ -541,4 +542,8 @@ line-height: 24px;
 
 #TB_window .label-tile-one-column .tooltip{ 
     left: 533px !important;
+}
+#form-create-feed .grabpress-table .ui-multiselect{
+    width: 230px !important;
+    *width: 244px !important;
 }

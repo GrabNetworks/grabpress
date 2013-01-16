@@ -1,61 +1,25 @@
 <?php 
-	$providers_total = count( $list_providers );
-	if(isset($form['providers'])){
-		$providers = isset($form['providers']) ? join($form['providers'], ","): "";
 
-		if(($providers_total == count($form['providers'])) || in_array("", $form['providers'])){
-			$provider_text = "All Providers";
-			$providers = "";
-		}else{
-			$provider_text = count($form['providers'])." of ".$providers_total." selected";
-		}  
-	}else{
+	$providers_total = count( $list_providers );
+	if(($providers_total == count($providers)) || in_array("", $providers)){
+		$provider_text = "All Providers";
 		$providers = "";
-	}
+	}else{
+		$provider_text = count($providers)." of ".$providers_total." selected";
+	}  
 
 	$channels_total = count( $list_channels );
 
-	if(isset($form['channels'])){
-		if(($channels_total == count($form['channels'])) || in_array("", $form['channels'])){
-			$channel_text = "All Video Categories";
-		}else{
-			$channel_text = count($form['channels'])." of ".$channels_total." selected";
-		}
-		$channels = is_array($form["channels"])?$form["channels"]:explode( ",", $form["channels"] );
+	if(($channels_total == count($channels)) || in_array("", $channels)){
+		$channel_text = "All Video Categories";
 	}else{
-		$channels = array();
+		$channel_text = count($channels)." of ".$channels_total." selected";
 	}
 
-	$adv_search_params = GrabPress::parse_adv_search_string(isset($form["keywords"])?$form["keywords"]:"");
-
-	if(isset($form['created_before']) && ($form['created_before'] != "")){
-		$created_before_date = new DateTime( $form['created_before'] );	
-		$created_before = $created_before_date->format('Ymd');
-		$adv_search_params['created_before'] = $created_before;
-	}
-	
-	if(isset($form['created_after']) && ($form['created_after'] != "")){
-		$created_after_date = new DateTime( $form['created_after'] );
-		$created_after = $created_after_date->format('Ymd');
-		$adv_search_params['created_after'] = $created_after;
-	}
-	$adv_search_params["providers"] = $providers;
-	$adv_search_params["categories"] = $channels;
-	$adv_search_params["sort_by"] = $form["sort_by"];
-	$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
-
-	$json_preview = GrabPress::get_json($url_catalog);
-
-	$list_feeds = json_decode($json_preview, true);	
-	
-	if(empty($list_feeds["results"])){
-		GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
-	}
-	
 	$id = GrabPress::get_connector_id();
 	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_data = json_decode( $player_json, true );
-	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
+	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';
 ?>
 <div id="gp-catalog-container">
 	<form method="post" action="" id="form-catalog-page">
@@ -103,7 +67,7 @@
 							$provider = $record_provider->provider;
 							$provider_name = $provider->name;
 							$provider_id = $provider->id;
-							$provider_selected = ((isset($form["providers"])) && (is_array($form["providers"])) && ( in_array( $provider_id, $form["providers"] ))) ?'selected="selected"':"";
+							$provider_selected = ((isset($providers)) && (is_array($providers)) && ( in_array( $provider_id, $providers ))) ?'selected="selected"':"";
 							echo '<option value = "'.$provider_id.'" '.$provider_selected.'>'.$provider_name.'</option>';
 						}
 					?>
@@ -119,10 +83,10 @@
 				</div>				
 				<div class="tile-right">
 					From<input type="text" value="<?php echo $created_after = isset($form['created_after']) ? $form['created_after'] : ''; ?>" maxlength="8" id="created_after" name="created_after" class="datepicker" />					
+					To<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
 				</div>
 			</div>	
-			<div class="label-tile">	
-				To<input type="text" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
+			<div class="label-tile">				
 				<div class="tile-right">					
 					<a href="#" id="clear-search" onclick="return false;" >clear search</a>
 					<input type="submit" value="Search " class="update-search" id="update-search" >
@@ -190,6 +154,8 @@
 
 				jQuery('#TB_window').css({'marginLeft': -(TB_newWidth / 2), "marginTop": -(TB_newHeight / 2)});
 				jQuery('#TB_window, #TB_iframeContent').width(TB_newWidth).height(TB_newHeight);
+				jQuery('#TB_ajaxContent').height(TB_newHeight - 29);
+				jQuery('#TB_ajaxContent').width(TB_newWidth - 33);
 
 			}
 			global.doValidation = function(){
@@ -284,7 +250,7 @@
 			 	doValidation();
 			 }
 		   }).multiselectfilter();
-
+		   
 		   $(".datepicker").datepicker({
 			   showOn: 'both',
 			   buttonImage: '<?php echo plugin_dir_url( __FILE__ ); ?>images/icon-calendar.gif',
@@ -295,7 +261,21 @@
 			   duration: 'fast'
 			});
 			var submitSearch = function(){
-		   		var data = { "action" : "get_catalog", 
+		   		var data = { "action" : "get_catalog",
+		   					 "empty" : false,
+		   					 "keywords" : $("#keywords").val(),
+		   					 "providers" : $("#provider-select").val(),
+		   					 "channels" : $("#channel-select").val(),
+		   					 "sort_by" : $('.sort_by:checked').val(),
+		   					 "created_before" : $("#created_before").val(),
+		   					 "created_after" : $("#created_after").val()};
+		   		$.post(ajaxurl, data, function(response) {
+		   			$("#gp-catalog-container").replaceWith(response);
+		   		});
+		   }
+		   	var submitClear = function(){
+		   		var data = { "action" : "get_catalog",
+		   					 "empty" : true,
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#provider-select").val(),
 		   					 "channels" : $("#channel-select").val(),
@@ -338,13 +318,21 @@
 
 		   	$('#clear-search').bind('click', function(e){
 				 $("#keywords").val("");
-				 $("#providers option").attr("selected", "selected");
-				 $("#channels option").attr("selected", "selected");
-				 $('.sort_by[value=created_at]').attr("checked", "checked");
+				 $('#provider-select option').attr('selected', 'selected');
+				 $("#provider-select").multiselect("refresh");
+				 $("#provider-select").multiselect({
+				   selectedText: "All providers selected"
+				});	
+				 $('#channel-select option').attr('selected', 'selected');
+				 $("#channel-select").multiselect("refresh");
+				 $("#channel-select").multiselect({
+				   selectedText: "All Video Categories"
+				}); 
 				 $('.sort_by[value=relevance]').removeAttr("checked");
+				 $('.sort_by[value=created_at]').attr("checked", "checked");
 				 $("#created_before").val("");
-				 $("#created_after").val("");
-		   		submitSearch();
+				 $("#created_after").val("");				 			 
+		   		submitClear();
 			});
 			
 			$(".video_summary").ellipsis(2, true, "more", "less");
