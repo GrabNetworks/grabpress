@@ -547,3 +547,7 @@ line-height: 24px;
     width: 230px !important;
     *width: 244px !important;
 }
+
+#TB_window #TB_title{
+    z-index: 105 !important;
+}
