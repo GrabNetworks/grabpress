@@ -1553,7 +1553,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						</script>"; 
 					$post_id = wp_insert_post(array(
 						"post_content" => $text,
-						"post_title" => $item->title,
+						"post_title" => "VIDEO: ".$item->title,
 						"post_type" => "post",
 						"post_status" => "draft",
 						"tags_input" => $item->mediagroup->mediakeywords
