@@ -166,22 +166,22 @@
 	    	var errors = hasValidationErrors();
 			if ( !errors ){
 				$('#btn-create-feed').removeAttr('disabled');
-				$('#btn-preview-feed').removeAttr('disabled');
+				$('#update-search').removeAttr('disabled');
 
-				if( $( '#btn-preview-feed' ).off ){
-					$( '#btn-preview-feed' ).off('click');
+				if( $( '#update-search' ).off ){
+					$( '#update-search' ).off('click');
 				}else{
-					$( '#btn-preview-feed' ).unbind('click');
+					$( '#update-search' ).unbind('click');
 				}
 				$('.hide').show();					
 			}else{
 				$( '#btn-create-feed' ).attr('disabled', 'disabled');
-				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
+				$( '#update-search' ).attr('disabled', 'disabled');
 			
-				if( $( '#btn-preview-feed' ).off ){
-					$( '#btn-preview-feed' ).off('click');
+				if( $( '#update-search' ).off ){
+					$( '#update-search' ).off('click');
 				}else{
-					$( '#btn-preview-feed' ).unbind('click');
+					$( '#update-search' ).unbind('click');
 				}
 
 				$('.hide').hide();
