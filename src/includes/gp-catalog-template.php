@@ -42,7 +42,7 @@
 			<h2>GrabPress: Find a Video in our Catalog</h2>
 			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
 	<fieldset id="preview-feed">
-	<legend>Preview Feed</legend>
+	<legend>Search Criteria</legend>
 		<div class="label-tile-one-column">
 			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords'] : '' ?>" maxlength="255" /></span>
 			<a href="#" id="help">help</a>
@@ -102,8 +102,7 @@
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
-				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
+				<a href="#" id="clear-search" onclick="return false;" >clear search</a>				
 				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
@@ -120,7 +119,8 @@
                        $relevance_checked = ((isset($form["sort_by"])) &&($form["sort_by"]=="relevance")) ?'checked="checked";':"";
                ?>
                <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
-               <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
+               <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance
+               <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
        </div>
 	<?php
 			foreach ($list_feeds["results"] as $result) {
