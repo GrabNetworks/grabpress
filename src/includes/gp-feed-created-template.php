@@ -56,4 +56,7 @@ jQuery(function(){
     }
         //echo GrabPress::$message = 'A new draft or post will be created every '.$time.' if videos that meet your search criteria have been added to our catalog.'; 
 ?>
+<div class="grabgear">
+    <?php echo '<img src="'.plugin_dir_url( __FILE__ ).'images/grabgear.gif" alt="Grab">'; ?>
+</div>
 

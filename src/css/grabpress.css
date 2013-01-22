@@ -559,3 +559,10 @@ line-height: 24px;
     float: none;
     margin-left: 200px;
 }
+.grabgear{  
+    bottom: 50%;
+    *bottom: -70px;
+    left: 50%;
+    position: absolute;
+    text-align: center;
+}
