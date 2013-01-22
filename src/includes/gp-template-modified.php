@@ -26,3 +26,6 @@ jQuery(function(){
     Template updated successfully.  Redirecting in 5 seconds ...  If you are not redirected automatically, please press <a href="admin.php?page=gp-template">here</a>
   </p>
 </div>
+<div class="grabgear">
+    <?php echo '<img src="'.plugin_dir_url( __FILE__ ).'images/grabgear.gif" alt="Grab">'; ?>
+</div>
