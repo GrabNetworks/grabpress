@@ -726,6 +726,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function grabpress_plugin_menu() {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
+			add_submenu_page( 'grabpress', 'Dashboard', 'Dashboard', 'publish_posts', 'gp-dashboard', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );			
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
@@ -1067,6 +1068,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::show_message();
 		}
 
+		static function render_dashboard_management() {
+			GrabPress::log();
+			//if (!current_user_can('manage_options'))  {
+			//  wp_die( __('You do not have sufficient permissions to access this page.') );
+			// }
+			print GrabPress::fetch( 'includes/gp-dashboard.php' );
+		}
+
 		static function form_default_values( $params = array() ) {
 			GrabPress::log();
 			$defaults = array( "publish" => true,
@@ -1390,10 +1399,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							GrabPress::render_catalog_management();
 						break;
 					}
-				}
-			break;	
+				}			
+			case 'gp-dashboard':
+				GrabPress::render_dashboard_management($_REQUEST);
+				break;
 			case 'gp-template':
 				GrabPress::render_template_management($_REQUEST);
+				break;
 			}
 		}
 
