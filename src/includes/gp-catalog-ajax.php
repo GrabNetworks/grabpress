@@ -341,6 +341,22 @@
 		
 		jQuery(window).load(function () {
 		    doValidation();
+
+		});
+
+		jQuery(window).scroll(function () {
+			var channelHeight = jQuery('.ui-multiselect').position().top;
+			jQuery('.ui-multiselect-menu').css('top', channelHeight + 61);
+			jQuery('.ui-multiselect-menu').css('position', 'fixed');
+			
+		});
+
+		jQuery('#TB_ajaxContent').scroll(function () {
+			var channelHeight = jQuery('.ui-multiselect').position().top;
+			jQuery('.ui-multiselect-menu').css('z-index', 103);
+			jQuery('.ui-multiselect-menu').css('overflow', 'auto');
+			jQuery('.ui-multiselect-menu').css('top', channelHeight + 61);		
+			
 		});
 		
 	</script>

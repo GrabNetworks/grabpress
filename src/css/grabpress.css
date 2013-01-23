@@ -193,28 +193,31 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
     width:400px;
     float:left;
 }
-.template-preview{
-    width:500px;
-    height:400px;
+.template-preview{        
     border: 1px solid black;
-    margin: 0;
-    padding: 0;
-    text-align: center;
     float:left;
-    margin-left: 20px;
+    height:333px;        
+    margin: 0 0 0 20px;
+    padding: 0;
+    text-align: center; 
+    width:600px;
 }
 .template-preview .widescreen{
-    width: 480px;
-    height: 270px;
-    border: 2px dotted red;
-    position: absolute;
+    border-left: 2px dotted red;
+    border-right: 2px dotted red;
     display: block;
+    height: 333px;
+    margin-left: 70px;
+    position: absolute;
+    width: 460px; 
 }
 .template-preview .standard{
-    width: 480px;
-    height: 360px;
-    border: 2px dotted blue;
+    border-top: 2px dotted blue;
+    border-bottom: 2px dotted blue;
     display: block;
+    height: 252px;
+    margin-top: 40px;
+    width: 480px;
 }
 .result-tile:hover {
 cursor: pointer;
@@ -546,4 +549,20 @@ line-height: 24px;
 #form-create-feed .grabpress-table .ui-multiselect{
     width: 230px !important;
     *width: 244px !important;
+}
+
+#TB_window #TB_title{
+    z-index: 105 !important;
+}
+
+#preview-feed #btn-create-feed{
+    float: none;
+    margin-left: 200px;
+}
+.grabgear{  
+    bottom: 50%;
+    *bottom: -70px;
+    left: 50%;
+    position: absolute;
+    text-align: center;
 }

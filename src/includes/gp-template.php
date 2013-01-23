@@ -53,12 +53,28 @@
 <script type="text/javascript">
  	jQuery(function($){
  		var updateHeightValue = function(){
+ 			var player_width = $("form input[name=width]").val();
+ 			$(".template-preview").width(player_width);
+ 			 
 		 	if($("form input[name=ratio]:checked").val() == "widescreen"){
 		 		var height = ($("form input[name=width]").val()/16)*9;
+		 		var player_height = parseInt(height,10);
+		 		var widescreen_width = (player_width * 3) / 4;
+		 		var margin_left = (player_width - widescreen_width) / 2;
+		 		$(".widescreen").width(widescreen_width);
+		 		$(".widescreen").height(player_height);
+		 		$(".widescreen").css({"border-top": "none", "border-bottom" : "none", "margin-left" : margin_left});
 		 	}else{
 				var height = ($("form input[name=width]").val()/4)*3;
+				var player_height = parseInt(height,10);
+				var standard_height = (player_height * 3) / 4;
+				var margin_top = (player_height - standard_height) / 2;
+				$(".standard").width(player_width);
+		 		$(".standard").height(standard_height);
+		 		$(".standard").css({"border-left": "none", "border-right" : "none", "margin-top" : margin_top });
 		 	}
-	 		$(".height").text(parseInt(height,10));
+	 		$(".height").text(player_height);
+	 		$(".template-preview").height(player_height);
  		};
  		$("form input[name=width]").change(updateHeightValue);
  		$("form input[name=ratio]").change(updateHeightValue);
