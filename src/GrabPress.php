@@ -1438,6 +1438,26 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
 			}
 			wp_enqueue_script( 'thickbox' );
+
+			wp_enqueue_script( 'twitter-bootstrap', $plugin_url.'/js/bootstrap/bootstrap.min.js' );
+			/*
+			wp_enqueue_script( 'bootstrap-collapse', $plugin_url.'/js/bootstrap/bootstrap-collapse.js' );			
+			wp_enqueue_script( 'bootstrap-transition', $plugin_url.'/js/bootstrap/bootstrap-transition.js' );
+			wp_enqueue_script( 'bootstrap-alert', $plugin_url.'/js/bootstrap/bootstrap-alert.js' );
+			wp_enqueue_script( 'bootstrap-modal', $plugin_url.'/js/bootstrap/bootstrap-modal.js' );
+			wp_enqueue_script( 'bootstrap-dropdown', $plugin_url.'/js/bootstrap/bootstrap-dropdown.js' );
+			wp_enqueue_script( 'bootstrap-scrollspy', $plugin_url.'/js/bootstrap/bootstrap-scrollspy.js' );
+			wp_enqueue_script( 'bootstrap-tab', $plugin_url.'/js/bootstrap/bootstrap-tab.js' );
+			wp_enqueue_script( 'bootstrap-tooltip', $plugin_url.'/js/bootstrap/bootstrap-tooltip.js' );
+			wp_enqueue_script( 'bootstrap-popover', $plugin_url.'/js/bootstrap/bootstrap-popover.js' );
+			wp_enqueue_script( 'bootstrap-button', $plugin_url.'/js/bootstrap/bootstrap-button.js' );
+			wp_enqueue_script( 'bootstrap-collapse', $plugin_url.'/js/bootstrap/bootstrap-collapse.js' );
+			wp_enqueue_script( 'bootstrap-carousel', $plugin_url.'/js/bootstrap/bootstrap-carousel.js' );
+			wp_enqueue_script( 'bootstrap-typeahead', $plugin_url.'/js/bootstrap/bootstrap-typeahead.js' );
+			*/
+			
+
+			//wp_enqueue_script( 'html5', 'http://html5shim.googlecode.com/svn/trunk/html5.js' );
 			
 		}
 
@@ -1455,6 +1475,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_style( 'jquery-css', $plugin_url.'/css/grabpress.css' );
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
 			wp_enqueue_style( 'thickbox' );
+			wp_enqueue_style( 'bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
+			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );			
 
 		}
 
