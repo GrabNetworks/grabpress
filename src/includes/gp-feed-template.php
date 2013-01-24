@@ -19,14 +19,82 @@
 
 		global.previewVideos = function () {
 			var errors = hasValidationErrors();
-
 			if(!errors){
-				$("#form-create-feed input[name=action]").val("preview-feed");
-				$("#form-create-feed").submit();
+				
+	            global.previewdialog = $("<div id='preview-modal'>").dialog({
+	                modal: true,
+	                width:900,
+	                height:900,
+	                close: function(){
+	                	debugger;
+	                	var and = [], or = [], phrase = [], not = [],
+	                	kwrds = $("#keywords").val(),
+	                	regPhrase = /"[^"]*"/ig,
+	                	regOR = /OR\s+([a-zA-Z0-9_]*)/;
+
+	                	phrase = regPhrase.exec(kwrds);
+	                	if(!phrase){
+	                		phrase = [];
+	                	}else{
+	                		for (var i = phrase.length - 1; i >= 0; i--) {
+	                			phrase[i] = phrase[i].replace(/"/g, "");
+	                		}; 
+	                	}
+
+	                	kwrds = kwrds.replace(regPhrase, "");
+
+	                	or = regOR.exec(kwrds);
+	                	
+	                	if(!or){
+	                		or = [];
+	                	}else{
+	                		or = or.filter(function(n){return n.slice(0,2)!="OR";});
+	                	}
+
+						kwrds = kwrds.replace(regOR, "");
+
+						var words = kwrds.replace(/^\s+|\s+$/g, '').split(/\s+/);
+						for(var i=0;i<words.length;i++){
+							if(words[i][0] == "-"){
+								not.push(words[i].slice(1,words[i].length));
+							}else{
+								and.push(words[i]);
+							}
+						}
+						$("#form-create-feed input[name=keywords_and]").val(and.join(" "));
+                		$("#form-create-feed input[name=keywords_or]").val(or.join(" "));
+                		$("#form-create-feed input[name=keywords_not]").val(not.join(" "));
+                		$("#form-create-feed input[name=keywords_phrase]").val(phrase.join(" "));
+                		$("#preview-modal").remove();
+                		$("#channel-select-preview").multiselect("destroy");
+                		$("#provider-select-preview").multiselect("destroy");
+	                }
+	            });
+	            var data = {
+                	"action": "get_preview",
+                	"keywords_and": $("#form-create-feed input[name=keywords_and]").val(),
+                	"keywords_or": $("#form-create-feed input[name=keywords_or]").val(),
+                	"keywords_not": $("#form-create-feed input[name=keywords_not]").val(),
+                	"keywords_phrase": $("#form-create-feed input[name=keywords_phrase]").val(),
+                	"providers": $("#provider-select").val(),
+                	"channels": $("#channel-select").val(),
+                };
+	                	
+	            // load remote content
+	            previewdialog.load(
+	                ajaxurl,
+	                data,
+	                function (responseText, textStatus, XMLHttpRequest) {
+	                    // remove the loading class
+	                    previewdialog.removeClass('loading');
+	                }
+	            );
+	            //prevent the browser to follow the link
+	            return false;
 			}else{
 				alert(errors);
 			}
-		}
+		};
 
 		global.deleteFeed = function(id){
 			var bg_color = $('#tr-'+id+' td').css("background-color")
