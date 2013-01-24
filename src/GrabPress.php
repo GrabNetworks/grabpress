@@ -1107,7 +1107,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			//our popup's title
 			$title = 'Insert GrabMedia Video';
-			$onclick = 'tb_show("Grab Media Catalog", "admin-ajax.php?action=get_catalog&amp;width=900&amp;height=900" );';
+			$onclick = 'tb_show("Grab Media Catalog", "admin-ajax.php?action=gp_get_catalog&amp;width=900&amp;height=900" );';
 			//append the icon
 			$context .= "<a title='{$title}' href='#' onclick='{$onclick}' ><img src='{$img}' /></a>";
 			return $context;
@@ -1135,12 +1135,12 @@ if( is_admin() ){
 	add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 	add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
 	add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
-	add_action( 'wp_ajax_my_action', array( 'GrabPressViews', 'my_action_callback' ));
-	add_action( 'wp_ajax_delete_action', array( 'GrabPressViews', 'delete_action_callback' ));
-	add_action( 'wp_ajax_get_name_action', array( 'GrabPressViews', 'get_name_action_callback' ));
-	add_action( 'wp_ajax_get_mrss_format', array( 'GrabPressViews', 'get_mrss_format_callback' ));
-	add_action( 'wp_ajax_get_catalog', array( 'GrabPressViews', 'get_catalog_callback' ));
-	add_action( 'wp_ajax_get_preview', array( 'GrabPressViews', 'get_preview_callback' ));
+	add_action( 'wp_ajax_gp_toggle_feed', array( 'GrabPressViews', 'toggle_feed_callback' ));
+	add_action( 'wp_ajax_gp_delete_action', array( 'GrabPressViews', 'delete_feed_callback' ));
+	add_action( 'wp_ajax_gp_feed_name_unique', array( 'GrabPressViews', 'feed_name_unique_callback' ));
+	add_action( 'wp_ajax_gp_insert_video', array( 'GrabPressViews', 'insert_video_callback' ));
+	add_action( 'wp_ajax_gp_get_catalog', array( 'GrabPressViews', 'get_catalog_callback' ));
+	add_action( 'wp_ajax_gp_get_preview', array( 'GrabPressViews', 'get_preview_callback' ));
 	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );

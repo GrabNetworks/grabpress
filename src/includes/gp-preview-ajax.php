@@ -232,7 +232,7 @@
 			   duration: 'fast'
 			});
 			var submitSearch = function(){
-		   		var data = { "action" : "get_preview",
+		   		var data = { "action" : "gp_get_preview",
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#provider-select-preview").val(),
 		   					 "channels" : $("#channel-select-preview").val(),

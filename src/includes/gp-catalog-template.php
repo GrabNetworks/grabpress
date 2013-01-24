@@ -302,7 +302,7 @@
 		    var v_id = this.id.replace('btn-create-feed-single-','');
 
 		    var data = {
-				action: 'get_mrss_format',
+				action: 'gp_insert_video',
 				format : 'post',
 				video_id: v_id
 			};

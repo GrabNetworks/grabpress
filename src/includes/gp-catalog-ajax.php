@@ -261,7 +261,7 @@
 			   duration: 'fast'
 			});
 			var submitSearch = function(){
-		   		var data = { "action" : "get_catalog",
+		   		var data = { "action" : "gp_get_catalog",
 		   					 "empty" : false,
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#provider-select").val(),
@@ -274,7 +274,7 @@
 		   		});
 		   }
 		   	var submitClear = function(){
-		   		var data = { "action" : "get_catalog",
+		   		var data = { "action" : "gp_get_catalog",
 		   					 "empty" : true,
 		   					 "keywords" : $("#keywords").val(),
 		   					 "providers" : $("#provider-select").val(),
@@ -301,7 +301,7 @@
 			    var v_id = this.id.replace('btn-create-feed-single-','');
 
 			    var data = {
-					action: 'get_mrss_format',
+					action: 'gp_insert_video',
 					format : 'embed',
 					video_id: v_id
 				};

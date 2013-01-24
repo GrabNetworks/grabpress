@@ -395,7 +395,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			print GrabPress::fetch( 'includes/gp-dashboard.php' );
 		}
 
-		static function my_action_callback() {
+		static function toggle_feed_callback() {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );
@@ -426,7 +426,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die(); // this is required to return a proper result
 		}
 
-		static function delete_action_callback() {
+		static function delete_feed_callback() {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );	
@@ -437,7 +437,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die(); // this is required to return a proper result
 		}
 
-		static function get_name_action_callback() {	
+		static function feed_name_unique_callback() {
 			$name = $_REQUEST['name'];	
 
 			$feeds = GrabPress::get_feeds();
@@ -456,7 +456,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die(); // this is required to return a proper result
 		}
 		
-		static function get_mrss_format_callback() {	
+		static function insert_video_callback() {	
 			$video_id = $_REQUEST['video_id'];
 			$format = $_REQUEST['format'];
 			$id = GrabPress::get_connector_id();
