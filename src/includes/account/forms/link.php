@@ -64,7 +64,7 @@
 			$('#cancel_button').click(function(e){
 				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
-					$user = GrabPress::get_user();
+					$user = GrabPressAPI::get_user();
 					$linked = isset( $user->email );
 					if( $linked ){?>
 						'Money earned with this installation will continue to be credited to the account associated with the email address <?php echo $user->email; ?>.'

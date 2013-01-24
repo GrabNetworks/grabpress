@@ -5,14 +5,14 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 		static function grabpress_edit_feed($feed_id){
 			GrabPress::log();
-			$list_channels = GrabPress::get_channels();
+			$list_channels = GrabPressAPI::get_channels();
 			$channels_total = count( $list_channels );				
-			$list_providers = GrabPress::get_providers();
+			$list_providers = GrabPressAPI::get_providers();
 			$providers_total = count( $list_providers );
 
-			if ( GrabPress::validate_key() ) {
+			if ( GrabPressAPI::validate_key() ) {
 
-				$feed = GrabPress::get_feed($feed_id);
+				$feed = GrabPressAPI::get_feed($feed_id);
 				
 				$url = array();
 				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
@@ -93,11 +93,11 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 		static function prefill_feed(){
 			GrabPress::log();
-			if ( GrabPress::validate_key() ) {
-				$list_providers = GrabPress::get_providers();			
+			if ( GrabPressAPI::validate_key() ) {
+				$list_providers = GrabPressAPI::get_providers();			
 				$providers_total = count( $list_providers );
 
-				$list_channels = GrabPress::get_channels();
+				$list_channels = GrabPressAPI::get_channels();
 				$channels_total = count( $list_channels );
 
 				$blogusers = get_users();
@@ -153,18 +153,18 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$created_after = $created_after_date->format('Ymd');
 					$adv_search_params['created_after'] = $created_after;
 				}
-				if(count($request["providers"]) != count(GrabPress::get_providers())){
+				if(count($request["providers"]) != count(GrabPressAPI::get_providers())){
 					$adv_search_params["providers"] =  is_array($request['providers']) ? join($request['providers'], ","): "";
 				}
 
-				if(count($request["channels"]) != count(GrabPress::get_channels())){
+				if(count($request["channels"]) != count(GrabPressAPI::get_channels())){
 					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
 				}
 				$adv_search_params["sort_by"] = $request["sort_by"];
 
 				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
-				$json_preview = GrabPress::get_json($url_catalog);
+				$json_preview = GrabPressAPI::get_json($url_catalog);
 
 				$list_feeds = json_decode($json_preview, true);	
 				
@@ -177,8 +177,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			print GrabPress::fetch( 'includes/gp-catalog-template.php' ,
 				array( "form" => $request ,
-					"list_channels" => GrabPress::get_channels(),
-					"list_providers" => GrabPress::get_providers(),
+					"list_channels" => GrabPressAPI::get_channels(),
+					"list_providers" => GrabPressAPI::get_providers(),
 					"list_feeds" => $list_feeds,
 					"providers" => $request["providers"],
 					"channels" => $request["channels"]
@@ -210,17 +210,17 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$created_after = $created_after_date->format('Ymd');
 					$adv_search_params['created_after'] = $created_after;
 				}
-				if(count($request["providers"]) != count(GrabPress::get_providers())){
+				if(count($request["providers"]) != count(GrabPressAPI::get_providers())){
 					$adv_search_params["providers"] =  isset($request['providers']) ? join($request['providers'], ","): "";
 				}
-				if(count($request["channels"]) != count(GrabPress::get_channels())){
+				if(count($request["channels"]) != count(GrabPressAPI::get_channels())){
 					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
 				}
 				
 				$adv_search_params["sort_by"] = $request["sort_by"];
 				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
-				$json_preview = GrabPress::get_json($url_catalog);
+				$json_preview = GrabPressAPI::get_json($url_catalog);
 
 				$list_feeds = json_decode($json_preview, true);	
 
@@ -232,8 +232,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			}
 			print GrabPress::fetch("includes/gp-catalog-ajax.php", array(
 				"form" => $request,
-				"list_providers" => GrabPress::get_providers(),
-				"list_channels" => GrabPress::get_channels(),
+				"list_providers" => GrabPressAPI::get_providers(),
+				"list_channels" => GrabPressAPI::get_channels(),
 				"list_feeds" => $list_feeds,
 				"empty" => $empty,
 				"providers" => $request["providers"],
@@ -250,9 +250,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				"channels" => array());
 			$request = array_merge($defaults, $_REQUEST);
 
-			$providers =  GrabPress::get_providers();			
+			$providers =  GrabPressAPI::get_providers();			
 
-			$channels = GrabPress::get_channels();
+			$channels = GrabPressAPI::get_channels();
 			if(isset($request["keywords"])){
 				$adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
 			}else{
@@ -272,13 +272,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$adv_search_params['created_after'] = $created_after;
 			}
 
-			if(count($request["providers"]) != count(GrabPress::get_providers())){
+			if(count($request["providers"]) != count(GrabPressAPI::get_providers())){
 				$adv_search_params["providers"] =  is_array($request['providers']) ? join($request['providers'], ","): "";
 			}else{
 				unset($adv_search_params["providers"]);
 			}
 
-			if(count($request["channels"]) != count(GrabPress::get_channels())){
+			if(count($request["channels"]) != count(GrabPressAPI::get_channels())){
 				$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
 			}else{
 				unset($adv_search_params["categories"]);
@@ -287,7 +287,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
-			$json_preview = GrabPress::get_json($url_catalog);
+			$json_preview = GrabPressAPI::get_json($url_catalog);
 
 			$list_feeds = json_decode($json_preview, true);	
 			
@@ -297,8 +297,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			
 			print GrabPress::fetch( "includes/gp-preview-ajax.php", array(
 						"form" => $request ,
-						"list_channels" => GrabPress::get_channels(),
-						"list_providers" => GrabPress::get_providers(),
+						"list_channels" => GrabPressAPI::get_channels(),
+						"list_providers" => GrabPressAPI::get_providers(),
 						"list_feeds" => $list_feeds,
 						"providers" => $request["providers"],
 						"channels" => $request["channels"],
@@ -311,10 +311,10 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 		static function feed_management() {
 			GrabPress::log();
 
-			$list_providers = GrabPress::get_providers();			
+			$list_providers = GrabPressAPI::get_providers();			
 			$providers_total = count( $list_providers );
 
-			$list_channels = GrabPress::get_channels();
+			$list_channels = GrabPressAPI::get_channels();
 			$channels_total = count( $list_channels );
 
 			$blogusers = get_users();
@@ -347,8 +347,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			 	}else{
 					$height = (int)($request["width"]/4)*3;
 			 	}
-				$result = GrabPress::api_call( $request["action"]=="edit"?'PUT':"POST",
-				 '/connectors/'.GrabPress::get_connector_id().'/player_settings?api_key='.GrabPress::$api_key, array(
+				$result = GrabPressAPI::call( $request["action"]=="edit"?'PUT':"POST",
+				 '/connectors/'.GrabPressAPI::get_connector_id().'/player_settings?api_key='.GrabPress::$api_key, array(
 				 	"player_setting" => array(
 					 	"ratio" => $ratio,
 					 	"width" => $width,
@@ -407,9 +407,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				)
 			);
 
-			GrabPress::api_call( 'PUT', '/connectors/' . GrabPress::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
+			GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
 
-			$feeds = GrabPress::get_feeds();
+			$feeds = GrabPressAPI::get_feeds();
 			$num_feeds = count( $feeds );
 
 			$active_feeds = 0;
@@ -431,8 +431,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			$feed_id = intval( $_REQUEST['feed_id'] );	
 
-			$connector_id = GrabPress::get_connector_id();
-			GrabPress::api_call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
+			$connector_id = GrabPressAPI::get_connector_id();
+			GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
 
 			die(); // this is required to return a proper result
 		}
@@ -440,7 +440,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 		static function feed_name_unique_callback() {
 			$name = $_REQUEST['name'];	
 
-			$feeds = GrabPress::get_feeds();
+			$feeds = GrabPressAPI::get_feeds();
 			$num_feeds = count( $feeds );
 
 			foreach ( $feeds as $record_feed ) {
@@ -459,7 +459,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 		static function insert_video_callback() {	
 			$video_id = $_REQUEST['video_id'];
 			$format = $_REQUEST['format'];
-			$id = GrabPress::get_connector_id();
+			$id = GrabPressAPI::get_connector_id();
 			$url= 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/'.$video_id.'.mrss';
 			
 			$ch = curl_init();
@@ -548,7 +548,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 		}
 
 		static function get_preview_callback(){
-			GrabPress::grabpress_preview_videos();
+			GrabPressViews::grabpress_preview_videos();
 			die();
 		}
 	}

@@ -26,7 +26,6 @@
 	                width:900,
 	                height:900,
 	                close: function(){
-	                	debugger;
 	                	var and = [], or = [], phrase = [], not = [],
 	                	kwrds = $("#keywords").val(),
 	                	regPhrase = /"[^"]*"/ig,
@@ -457,7 +456,7 @@
 	</script>
 	<?php
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
-		$connector_id = GrabPress::get_connector_id();
+		$connector_id = GrabPressAPI::get_connector_id();
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
@@ -739,7 +738,7 @@
 </div>
 
 <?php
-	$feeds = GrabPress::get_feeds();
+	$feeds = GrabPressAPI::get_feeds();
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',

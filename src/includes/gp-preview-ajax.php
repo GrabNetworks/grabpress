@@ -16,8 +16,8 @@
 		$channel_text = count($channels)." of ".$channels_total." selected";
 	}
 
-	$id = GrabPress::get_connector_id();
-	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
+	$id = GrabPressAPI::get_connector_id();
+	$player_json = GrabPressAPI::call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_data = json_decode( $player_json, true );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';
 ?>

@@ -1,5 +1,5 @@
 <?php
-	$feeds = GrabPress::get_feeds();
+	$feeds = GrabPressAPI::get_feeds();
 	$num_feeds = count( $feeds ); 
 	$active_feeds = 0;
 
@@ -29,7 +29,7 @@
 			<th></th>
 		</tr>
 		<?php
-			$feeds = GrabPress::get_feeds();
+			$feeds = GrabPressAPI::get_feeds();
 			$num_feeds = count( $feeds );
 			
 

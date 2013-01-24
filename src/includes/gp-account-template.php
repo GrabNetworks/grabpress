@@ -2,7 +2,7 @@
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Earn money with a Grab Publisher Account</h2>
 			<?php
-				$user = GrabPress::get_user();
+				$user = GrabPressAPI::get_user();
 				$linked = isset( $user->email);
 				if( $linked ){?>
 			<p class="account-help">This installation is linked to <?php echo $user->email; ?></p>					
