@@ -610,12 +610,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
-			//GrabPress::grabpress_plugin_messages();
 		}
-
-		
-
-		
 
 		static function _filter_out_out_providers( $x ) {
 			return !$x->provider->opt_out;
@@ -1033,7 +1028,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function print_scripts() {
 			GrabPress::log();
 			// Plugin url
-			$plugin_url = trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
+			$plugin_url = GrabPress::grabpress_plugin_url();
 
 			// jQuery files
 
@@ -1064,7 +1059,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function grabpress_plugin_url(){
-			return trailingslashit( get_bloginfo( 'wpurl' ) ).PLUGINDIR.'/'. dirname( plugin_basename( __FILE__ ) );
+			return plugin_dir_url( __FILE__ ) ;
 		}
 
 		static function print_styles() {
@@ -1150,8 +1145,6 @@ if( is_admin() ){
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
 	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
-
-	if ( defined('ABSPATH') ){require_once(ABSPATH . 'wp-load.php');}
 }
 
 GrabPress::allow_tags();
