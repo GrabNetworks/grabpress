@@ -29,22 +29,26 @@
 									<div class="accordion" id="accordion2">
 										<div class="accordion-group">
 											<div class="accordion-heading">
-												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Collapsible Group Item #1</a>
+												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+												Collapsible Group Item #1
+												</a>
 											</div>
 											<div id="collapseOne" class="accordion-body collapse in">
 												<div class="accordion-inner">
-													Anim pariatur cliche...
+												Anim pariatur cliche...
 												</div>
 											</div>
 										</div>
 										<div class="accordion-group">
 											<div class="accordion-heading">
-													<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Collapsible Group Item #2</a>
+												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+											Collapsible Group Item #2
+												</a>
 											</div>
 											<div id="collapseTwo" class="accordion-body collapse">
-													<div class="accordion-inner">
-														Anim pariatur cliche...
-													</div>
+												<div class="accordion-inner">
+												Anim pariatur cliche...
+												</div>
 											</div>
 										</div>
 									</div>
@@ -175,27 +179,11 @@
 		    <!--***********************************************************-->		   
 		  </div>
 		</div>
-
-		<button type="button" id="btn-danger1" class="btn btn-danger">
-   Show All</button>
-
-   <button type="button" id="btn-danger2" class="btn btn-danger">
-        hide all</button>
-
 	
 </div>
 </form>
 <script type="text/javascript">
 	jQuery(function($){	
-		$("#btn-danger1").click(function() {
-			alert("Handler for .click() called.");
-			$('.collapse').not('.in').collapse('show');
-		});
-
-		$("#btn-danger2").click(function() {
-			alert("Handler for .click() called.");
-			$('.collapse.in').collapse('hide');
-		});
 		
 	});
 </script>

@@ -1469,8 +1469,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'thickbox' );
 
 			wp_enqueue_script( 'twitter-bootstrap', $plugin_url.'/js/bootstrap/bootstrap.min.js' );
-			/*
-			wp_enqueue_script( 'bootstrap-collapse', $plugin_url.'/js/bootstrap/bootstrap-collapse.js' );			
+			
+			//wp_enqueue_script( 'bootstrap-collapse', $plugin_url.'/js/bootstrap/bootstrap-collapse.js' );
+
+			/*			
 			wp_enqueue_script( 'bootstrap-transition', $plugin_url.'/js/bootstrap/bootstrap-transition.js' );
 			wp_enqueue_script( 'bootstrap-alert', $plugin_url.'/js/bootstrap/bootstrap-alert.js' );
 			wp_enqueue_script( 'bootstrap-modal', $plugin_url.'/js/bootstrap/bootstrap-modal.js' );

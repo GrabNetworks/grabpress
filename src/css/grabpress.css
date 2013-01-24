@@ -566,14 +566,3 @@ line-height: 24px;
     position: absolute;
     text-align: center;
 }
-
-.row-fluid [class*="span"] {
-    background-color: #EEEEEE;
-    border-radius: 3px 3px 3px 3px;
-    line-height: 40px;
-    min-height: 40px;
-    text-align: center;
-}
-.row-fluid [class*="span"] [class*="span"] {
-    background-color: #CCCCCC;
-}

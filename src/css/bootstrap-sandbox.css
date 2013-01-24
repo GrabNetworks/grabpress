@@ -354,3 +354,54 @@
 #t #b .media-grid li{display:inline;}
 #t #b .media-grid a{float:left;padding:4px;margin:0 0 18px 20px;border:1px solid #ddd;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075);-moz-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075);box-shadow:0 1px 1px rgba(0, 0, 0, 0.075);}#t #b .media-grid a img{display:block;}
 #t #b .media-grid a:hover{border-color:#0069d6;-webkit-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);-moz-box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);box-shadow:0 1px 4px rgba(0, 105, 214, 0.25);}
+
+/* Custom =======================================================*/
+#t #b .tab-content{
+	clear: both;
+}
+#t #b .accordion {
+    margin-bottom: 20px;
+    clear: both;
+}
+#t #b .accordion-group {
+    border: 1px solid #E5E5E5;
+    border-radius: 4px 4px 4px 4px;
+    margin-bottom: 2px;
+}
+#t #b .accordion-heading {
+    border-bottom: 0 none;
+}
+#t #b .accordion-toggle {
+    cursor: pointer;
+}
+#t #b .accordion-heading .accordion-toggle {
+    display: block;
+    padding: 8px 15px;
+}
+#t #b .collapse {
+    height: 0;
+    overflow: hidden;
+    position: relative;
+    transition: height 0.35s ease 0s;
+}
+#t #b .collapse.in {
+    height: auto;
+}
+#t #b .accordion-inner {
+    border-top: 1px solid #E5E5E5;
+    padding: 9px 15px;
+}
+
+
+/*
+#t #b .row-fluid [class*="span"] {
+    background-color: #EEEEEE;
+    border-radius: 3px 3px 3px 3px;
+    line-height: 40px;
+    min-height: 40px;
+    text-align: center;
+}
+#t #b .row-fluid [class*="span"] [class*="span"] {
+    background-color: #CCCCCC;
+}
+*/
