@@ -16,8 +16,8 @@
 		$channel_text = count($channels)." of ".$channels_total." selected";
 	}
 
-	$id = GrabPress::get_connector_id();
-	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
+	$id = GrabPressAPI::get_connector_id();
+	$player_json = GrabPressAPI::call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_data = json_decode( $player_json, true );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
@@ -302,7 +302,7 @@
 		    var v_id = this.id.replace('btn-create-feed-single-','');
 
 		    var data = {
-				action: 'get_mrss_format',
+				action: 'gp_insert_video',
 				format : 'post',
 				video_id: v_id
 			};

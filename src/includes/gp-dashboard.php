@@ -1,5 +1,5 @@
 <?php
-	$feeds = GrabPress::get_feeds();
+	$feeds = GrabPressAPI::get_feeds();
 	$num_feeds = count( $feeds );
 ?>
 <form method="post" action="" id="form-dashboard">

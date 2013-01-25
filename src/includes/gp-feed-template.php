@@ -26,7 +26,6 @@
 	                width:900,
 	                height:900,
 	                close: function(){
-	                	debugger;
 	                	var and = [], or = [], phrase = [], not = [],
 	                	kwrds = $("#keywords").val(),
 	                	regPhrase = /"[^"]*"/ig,
@@ -71,7 +70,7 @@
 	                }
 	            });
 	            var data = {
-                	"action": "get_preview",
+                	"action": "gp_get_preview",
                 	"keywords_and": $("#form-create-feed input[name=keywords_and]").val(),
                 	"keywords_or": $("#form-create-feed input[name=keywords_or]").val(),
                 	"keywords_not": $("#form-create-feed input[name=keywords_not]").val(),
@@ -104,7 +103,7 @@
 			var answer = confirm('Are you sure you want to delete this feed? You will no longer receive videos based on its settings. Existing video posts will not be deleted.');
 				if(answer){					
 				    var data = {
-						action: 'delete_action',
+						action: 'gp_delete_feed',
 						feed_id: id
 					};
 
@@ -162,7 +161,7 @@
 			var regx = /^[a-zA-Z0-9,\s]+$/;
 
 			var data = {
-				action: 'get_name_action',
+				action: 'gp_feed_name_unique',
 				name: name
 			};
 
@@ -343,7 +342,7 @@
 		    }		    
 
 		    var data = {
-				action: 'my_action',
+				action: 'gp_toggle_feed',
 				feed_id: id,
 				active: active
 			};
@@ -457,7 +456,7 @@
 	</script>
 	<?php
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
-		$connector_id = GrabPress::get_connector_id();
+		$connector_id = GrabPressAPI::get_connector_id();
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
@@ -739,7 +738,7 @@
 </div>
 
 <?php
-	$feeds = GrabPress::get_feeds();
+	$feeds = GrabPressAPI::get_feeds();
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
