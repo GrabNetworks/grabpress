@@ -327,7 +327,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					"blogusers" => $blogusers ) );
 		}
 
-		static function render_feed_creation_success(){
+		static function feed_creation_success(){
 			print GrabPress::fetch( "includes/gp-feed-created-template.php" );
 		}
 
@@ -359,7 +359,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				print GrabPress::fetch("includes/gp-template-modified.php");
 			}else{
 				$settings = $defaults;
-				$player = GrabPress::get_player_settings();
+				$player = GrabPressAPI::get_player_settings();
 
 				if($player){
 					$settings["width"] = $player["width"];
@@ -475,7 +475,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			$xmlString = str_replace( $search, $replace, $xml);
 			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
-			$settings = GrabPress::get_player_settings_for_embed();
+			$settings = GrabPressAPI::get_player_settings_for_embed();
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
 					$text = "<div id=\"grabpreview\"> 
