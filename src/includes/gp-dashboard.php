@@ -1,4 +1,7 @@
-
+<?php
+	$feeds = GrabPress::get_feeds();
+	$num_feeds = count( $feeds );
+?>
 <form method="post" action="" id="form-dashboard">
 
 <div class="wrap" >
@@ -120,23 +123,83 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
+										<?php
+											for ( $n = 0; $n < $num_feeds; $n++ ) {
+												$feed = $feeds[$n]->feed;
+												$url = array();
+												parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
+												GrabPress::_escape_params_template($url);
+												$feedId = $feed->id;
+												$providers = explode( ",", $url["providers"] ); // providers chosen by the user
+												$channels = explode( ",", $url["categories"] );
+												//echo "FEED: "; var_dump($feed); echo "<br/><br/>";
+										?>
+										<tr id="tr-<?php echo $feedId; ?>">
 											<td>
-												feed name
+												<?php 
+													echo urldecode($feed->name);
+												?>	
 											</td>
 											<td>
-												all 
+												<?php								
+													$providers_selected = count($providers);
+													if($providers_selected == 1){
+														if ( in_array( "", $providers ) ) {
+															echo "All providers";
+														}else{	
+															foreach ( $list_providers as $record_provider ) {
+																$provider = $record_provider->provider;
+																$provider_name = $provider->name;
+																$provider_id = $provider->id;											
+																if(in_array( $provider_id, $providers )) {											
+																	echo $provider_name;									
+																}
+															}
+														}
+													}else{
+														echo $providers_selected." selected";
+													}
+												?> 
 											</td>
 											<td>
 												25
 											</td>
 											<td>
+												<?php 												
+													if(isset($_GET['action'])=='edit-feed'){
+														echo $checked = ( $feed->watchlist  ) ? 'Yes' : 'No'; 
+												 	}else{ 
+														$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
+														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" />';
+													} 
+													//echo "<br/>";
+													/*
+													if(isset($_GET['action'])=='edit-feed'){
+														echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
+												 	}else{ 
+														$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
+														echo '<input '.$checked.' type="checkbox" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
+													} 
+													*/
+												?>
 												<i class="icon-eye-open"></i>
 											</td>
 											<td>
+												<?php 
+												$text_edit_button = "edit";
+												if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){ 
+													echo $text_edit_button;
+												 }else{ ?>				
+												<a href="admin.php?page=autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="<?php echo $class_edit_button; ?> btn-update-feed">						
+													<?php echo $text_edit_button; ?>
+												</a>
+												<?php } ?>
 												<i class="icon-pencil"></i>
 											</td>
 										</tr>
+										<?php
+											}
+										?>
 									</tbody>
 								</table>
 							</div>
@@ -184,6 +247,63 @@
 </form>
 <script type="text/javascript">
 	jQuery(function($){	
-		
+
+		$('.watchlist-check').bind('click', function(e){
+
+        var id = this.id.replace('watchlist-check-','');
+        var watchlist_check = $(this);
+
+        if(watchlist_check.is(':checked')) {
+            var watchlist = 1;           
+            $('#tr-'+id+' td').css("background-color","#FFE4C4");
+        }else{
+          var watchlist = 0;
+          $('#tr-'+id+' td').css("background-color","#DCDCDC");         
+        }       
+
+        /*
+        var data = {
+	        action: 'my_action',
+	        feed_id: id,
+	        active: active
+	    };
+	    */
+/*
+      $.post(ajaxurl, data, function(response) {
+	        //alert('Got this from the server: ' + response);
+	        var substr = response.split('-');
+	        var num_active_feeds = substr[0];
+	        var num_feeds =  substr[1];
+	        var noun = 'feed';  
+	        var autoposter_status = 'ON';
+	        var feeds_status = 'active';    
+
+	        
+	        //if( (num_active_feeds == 1) || (num_feeds == 1) ){
+	        //  noun = 'feed';  
+	        //}else 
+	        if(num_active_feeds == 0){
+	          var autoposter_status = 'OFF';
+	          var feeds_status = 'inactive';
+	          response = '';          
+	          num_active_feeds = num_feeds;
+	          if(num_feeds > 1){
+	            noun = noun + 's';
+	          }         
+	        }else if( (num_active_feeds == 1) ){
+	          noun = 'feed';  
+	        }else{
+	          noun = noun + 's';
+	        }
+	        
+	        $('#num-active-feeds').text(num_active_feeds);  
+	        $('#noun-active-feeds').text(noun);
+
+	        $('#autoposter-status').text(autoposter_status);
+	        $('#feeds-status').text(feeds_status);
+	      });
+		*/
+      }); 
+
 	});
 </script>

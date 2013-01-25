@@ -370,6 +370,7 @@
 }
 #t #b .accordion-heading {
     border-bottom: 0 none;
+    background-color: #EEE;
 }
 #t #b .accordion-toggle {
     cursor: pointer;
@@ -390,6 +391,13 @@
 #t #b .accordion-inner {
     border-top: 1px solid #E5E5E5;
     padding: 9px 15px;
+}
+#t #b .watchlist, #t #b .messages, #t #b .feeds, #t #b .faq{
+	border: 1px solid #000;
+}
+
+#t #b table th {
+    background-color: #CCCCCC;
 }
 
 
