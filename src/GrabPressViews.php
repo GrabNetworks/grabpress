@@ -551,5 +551,25 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			GrabPressViews::grabpress_preview_videos();
 			die();
 		}
+
+		static function toggle_watchlist_callback() {
+			global $wpdb; // this is how you get access to the database
+
+			$feed_id = intval( $_REQUEST['feed_id'] );
+			$watchlist = intval( $_REQUEST['watchlist'] );							
+
+			$post_data = array(
+				'feed' => array(
+					'watchlist' => $watchlist
+				)
+			);
+
+			GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
+						
+			die(); // this is required to return a proper result
+
+			
+		}
+
 	}
 }

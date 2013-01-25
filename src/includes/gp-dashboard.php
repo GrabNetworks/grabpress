@@ -170,7 +170,7 @@
 														echo $checked = ( $feed->watchlist  ) ? 'Yes' : 'No'; 
 												 	}else{ 
 														$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
-														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" />';
+														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
 													} 
 													//echo "<br/>";
 													/*
@@ -261,48 +261,18 @@
           $('#tr-'+id+' td').css("background-color","#DCDCDC");         
         }       
 
-        /*
+        
         var data = {
-	        action: 'my_action',
+	        action: 'gp_toggle_watchlist',
 	        feed_id: id,
-	        active: active
+	        watchlist: watchlist
 	    };
-	    */
-/*
+	    
+
       $.post(ajaxurl, data, function(response) {
-	        //alert('Got this from the server: ' + response);
-	        var substr = response.split('-');
-	        var num_active_feeds = substr[0];
-	        var num_feeds =  substr[1];
-	        var noun = 'feed';  
-	        var autoposter_status = 'ON';
-	        var feeds_status = 'active';    
-
-	        
-	        //if( (num_active_feeds == 1) || (num_feeds == 1) ){
-	        //  noun = 'feed';  
-	        //}else 
-	        if(num_active_feeds == 0){
-	          var autoposter_status = 'OFF';
-	          var feeds_status = 'inactive';
-	          response = '';          
-	          num_active_feeds = num_feeds;
-	          if(num_feeds > 1){
-	            noun = noun + 's';
-	          }         
-	        }else if( (num_active_feeds == 1) ){
-	          noun = 'feed';  
-	        }else{
-	          noun = noun + 's';
-	        }
-	        
-	        $('#num-active-feeds').text(num_active_feeds);  
-	        $('#noun-active-feeds').text(noun);
-
-	        $('#autoposter-status').text(autoposter_status);
-	        $('#feeds-status').text(feeds_status);
-	      });
-		*/
+	        alert('Got this from the server: ' + response);
+	   });
+		
       }); 
 
 	});
