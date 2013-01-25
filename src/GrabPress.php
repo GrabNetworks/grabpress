@@ -195,6 +195,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function grabpress_plugin_menu() {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
+			add_submenu_page( 'grabpress', 'Dashboard', 'Dashboard', 'publish_posts', 'gp-dashboard', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );			
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
@@ -575,7 +576,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						break;
 					}
 				}
+
 				break;			
+			case 'gp-dashboard':
+           		GrabPressViews::dashboard_management($_REQUEST);
+				break;
 			case 'gp-template':
 				GrabPressViews::template_management($_REQUEST);
 				break;
@@ -612,6 +617,28 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
 			}
 			wp_enqueue_script( 'thickbox' );
+
+			wp_enqueue_script( 'twitter-bootstrap', $plugin_url.'/js/bootstrap/bootstrap.min.js' );
+			
+			//wp_enqueue_script( 'bootstrap-collapse', $plugin_url.'/js/bootstrap/bootstrap-collapse.js' );
+
+			/*			
+			wp_enqueue_script( 'bootstrap-transition', $plugin_url.'/js/bootstrap/bootstrap-transition.js' );
+			wp_enqueue_script( 'bootstrap-alert', $plugin_url.'/js/bootstrap/bootstrap-alert.js' );
+			wp_enqueue_script( 'bootstrap-modal', $plugin_url.'/js/bootstrap/bootstrap-modal.js' );
+			wp_enqueue_script( 'bootstrap-dropdown', $plugin_url.'/js/bootstrap/bootstrap-dropdown.js' );
+			wp_enqueue_script( 'bootstrap-scrollspy', $plugin_url.'/js/bootstrap/bootstrap-scrollspy.js' );
+			wp_enqueue_script( 'bootstrap-tab', $plugin_url.'/js/bootstrap/bootstrap-tab.js' );
+			wp_enqueue_script( 'bootstrap-tooltip', $plugin_url.'/js/bootstrap/bootstrap-tooltip.js' );
+			wp_enqueue_script( 'bootstrap-popover', $plugin_url.'/js/bootstrap/bootstrap-popover.js' );
+			wp_enqueue_script( 'bootstrap-button', $plugin_url.'/js/bootstrap/bootstrap-button.js' );
+			wp_enqueue_script( 'bootstrap-collapse', $plugin_url.'/js/bootstrap/bootstrap-collapse.js' );
+			wp_enqueue_script( 'bootstrap-carousel', $plugin_url.'/js/bootstrap/bootstrap-carousel.js' );
+			wp_enqueue_script( 'bootstrap-typeahead', $plugin_url.'/js/bootstrap/bootstrap-typeahead.js' );
+			*/
+			
+
+			//wp_enqueue_script( 'html5', 'http://html5shim.googlecode.com/svn/trunk/html5.js' );
 			
 		}
 
@@ -629,6 +656,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_style( 'jquery-css', $plugin_url.'/css/grabpress.css' );
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
 			wp_enqueue_style( 'thickbox' );
+			wp_enqueue_style( 'bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
+			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );			
 
 		}
 
@@ -698,6 +727,7 @@ if( is_admin() ){
 	add_action( 'wp_ajax_gp_insert_video', array( 'GrabPressViews', 'insert_video_callback' ));
 	add_action( 'wp_ajax_gp_get_catalog', array( 'GrabPressViews', 'get_catalog_callback' ));
 	add_action( 'wp_ajax_gp_get_preview', array( 'GrabPressViews', 'get_preview_callback' ));
+	add_action( 'wp_ajax_gp_toggle_watchlist', array( 'GrabPressViews', 'toggle_watchlist_callback' ));
 	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
