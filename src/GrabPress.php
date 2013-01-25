@@ -362,7 +362,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				switch ( $action ) {
 				case 'update':
 					if ( GrabPressAPI::validate_key() && $_REQUEST[ 'channel' ] != '' && $_REQUEST[ 'provider' ] != '' ) {
-						GrabPress::create_feed();
+						GrabPressAPI::create_feed();
 						GrabPressViews::feed_creation_success();
 					}else {
 						GrabPress::$invalid = true;
@@ -559,7 +559,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					switch ( $_REQUEST[ 'action' ] ) {
 						case 'update':
 						if ( GrabPressAPI::validate_key() && $_REQUEST[ 'channel' ] != '' && $_REQUEST[ 'provider' ] != '' ) {
-							GrabPress::create_feed();
+							GrabPressAPI::create_feed();
 							GrabPressViews::feed_creation_success();
 						}else {
 							GrabPress::$invalid = true;
