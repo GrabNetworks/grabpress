@@ -391,8 +391,20 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 		static function dashboard_management($request) {
 			GrabPress::log();
-
-			print GrabPress::fetch( 'includes/gp-dashboard.php' );
+			$broadcast_json = GrabPressAPI::call( "GET",
+				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=1");
+			$cookie_json = GrabPressAPI::call( "GET",
+				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=2");
+			$resources_json = GrabPressAPI::call( "GET",
+				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=3");
+			$messages = json_decode($broadcast_json);
+			$cookies = json_decode($cookie_json);
+			$resources = json_decode($resources_json);
+			print GrabPress::fetch( 'includes/gp-dashboard.php' , array(
+				"messages" => $messages,
+				"cookies" => $cookies,
+				"resources" => $resources
+				));
 		}
 
 		static function toggle_feed_callback() {
