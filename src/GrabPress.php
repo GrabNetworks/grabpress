@@ -722,7 +722,7 @@ if( is_admin() ){
 	add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
 	add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
 	add_action( 'wp_ajax_gp_toggle_feed', array( 'GrabPressViews', 'toggle_feed_callback' ));
-	add_action( 'wp_ajax_gp_delete_action', array( 'GrabPressViews', 'delete_feed_callback' ));
+	add_action( 'wp_ajax_gp_delete_feed', array( 'GrabPressViews', 'delete_feed_callback' ));
 	add_action( 'wp_ajax_gp_feed_name_unique', array( 'GrabPressViews', 'feed_name_unique_callback' ));
 	add_action( 'wp_ajax_gp_insert_video', array( 'GrabPressViews', 'insert_video_callback' ));
 	add_action( 'wp_ajax_gp_get_catalog', array( 'GrabPressViews', 'get_catalog_callback' ));
