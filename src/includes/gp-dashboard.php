@@ -69,7 +69,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="span8">
+					<div class="span8" style="display: table;">
 						<div clas="row-fluid">
 							<div class="span3 messages">
 								<ul class="nav nav-tabs">
@@ -100,7 +100,15 @@
 										</p>
 									</div>
 								</div>
+							</div>	
+
+							<div class="span3 welcome">
+								<p>
+									Thank you for installing GrabPress! <a href="#">Sign up</a> for
+								or <a href="#">link an existing</a> Grab Media Publisher Account
+								</p>
 							</div>
+						
 							<div class="span5 feeds">
 								<table class="table table-hover">
 									<thead>
@@ -204,6 +212,8 @@
 								</table>
 							</div>
 						</div>
+	
+
 						<div clas="row-fluid">
 							<div class="span8 faq">
 								<ul class="nav nav-tabs">
@@ -244,6 +254,30 @@
 		</div>
 	
 </div>
+<table style="border:1px solid #000;">
+	<tr>
+		<td style="border:1px solid red;">Col1 row1</td>
+		<td style="border:1px solid red;" rowspan="2">Col2 row1</td>
+	</tr>
+	<tr>
+		<td style="border:1px solid red;">Col1 row2</td>
+	</tr>
+</table>
+
+<div style="display: table; width:300px; border: 1px solid black; border-spacing: 2px;">  
+  <div style="display: table-cell; width: 100px;">
+    <div style="border: 1px solid black; margin-bottom: 2px;">
+      Here is some sample text. And some additional sample text.
+    </div>
+    <div style="border: 1px solid black;">
+      Here is some sample text. And some additional sample text.
+    </div>
+  </div>
+  <div style="display: table-cell; border: 1px solid black; vertical-align: middle;">
+    This column should equal the height (no fixed-height allowed) of the 2 rows sitting to the right.
+  </div>
+</div>
+
 </form>
 <script type="text/javascript">
 	jQuery(function($){	
@@ -260,14 +294,12 @@
           var watchlist = 0;
           $('#tr-'+id+' td').css("background-color","#DCDCDC");         
         }       
-
         
         var data = {
 	        action: 'gp_toggle_watchlist',
 	        feed_id: id,
 	        watchlist: watchlist
-	    };
-	    
+	    };	    
 
       $.post(ajaxurl, data, function(response) {
 	        //alert('Got this from the server: ' + response);
