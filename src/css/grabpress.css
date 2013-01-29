@@ -195,29 +195,23 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
 }
 .template-preview{        
     border: 1px solid black;
-    float:left;
-    height:333px;        
-    margin: 0 0 0 20px;
+    float:left;       
+    margin: 9px 0 0 20px;
     padding: 0;
     text-align: center; 
-    width:600px;
 }
 .template-preview .widescreen{
     border-left: 2px dotted red;
     border-right: 2px dotted red;
     display: block;
-    height: 333px;
     margin-left: 70px;
     position: absolute;
-    width: 460px; 
 }
 .template-preview .standard{
     border-top: 2px dotted blue;
     border-bottom: 2px dotted blue;
     display: block;
-    height: 252px;
     margin-top: 40px;
-    width: 480px;
 }
 .result-tile:hover {
 cursor: pointer;
@@ -559,10 +553,15 @@ line-height: 24px;
     float: none;
     margin-left: 200px;
 }
-.grabgear{  
-    bottom: 50%;
-    *bottom: -70px;
+.grabgear{ 
+     bottom: 50%;
+    *bottom: -70px;    
     left: 50%;
+    width: 68px;
+    height: 68px;
+    margin-top: -34px;
+    margin-left: -34px;
     position: absolute;
-    text-align: center;
+    z-index: 16777271;/* lowest maximum z-index supported cross-browser (safari 3 was 24bit) */
+    top: 50%;
 }

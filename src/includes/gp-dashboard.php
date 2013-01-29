@@ -69,24 +69,41 @@
 							</div>
 						</div>
 					</div>
-					<div class="span8">
-						<div clas="row-fluid">
-							<div class="span3 messages">
-								<ul class="nav nav-tabs">
-										<li class="active">
-											<a href="#messages-tab1" data-toggle="tab">messages</a>
-										</li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane active" id="messages-tab1">
-										<?php foreach($messages as $msg){ ?>
-										<p>
-											<?php echo $msg->message->body; ?>
-										</p>
-										<?php }?>
-									</div>
+					<div class="span8" style="display: table;">
+						<div class="row-fluid">
+							<div class="span3">
+								<div class="row-fluid">
+									<div class="span12 messages">
+										<ul class="nav nav-tabs">
+												<li class="active">
+													<a href="#messages-tab1" data-toggle="tab">messages</a>
+												</li>
+										</ul>
+										<div class="tab-content">
+											<div class="tab-pane active" id="messages-tab1">
+												<?php foreach($messages as $msg){ ?>
+												<p>
+													<?php echo $msg->message->body; ?>
+												</p>
+												<?php }?>
+											</div>
+										</div>
+									</div>										
+								</div>
+								<div class="row-fluid">
+																<div class="span12 welcome">
+								<p>
+									Thank you for installing GrabPress! <a href="#">Sign up</a> for
+								or <a href="#">link an existing</a> Grab Media Publisher Account
+								</p>
+							</div>
+									
 								</div>
 							</div>
+
+
+
+						
 							<div class="span5 feeds">
 								<table class="table table-hover">
 									<thead>
@@ -181,6 +198,8 @@
 								</table>
 							</div>
 						</div>
+	
+
 						<div clas="row-fluid">
 							<div class="span8 faq">
 								<ul class="nav nav-tabs">
@@ -207,6 +226,7 @@
 		</div>
 	
 </div>
+
 </form>
 <script type="text/javascript">
 	jQuery(function($){	
@@ -223,14 +243,12 @@
           var watchlist = 0;
           $('#tr-'+id+' td').css("background-color","#DCDCDC");         
         }       
-
         
         var data = {
 	        action: 'gp_toggle_watchlist',
 	        feed_id: id,
 	        watchlist: watchlist
-	    };
-	    
+	    };	    
 
       $.post(ajaxurl, data, function(response) {
 	        //alert('Got this from the server: ' + response);
