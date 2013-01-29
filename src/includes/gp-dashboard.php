@@ -30,30 +30,22 @@
 							<div class="tab-content">
 								<div class="tab-pane active" id="watchlist-tab1">
 									<div class="accordion" id="accordion2">
+										<?php $i = 1;?>
+										<?php foreach($watchlist as $item){?>
 										<div class="accordion-group">
 											<div class="accordion-heading">
-												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-												Collapsible Group Item #1
+												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+												<?php echo $item->video->title;?>
 												</a>
 											</div>
-											<div id="collapseOne" class="accordion-body collapse in">
+											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in">
 												<div class="accordion-inner">
 												Anim pariatur cliche...
 												</div>
 											</div>
 										</div>
-										<div class="accordion-group">
-											<div class="accordion-heading">
-												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-											Collapsible Group Item #2
-												</a>
-											</div>
-											<div id="collapseTwo" class="accordion-body collapse">
-												<div class="accordion-inner">
-												Anim pariatur cliche...
-												</div>
-											</div>
-										</div>
+										<?php $i++;
+										}?>
 									</div>
 								</div>
 								<div class="tab-pane" id="watchlist-tab2">
@@ -91,19 +83,16 @@
 									</div>										
 								</div>
 								<div class="row-fluid">
-																<div class="span12 welcome">
-								<p>
-									Thank you for installing GrabPress! <a href="#">Sign up</a> for
-								or <a href="#">link an existing</a> Grab Media Publisher Account
-								</p>
-							</div>
+									<div class="span12 welcome">
+										<?php foreach($pills as $msg){ ?>
+										<p>
+											<?php echo html_entity_decode($msg->message->body); ?>
+										</p>
+										<?php }?>
+								</div>
 									
 								</div>
 							</div>
-
-
-
-						
 							<div class="span5 feeds">
 								<table class="table table-hover">
 									<thead>
