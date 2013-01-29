@@ -76,28 +76,14 @@
 										<li class="active">
 											<a href="#messages-tab1" data-toggle="tab">messages</a>
 										</li>
-										<li>
-											<a href="#messages-tab2" data-toggle="tab">read</a>
-										</li>
-										<li>
-											<a href="#messages-tab3" data-toggle="tab">allofthem</a>
-										</li>
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="messages-tab1">
+										<?php foreach($messages as $msg){ ?>
 										<p>
-											I'm in Section 1.
+											<?php echo $msg->message->body; ?>
 										</p>
-									</div>
-									<div class="tab-pane" id="messages-tab2">
-										<p>
-											Howdy, I'm in Section 2.
-										</p>
-									</div>
-									<div class="tab-pane" id="messages-tab3">
-										<p>
-											Howdy, I'm in Section 3.
-										</p>
+										<?php }?>
 									</div>
 								</div>
 							</div>	
@@ -179,16 +165,7 @@
 												 	}else{ 
 														$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
 														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
-													} 
-													//echo "<br/>";
-													/*
-													if(isset($_GET['action'])=='edit-feed'){
-														echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
-												 	}else{ 
-														$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
-														echo '<input '.$checked.' type="checkbox" value="1" name="active" class="active-check" id="active-check-'.$feedId.'" />';
-													} 
-													*/
+													}
 												?>
 												<i class="icon-eye-open"></i>
 											</td>
@@ -220,28 +197,14 @@
 									<li class="active">
 										<a href="#faq-tab1" data-toggle="tab">Resources</a>
 									</li>
-									<li>
-										<a href="#faq-tab2" data-toggle="tab">Tutorials</a>
-									</li>
-									<li>
-										<a href="#faq-tab3" data-toggle="tab">Feedback</a>
-									</li>
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="faq-tab1">
+										<?php foreach($resources as $msg){ ?>
 										<p>
-											Resources
+											<?php echo html_entity_decode($msg->message->body); ?>
 										</p>
-									</div>
-									<div class="tab-pane" id="faq-tab2">
-										<p>
-											Tutorials
-										</p>
-									</div>
-									<div class="tab-pane" id="faq-tab3">
-										<p>
-											Feedback
-										</p>
+										<?php }?>
 									</div>
 								</div>
 							</div>
