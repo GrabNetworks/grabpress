@@ -368,21 +368,18 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$settings["ratio"] = $player["ratio"]=="16:9"?"widescreen":"standard";
 					if($settings["ratio"] == "widescreen"){
 			 			$player_height = (int)($player["width"]/16)*9;
+			 			$settings["widescreen_selected"] = true;
+						$settings["standard_selected"] = false;
 				 	}else{
 						$player_height = (int)($player["width"]/4)*3;
+						$settings["widescreen_selected"] = false;
+						$settings["standard_selected"] = true;
 				 	}
 				 	
 				 	$settings["height"] = $player_height;				 	
 					$settings["action"] = "edit";
 				}
-
-				if($settings["ratio"] =="widescreen"){
-					$settings["widescreen_selected"] = true;
-					$settings["standard_selected"] = false;
-				}else{
-					$settings["widescreen_selected"] = false;
-					$settings["standard_selected"] = true;
-				}
+				/*
 				if($settings["playback"] == "auto"){
 					$settings["auto_selected"] = true;
 					$settings["click_selected"] = false;
@@ -390,6 +387,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$settings["auto_selected"] = false;
 					$settings["click_selected"] = true;
 				}
+				*/
 
 				
 

@@ -226,29 +226,6 @@
 		</div>
 	
 </div>
-<table style="border:1px solid #000;">
-	<tr>
-		<td style="border:1px solid red;">Col1 row1</td>
-		<td style="border:1px solid red;" rowspan="2">Col2 row1</td>
-	</tr>
-	<tr>
-		<td style="border:1px solid red;">Col1 row2</td>
-	</tr>
-</table>
-
-<div style="display: table; width:300px; border: 1px solid black; border-spacing: 2px;">  
-  <div style="display: table-cell; width: 100px;">
-    <div style="border: 1px solid black; margin-bottom: 2px;">
-      Here is some sample text. And some additional sample text.
-    </div>
-    <div style="border: 1px solid black;">
-      Here is some sample text. And some additional sample text.
-    </div>
-  </div>
-  <div style="display: table-cell; border: 1px solid black; vertical-align: middle;">
-    This column should equal the height (no fixed-height allowed) of the 2 rows sitting to the right.
-  </div>
-</div>
 
 </form>
 <script type="text/javascript">
