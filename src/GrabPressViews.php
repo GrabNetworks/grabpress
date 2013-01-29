@@ -343,9 +343,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$ratio = $request["ratio"]=="widescreen"?"16:9":"4:3";
 				$width = $request["width"];
 	  			if($ratio == "16:9"){
-			 		$height = (int)($request["width"]/16)*9;
+			 		$height = (int)(($request["width"]/16)*9);
 			 	}else{
-					$height = (int)($request["width"]/4)*3;
+					$height = (int)(($request["width"]/4)*3);
 			 	}
 				$result = GrabPressAPI::call( $request["action"]=="edit"?'PUT':"POST",
 				 '/connectors/'.GrabPressAPI::get_connector_id().'/player_settings?api_key='.GrabPress::$api_key, array(
@@ -362,19 +362,24 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$player = GrabPressAPI::get_player_settings();
 
 				if($player){
-					$settings["width"] = $player["width"];
+					$settings["width"] = $player["width"];			
 					$settings["height"] = $player["height"];
+					
 					$settings["ratio"] = $player["ratio"]=="16:9"?"widescreen":"standard";
+					if($settings["ratio"] == "widescreen"){
+			 			$player_height = (int)($player["width"]/16)*9;
+			 			$settings["widescreen_selected"] = true;
+						$settings["standard_selected"] = false;
+				 	}else{
+						$player_height = (int)($player["width"]/4)*3;
+						$settings["widescreen_selected"] = false;
+						$settings["standard_selected"] = true;
+				 	}
+				 	
+				 	$settings["height"] = $player_height;				 	
 					$settings["action"] = "edit";
 				}
-
-				if($settings["ratio"] =="widescreen"){
-					$settings["widescreen_selected"] = true;
-					$settings["standard_selected"] = false;
-				}else{
-					$settings["widescreen_selected"] = false;
-					$settings["standard_selected"] = true;
-				}
+				/*
 				if($settings["playback"] == "auto"){
 					$settings["auto_selected"] = true;
 					$settings["click_selected"] = false;
@@ -382,6 +387,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$settings["auto_selected"] = false;
 					$settings["click_selected"] = true;
 				}
+				*/
+
+				
 
 			print GrabPress::fetch("includes/gp-template.php", array(
 				"form" => $settings
