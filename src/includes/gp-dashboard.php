@@ -6,8 +6,7 @@
 
 <div class="wrap" >
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
-			<h2>GrabPress: Find a Video in our Catalog</h2>
-			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
+			<h2>GrabPress: Dashboard</h2>
 
 		<div id="t">
 		  <div id="b">		    
