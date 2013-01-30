@@ -397,18 +397,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			}
 			return true;
 		}
-		static function delete_connector() {
-			GrabPress::log();
-			$connector_id = GrabPressAPI::get_connector_id();
-
-			$response = GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/deactivate?api_key='.GrabPress::$api_key );
-			delete_option( 'grabpress_key' );
-			$grab_user = get_user_by('login', 'grabpress');
-			$current_user = wp_get_current_user();
-			wp_delete_user( $grab_user->id, $current_user->id );
-			$response_delete = GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '?api_key=' . GrabPress::$api_key );
-			GrabPress::$message = 'GrabPress has been deactivated. Any posts that used to be credited to the "grabpress" user are now assigned to you. XML-RPC is still enabled, unless you are using it for anything else, we recommend you turn it off.';
-		}
+		
 		static function _filter_out_out_providers( $x ) {
 			return !$x->provider->opt_out;
 		}
