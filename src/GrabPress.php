@@ -648,6 +648,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			wp_enqueue_script( 'thickbox' );
 
+
 			wp_enqueue_script( 'twitter-bootstrap', $plugin_url.'/js/bootstrap/bootstrap.min.js'  , array("jquery"));
 
 			wp_enqueue_style( 'jquery-css', $plugin_url.'/css/grabpress.css' );
