@@ -3,7 +3,7 @@
 if ( ! class_exists( 'GrabPressViews' ) ) {
 	class GrabPressViews {
 
-		static function grabpress_edit_feed($feed_id){
+		static function edit_feed($feed_id){
 			GrabPress::log();
 			$list_channels = GrabPressAPI::get_channels();
 			$channels_total = count( $list_channels );				

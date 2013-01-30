@@ -454,7 +454,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				case 'edit-feed':			
 					$feed_id = $_REQUEST['feed_id'];
-					GrabPressViews::grabpress_edit_feed($feed_id);
+					GrabPressViews::edit_feed($feed_id);
 					break;	
 				case 'prefill':
 					GrabPressViews::prefill_feed();
