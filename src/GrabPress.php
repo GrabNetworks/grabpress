@@ -145,7 +145,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$response = GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/deactivate?api_key='.GrabPress::$api_key );
 			$response_delete = GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '?api_key=' . GrabPress::$api_key );
-			
+
 			delete_option( 'grabpress_key' );
 			$grab_user = get_user_by('login', 'grabpress');
 			$current_user = wp_get_current_user();
@@ -600,9 +600,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				break;
 			}
 		}
-
-		static function print_scripts() {
-			GrabPress::log();
+		static function grabpress_plugin_url(){
+			return plugin_dir_url( __FILE__ ) ;
+		}
+		static function enqueue_scripts($page) {
+			GrabPress::log("DEBUG ".$page);
+			$handlerparts = explode("_", $page);
+			if($handlerparts[0] !="grabpress" && $page != "post-new.php" && $page != "post.php"){
+				return;
+			}
+			GrabPress::log("DEBUG loading scripts");
 			// Plugin url
 			$plugin_url = GrabPress::grabpress_plugin_url();
 
@@ -618,64 +625,28 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			wp_enqueue_script( 'jquery-ui-filter', $plugin_url.'/js/ui/multi/jquery.multiselect.filter.min.js' , array("jquery-ui-widget"));
 			wp_enqueue_script( 'jquery-ui-multiselect', $plugin_url.'/js/ui/multi/jquery.multiselect.min.js', array("jquery-ui-widget" ));
-			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js' );
-			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' );
-			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' );
+			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js', array("jquery-ui-widget" ));
+			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' , array("jquery"));
+			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
 
 			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
 
 			$wpversion = floatval(get_bloginfo('version'));
 			if ( $wpversion <= 3.1 ) {		
-			    wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.1.8.7.js' );
+			    wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.1.8.7.js'  , array("jquery"));
 			}else{				
-				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' );
+				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' , array("jquery") );
 			}
 			wp_enqueue_script( 'thickbox' );
 
-			wp_enqueue_script( 'twitter-bootstrap', $plugin_url.'/js/bootstrap/bootstrap.min.js' );
-			
-			//wp_enqueue_script( 'bootstrap-collapse', $plugin_url.'/js/bootstrap/bootstrap-collapse.js' );
-
-			/*			
-			wp_enqueue_script( 'bootstrap-transition', $plugin_url.'/js/bootstrap/bootstrap-transition.js' );
-			wp_enqueue_script( 'bootstrap-alert', $plugin_url.'/js/bootstrap/bootstrap-alert.js' );
-			wp_enqueue_script( 'bootstrap-modal', $plugin_url.'/js/bootstrap/bootstrap-modal.js' );
-			wp_enqueue_script( 'bootstrap-dropdown', $plugin_url.'/js/bootstrap/bootstrap-dropdown.js' );
-			wp_enqueue_script( 'bootstrap-scrollspy', $plugin_url.'/js/bootstrap/bootstrap-scrollspy.js' );
-			wp_enqueue_script( 'bootstrap-tab', $plugin_url.'/js/bootstrap/bootstrap-tab.js' );
-			wp_enqueue_script( 'bootstrap-tooltip', $plugin_url.'/js/bootstrap/bootstrap-tooltip.js' );
-			wp_enqueue_script( 'bootstrap-popover', $plugin_url.'/js/bootstrap/bootstrap-popover.js' );
-			wp_enqueue_script( 'bootstrap-button', $plugin_url.'/js/bootstrap/bootstrap-button.js' );
-			wp_enqueue_script( 'bootstrap-collapse', $plugin_url.'/js/bootstrap/bootstrap-collapse.js' );
-			wp_enqueue_script( 'bootstrap-carousel', $plugin_url.'/js/bootstrap/bootstrap-carousel.js' );
-			wp_enqueue_script( 'bootstrap-typeahead', $plugin_url.'/js/bootstrap/bootstrap-typeahead.js' );
-			*/
-			
-
-			//wp_enqueue_script( 'html5', 'http://html5shim.googlecode.com/svn/trunk/html5.js' );
-			
-		}
-
-		static function grabpress_plugin_url(){
-			return plugin_dir_url( __FILE__ ) ;
-		}
-
-		static function print_styles() {
-			GrabPress::log();
-			// Plugin url
-			$plugin_url = GrabPress::grabpress_plugin_url();
-
-			// CSS files
+			wp_enqueue_script( 'twitter-bootstrap', $plugin_url.'/js/bootstrap/bootstrap.min.js'  , array("jquery"));
 
 			wp_enqueue_style( 'jquery-css', $plugin_url.'/css/grabpress.css' );
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
 			wp_enqueue_style( 'thickbox' );
 			wp_enqueue_style( 'bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
 			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );			
-
 		}
-
-		
 
 		static function content_by_request( $content, $post )
 		{
@@ -728,8 +699,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 }//ifndefclass
 if( is_admin() ){
 	GrabPress::log( '-------------------------------------------------------' );
-	add_action( 'admin_print_styles', array( 'GrabPress', 'print_styles' ) );
-	add_action( 'admin_print_scripts', array( 'GrabPress', 'print_scripts' ) );
+	add_action( 'admin_enqueue_scripts', array( 'GrabPress', 'enqueue_scripts' ) );
 	register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
 	register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector' ));
 	add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
