@@ -414,7 +414,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				"messages" => $messages,
 				"pills" => $pills,
 				"resources" => $resources,
-				"watchlist" => $watchlist
+				"watchlist" => array_splice($watchlist,0,10)
 				));
 		}
 
