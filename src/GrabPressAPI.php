@@ -343,9 +343,6 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			if ( $api_key ) {
 				update_option( 'grabpress_key', $api_key );//store api key
 			}
-			if ( ! isset( GrabPress::$api_key ) ) {
-				GrabPress::abort( 'Error retrieving API Key' );//unless storing failed
-			}
 
 			GrabPress::$api_key = get_option( 'grabpress_key' );//retreive api key from storage
 			/*
