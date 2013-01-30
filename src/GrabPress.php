@@ -457,7 +457,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPressViews::grabpress_edit_feed($feed_id);
 					break;	
 				case 'prefill':
-					GrabPressViews::grabpress_prefill_feed();
+					GrabPressViews::prefill_feed();
 				break;	
 				case 'default':
 				default:				
