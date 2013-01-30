@@ -548,7 +548,11 @@ line-height: 24px;
 #TB_window #TB_title{
     z-index: 105 !important;
 }
+/*-Preview page ------------*/
 
+
+
+/*--------------------------*/
 #preview-feed #btn-create-feed{
     float: none;
     margin-left: 200px;
