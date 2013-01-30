@@ -319,7 +319,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		static function create_connection() {
 			GrabPress::log();
 			$user_url = get_site_url();
-			$user_nicename = 'grabpress';
+			$user_nicename = GrabPress::$grabpress_user;
 			$user_login = $user_nicename;
 			$url_array = explode(  '/', $user_url );
 			$email_host =  substr( $url_array[ 2 ], 4, 13 );
@@ -350,17 +350,11 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		 */
 			$description = 'Bringing you the best media on the Web.';
 			$role = 'editor';// minimum for auto-publish (author)
-			if ( function_exists( get_user_by ) ) {
-				get_user_by( 'login', $user_login );
-			}else if ( function_exists( get_userbylogin ) ) {
-					get_userbylogin( $user_login );
-				}else {
-				GrabPress::abort( 'No get_user function.' );
-			}
+			GrabPress::get_user_by("login");
 			if ( isset($user_data) ) {// user exists, hash password to keep data up-to-date
-				$msg = 'User Exists ('.$user_login.'): '.$user_data->ID;
+				$msg = 'User Exists ('.$user_login.'): '.$user_data->user->id;
 				$user = array(
-					"id" => $user_data -> ID,
+					"id" => $user_data->user->id,
 					'user_login' => $user_login,
 					"user_nicename" => $user_nicename,
 					'user_url' => $user_url,

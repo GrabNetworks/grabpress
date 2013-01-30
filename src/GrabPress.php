@@ -34,6 +34,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $debug = true;
 		static $message = false;
 		static $error = false;
+		static $grabpress_user = "grabpress";
 		static $feed_message = 'items marked with an asterisk * are required.';
 		static $connector;
 		static $connector_user;
@@ -49,6 +50,15 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					@$message = 'GrabPress:<line '.$caller['line'].'>'.$caller['class'].$caller['type'].$caller['function'].'('.implode( ', ', $caller['args'] ).')';
 				}
 				error_log( $message );
+			}
+		}
+		static function get_user_by($field){
+			if ( function_exists( "get_user_by" ) ) {
+				return get_user_by( $field, GrabPress::$grabpress_user );
+			}else if ( function_exists( "get_userbylogin" ) ) {
+				return get_userbylogin( GrabPress::$grabpress_user );
+			}else {
+				GrabPress::abort( 'No get_user function.' );
 			}
 		}
 
@@ -147,9 +157,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$response_delete = GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '?api_key=' . GrabPress::$api_key );
 
 			delete_option( 'grabpress_key' );
-			$grab_user = get_user_by('login', 'grabpress');
+			$grab_user = GrabPress::get_user_by("login");
 			$current_user = wp_get_current_user();
-			wp_delete_user( $grab_user->id, $current_user->id );
+			wp_delete_user( $grab_user->ID, $current_user->ID );
 			GrabPress::$message = 'GrabPress has been deactivated. Any posts that used to be credited to the "grabpress" user are now assigned to you. XML-RPC is still enabled, unless you are using it for anything else, we recommend you turn it off.';
 		}
 
@@ -510,7 +520,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						break;
 					case 'unlink-user' :
 						if( isset( $_REQUEST[ 'confirm' ]) ){
-							$user = get_user_by( 'slug', 'grabpress');
+							$user = GrabPress::get_user_by("slug");
 							$connector_data = array(
 							 	'user_id' 	=> null,
 								'email' 	=> $user -> email
@@ -604,12 +614,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return plugin_dir_url( __FILE__ ) ;
 		}
 		static function enqueue_scripts($page) {
-			GrabPress::log("DEBUG ".$page);
+
 			$handlerparts = explode("_", $page);
 			if($handlerparts[0] !="grabpress" && $page != "post-new.php" && $page != "post.php"){
 				return;
 			}
-			GrabPress::log("DEBUG loading scripts");
 			// Plugin url
 			$plugin_url = GrabPress::grabpress_plugin_url();
 
