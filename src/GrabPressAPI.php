@@ -319,7 +319,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		static function create_connection() {
 			GrabPress::log();
 			$user_url = get_site_url();
-			$user_nicename = 'grabpress';
+			$user_nicename = GrabPress::$grabpress_user;
 			$user_login = $user_nicename;
 			$url_array = explode(  '/', $user_url );
 			$email_host =  substr( $url_array[ 2 ], 4, 13 );
@@ -343,9 +343,6 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			if ( $api_key ) {
 				update_option( 'grabpress_key', $api_key );//store api key
 			}
-			if ( ! isset( GrabPress::$api_key ) ) {
-				GrabPress::abort( 'Error retrieving API Key' );//unless storing failed
-			}
 
 			GrabPress::$api_key = get_option( 'grabpress_key' );//retreive api key from storage
 			/*
@@ -353,17 +350,11 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		 */
 			$description = 'Bringing you the best media on the Web.';
 			$role = 'editor';// minimum for auto-publish (author)
-			if ( function_exists( get_user_by ) ) {
-				get_user_by( 'login', $user_login );
-			}else if ( function_exists( get_userbylogin ) ) {
-					get_userbylogin( $user_login );
-				}else {
-				GrabPress::abort( 'No get_user function.' );
-			}
+			GrabPress::get_user_by("login");
 			if ( isset($user_data) ) {// user exists, hash password to keep data up-to-date
-				$msg = 'User Exists ('.$user_login.'): '.$user_data->ID;
+				$msg = 'User Exists ('.$user_login.'): '.$user_data->user->id;
 				$user = array(
-					"id" => $user_data -> ID,
+					"id" => $user_data->user->id,
 					'user_login' => $user_login,
 					"user_nicename" => $user_nicename,
 					'user_url' => $user_url,
@@ -397,18 +388,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			}
 			return true;
 		}
-		static function delete_connector() {
-			GrabPress::log();
-			$connector_id = GrabPressAPI::get_connector_id();
-
-			$response = GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/deactivate?api_key='.GrabPress::$api_key );
-			delete_option( 'grabpress_key' );
-			$grab_user = get_user_by('login', 'grabpress');
-			$current_user = wp_get_current_user();
-			wp_delete_user( $grab_user->id, $current_user->id );
-			$response_delete = GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '?api_key=' . GrabPress::$api_key );
-			GrabPress::$message = 'GrabPress has been deactivated. Any posts that used to be credited to the "grabpress" user are now assigned to you. XML-RPC is still enabled, unless you are using it for anything else, we recommend you turn it off.';
-		}
+		
 		static function _filter_out_out_providers( $x ) {
 			return !$x->provider->opt_out;
 		}
