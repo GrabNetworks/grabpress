@@ -422,7 +422,26 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			GrabPress::$channels = $list;
 			return $list;
 		}
+		static function _sort_watchlist($a, $b){
+			$at = new DateTime($a->video->created_at);
+			$bt = new DateTime($b->video->created_at);
+			return $at->format("YmdHis") < $bt->format("YmdHis");
+		}
+		static function get_watchlist(){
+			if( isset(GrabPress::$watchlist) ){
+				return GrabPress::$watchlist;
+			}
+			$feeds = GrabPressAPI::get_feeds();
+			$watched = array();
 
-		
+			foreach ($feeds as $feed) {
+				if($feed->feed->watchlist == true){
+					$json = GrabPressAPI::get_json($feed->feed->url);
+					$watched = array_merge($watched, json_decode($json)->results);
+				}
+			}
+			uasort($watched, array("GrabPressAPI", "_sort_watchlist"));
+			return $watched;
+		}
 	}
 }
