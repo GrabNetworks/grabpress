@@ -366,11 +366,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 
 			if($keywords["keywords_or"]){
-				$or = preg_split("/\s\s+/", $keywords["keywords_or"]);
+
+				$or = preg_split("/\s+/", $keywords["keywords_or"]);
+				if($string){
+					$string .= " OR ";
+				}
+
 				if(count($or) > 1){
 					$string .= join(" OR ", $or);
 				}else{
-					$string .= " OR ".$or[0];
+					$string .= $or[0];
 				}
 			}
 			return $string;

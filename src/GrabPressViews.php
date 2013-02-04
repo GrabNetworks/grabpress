@@ -18,8 +18,6 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
 				$providers = explode( ",", $url["providers"] ); // providers chosen by the user
 
-
-				
 				$channels = explode( ",", $url["categories"] ); // Categories or channels chosen by the user
 				
 				$blogusers = get_users();
