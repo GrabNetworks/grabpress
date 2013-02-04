@@ -64,9 +64,17 @@
                 		$("#form-create-feed input[name=keywords_or]").val(or.join(" "));
                 		$("#form-create-feed input[name=keywords_not]").val(not.join(" "));
                 		$("#form-create-feed input[name=keywords_phrase]").val(phrase.join(" "));
-                		$("#preview-modal").remove();
+                		
+
+                		$("#channel-select").val($("#channel-select-preview").val());
+                		$("#provider-select").val($("#provider-select-preview").val());
+                		$("#channel-select").multiselect("refresh");
+                		$("#provider-select").multiselect("refresh");
+
                 		$("#channel-select-preview").multiselect("destroy");
                 		$("#provider-select-preview").multiselect("destroy");
+
+                		$("#preview-modal").remove();
 	                }
 	            });
 	            var data = {
