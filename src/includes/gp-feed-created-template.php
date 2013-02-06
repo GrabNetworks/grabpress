@@ -38,10 +38,10 @@ jQuery(function(){
         } 
 
         if ( GrabPress::$environment == 'grabqa' ) {                        
-          $values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
+          $values = array( 15*60,  30*60,  45*60, 60*60, 120*60, 360*60, 720*60, 1440*60, 2880*60, 4320*60 );
         }
         else {
-          $values = array( 360, 720, 1440, 2880, 4320 );
+          $values = array( 360*60, 720*60, 1440*60, 2880*60, 4320*60 );
         }
 
         if(isset($_REQUEST['schedule'])){
