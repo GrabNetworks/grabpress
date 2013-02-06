@@ -120,7 +120,9 @@
                ?>
                <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
                <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance
+               <?php if(!empty($list_feeds["results"])){ ?>
                <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
+               <?php } ?>
        </div>
 	<?php
 			foreach ($list_feeds["results"] as $result) {
