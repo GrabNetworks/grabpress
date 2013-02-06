@@ -225,7 +225,7 @@
 					}
 				?>
 				<td>
-					<a href="admin.php?page=autoposter&action=preview-feed&feed_id=<?php echo $feedId; ?>"  id="btn-preview-feed-<?php echo $feedId; ?>" class="<?php echo $class_preview_button; ?> btn-preview-feed" >preview</a>
+					<a href="#"  data-id="<?php echo $feedId; ?>" class="<?php echo $class_preview_button; ?> btn-preview-feed" >preview</a>
 				</td>
 				<td>
 					<?php if(isset($_GET['action']) && ($_GET['action']=='edit-feed') && ($_GET['feed_id']==$feedId)){ 
