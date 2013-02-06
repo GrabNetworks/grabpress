@@ -6,9 +6,9 @@
 		<fieldset id="create-form" class="<?php echo isset($_GET['action'])=='edit-feed' ? 'edit-mode':''?>">
 		<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
-	( function ( global, $ ) {
-
-		global.hasValidationErrors = function () {
+	jQuery(document).ready(function($) {
+		var previewdialogConf = null;
+		hasValidationErrors = function () {
 			if(($("#channel-select :selected").length == 0) || ($("#provider-select :selected").length == 0)){
 				return true;
 			}
@@ -16,12 +16,7 @@
 				return false;
 			}
 		}
-
-		global.previewVideos = function () {
-			var errors = hasValidationErrors();
-			if(!errors){
-				
-	            global.previewdialog = $("<div id='preview-modal'>").dialog({
+ 		previewdialogConf = {
 	                modal: true,
 	                width:900,
 	                height:900,
@@ -76,7 +71,12 @@
 
                 		$("#preview-modal").remove();
 	                }
-	            });
+	            };
+
+		previewVideos = function () {
+			var errors = hasValidationErrors();
+			if(!errors){
+				
 	            var data = {
                 	"action": "gp_get_preview",
                 	"keywords_and": $("#form-create-feed input[name=keywords_and]").val(),
@@ -87,13 +87,14 @@
                 	"channels": $("#channel-select").val(),
                 };
 	                	
+	            var dialog = $("<div id='preview-modal'>").dialog(previewdialogConf);
 	            // load remote content
-	            previewdialog.load(
+	            dialog.load(
 	                ajaxurl,
 	                data,
 	                function (responseText, textStatus, XMLHttpRequest) {
 	                    // remove the loading class
-	                    previewdialog.removeClass('loading');
+	                    dialog.removeClass('loading');
 	                }
 	            );
 	            //prevent the browser to follow the link
@@ -103,7 +104,28 @@
 			}
 		};
 
-		global.deleteFeed = function(id){
+		$(".btn-preview-feed").live("click", function(e){
+			var id = $(this).data("id");
+			var data = {
+                	"action": "gp_get_preview",
+                	"feed_id": id
+                };
+	                	
+	            var dialog = $("<div id='preview-modal'>").dialog(previewdialogConf);
+	            // load remote content
+	            dialog.load(
+	                ajaxurl,
+	                data,
+	                function (responseText, textStatus, XMLHttpRequest) {
+	                    // remove the loading class
+	                    dialog.removeClass('loading');
+	                }
+	            );
+			e.preventDefault();
+			return false;
+		});
+
+		deleteFeed = function(id){
 			var bg_color = $('#tr-'+id+' td').css("background-color")
 			$('#tr-'+id+' td').css("background-color","red");	
 			var form = $('#form-'+id);
@@ -124,13 +146,13 @@
 					return false;
 				}
 		}
-		global.selectedCategories = <?php echo json_encode( $form["category"] );?>;
+		selectedCategories = <?php echo json_encode( $form["category"] );?>;
 
-		global.editFeed = function(id) {
+		editFeed = function(id) {
 			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
 		}
 
-		global.doValidation = function(){
+		doValidation = function(){
 	    	var errors = hasValidationErrors();
 			if ( !errors ){
 				$('#btn-create-feed').removeAttr('disabled');
@@ -157,7 +179,7 @@
 			
 		}
 
-		global.validateFeedName = function(edit){
+		validateFeedName = function(edit){
 			var feed_date = $('#feed_date').val();
 			var name = $('#name').val();
 			if(name == ""){
@@ -209,7 +231,7 @@
 
 		}
 
-	} )( window, jQuery );
+	} );
 
 	var multiSelectOptions = {
 	  	 noneSelectedText:"Select providers",
