@@ -250,9 +250,12 @@
     width: 48.717948717948715%;
     *width: 48.664757228587014%;
   }
-  #t #b .row-fluid .span5 {
+  #t #b .row-fluid .span5 {    
     width: 40.17094017094017%;
-    *width: 40.11774868157847%;
+    *width: 40.11774868157847%;    
+  }
+  #t #b .row-fluid .span5.feeds {
+    width: 380px;
   }
   #t #b .row-fluid .span4 {
     width: 31.623931623931625%;
