@@ -622,12 +622,12 @@
 											$times = array( '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
 										}	
 
-										if ( GrabPress::$environment == 'grabqa' ) {												
-											$values = array( 15,  30,  45, 60, 120, 360, 720, 1440, 2880, 4320 );
-										}
-										else {
-											$values = array( 360, 720, 1440, 2880, 4320 );
-										}
+										if ( GrabPress::$environment == 'grabqa' ) {                        
+								          $values = array( 15*60,  30*60,  45*60, 60*60, 120*60, 360*60, 720*60, 1440*60, 2880*60, 4320*60 );
+								        }
+								        else {
+								          $values = array( 360*60, 720*60, 1440*60, 2880*60, 4320*60 );
+								        }
 
 										if(!isset($form["schedule"])){
 											for ( $o = 0; $o < count( $times ); $o++ ) {
