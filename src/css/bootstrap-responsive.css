@@ -255,7 +255,7 @@
     *width: 40.11774868157847%;    
   }
   #t #b .row-fluid .span5.feeds {
-    width: 380px;
+    width: 390px !important;
   }
   #t #b .row-fluid .span4 {
     width: 31.623931623931625%;
