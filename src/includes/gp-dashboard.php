@@ -12,7 +12,7 @@
 		    <!--************************************************************-->
 			<div class="container-fluid">
 				<div class="row-fluid">
-					<div class="span4 watchlist">
+					<div class="span4 watchlist panel">
 						<div class="tabbable">
 							<ul class="nav nav-tabs">
 								<li class="active">
@@ -59,9 +59,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="span8" style="display: table;">
+					<div class="span8" >
 						<div class="row-fluid">
-							<div class="span3">
+							<div class="span4">
 								<div class="row-fluid">
 									<div class="span12 messages">
 										<ul class="nav nav-tabs">
@@ -82,15 +82,14 @@
 								</div>
 								<div class="row-fluid">
 									<div class="span12 welcome">
-										
 										<p>
 											<?php echo html_entity_decode($pills[0]->message->body); ?>
 										</p>
-								</div>
+									</div>
 									
 								</div>
 							</div>
-							<div class="span5 feeds">
+							<div class="span8 feeds">
 								<table class="table table-hover">
 									<thead>
 										<tr>
@@ -187,7 +186,7 @@
 	
 
 						<div clas="row-fluid">
-							<div class="span8 faq">
+							<div class="span12 faq">
 								<ul class="nav nav-tabs">
 									<li class="active">
 										<a href="#faq-tab1" data-toggle="tab">Resources</a>
@@ -195,6 +194,7 @@
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="faq-tab1">
+										<p> placeholder </p>
 										<?php foreach($resources as $msg){ ?>
 										<p>
 											<?php echo html_entity_decode($msg->message->body); ?>
