@@ -82,11 +82,10 @@
 								</div>
 								<div class="row-fluid">
 									<div class="span12 welcome">
-										<?php foreach($pills as $msg){ ?>
+										
 										<p>
-											<?php echo html_entity_decode($msg->message->body); ?>
+											<?php echo html_entity_decode($pills[0]->message->body); ?>
 										</p>
-										<?php }?>
 								</div>
 									
 								</div>
