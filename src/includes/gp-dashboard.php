@@ -18,12 +18,12 @@
 								<li class="active">
 									<a href="#watchlist-tab1" data-toggle="tab">Watchlist</a>
 								</li>
-								<li>
+								<!-- <li>
 									<a href="#watchlist-tab2" data-toggle="tab">Featured Feed</a>
 								</li>
 								<li>
 									<a href="#watchlist-tab3" data-toggle="tab">Hot Videos</a>
-								</li>
+								</li> -->
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="watchlist-tab1">
@@ -36,7 +36,7 @@
 												<?php echo $item->video->title;?>
 												</a>
 											</div>
-											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in">
+											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in" style="display:none;">
 												<div class="accordion-inner">
 												Anim pariatur cliche...
 												</div>
@@ -46,7 +46,7 @@
 										}?>
 									</div>
 								</div>
-								<div class="tab-pane" id="watchlist-tab2">
+								<!-- <div class="tab-pane" id="watchlist-tab2">
 									<p>
 											Howdy, I'm in Section 2.
 									</p>
@@ -55,7 +55,7 @@
 									<p>
 											Howdy, I'm in Section 3.
 									</p>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -217,30 +217,56 @@
 <script type="text/javascript">
 	jQuery(function($){	
 
-		$('.watchlist-check').bind('click', function(e){
+		function watchlist_binding(){
+				$('.watchlist-check').bind('click', function(e){
 
-        var id = this.id.replace('watchlist-check-','');
-        var watchlist_check = $(this);
+	        var id = this.id.replace('watchlist-check-','');
+	        var watchlist_check = $(this);
 
-        if(watchlist_check.is(':checked')) {
-            var watchlist = 1;           
-            $('#tr-'+id+' td').css("background-color","#FFE4C4");
-        }else{
-          var watchlist = 0;
-          $('#tr-'+id+' td').css("background-color","#DCDCDC");         
-        }       
-        
-        var data = {
-	        action: 'gp_toggle_watchlist',
-	        feed_id: id,
-	        watchlist: watchlist
-	    };	    
+	        if(watchlist_check.is(':checked')) {
+	            var watchlist = 1;           
+	            $('#tr-'+id+' td').css("background-color","#FFE4C4");
+	        }else{
+	          var watchlist = 0;
+	          $('#tr-'+id+' td').css("background-color","#DCDCDC");         
+	        }       
+	        
+	        var data = {
+		        action: 'gp_toggle_watchlist',
+		        feed_id: id,
+		        watchlist: watchlist
+		    };	    
 
-      $.post(ajaxurl, data, function(response) {
-	        //alert('Got this from the server: ' + response);
-	   });
-		
-      }); 
+	      $.post(ajaxurl, data, function(response) {
+		        //alert('Got this from the server: ' + response);
+		   });
+			
+	      }); 
+		};
+
+		function accordion_binding(){
+			$(".accordion-toggle").click(function(e){
+
+				if($(this).data("toggle") == "collapse"){
+					var panel = $($(this).attr("href"));
+					if(panel.css("display") =="none"){
+						panel.slideDown();
+					}else{
+						panel.slideUp();
+					}
+				}
+				e.preventDefault();
+				return false;
+			});
+
+		}
+
+		function init(){
+			watchlist_binding();
+			accordion_binding();
+
+		}
+		init();
 
 	});
 </script>
