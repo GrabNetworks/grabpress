@@ -5,8 +5,7 @@
 <form method="post" action="" id="form-dashboard">
 
 <div class="wrap" >
-			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
-			<h2>GrabPress: Dashboard</h2>
+			<img src="<?php echo plugin_dir_url( __FILE__ ).'images/logo.png' ?>"/>
 
 		<div id="t">
 		  <div id="b">		    
