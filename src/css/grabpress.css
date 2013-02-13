@@ -599,3 +599,48 @@ line-height: 24px;
     font: 12px Calibri;
     background: none;
 }
+#t #b .accordion{
+    background-color: #000;
+}
+#t #b .accordion-group {
+    border: 1px solid #2B2B2B;
+}
+
+#t #b .accordion-heading{
+    /*
+    height: 13px;
+    margin: 5px;
+    */
+}
+
+#t #b a.accordion-toggle{
+    background-color: #2B2B2B;
+    color: #FFFFFF;
+    font: 18px 'Gill Sans W01 Light';
+    text-decoration: none;
+}
+#t #b .accordion-inner {
+     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+}
+#t #b .feeds .panel{
+     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+}
+#t #b .feeds .table-hover{
+     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+}
+#t #b table th {
+    background-color: #818181;
+}
+#t #b tr:nth-child(even) {background: #CCC}
+#t #b tr:nth-child(odd) {background: #EEE}
+#t #b .accordion-left {
+    background: url("../images/accordion_left.png") repeat scroll 0 0 #000000;
+    width: 3px;
+}
+#t #b .accordion-center {
+    background: url("../images/accordion_center.png") repeat scroll 0 0 #000000;
+}
+#t #b .accordion-right {
+    background: url("../images/accordion_right.png") repeat scroll 0 0 #000000;
+    width: 3px;
+}
