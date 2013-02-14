@@ -71,12 +71,14 @@
 													</li>
 											</ul>
 											<div class="tab-content">
-												<div class="tab-pane active" id="messages-tab1">
-													<?php foreach($messages as $msg){ ?>
-													<p>
-														<?php echo $msg->message->body; ?>
-													</p>
-													<?php }?>
+												<div class="tab-pane active nano" id="messages-tab1">
+													<div class="content">
+														<?php foreach($messages as $msg){ ?>
+														<p>
+															<?php echo $msg->message->body; ?>
+														</p>
+														<?php }?>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -270,7 +272,7 @@
 		function init(){
 			watchlist_binding();
 			accordion_binding();
-
+			$(".nano").nanoScroller({"alwaysVisible":true});
 		}
 		init();
 

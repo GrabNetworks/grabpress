@@ -642,6 +642,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js', array("jquery-ui-widget" ));
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' , array("jquery"));
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
+			wp_enqueue_script( 'nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
 
 			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
 
@@ -657,7 +658,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_style( 'thickbox' );
 			wp_enqueue_style( 'bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
 			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );			
-			wp_enqueue_style( 'grabpress-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "bootstrap", "bootstrap-responsive"));
+			wp_enqueue_style( 'grabpress-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "bootstrap", "bootstrap-responsive","nanoscroller"));
+			wp_enqueue_style( 'nanoscroller', $plugin_url.'/css/nanoscroller.css');
 		}
 
 		static function content_by_request( $content, $post )
