@@ -660,6 +660,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );			
 			wp_enqueue_style( 'grabpress-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "bootstrap", "bootstrap-responsive","nanoscroller"));
 			wp_enqueue_style( 'nanoscroller', $plugin_url.'/css/nanoscroller.css');
+			wp_enqueue_style( 'grabpresss-fonts', "http://fast.fonts.com/cssapi/7ece15ec-35ef-4a92-bc79-b5349675eb23.css");
+			
 		}
 
 		static function content_by_request( $content, $post )

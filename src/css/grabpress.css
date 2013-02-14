@@ -582,7 +582,7 @@ line-height: 24px;
 }
 #t #b {
     background: none;
-    font-family: Calibri;
+    font: 12px 'Calibri W01 Regular 904604';
 }
 #form-dashboard .panel {
     background: #FFF url( '../images/panel.png' ) repeat;
@@ -598,7 +598,7 @@ line-height: 24px;
     height: 20px;
     color: #FFF;
     padding: 8px 0 0 0;
-    font: 12px Calibri;
+    font: 12px 'Calibri W01 Regular 904604';
     background: none;
 }
 #t #b .accordion{
@@ -625,7 +625,6 @@ line-height: 24px;
 #t #b .feeds .panel{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
      margin: 2px 2px 2px 3px;
-     width: 442px
 }
 #t #b .feeds .table-hover{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
@@ -666,7 +665,6 @@ line-height: 24px;
     clear: both;
 }
 #t #b .accordion-group {
-    border: 1px solid #E5E5E5;
     border-radius: 4px 4px 4px 4px;
     margin-bottom: 2px;
 }
@@ -691,11 +689,7 @@ line-height: 24px;
     height: auto;
 }
 #t #b .accordion-inner {
-    border-top: 1px solid #E5E5E5;
     padding: 9px 15px;
-}
-#t #b .watchlist{
-    border: 1px solid #000;
 }
 
 #t #b table th {
