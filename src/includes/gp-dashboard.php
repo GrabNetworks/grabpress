@@ -32,9 +32,13 @@
 										<?php foreach($watchlist as $item){?>
 										<div class="accordion-group">
 											<div class="accordion-heading">
-												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
-												<?php echo $item->video->title;?>
-												</a>
+												<div class="accordion-left"></div>
+												<div class="accordion-center">
+													<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+													<?php echo $item->video->title;?>
+													</a>
+												</div>
+												<div class="accordion-right"></div>
 											</div>
 											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in" style="display:none;">
 												<div class="accordion-inner">
@@ -67,7 +71,7 @@
 										<div class="tabbable panel">
 											<ul class="nav nav-tabs">
 													<li class="active">
-														<a href="#messages-tab1" data-toggle="tab">messages</a>
+														<a href="#messages-tab1" data-toggle="tab">Messages</a>
 													</li>
 											</ul>
 											<div class="tab-content">
@@ -97,6 +101,7 @@
 							</div>
 							<div class="span8 feeds">
 								<div class="panel">
+								<h3>Feed Activity (Latest Auto-post)</h3>
 								<table class="table table-hover">
 									<thead>
 										<tr>
