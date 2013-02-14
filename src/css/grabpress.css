@@ -583,7 +583,7 @@ line-height: 24px;
     background: none;
     font-family: Calibri;
 }
-#t #b #form-dashboard .panel {
+#form-dashboard .panel {
     background: #FFF url( '../images/panel.png' ) repeat;
     margin: 4px;
     padding: 0 8px 8px 8px;
