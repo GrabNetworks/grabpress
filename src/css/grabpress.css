@@ -665,7 +665,6 @@ line-height: 24px;
     clear: both;
 }
 #t #b .accordion-group {
-    border: 1px solid #E5E5E5;
     border-radius: 4px 4px 4px 4px;
     margin-bottom: 2px;
 }
@@ -690,11 +689,7 @@ line-height: 24px;
     height: auto;
 }
 #t #b .accordion-inner {
-    border-top: 1px solid #E5E5E5;
     padding: 9px 15px;
-}
-#t #b .watchlist{
-    border: 1px solid #000;
 }
 
 #t #b table th {
