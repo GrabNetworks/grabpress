@@ -592,6 +592,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			);
 
 			GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
+		
+			echo json_encode(GrabpressAPI::get_watchlist());
 						
 			die(); // this is required to return a proper result
 

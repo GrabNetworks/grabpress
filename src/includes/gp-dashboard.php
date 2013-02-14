@@ -206,7 +206,7 @@
 									</ul>
 									<div class="tab-content">
 										<div class="tab-pane active" id="faq-tab1">
-											<p> placeholder </p>
+											<p> Placeholder </p>
 											<?php foreach($resources as $msg){ ?>
 											<p>
 												<?php echo html_entity_decode($msg->message->body); ?>
@@ -236,13 +236,15 @@
 	        var id = this.id.replace('watchlist-check-','');
 	        var watchlist_check = $(this);
 
+	        
 	        if(watchlist_check.is(':checked')) {
 	            var watchlist = 1;           
 	            $('#tr-'+id+' td').css("background-color","#FFE4C4");
 	        }else{
 	          var watchlist = 0;
 	          $('#tr-'+id+' td').css("background-color","#DCDCDC");         
-	        }       
+	        }    
+	           
 	        
 	        var data = {
 		        action: 'gp_toggle_watchlist',
@@ -251,9 +253,32 @@
 		    };	    
 
 	      $.post(ajaxurl, data, function(response) {
-		        //alert('Got this from the server: ' + response);
+		        alert('Got this from the server: ' + response);
+			    var parsedJson = $.parseJSON(response);
+			    var accordion = '';
+			    for(var i in parsedJson) {
+				  if(!isNaN(i)) {
+				  	accordion += '<div class="accordion-group">'
+								+'<div class="accordion-heading">'
+								+'	<div class="accordion-left"></div>'
+								+'	<div class="accordion-center">'
+								+'		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
+								+'		'+parsedJson[i].video.title+''
+								+'		</a>'
+								+'	</div>'
+								+'	<div class="accordion-right"></div>'
+								+'</div>'
+								+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
+								+'	<div class="accordion-inner">'
+								+'	Anim pariatur cliche...'
+								+'	</div>'
+								+'</div>'
+								+'</div>';
+				  }
+				}  
+				$('#accordion2').html(accordion);		
 		   });
-			
+	      			
 	      }); 
 		};
 
