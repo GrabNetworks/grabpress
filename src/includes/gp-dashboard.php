@@ -108,7 +108,7 @@
 												Providers
 											</th>
 											<th>
-												videos
+												feed health
 											</th>
 											<th>
 												watchlist
@@ -159,7 +159,7 @@
 												?> 
 											</td>
 											<td>
-												25
+												<?php echo $feed->feed->feed_health;?>
 											</td>
 											<td>
 												<?php 												

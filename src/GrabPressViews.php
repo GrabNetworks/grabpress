@@ -415,6 +415,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			$watchlist = GrabpressAPI::get_watchlist();
 			$feeds = GrabPressAPI::get_feeds();
+			$feeds = GrabPressAPI::watchlist_activity($feeds);
 			$num_feeds = count( $feeds );
 			print GrabPress::fetch( 'includes/gp-dashboard.php' , array(
 				"messages" => $messages,

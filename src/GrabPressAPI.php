@@ -451,12 +451,12 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			return $feeds;
 		}
 		static function get_items_from_last_submission($feed){
-			$submissions = GrabPressAPI::call("/connectors/".GrabPressAPI::get_connector_id()."/feeds/".$feed->feed->id."/submissions?api_key=".GrabPress::$api_key);
+			$submissions = GrabPressAPI::call("GET", "/connectors/".GrabPressAPI::get_connector_id()."/feeds/".$feed->feed->id."/submissions?api_key=".GrabPress::$api_key);
 			$submissions = json_decode($submissions);
 			$last_submission = new DateTime($submissions[0]->submission->created_at);
 			$count = 0;
 			foreach ($submissions as $sub) {
-				if(new DateTime($sub->submission->created_at) > $last_submission->sub($feed->feed->schedule)){
+				if(new DateTime($sub->submission->created_at) > $last_submission->sub(date_interval_create_from_date_string($feed->feed->schedule." seconds"))){
 					$count++;
 				}
 			}
