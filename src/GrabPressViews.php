@@ -414,10 +414,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$resources = json_decode($resources_json);
 
 			$watchlist = GrabpressAPI::get_watchlist();
+			$feeds = GrabPressAPI::get_feeds();
+			$num_feeds = count( $feeds );
 			print GrabPress::fetch( 'includes/gp-dashboard.php' , array(
 				"messages" => $messages,
 				"pills" => $pills,
 				"resources" => $resources,
+				"feeds" => $feeds,
 				"watchlist" => array_splice($watchlist,0,10)
 				));
 		}

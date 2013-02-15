@@ -1,7 +1,3 @@
-<?php
-	$feeds = GrabPressAPI::get_feeds();
-	$num_feeds = count( $feeds );
-?>
 <form method="post" action="" id="form-dashboard">
 
 <div class="wrap" >
@@ -124,6 +120,7 @@
 									</thead>
 									<tbody>
 										<?php
+										$num_feeds = count($feeds);
 											for ( $n = 0; $n < $num_feeds; $n++ ) {
 												$feed = $feeds[$n]->feed;
 												$url = array();

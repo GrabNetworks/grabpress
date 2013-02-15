@@ -443,5 +443,24 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			uasort($watched, array("GrabPressAPI", "_sort_watchlist"));
 			return $watched;
 		}
+		static function watchlist_activity($feeds){
+			foreach ($feeds as $feed) {
+				$submissions = GrabPressAPI::get_items_from_last_submission($feed);
+				$feed->feed->feed_health = $submissions/$feed->feed->posts_per_update;
+			}
+			return $feeds;
+		}
+		static function get_items_from_last_submission($feed){
+			$submissions = GrabPressAPI::call("/connectors/".GrabPressAPI::get_connector_id()."/feeds/".$feed->feed->id."/submissions?api_key=".GrabPress::$api_key);
+			$submissions = json_decode($submissions);
+			$last_submission = new DateTime($submissions[0]->submission->created_at);
+			$count = 0;
+			foreach ($submissions as $sub) {
+				if(new DateTime($sub->submission->created_at) > $last_submission->sub($feed->feed->schedule)){
+					$count++;
+				}
+			}
+			return $count;
+		}
 	}
 }
