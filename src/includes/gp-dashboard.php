@@ -159,7 +159,7 @@
 												?> 
 											</td>
 											<td>
-												<?php echo $feed->feed->feed_health;?>
+												<?php echo $feed->feed_health;?>
 											</td>
 											<td>
 												<?php 												
