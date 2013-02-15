@@ -253,7 +253,7 @@
 		    };	    
 
 	      $.post(ajaxurl, data, function(response) {
-		        alert('Got this from the server: ' + response);
+		        //console.log('Got this from the server: ' + response);		        
 			    var parsedJson = $.parseJSON(response);
 			    var accordion = '';
 			    for(var i in parsedJson) {
@@ -275,7 +275,7 @@
 								+'</div>'
 								+'</div>';
 				  }
-				}  
+				}
 				$('#accordion2').html(accordion);		
 		   });
 	      			
@@ -283,7 +283,7 @@
 		};
 
 		function accordion_binding(){
-			$(".accordion-toggle").click(function(e){
+			$(".accordion-toggle").live("click", function(e){
 
 				if($(this).data("toggle") == "collapse"){
 					var panel = $($(this).attr("href"));
