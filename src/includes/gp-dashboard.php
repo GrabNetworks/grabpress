@@ -232,11 +232,10 @@
 
 	        var id = this.id.replace('watchlist-check-','');
 	        var watchlist_check = $(this); 	          
-	        
+
 	        var data = {
 		        action: 'gp_toggle_watchlist',
-		        feed_id: id,
-		        watchlist: watchlist
+		        feed_id: id
 		    };	    
 
 	      $.post(ajaxurl, data, function(response) {
