@@ -621,11 +621,14 @@ line-height: 24px;
     background: #FFF url( '../images/panel.png' ) repeat;
     box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.25);
     display: inline-block;
+    padding-top: 5px;
 }
 #t #b .feeds .panel{
-     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
-     margin: 2px 2px 2px 3px;
-     padding-left: 0;
+    background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+    margin: 62px 2px 2px 3px;
+    padding-left: 0;
+    padding-right: 0;
+    padding: 0 0 8px 0;
 }
 #t #b .feeds .table-hover{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
@@ -710,4 +713,32 @@ line-height: 24px;
 }
 .nano .pane{
     margin:4px;
+}
+#t #b #btn-publisher-account-status{
+    background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
+    border: none;
+    float: left;
+    height: 38px;
+    width: 322px;
+    margin-left: 3px;
+    text-indent: -3000px;
+}
+#t #b #btn-account-settings{
+    background: #3D3C3C;
+    border: none;
+    color: #FFF;
+    margin-top: 10px;
+    width: 100px;
+}
+#t #b .watch-on{
+    background: url("../images/watch-on.png") no-repeat scroll 0 0;
+    display: block;
+    height: 10px;
+    width: 12px;
+}
+#t #b .watch-off{
+    background: url("../images/watch-off.png") no-repeat scroll 0 0;
+    display: block;
+    height: 10px;
+    width: 12px;
 }
