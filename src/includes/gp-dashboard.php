@@ -231,11 +231,19 @@
 				$('.watchlist-check').bind('click', function(e){
 
 	        var id = this.id.replace('watchlist-check-','');
-	        var watchlist_check = $(this); 	          
+	        var watchlist_check = $(this);
+
+	        
+	        if(watchlist_check.is(':checked')) {
+	          var watchlist = 1;
+	        }else{
+	          var watchlist = 0;         
+	        }  
 
 	        var data = {
 		        action: 'gp_toggle_watchlist',
-		        feed_id: id
+		        feed_id: id,
+		        watchlist: watchlist		        
 		    };	    
 
 	      $.post(ajaxurl, data, function(response) {
