@@ -577,7 +577,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );
-			$watchlist = intval( $_REQUEST['watchlist'] );							
+			$watchlist = intval( $_REQUEST['watchlist'] );
 
 			$post_data = array(
 				'feed' => array(

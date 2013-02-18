@@ -88,6 +88,8 @@
 								</div>
 							</div>
 							<div class="span8 feeds">
+								<input type="button" id="btn-account-settings" value="Account Settings" class="button-primary">
+								<input type="button" id="btn-publisher-account-status" value="Publisher Account Status" class="button-primary">									
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
 								<table class="table table-hover">
@@ -156,13 +158,22 @@
 											<td>
 												<?php 												
 													if(isset($_GET['action'])=='edit-feed'){
-														echo $checked = ( $feed->watchlist  ) ? 'Yes' : 'No'; 
+														//echo $checked = ( $feed->watchlist  ) ? 'Yes' : 'No'; 
 												 	}else{ 
-														$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
-														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
+														//$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
+														//echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
 													}
 												?>
 												<i class="icon-eye-open"></i>
+												
+												<?php
+													if($feed->watchlist == '1'){
+														echo '<input type="button" value="1" class="watch-on" id="watchlist-check-'.$feedId.'" >';
+													}else{
+														echo '<input type="button" value="1" class="watch-off" id="watchlist-check-'.$feedId.'" >';
+													}
+													
+												?>		
 											</td>
 											<td>
 												<?php 
@@ -227,18 +238,15 @@
 
 	        
 	        if(watchlist_check.is(':checked')) {
-	            var watchlist = 1;           
-	            $('#tr-'+id+' td').css("background-color","#FFE4C4");
+	          var watchlist = 1;
 	        }else{
-	          var watchlist = 0;
-	          $('#tr-'+id+' td').css("background-color","#DCDCDC");         
-	        }    
-	           
-	        
+	          var watchlist = 0;         
+	        }  
+
 	        var data = {
 		        action: 'gp_toggle_watchlist',
 		        feed_id: id,
-		        watchlist: watchlist
+		        watchlist: watchlist		        
 		    };	    
 
 	      $.post(ajaxurl, data, function(response) {
