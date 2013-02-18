@@ -465,5 +465,21 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			}
 			return $count;
 		}
+		static function get_video_mrss($video_id){
+			$url= 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/'.$video_id.'.mrss';
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$xml = curl_exec($ch);
+			
+			curl_close($ch);
+
+			$search = array('grab:', 'media:', 'type="flash"');
+			$replace = array('grab', 'media', '');
+
+			$xmlString = str_replace( $search, $replace, $xml);
+			return  simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
+		}
 	}
 }

@@ -38,7 +38,9 @@
 											</div>
 											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in" style="display:none;">
 												<div class="accordion-inner">
-												Anim pariatur cliche...
+														<script type="text/javascript" 
+														src="http://player.<?php echo GrabPress::$environment; ?>.com/js/Player.js?id=<?php echo $embed_id ?>&content=v<?php echo $item->video->guid; ?>&tgt=<?php echo GrabPress::$environment; ?>">
+														</script>
 												</div>
 											</div>
 										</div>
@@ -46,16 +48,6 @@
 										}?>
 									</div>
 								</div>
-								<!-- <div class="tab-pane" id="watchlist-tab2">
-									<p>
-											Howdy, I'm in Section 2.
-									</p>
-								</div>
-								<div class="tab-pane" id="watchlist-tab3">
-									<p>
-											Howdy, I'm in Section 3.
-									</p>
-								</div> -->
 							</div>
 						</div>
 					</div>
