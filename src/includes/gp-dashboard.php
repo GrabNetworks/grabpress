@@ -231,17 +231,7 @@
 				$('.watchlist-check').bind('click', function(e){
 
 	        var id = this.id.replace('watchlist-check-','');
-	        var watchlist_check = $(this);
-
-	        
-	        if(watchlist_check.is(':checked')) {
-	            var watchlist = 1;           
-	            $('#tr-'+id+' td').css("background-color","#FFE4C4");
-	        }else{
-	          var watchlist = 0;
-	          $('#tr-'+id+' td').css("background-color","#DCDCDC");         
-	        }    
-	           
+	        var watchlist_check = $(this); 	          
 	        
 	        var data = {
 		        action: 'gp_toggle_watchlist',

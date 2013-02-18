@@ -625,6 +625,7 @@ line-height: 24px;
 #t #b .feeds .panel{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
      margin: 2px 2px 2px 3px;
+     padding-left: 0;
 }
 #t #b .feeds .table-hover{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
@@ -636,12 +637,13 @@ line-height: 24px;
 }
 #t #b table td {
     text-align: center;
+    padding: 7px 10px 5px 10px;
 }
 #t #b table td:first-child {
     text-align: left;
 }
-#t #b tr:nth-child(even) {background: #CCC}
-#t #b tr:nth-child(odd) {background: #EEE}
+#t #b tr:nth-child(even) { background: #C0C0C0; }
+#t #b tr:nth-child(odd) { background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF; }
 #t #b .accordion-left {
     background: url("../images/accordion_left.png") repeat scroll 0 0 #000000;
     width: 3px;
@@ -693,7 +695,7 @@ line-height: 24px;
 }
 
 #t #b table th {
-    background-color: #CCCCCC;
+    background-color: #818181;
 }
 #t #b table .rowspan1{height:20px;}
 #t #b table .rowspan2{height:60px;}
