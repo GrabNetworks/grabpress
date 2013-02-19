@@ -156,7 +156,30 @@
 													}
 												?> 
 											</td>
-											<td class="feed-health-0">
+											<?php
+												switch ($feed->feed_health) {
+												    case 0:
+												        $feed_health = "feed-health-0";
+												        break;
+												    case 0.2:
+												        $feed_health = "feed-health-20";
+												        break;
+												    case 0.4:
+												        $feed_health = "feed-health-40";
+												        break;
+												    case 0.6:
+												        $feed_health = "feed-health-60";
+												        break;
+												    case 0.8:
+												        $feed_health = "feed-health-80";
+												        break;
+												    case 1:
+												        $feed_health = "feed-health-100";
+												        break;    
+												}
+												
+											?>
+											<td class="<?php echo $feed_health; ?>">
 												<?php echo $feed->feed_health;?>
 											</td>
 											<td class="watch">
@@ -169,9 +192,7 @@
 														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
 													}
 													*/
-												?>
-												<!--<i class="icon-eye-open"></i>-->
-												
+												?>												
 												<?php
 													if($feed->watchlist == '1'){
 														echo '<input type="button" value="1" class="watch-on" id="watchlist-check-'.$feedId.'" >';
