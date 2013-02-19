@@ -152,7 +152,7 @@
 													}
 												?> 
 											</td>
-											<td class="feed-health">
+											<td class="feed-health-0">
 												<?php echo $feed->feed_health;?>
 											</td>
 											<td class="watch">
