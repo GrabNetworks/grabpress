@@ -764,6 +764,7 @@ line-height: 24px;
 #t #b .watch-off{
     background: url("../images/watch-off.png") no-repeat scroll 0 0;
     display: block;
+<<<<<<< Updated upstream
     height: 14px !important;
     width: 15px !important;
     margin-right: 30px;
@@ -814,4 +815,9 @@ line-height: 24px;
     width: 332px;
     margin-left: 3px;
     text-indent: -3000px;
+    height: 10px;
+    width: 12px;
+}
+#t #b .accordion-inner{
+    max-height: 300px;
 }

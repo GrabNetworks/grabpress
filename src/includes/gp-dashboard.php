@@ -1,8 +1,3 @@
-<?php
-	$user = GrabPressAPI::get_user();
-	$linked = isset($user->email);
-	$publisher_status = $linked ? "account-linked" : "account-unlinked";
-?>
 <form method="post" action="" id="form-dashboard">
 
 <div class="wrap" >
@@ -19,12 +14,6 @@
 								<li class="active">
 									<a href="#watchlist-tab1" data-toggle="tab">Watchlist</a>
 								</li>
-								<!-- <li>
-									<a href="#watchlist-tab2" data-toggle="tab">Featured Feed</a>
-								</li>
-								<li>
-									<a href="#watchlist-tab3" data-toggle="tab">Hot Videos</a>
-								</li> -->
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="watchlist-tab1">
@@ -35,7 +24,7 @@
 											<div class="accordion-heading">
 												<div class="accordion-left"></div>
 												<div class="accordion-center">
-													<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+													<a class="accordion-toggle" data-guid="<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
 													<?php echo $item->video->title;?>
 													</a>
 												</div>
@@ -43,9 +32,6 @@
 											</div>
 											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in" style="display:none;">
 												<div class="accordion-inner">
-														<script type="text/javascript" 
-														src="http://player.<?php echo GrabPress::$environment; ?>.com/js/Player.js?id=<?php echo $embed_id ?>&content=v<?php echo $item->video->guid; ?>&tgt=<?php echo GrabPress::$environment; ?>">
-														</script>
 												</div>
 											</div>
 										</div>
@@ -94,7 +80,7 @@
 							</div>
 							<div class="span8 feeds">
 								<input type="button" id="btn-account-settings" value="Account Settings" class="button-primary">
-								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>									
+								<input type="button" id="btn-publisher-account-status" value="Publisher Account Status" class="button-primary">									
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
 								<table class="table table-hover">
@@ -107,13 +93,13 @@
 												Providers
 											</th>
 											<th>
-												Posts
+												feed health
 											</th>
 											<th>
-												Watchlist
+												watchlist
 											</th>
 											<th>
-												&nbsp;
+												edit
 											</th>
 										</tr>
 									</thead>
@@ -128,6 +114,7 @@
 												$feedId = $feed->id;
 												$providers = explode( ",", $url["providers"] ); // providers chosen by the user
 												$channels = explode( ",", $url["categories"] );
+												//echo "FEED: "; var_dump($feed); echo "<br/><br/>";
 										?>
 										<tr id="tr-<?php echo $feedId; ?>">
 											<td>
@@ -156,48 +143,24 @@
 													}
 												?> 
 											</td>
-											<?php
-												switch ($feed->feed_health) {
-												    case 0:
-												        $feed_health = "feed-health-0";
-												        break;
-												    case 0.2:
-												        $feed_health = "feed-health-20";
-												        break;
-												    case 0.4:
-												        $feed_health = "feed-health-40";
-												        break;
-												    case 0.6:
-												        $feed_health = "feed-health-60";
-												        break;
-												    case 0.8:
-												        $feed_health = "feed-health-80";
-												        break;
-												    case 1:
-												        $feed_health = "feed-health-100";
-												        break;    
-												}
-												
-											?>
-											<td class="<?php echo $feed_health; ?>">
+											<td>
 												<?php echo $feed->feed_health;?>
 											</td>
-											<td class="watch">
-												<?php 		
-													/*										
+											<td>
+												<?php 												
 													if(isset($_GET['action'])=='edit-feed'){
-														echo $checked = ( $feed->watchlist  ) ? 'Yes' : 'No'; 
+														//echo $checked = ( $feed->watchlist  ) ? 'Yes' : 'No'; 
 												 	}else{ 
-														$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
-														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
+														//$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
+														//echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
 													}
-													*/
-												?>												
+												?>
+												
 												<?php
 													if($feed->watchlist == '1'){
-														echo '<input type="button" value="1" class="watch-on" id="watchlist-check-'.$feedId.'" >';
+														echo '<input type="button" value="0" class="watchlist-toggle watch-on" data-id="'.$feedId.' >';
 													}else{
-														echo '<input type="button" value="1" class="watch-off" id="watchlist-check-'.$feedId.'" >';
+														echo '<input type="button" value="1" class="watchlist-toggle watch-off" data-it="'.$feedId.'" >';
 													}
 													
 												?>		
@@ -258,65 +221,72 @@
 	jQuery(function($){	
 
 		function watchlist_binding(){
-				$('.watchlist-check').bind('click', function(e){
+			$('.watchlist-toggles').bind('click', function(e){
 
-	        var id = this.id.replace('watchlist-check-','');
-	        var watchlist_check = $(this);
+		        var id = $(this).data("id");
+		        var value = $(this).val();
 
-	        
-	        if(watchlist_check.is(':checked')) {
-	          var watchlist = 1;
-	        }else{
-	          var watchlist = 0;         
-	        }  
+		        var data = {
+			        action: 'gp_toggle_watchlist',
+			        feed_id: id,
+			        watchlist: value		        
+			    };	    
 
-	        var data = {
-		        action: 'gp_toggle_watchlist',
-		        feed_id: id,
-		        watchlist: watchlist		        
-		    };	    
-
-	      $.post(ajaxurl, data, function(response) {
-		        //console.log('Got this from the server: ' + response);		        
-			    var parsedJson = $.parseJSON(response);
-			    var accordion = '';
-			    for(var i in parsedJson) {
-				  if(!isNaN(i)) {
-				  	accordion += '<div class="accordion-group">'
-								+'<div class="accordion-heading">'
-								+'	<div class="accordion-left"></div>'
-								+'	<div class="accordion-center">'
-								+'		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
-								+'		'+parsedJson[i].video.title+''
-								+'		</a>'
-								+'	</div>'
-								+'	<div class="accordion-right"></div>'
-								+'</div>'
-								+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
-								+'	<div class="accordion-inner">'
-								+'	Anim pariatur cliche...'
-								+'	</div>'
-								+'</div>'
-								+'</div>';
-				  }
-				}
-				$('#accordion2').html(accordion);		
-		   });
+		      $.post(ajaxurl, data, function(response) {	        
+				    var parsedJson = $.parseJSON(response);
+				    var accordion = '';
+				    for(var i in parsedJson.results) {
+					  if(!isNaN(i)) {
+					  	accordion += '<div class="accordion-group">'
+									+'<div class="accordion-heading">'
+									+'	<div class="accordion-left"></div>'
+									+'	<div class="accordion-center">'
+									+'		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
+									+ 		parsedJson.results[i].video.title
+									+'		</a>'
+									+'	</div>'
+									+'	<div class="accordion-right"></div>'
+									+'</div>'
+									+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
+									+'	<div class="accordion-inner">'
+									+'	<script type="text/javascript"' 
+									+'	src="http://player.'+parsedJson.environment+'.com/js/Player.js?id='+parsedJson.embed_id+'&content=v'+parsedJson.results[i].video.guid+'&tgt='+parsedJson.environment+'" />'
+									+'	</div>'
+									+'</div>'
+									+'</div>';
+					  }
+					}
+					$('#accordion2').html(accordion);		
+			   });
 	      			
 	      }); 
 		};
 
-		function accordion_binding(){
+		function accordion_binding(env, embed_id){
+
+			var active_video = null;
+
 			$(".accordion-toggle").live("click", function(e){
 
-				if($(this).data("toggle") == "collapse"){
-					var panel = $($(this).attr("href"));
-					if(panel.css("display") =="none"){
-						panel.slideDown();
-					}else{
-						panel.slideUp();
-					}
+				var panel = $($(this).attr("href"));
+				if(panel.css("display") =="none"){
+					$(".accordion-group.collapse").slideUp(400, function(){
+						$(this).toggleClass("collapse");
+					});
+					panel.slideDown(400, function(){
+						debugger;
+						var script = '<script type="text/javascript"'
+									+'src="http://player.'+env+'.com/js/Player.js?id='
+									+embed_id+'&content=v'+$(this).data("guid")+'&width=100%&height=100%" />'
+						panel.toggleClass("collapse");
+
+						panel.find(".accordion-inner").append(script);
+					});
+				}else{
+					panel.slideUp();
+					panel.find(".accordion-inner").empty();
 				}
+				
 				e.preventDefault();
 				return false;
 			});
@@ -325,7 +295,7 @@
 
 		function init(){
 			watchlist_binding();
-			accordion_binding();
+			accordion_binding('<?php echo GrabPress::$environment; ?>', <?php echo $embed_id ?>);
 			$(".nano").nanoScroller({"alwaysVisible":true});
 		}
 		init();
