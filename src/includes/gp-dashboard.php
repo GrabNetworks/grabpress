@@ -1,12 +1,12 @@
 <?php
-	$feeds = GrabPressAPI::get_feeds();
-	$num_feeds = count( $feeds );
+	$user = GrabPressAPI::get_user();
+	$linked = isset($user->email);
+	$publisher_status = $linked ? "account-linked" : "account-unlinked";
 ?>
 <form method="post" action="" id="form-dashboard">
 
 <div class="wrap" >
-			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
-			<h2>GrabPress: Dashboard</h2>
+			<img src="<?php echo plugin_dir_url( __FILE__ ).'images/logo.png' ?>"/>
 
 		<div id="t">
 		  <div id="b">		    
@@ -14,17 +14,17 @@
 			<div class="container-fluid">
 				<div class="row-fluid">
 					<div class="span4 watchlist">
-						<div class="tabbable">
+						<div class="tabbable panel">
 							<ul class="nav nav-tabs">
 								<li class="active">
 									<a href="#watchlist-tab1" data-toggle="tab">Watchlist</a>
 								</li>
-								<li>
+								<!-- <li>
 									<a href="#watchlist-tab2" data-toggle="tab">Featured Feed</a>
 								</li>
 								<li>
 									<a href="#watchlist-tab3" data-toggle="tab">Hot Videos</a>
-								</li>
+								</li> -->
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="watchlist-tab1">
@@ -33,13 +33,19 @@
 										<?php foreach($watchlist as $item){?>
 										<div class="accordion-group">
 											<div class="accordion-heading">
-												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
-												<?php echo $item->video->title;?>
-												</a>
+												<div class="accordion-left"></div>
+												<div class="accordion-center">
+													<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+													<?php echo $item->video->title;?>
+													</a>
+												</div>
+												<div class="accordion-right"></div>
 											</div>
-											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in">
+											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in" style="display:none;">
 												<div class="accordion-inner">
-												Anim pariatur cliche...
+														<script type="text/javascript" 
+														src="http://player.<?php echo GrabPress::$environment; ?>.com/js/Player.js?id=<?php echo $embed_id ?>&content=v<?php echo $item->video->guid; ?>&tgt=<?php echo GrabPress::$environment; ?>">
+														</script>
 												</div>
 											</div>
 										</div>
@@ -47,52 +53,50 @@
 										}?>
 									</div>
 								</div>
-								<div class="tab-pane" id="watchlist-tab2">
-									<p>
-											Howdy, I'm in Section 2.
-									</p>
-								</div>
-								<div class="tab-pane" id="watchlist-tab3">
-									<p>
-											Howdy, I'm in Section 3.
-									</p>
-								</div>
 							</div>
 						</div>
 					</div>
-					<div class="span8" style="display: table;">
+					<div class="span8" >
 						<div class="row-fluid">
-							<div class="span3">
+							<div class="span4">
 								<div class="row-fluid">
 									<div class="span12 messages">
-										<ul class="nav nav-tabs">
-												<li class="active">
-													<a href="#messages-tab1" data-toggle="tab">messages</a>
-												</li>
-										</ul>
-										<div class="tab-content">
-											<div class="tab-pane active" id="messages-tab1">
-												<?php foreach($messages as $msg){ ?>
-												<p>
-													<?php echo $msg->message->body; ?>
-												</p>
-												<?php }?>
+										<div class="tabbable panel">
+											<ul class="nav nav-tabs">
+													<li class="active">
+														<a href="#messages-tab1" data-toggle="tab">Messages</a>
+													</li>
+											</ul>
+											<div class="tab-content">
+												<div class="tab-pane active nano" id="messages-tab1">
+													<div class="content">
+														<?php foreach($messages as $msg){ ?>
+														<p>
+															<?php echo $msg->message->body; ?>
+														</p>
+														<?php }?>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>										
 								</div>
 								<div class="row-fluid">
 									<div class="span12 welcome">
-										<?php foreach($pills as $msg){ ?>
-										<p>
-											<?php echo html_entity_decode($msg->message->body); ?>
-										</p>
-										<?php }?>
-								</div>
+										<div class="panel">
+											<p>
+												<?php echo html_entity_decode($pills[0]->message->body); ?>
+											</p>
+										</div>
+									</div>
 									
 								</div>
 							</div>
-							<div class="span5 feeds">
+							<div class="span8 feeds">
+								<input type="button" id="btn-account-settings" value="Account Settings" class="button-primary">
+								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>									
+								<div class="panel">
+								<h3>Feed Activity (Latest Auto-post)</h3>
 								<table class="table table-hover">
 									<thead>
 										<tr>
@@ -103,18 +107,19 @@
 												Providers
 											</th>
 											<th>
-												videos
+												Posts
 											</th>
 											<th>
-												watchlist
+												Watchlist
 											</th>
 											<th>
-												edit
+												&nbsp;
 											</th>
 										</tr>
 									</thead>
 									<tbody>
 										<?php
+										$num_feeds = count($feeds);
 											for ( $n = 0; $n < $num_feeds; $n++ ) {
 												$feed = $feeds[$n]->feed;
 												$url = array();
@@ -123,7 +128,6 @@
 												$feedId = $feed->id;
 												$providers = explode( ",", $url["providers"] ); // providers chosen by the user
 												$channels = explode( ",", $url["categories"] );
-												//echo "FEED: "; var_dump($feed); echo "<br/><br/>";
 										?>
 										<tr id="tr-<?php echo $feedId; ?>">
 											<td>
@@ -152,19 +156,51 @@
 													}
 												?> 
 											</td>
-											<td>
-												25
+											<?php
+												switch ($feed->feed_health) {
+												    case 0:
+												        $feed_health = "feed-health-0";
+												        break;
+												    case 0.2:
+												        $feed_health = "feed-health-20";
+												        break;
+												    case 0.4:
+												        $feed_health = "feed-health-40";
+												        break;
+												    case 0.6:
+												        $feed_health = "feed-health-60";
+												        break;
+												    case 0.8:
+												        $feed_health = "feed-health-80";
+												        break;
+												    case 1:
+												        $feed_health = "feed-health-100";
+												        break;    
+												}
+												
+											?>
+											<td class="<?php echo $feed_health; ?>">
+												<?php echo $feed->feed_health;?>
 											</td>
-											<td>
-												<?php 												
+											<td class="watch">
+												<?php 		
+													/*										
 													if(isset($_GET['action'])=='edit-feed'){
 														echo $checked = ( $feed->watchlist  ) ? 'Yes' : 'No'; 
 												 	}else{ 
 														$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
 														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
 													}
-												?>
-												<i class="icon-eye-open"></i>
+													*/
+												?>												
+												<?php
+													if($feed->watchlist == '1'){
+														echo '<input type="button" value="1" class="watch-on" id="watchlist-check-'.$feedId.'" >';
+													}else{
+														echo '<input type="button" value="1" class="watch-off" id="watchlist-check-'.$feedId.'" >';
+													}
+													
+												?>		
 											</td>
 											<td>
 												<?php 
@@ -184,24 +220,26 @@
 										?>
 									</tbody>
 								</table>
+								</div>
 							</div>
 						</div>
-	
-
 						<div clas="row-fluid">
-							<div class="span8 faq">
-								<ul class="nav nav-tabs">
-									<li class="active">
-										<a href="#faq-tab1" data-toggle="tab">Resources</a>
-									</li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane active" id="faq-tab1">
-										<?php foreach($resources as $msg){ ?>
-										<p>
-											<?php echo html_entity_decode($msg->message->body); ?>
-										</p>
-										<?php }?>
+							<div class="span12 faq">
+								<div class="tabbable panel">
+									<ul class="nav nav-tabs">
+										<li class="active">
+											<a href="#faq-tab1" data-toggle="tab">Resources</a>
+										</li>
+									</ul>
+									<div class="tab-content">
+										<div class="tab-pane active" id="faq-tab1">
+											<p> Placeholder </p>
+											<?php foreach($resources as $msg){ ?>
+											<p>
+												<?php echo html_entity_decode($msg->message->body); ?>
+											</p>
+											<?php }?>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -219,30 +257,78 @@
 <script type="text/javascript">
 	jQuery(function($){	
 
-		$('.watchlist-check').bind('click', function(e){
+		function watchlist_binding(){
+				$('.watchlist-check').bind('click', function(e){
 
-        var id = this.id.replace('watchlist-check-','');
-        var watchlist_check = $(this);
+	        var id = this.id.replace('watchlist-check-','');
+	        var watchlist_check = $(this);
 
-        if(watchlist_check.is(':checked')) {
-            var watchlist = 1;           
-            $('#tr-'+id+' td').css("background-color","#FFE4C4");
-        }else{
-          var watchlist = 0;
-          $('#tr-'+id+' td').css("background-color","#DCDCDC");         
-        }       
-        
-        var data = {
-	        action: 'gp_toggle_watchlist',
-	        feed_id: id,
-	        watchlist: watchlist
-	    };	    
+	        
+	        if(watchlist_check.is(':checked')) {
+	          var watchlist = 1;
+	        }else{
+	          var watchlist = 0;         
+	        }  
 
-      $.post(ajaxurl, data, function(response) {
-	        //alert('Got this from the server: ' + response);
-	   });
-		
-      }); 
+	        var data = {
+		        action: 'gp_toggle_watchlist',
+		        feed_id: id,
+		        watchlist: watchlist		        
+		    };	    
+
+	      $.post(ajaxurl, data, function(response) {
+		        //console.log('Got this from the server: ' + response);		        
+			    var parsedJson = $.parseJSON(response);
+			    var accordion = '';
+			    for(var i in parsedJson) {
+				  if(!isNaN(i)) {
+				  	accordion += '<div class="accordion-group">'
+								+'<div class="accordion-heading">'
+								+'	<div class="accordion-left"></div>'
+								+'	<div class="accordion-center">'
+								+'		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
+								+'		'+parsedJson[i].video.title+''
+								+'		</a>'
+								+'	</div>'
+								+'	<div class="accordion-right"></div>'
+								+'</div>'
+								+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
+								+'	<div class="accordion-inner">'
+								+'	Anim pariatur cliche...'
+								+'	</div>'
+								+'</div>'
+								+'</div>';
+				  }
+				}
+				$('#accordion2').html(accordion);		
+		   });
+	      			
+	      }); 
+		};
+
+		function accordion_binding(){
+			$(".accordion-toggle").live("click", function(e){
+
+				if($(this).data("toggle") == "collapse"){
+					var panel = $($(this).attr("href"));
+					if(panel.css("display") =="none"){
+						panel.slideDown();
+					}else{
+						panel.slideUp();
+					}
+				}
+				e.preventDefault();
+				return false;
+			});
+
+		}
+
+		function init(){
+			watchlist_binding();
+			accordion_binding();
+			$(".nano").nanoScroller({"alwaysVisible":true});
+		}
+		init();
 
 	});
 </script>

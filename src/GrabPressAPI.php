@@ -443,5 +443,43 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			uasort($watched, array("GrabPressAPI", "_sort_watchlist"));
 			return $watched;
 		}
+		static function watchlist_activity($feeds){
+			foreach ($feeds as $feed) {
+				$submissions = GrabPressAPI::get_items_from_last_submission($feed);
+				$feed->feed->feed_health = $submissions/$feed->feed->posts_per_update;
+			}
+			return $feeds;
+		}
+		static function get_items_from_last_submission($feed){
+			$submissions = GrabPressAPI::call("GET", "/connectors/".GrabPressAPI::get_connector_id()."/feeds/".$feed->feed->id."/submissions?api_key=".GrabPress::$api_key);
+			$submissions = json_decode($submissions);
+			$count = 0;
+			if(count($submissions)){
+				$last_submission = new DateTime($submissions[0]->submission->created_at);
+				
+				foreach ($submissions as $sub) {
+					if(new DateTime($sub->submission->created_at) > $last_submission->sub(date_interval_create_from_date_string($feed->feed->schedule." seconds"))){
+						$count++;
+					}
+				}
+			}
+			return $count;
+		}
+		static function get_video_mrss($video_id){
+			$url= 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/'.$video_id.'.mrss';
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, false);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$xml = curl_exec($ch);
+			
+			curl_close($ch);
+
+			$search = array('grab:', 'media:', 'type="flash"');
+			$replace = array('grab', 'media', '');
+
+			$xmlString = str_replace( $search, $replace, $xml);
+			return  simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
+		}
 	}
 }
