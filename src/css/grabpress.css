@@ -633,17 +633,40 @@ line-height: 24px;
 #t #b .feeds .table-hover{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
 }
+#t #b table{
+    border-bottom: none;
+    margin-bottom: 0;
+}
+#t #b table thead{
+    border-bottom: none;
+}
+#t #b table tbody{
+    border-bottom: none;
+}
+
 #t #b table th {
     background-color: #818181;
     color: #FFF;
     text-align: center;
+    border-right: 1px solid #5D5B5B;
+    border-bottom: none;
+}
+#t #b table th:last-child {
+    border-right: none;
 }
 #t #b table td {
+    color: #000;
     text-align: center;
-    padding: 7px 10px 5px 10px;
+    padding: 4px 10px;
+    border-right: 1px solid #5D5B5B;
+    height: 16px;
+    border-bottom: none;
 }
 #t #b table td:first-child {
     text-align: left;
+}
+#t #b table td:last-child {
+    border-right: none;
 }
 #t #b tr:nth-child(even) { background: #C0C0C0; }
 #t #b tr:nth-child(odd) { background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF; }
@@ -714,12 +737,13 @@ line-height: 24px;
 .nano .pane{
     margin:4px;
 }
-#t #b #btn-publisher-account-status{
+#t #b #publisher-account-status{
     background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
     border: none;
+    cursor: auto;
     float: left;
-    height: 38px;
-    width: 322px;
+    height: 46px;
+    width: 332px;
     margin-left: 3px;
     text-indent: -3000px;
 }
@@ -730,15 +754,30 @@ line-height: 24px;
     margin-top: 10px;
     width: 100px;
 }
+#t #b td.watch{
+    width: 70px;
+}
 #t #b .watch-on{
     background: url("../images/watch-on.png") no-repeat scroll 0 0;
     display: block;
-    height: 10px;
-    width: 12px;
+    height: 14px !important;
+    width: 15px !important;
+    margin-right: 30px;
+    margin-top: 4px;
+    padding-top: 3px;
+    text-indent: -3000px;
 }
 #t #b .watch-off{
     background: url("../images/watch-off.png") no-repeat scroll 0 0;
     display: block;
-    height: 10px;
-    width: 12px;
+    height: 14px !important;
+    width: 15px !important;
+    margin-right: 30px;
+    margin-top: 4px;
+    padding-top: 3px;
+    text-indent: -3000px;
+}
+#t #b td.feed-health {
+    background: url("../images/health-0.png") no-repeat scroll 2px 3px transparent;
+    width: 40px;
 }
