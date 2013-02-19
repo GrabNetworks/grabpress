@@ -740,16 +740,6 @@ line-height: 24px;
 .nano .pane{
     margin:4px;
 }
-#t #b #publisher-account-status{
-    background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
-    border: none;
-    cursor: auto;
-    float: left;
-    height: 46px;
-    width: 332px;
-    margin-left: 3px;
-    text-indent: -3000px;
-}
 #t #b #btn-account-settings{
     background: #3D3C3C;
     border: none;
@@ -804,4 +794,24 @@ line-height: 24px;
 #t #b td.feed-health-100 {
     background: url("../images/health-100.png") repeat-x scroll 2px 3px transparent;
     width: 40px;
+}
+#t #b .feeds .account-linked{
+    background: url("../images/account-linked.png") no-repeat scroll 0 0 #000000;
+    border: none;
+    cursor: auto;
+    float: left;
+    height: 46px;
+    width: 332px;
+    margin-left: 3px;
+    text-indent: -3000px;
+}
+#t #b .feeds .account-unlinked{
+    background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
+    border: none;
+    cursor: auto;
+    float: left;
+    height: 46px;
+    width: 332px;
+    margin-left: 3px;
+    text-indent: -3000px;
 }

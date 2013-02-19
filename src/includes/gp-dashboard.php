@@ -1,3 +1,8 @@
+<?php
+	$user = GrabPressAPI::get_user();
+	$linked = isset($user->email);
+	$publisher_status = $linked ? "account-linked" : "account-unlinked";
+?>
 <form method="post" action="" id="form-dashboard">
 
 <div class="wrap" >
@@ -89,7 +94,7 @@
 							</div>
 							<div class="span8 feeds">
 								<input type="button" id="btn-account-settings" value="Account Settings" class="button-primary">
-								<div id="publisher-account-status" value="Publisher Account Status" ></div>									
+								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>									
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
 								<table class="table table-hover">
@@ -123,7 +128,6 @@
 												$feedId = $feed->id;
 												$providers = explode( ",", $url["providers"] ); // providers chosen by the user
 												$channels = explode( ",", $url["categories"] );
-												//echo "FEED: "; var_dump($feed); echo "<br/><br/>";
 										?>
 										<tr id="tr-<?php echo $feedId; ?>">
 											<td>
