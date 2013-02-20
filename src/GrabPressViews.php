@@ -414,11 +414,17 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$resources = json_decode($resources_json);
 
 			$watchlist = GrabpressAPI::get_watchlist();
+			$feeds = GrabPressAPI::get_feeds();
+			$feeds = GrabPressAPI::watchlist_activity($feeds);
+			$num_feeds = count( $feeds );
+
 			print GrabPress::fetch( 'includes/gp-dashboard.php' , array(
 				"messages" => $messages,
 				"pills" => $pills,
 				"resources" => $resources,
-				"watchlist" => array_splice($watchlist,0,10)
+				"feeds" => $feeds,
+				"watchlist" => array_splice($watchlist,0,10),
+				"embed_id" => GrabPressAPI::get_connector()->ctp_embed_id
 				));
 		}
 
@@ -487,21 +493,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$video_id = $_REQUEST['video_id'];
 			$format = $_REQUEST['format'];
 			$id = GrabPressAPI::get_connector_id();
-			$url= 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/'.$video_id.'.mrss';
-			
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_HEADER, false);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$xml = curl_exec($ch);
-			
-			curl_close($ch);
 
-			$search = array('grab:', 'media:', 'type="flash"');
-			$replace = array('grab', 'media', '');
+			$objXml = GrabPressAPI::get_video_mrss($video_id);
 
-			$xmlString = str_replace( $search, $replace, $xml);
-			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
 			$settings = GrabPressAPI::get_player_settings_for_embed();
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
@@ -583,7 +577,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );
-			$watchlist = intval( $_REQUEST['watchlist'] );							
+			$watchlist = intval( $_REQUEST['watchlist'] );
 
 			$post_data = array(
 				'feed' => array(
@@ -592,6 +586,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			);
 
 			GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
+		
+			echo json_encode(GrabpressAPI::get_watchlist());
 						
 			die(); // this is required to return a proper result
 
