@@ -842,4 +842,8 @@ line-height: 24px;
 }
 #t #b .messages, #t #b .welcome{
     width: 100%\9;
+    float: left\9;
+}
+#t #b .faq{
+    width: 100%\9;
 }
