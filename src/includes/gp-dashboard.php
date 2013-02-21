@@ -182,24 +182,13 @@
 											<td class="<?php echo $feed_health; ?>">
 												<?php echo $feed->feed_health;?>
 											</td>
-											<td class="watch">
-												<?php 		
-													/*										
-													if(isset($_GET['action'])=='edit-feed'){
-														echo $checked = ( $feed->watchlist  ) ? 'Yes' : 'No'; 
-												 	}else{ 
-														$checked = ( $feed->watchlist  ) ? 'checked = "checked"' : '';
-														echo '<input '.$checked.' type="checkbox" value="1" name="watchlist" id="watchlist-check-'.$feedId.'" class="watchlist-check" />';
-													}
-													*/
-												?>												
+											<td class="watch">												
 												<?php
 													if($feed->watchlist == '1'){
-														echo '<input type="button" value="1" class="watch-on" id="watchlist-check-'.$feedId.'" >';
+														echo '<input type="button" value="0" class=" watchlist-check watch-on" id="watchlist-check-'.$feedId.'" >';
 													}else{
-														echo '<input type="button" value="1" class="watch-off" id="watchlist-check-'.$feedId.'" >';
-													}
-													
+														echo '<input type="button" value="1" class="watchlist-check watch-off" id="watchlist-check-'.$feedId.'" >';
+													}													
 												?>		
 											</td>
 											<td>
@@ -258,16 +247,15 @@
 	jQuery(function($){	
 
 		function watchlist_binding(){
-				$('.watchlist-check').bind('click', function(e){
+			$('.watchlist-check').bind('click', function(e){
 
 	        var id = this.id.replace('watchlist-check-','');
 	        var watchlist_check = $(this);
-
 	        
-	        if(watchlist_check.is(':checked')) {
+	        if(watchlist_check.val() == 1) {
 	          var watchlist = 1;
 	        }else{
-	          var watchlist = 0;         
+	          var watchlist = 0;	    
 	        }  
 
 	        var data = {
@@ -300,7 +288,16 @@
 								+'</div>';
 				  }
 				}
-				$('#accordion2').html(accordion);		
+				$('#accordion2').html(accordion);	
+
+				if(watchlist_check.val() == 1) {
+		          watchlist_check.val('0');
+		          watchlist_check.addClass('watch-on').removeClass('watch-off');
+		        }else{
+		          watchlist_check.val('1');
+		          watchlist_check.addClass('watch-off').removeClass('watch-on');	    
+		        } 
+
 		   });
 	      			
 	      }); 
