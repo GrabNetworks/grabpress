@@ -631,7 +631,7 @@ line-height: 24px;
     -moz-border-radius: 3px; 
     -webkit-border-radius: 3px; 
     border-radius: 3px; 
-    margin: 62px 2px 2px 3px;
+    margin: 20px 2px 2px 3px;
     padding-left: 0;
     padding-right: 0;
     padding: 0;
@@ -817,7 +817,7 @@ line-height: 24px;
     background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
     border: none;
     cursor: auto;
-    float: left;
+    /*float: left;*/
     height: 46px;
     width: 332px;
     margin-left: 3px;
@@ -826,6 +826,20 @@ line-height: 24px;
 #t #b .content p {
     width: 185px;
 }
+
 #t #b .faq {
     margin-left: 0 !important;
+}
+#t #b .span4 {
+    width: 31.6239%\9 !important;
+}
+#t #b .watchlist {
+    float: left\9;
+}
+#t #b .span8 {
+    width: 65.812%;\9 !important;
+    float: right\9;
+}
+#t #b .messages, #t #b .welcome{
+    width: 100%\9;
 }
