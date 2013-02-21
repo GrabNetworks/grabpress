@@ -739,6 +739,7 @@ line-height: 24px;
 }
 .nano .content{
     margin:10px;
+    right: -27px !important;
 }
 .nano .pane{
     margin:4px;
@@ -752,7 +753,8 @@ line-height: 24px;
     margin-right: 17px;
     margin-top: 13px;
     padding: 5px 5px 5px 14px;
-    width: 100px;
+    width: 110px;
+    text-decoration: none;
 }
 #t #b td.watch{
     width: 70px;
@@ -820,4 +822,10 @@ line-height: 24px;
     width: 332px;
     margin-left: 3px;
     text-indent: -3000px;
+}
+#t #b .content p {
+    width: 185px;
+}
+#t #b .faq {
+    margin-left: 0 !important;
 }
