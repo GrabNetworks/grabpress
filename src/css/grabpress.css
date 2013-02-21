@@ -623,6 +623,9 @@ line-height: 24px;
     display: inline-block;
     padding-top: 5px;
 }
+#t #b .feeds a{
+    text-decoration: none;
+}
 #t #b .feeds .panel{
     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
     -moz-border-radius: 3px; 
@@ -744,8 +747,11 @@ line-height: 24px;
     background: #3D3C3C;
     border: none;
     color: #FFF;
-    margin-right: 28px;
-    margin-top: 12px;
+    float: right;
+    margin-left: 2px;
+    margin-right: 17px;
+    margin-top: 13px;
+    padding: 5px 5px 5px 14px;
     width: 100px;
 }
 #t #b td.watch{

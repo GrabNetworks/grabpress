@@ -93,7 +93,12 @@
 								</div>
 							</div>
 							<div class="span8 feeds">
-								<input type="button" id="btn-account-settings" value="Account Settings" class="button-primary">
+								<?php
+									$admin = get_admin_url();
+									$admin_page = $admin.'admin.php?page=account';
+								?>
+								<a href="<?php echo $admin_page; ?>" id="btn-account-settings" class="button-primary">Account Settings<a>
+								
 								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>									
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
@@ -251,7 +256,7 @@
 
 	        var id = this.id.replace('watchlist-check-','');
 	        var watchlist_check = $(this);
-	        
+
 	        if(watchlist_check.val() == 1) {
 	          var watchlist = 1;
 	        }else{
@@ -300,7 +305,8 @@
 
 		   });
 	      			
-	      }); 
+	      }); 	
+
 		};
 
 		function accordion_binding(){
