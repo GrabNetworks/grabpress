@@ -623,12 +623,15 @@ line-height: 24px;
     display: inline-block;
     padding-top: 5px;
 }
+#t #b .feeds a{
+    text-decoration: none;
+}
 #t #b .feeds .panel{
     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
     -moz-border-radius: 3px; 
     -webkit-border-radius: 3px; 
     border-radius: 3px; 
-    margin: 62px 2px 2px 3px;
+    margin: 20px 2px 2px 3px;
     padding-left: 0;
     padding-right: 0;
     padding: 0;
@@ -736,6 +739,7 @@ line-height: 24px;
 }
 .nano .content{
     margin:10px;
+    right: -27px !important;
 }
 .nano .pane{
     margin:4px;
@@ -744,9 +748,13 @@ line-height: 24px;
     background: #3D3C3C;
     border: none;
     color: #FFF;
-    margin-right: 28px;
-    margin-top: 12px;
-    width: 100px;
+    float: right;
+    margin-left: 2px;
+    margin-right: 17px;
+    margin-top: 13px;
+    padding: 5px 5px 5px 14px;
+    width: 110px;
+    text-decoration: none;
 }
 #t #b td.watch{
     width: 70px;
@@ -764,6 +772,7 @@ line-height: 24px;
 #t #b .watch-off{
     background: url("../images/watch-off.png") no-repeat scroll 0 0;
     display: block;
+<<<<<<< Updated upstream
     height: 14px !important;
     width: 15px !important;
     margin-right: 30px;
@@ -809,9 +818,29 @@ line-height: 24px;
     background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
     border: none;
     cursor: auto;
-    float: left;
+    /*float: left;*/
     height: 46px;
     width: 332px;
     margin-left: 3px;
     text-indent: -3000px;
+}
+#t #b .content p {
+    width: 185px;
+}
+
+#t #b .faq {
+    margin-left: 0 !important;
+}
+#t #b .span4 {
+    width: 31.6239% !important;
+}
+#t #b .watchlist {
+    float: left;
+}
+#t #b .span8 {
+    width: 65.812%; !important;
+    float: right;
+}
+#t #b .messages, #t #b .welcome{
+    width: 100%;
 }
