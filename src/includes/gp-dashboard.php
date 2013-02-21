@@ -271,24 +271,40 @@
 			var active_video = null;
 
 			$(".accordion-toggle").live("click", function(e){
+				var anchor = $(this);
+				var panel = $(anchor.attr("href"));
+				var openPanels = $(".accordion-group .accordion-body").not(".collapse");
+				// debugger;
+				if(panel.hasClass("collapse")){
+					var slideDownCurrent = function(panel){
+						panel.slideDown(400, function(){
+							var script = document.createElement( 'script' );
+							script.type = 'text/javascript';
+							script.src = 'http://player.'+env+'.com/js/Player.js?id='
+										+embed_id+'&content=v'+anchor.data("guid")+'&width=100%&height=100%';
 
-				var panel = $($(this).attr("href"));
-				if(panel.css("display") =="none"){
-					$(".accordion-group.collapse").slideUp(400, function(){
-						$(this).toggleClass("collapse");
-					});
-					panel.slideDown(400, function(){
-						debugger;
-						var script = '<script type="text/javascript"'
-									+'src="http://player.'+env+'.com/js/Player.js?id='
-									+embed_id+'&content=v'+$(this).data("guid")+'&width=100%&height=100%" />'
-						panel.toggleClass("collapse");
+							panel.toggleClass("collapse");
 
-						panel.find(".accordion-inner").append(script);
-					});
+							panel.children()[0].appendChild(script);
+						});
+					};
+					if(openPanels.length > 0){
+						openPanels.slideUp(400, function(){
+							$(this).toggleClass("collapse");
+							slideDownCurrent(panel);
+						});
+					}else{
+						slideDownCurrent(panel);
+					}
+
+
+					
+					
 				}else{
-					panel.slideUp();
-					panel.find(".accordion-inner").empty();
+					panel.slideUp(400, function(){
+						panel.toggleClass("collapse");
+						panel.find(".accordion-inner").empty();	
+					});
 				}
 				
 				e.preventDefault();
