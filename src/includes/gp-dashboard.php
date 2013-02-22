@@ -125,7 +125,7 @@
 											for ( $n = 0; $n < $num_feeds; $n++ ) {
 												$feed = $feeds[$n]->feed;
 												$feedId = $feed->id;
-												$schedule = $feed->update_frequency/60;
+												$schedule = $feed->update_frequency;
 												
 												$schedule = $times[$schedule];
 										?>
