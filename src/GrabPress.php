@@ -655,12 +655,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'thickbox' );
 
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
-			wp_enqueue_style( 'thickbox' );
 			wp_enqueue_style( 'bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
-			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );			
-			wp_enqueue_style( 'grabpress-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "bootstrap", "bootstrap-responsive","nanoscroller"));
-			wp_enqueue_style( 'nanoscroller', $plugin_url.'/css/nanoscroller.css');
+			wp_enqueue_style( 'thickbox' );
+			wp_enqueue_style( 'nanoscroller', $plugin_url.'/css/nanoscroller.css');		
+			wp_enqueue_style( 'grabpress-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "bootstrap", "nanoscroller"));			
+			
+			
 			wp_enqueue_style( 'grabpresss-fonts', "http://fast.fonts.com/cssapi/7ece15ec-35ef-4a92-bc79-b5349675eb23.css");
+			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
 			
 		}
 
