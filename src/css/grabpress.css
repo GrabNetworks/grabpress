@@ -616,6 +616,8 @@ line-height: 24px;
 }
 #t #b .accordion-inner {
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+     padding: 9px 15px;
+     height: 300px;
 }
 #t #b .feeds{
     background: #FFF url( '../images/panel.png' ) repeat;
@@ -721,9 +723,6 @@ line-height: 24px;
 }
 #t #b .collapse.in {
     height: auto;
-}
-#t #b .accordion-inner {
-    padding: 9px 15px;
 }
 
 #t #b table th {
