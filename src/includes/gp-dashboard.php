@@ -113,20 +113,19 @@
 										$times = array(15*60 =>  '15 mins',
 													   30*60 => '30  mins',
 													   45*60 => '45 mins',
-													   60*60 => '01 hr',
-													   120*60 => '02 hrs',
-													   360*60 =>'06 hrs',
+													   60*60 => '1 hr',
+													   120*60 => '2 hrs',
+													   360*60 =>'6 hrs',
 													   720*60 => '12 hrs',
-													   24*60*60 => '01 day',
-													   48*60*60 => '02 days',
-													   72*60*60 => '03 days' );
+													   24*60*60 => '1 day',
+													   48*60*60 => '2 days',
+													   72*60*60 => '3 days' );
 
 										$num_feeds = count($feeds);
 											for ( $n = 0; $n < $num_feeds; $n++ ) {
 												$feed = $feeds[$n]->feed;
 												$feedId = $feed->id;
 												$schedule = $feed->update_frequency;
-												
 												$schedule = $times[$schedule];
 										?>
 										<tr id="tr-<?php echo $feedId; ?>">
@@ -235,7 +234,7 @@
 		        var data = {
 			        action: 'gp_toggle_watchlist',
 			        feed_id: id,
-			        watchlist: value		        
+			        watchlist: watchlist		        
 			    };	    
 
 		      $.post(ajaxurl, data, function(response) {	        
