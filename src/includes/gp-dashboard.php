@@ -234,7 +234,7 @@
 		        var data = {
 			        action: 'gp_toggle_watchlist',
 			        feed_id: id,
-			        watchlist: value		        
+			        watchlist: watchlist		        
 			    };	    
 
 		      $.post(ajaxurl, data, function(response) {	        
