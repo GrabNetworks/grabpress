@@ -138,7 +138,22 @@
 											<td>
 												<?php echo $schedule?>
 											</td>
-											<td>
+											<?php
+												if($feed->feed_health > 0.8) {
+													$feed_health = "feed-health-100";
+												}elseif($feed->feed_health > 0.6){
+													$feed_health = "feed-health-80";
+												}elseif ($feed->feed_health > 0.4) {
+													$feed_health = "feed-health-60";
+												}elseif ($feed->feed_health > 0.2) {
+													$feed_health = "feed-health-40";
+												}elseif($feed->feed_health > 0) {
+													$feed_health = "feed-health-20";
+												}else{
+													$feed_health = "feed-health-0";
+												}
+											?>
+											<td class="<?php echo $feed_health; ?>">
 												<?php echo $feed->feed_health;?>
 											</td>
 											<td class="watch">												
