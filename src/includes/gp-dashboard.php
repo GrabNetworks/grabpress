@@ -1,7 +1,3 @@
-<?php
-       
-?>
-
 <form method="post" action="" id="form-dashboard">
 
 <div class="wrap" >
@@ -99,31 +95,38 @@
 												Feed Name
 											</th>
 											<th>
-												Providers
+												Schedule
 											</th>
 											<th>
-												feed health
+												Health
 											</th>
 											<th>
-												watchlist
+												Watchlist
 											</th>
 											<th>
-												edit
+												&nbsp;
 											</th>
 										</tr>
 									</thead>
 									<tbody>
 										<?php
+										$times = array(15*60 =>  '15 mins',
+													   30*60 => '30  mins',
+													   45*60 => '45 mins',
+													   60*60 => '1 hr',
+													   120*60 => '2 hrs',
+													   360*60 =>'6 hrs',
+													   720*60 => '12 hrs',
+													   24*60*60 => '1 day',
+													   48*60*60 => '2 days',
+													   72*60*60 => '3 days' );
+
 										$num_feeds = count($feeds);
 											for ( $n = 0; $n < $num_feeds; $n++ ) {
 												$feed = $feeds[$n]->feed;
-												$url = array();
-												parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
-												GrabPress::_escape_params_template($url);
 												$feedId = $feed->id;
-												$providers = explode( ",", $url["providers"] ); // providers chosen by the user
-												$channels = explode( ",", $url["categories"] );
-												//echo "FEED: "; var_dump($feed); echo "<br/><br/>";
+												$schedule = $feed->update_frequency;
+												$schedule = $times[$schedule];
 										?>
 										<tr id="tr-<?php echo $feedId; ?>">
 											<td>
@@ -132,27 +135,24 @@
 												?>	
 											</td>
 											<td>
-												<?php								
-													$providers_selected = count($providers);
-													if($providers_selected == 1){
-														if ( in_array( "", $providers ) ) {
-															echo "All providers";
-														}else{	
-															foreach ( $list_providers as $record_provider ) {
-																$provider = $record_provider->provider;
-																$provider_name = $provider->name;
-																$provider_id = $provider->id;											
-																if(in_array( $provider_id, $providers )) {											
-																	echo $provider_name;									
-																}
-															}
-														}
-													}else{
-														echo $providers_selected." selected";
-													}
-												?> 
+												<?php echo $schedule?>
 											</td>
-											<td>
+											<?php
+												if($feed->feed_health > 0.8) {
+													$feed_health = "feed-health-100";
+												}elseif($feed->feed_health > 0.6){
+													$feed_health = "feed-health-80";
+												}elseif ($feed->feed_health > 0.4) {
+													$feed_health = "feed-health-60";
+												}elseif ($feed->feed_health > 0.2) {
+													$feed_health = "feed-health-40";
+												}elseif($feed->feed_health > 0) {
+													$feed_health = "feed-health-20";
+												}else{
+													$feed_health = "feed-health-0";
+												}
+											?>
+											<td class="<?php echo $feed_health; ?>">
 												<?php echo $feed->feed_health;?>
 											</td>
 											<td class="watch">												
@@ -234,7 +234,7 @@
 		        var data = {
 			        action: 'gp_toggle_watchlist',
 			        feed_id: id,
-			        watchlist: value		        
+			        watchlist: watchlist		        
 			    };	    
 
 		      $.post(ajaxurl, data, function(response) {	        

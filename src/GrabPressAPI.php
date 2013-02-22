@@ -458,7 +458,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				$last_submission = new DateTime($submissions[0]->submission->created_at);
 				
 				foreach ($submissions as $sub) {
-					if(new DateTime($sub->submission->created_at) > $last_submission->sub(date_interval_create_from_date_string($feed->feed->schedule." seconds"))){
+					if(new DateTime($sub->submission->created_at) > $last_submission->sub(date_interval_create_from_date_string($feed->feed->update_frequency." seconds"))){
 						$count++;
 					}
 				}
