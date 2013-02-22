@@ -584,6 +584,7 @@ line-height: 24px;
     background: none;
     font: 12px 'Calibri W01 Regular 904604';
 }
+
 #form-dashboard .panel {
     background: #FFF url( '../images/panel.png' ) repeat;
     margin: 4px;
@@ -616,6 +617,8 @@ line-height: 24px;
 }
 #t #b .accordion-inner {
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+     padding: 9px 15px;
+     height: 300px;
 }
 #t #b .feeds{
     background: #FFF url( '../images/panel.png' ) repeat;
@@ -631,7 +634,7 @@ line-height: 24px;
     -moz-border-radius: 3px; 
     -webkit-border-radius: 3px; 
     border-radius: 3px; 
-    margin: 20px 2px 2px 3px;
+    margin: 56px 2px 2px 3px;
     padding-left: 0;
     padding-right: 0;
     padding: 0;
@@ -722,9 +725,6 @@ line-height: 24px;
 #t #b .collapse.in {
     height: auto;
 }
-#t #b .accordion-inner {
-    padding: 9px 15px;
-}
 
 #t #b table th {
     background-color: #818181;
@@ -761,6 +761,7 @@ line-height: 24px;
 }
 #t #b .watch-on{
     background: url("../images/watch-on.png") no-repeat scroll 0 0;
+    border: none;
     display: block;
     height: 14px !important;
     width: 15px !important;
@@ -771,8 +772,8 @@ line-height: 24px;
 }
 #t #b .watch-off{
     background: url("../images/watch-off.png") no-repeat scroll 0 0;
+    border: none;
     display: block;
-<<<<<<< Updated upstream
     height: 14px !important;
     width: 15px !important;
     margin-right: 30px;
@@ -832,15 +833,55 @@ line-height: 24px;
     margin-left: 0 !important;
 }
 #t #b .span4 {
-    width: 31.6239% !important;
+    width: 31.6239%\9 !important;
 }
 #t #b .watchlist {
-    float: left;
+    float: left\9;
 }
 #t #b .span8 {
-    width: 65.812%; !important;
-    float: right;
+    width: 65.812%\9 !important;
+    float: left\9 !important;
 }
 #t #b .messages, #t #b .welcome{
+    width: 100%\9;
+}
+#t #b .faq {
+    width: 100%\9;
+    float: left\9;
+}
+#t #b .nano .content {
+    right: -10px\9;
+}
+#t #b .watchlist .span4{
+    float: left\9;
+}
+#t #b .feeds {
+    float: right\9 !important;
+}
+
+
+#t #b .row-fluid {
     width: 100%;
+}
+#t #b .row-fluid:before, #t #b .row-fluid:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+#t #b .row-fluid:after {
+    clear: both;
+}
+#t #b .row-fluid [class*="span"] {
+    -moz-box-sizing: border-box;
+    display: block;
+    float: left;
+    margin-left: 2.5641%;
+    min-height: 30px;
+    width: 100%;
+}
+#t #b .row-fluid .span12 {
+    width: 100%;
+}
+#t #b .row-fluid [class*="span"]:first-child {
+    margin-left: 0;
 }
