@@ -634,7 +634,7 @@ line-height: 24px;
     -moz-border-radius: 3px; 
     -webkit-border-radius: 3px; 
     border-radius: 3px; 
-    margin: 56px 2px 2px 3px;
+    margin: 10px 2px 2px 3px;
     padding-left: 0;
     padding-right: 0;
     padding: 0;
@@ -681,14 +681,18 @@ line-height: 24px;
 #t #b tr:nth-child(odd) { background: #C0C0C0}
 #t #b .accordion-left {
     background: url("../images/accordion_left.png") repeat scroll 0 0 #000000;
+    *background: none;
     width: 3px;
+    *display: none;
 }
 #t #b .accordion-center {
     background: url("../images/accordion_center.png") repeat scroll 0 0 #000000;
 }
 #t #b .accordion-right {
     background: url("../images/accordion_right.png") repeat scroll 0 0 #000000;
+    *background: none;
     width: 3px;
+    *display: none;
 }
 #t #b h3 {
     padding: 5px 10px;
@@ -881,7 +885,11 @@ line-height: 24px;
 }
 #t #b .row-fluid .span12 {
     width: 100%;
+    min-height: 10px !important;
 }
 #t #b .row-fluid [class*="span"]:first-child {
     margin-left: 0;
+}
+#t #b .nav a {
+    display: inline-block;
 }
