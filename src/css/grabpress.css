@@ -625,11 +625,11 @@ line-height: 24px;
     background: #FFF url( '../images/panel.png' ) repeat;
     box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.25);
     display: inline-block;
-    padding-top: 5px;
-    margin-top: 4px;
-    height: 474px;
-    width: 466px !important;  
+    height: 468px !important;
+    width: 468px !important;  
     float: right;  
+    padding: 6px !important;
+    margin: 8px !important;
 }
 #t #b .feeds a{
     text-decoration: none;
@@ -889,10 +889,6 @@ line-height: 24px;
 #t #b .watchlist .span4{
     float: left\9;
 }
-#t #b .feeds {
-    float: right\9 !important;
-    width: 485px !important;
-}
 
 #t #b .row-fluid {
     width: 100%;
@@ -931,9 +927,10 @@ line-height: 24px;
     position: absolute !important;
     right:0 !important;
     top:0 !important;
+    margin: 0 !important;
 }
 
 #t #b .watchlist{
     width:100% !important;
-    padding-right:760px !important;
+    padding-right:752px !important;
 }
