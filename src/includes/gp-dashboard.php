@@ -42,7 +42,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="span8" >
+					<div class="span8 right-pane" >
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="row-fluid">
@@ -70,22 +70,26 @@
 								<div class="row-fluid">
 									<div class="span12 welcome">
 										<div class="panel">
-											<p>
-												<?php echo html_entity_decode($pills[0]->message->body); ?>
-											</p>
+											<div class="tab-content">
+												<div class="tab-pane active nano" id="messages-tab1">
+													<div class="content">
+														<?php echo html_entity_decode($pills[0]->message->body); ?>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 									
 								</div>
 							</div>
-							<div class="span8 feeds">
+							<div class="feeds">
 								<?php
 									$admin = get_admin_url();
 									$admin_page = $admin.'admin.php?page=account';
 								?>
-								<a href="<?php echo $admin_page; ?>" id="btn-account-settings" class="button-primary">Account Settings<a>
+								<a href="<?php echo $admin_page; ?>" id="btn-account-settings" class="button-primary">Account Settings</a>
 								
-								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>									
+								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
 								<table class="table table-hover">
