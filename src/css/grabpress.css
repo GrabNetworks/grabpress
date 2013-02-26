@@ -853,14 +853,14 @@ line-height: 24px;
     float: left\9 !important;
 }
 #t #b .row-fluid .messages{
-    /*width: 240px !important;*/
-    width: 100%\9;
-    /*height: 240px !important;*/
+    width: 256px !important;
+    padding:0 !important;
 }
 #t #b .row-fluid .messages .panel{
-    width: 226px !important;
-    width: 100%\9;
-    height: 218px !important;
+    width: 240px !important;
+    height: 240px !important;
+    padding: 6px !important;
+    margin: 8px !important;
 }
 #t #b .row-fluid .welcome {
     /*width: 240px !important;*/
@@ -924,9 +924,7 @@ line-height: 24px;
     padding:0 !important;
     min-height: 580px;
 }
-#t #b .span8 .row-fluid .span4 {
-    width: 240px;
-}
+
 #t #b .right-pane{
     width:752px !important;
     float:right !important;
