@@ -447,6 +447,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			foreach ($feeds as $feed) {
 				$submissions = GrabPressAPI::get_items_from_last_submission($feed);
 				$feed->feed->feed_health = $submissions/$feed->feed->posts_per_update;
+				$feed->feed->submissions = $submissions;
 			}
 			return $feeds;
 		}

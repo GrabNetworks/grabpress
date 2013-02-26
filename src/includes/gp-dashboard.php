@@ -153,7 +153,7 @@
 												}
 											?>
 											<td class="<?php echo $feed_health; ?>">
-												<?php echo $feed->feed_health;?>
+												<?php echo $feed->submissions ."/". $feed->posts_per_update; ?>
 											</td>
 											<td class="watch">												
 												<?php
