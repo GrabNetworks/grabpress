@@ -625,6 +625,9 @@ line-height: 24px;
     box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.25);
     display: inline-block;
     padding-top: 5px;
+    margin-top: 4px;
+    height: 510px;
+    width: 466px !important;    
 }
 #t #b .feeds a{
     text-decoration: none;
@@ -638,6 +641,7 @@ line-height: 24px;
     padding-left: 0;
     padding-right: 0;
     padding: 0;
+    height: 441px;
 }
 #t #b .feeds .table-hover{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
@@ -739,7 +743,7 @@ line-height: 24px;
 
 
 .nano{
-    height:150px;
+    height:210px;
 }
 .nano .content{
     margin:10px;
@@ -757,7 +761,7 @@ line-height: 24px;
     margin-right: 17px;
     margin-top: 13px;
     padding: 5px 5px 5px 14px;
-    width: 110px;
+    width: 82px;
     text-decoration: none;
 }
 #t #b td.watch{
@@ -835,6 +839,7 @@ line-height: 24px;
 
 #t #b .faq {
     margin-left: 0 !important;
+    width: 752px;
 }
 #t #b .span4 {
     width: 31.6239%\9 !important;
@@ -845,9 +850,34 @@ line-height: 24px;
 #t #b .span8 {
     width: 65.812%\9 !important;
     float: left\9 !important;
+    margin-left: 8px !important;
 }
-#t #b .messages, #t #b .welcome{
+#t #b .row-fluid .messages{
+    width: 240px !important;
     width: 100%\9;
+    height: 240px !important;
+    margin-bottom: 23px;
+    margin-right: 16px;
+}
+#t #b .row-fluid .messages .panel{
+    width: 240px !important;
+    width: 100%\9;
+    height: 240px !important;
+}
+#t #b .row-fluid .welcome {
+    width: 240px !important;
+    width: 100%\9;
+    height: 240px !important;
+    margin-bottom: 23px;
+}
+#t #b .row-fluid .welcome .panel {
+    width: 240px !important;
+    width: 100%\9;
+    height: 240px !important;
+}
+#t #b .row-fluid .span12 {
+    /*width: 100%;*/
+    min-height: 10px !important;
 }
 #t #b .faq {
     width: 100%\9;
@@ -861,6 +891,7 @@ line-height: 24px;
 }
 #t #b .feeds {
     float: right\9 !important;
+    width: 458px !important;
 }
 
 
@@ -883,13 +914,17 @@ line-height: 24px;
     min-height: 30px;
     width: 100%;
 }
-#t #b .row-fluid .span12 {
-    width: 100%;
-    min-height: 10px !important;
-}
+
 #t #b .row-fluid [class*="span"]:first-child {
     margin-left: 0;
 }
 #t #b .nav a {
     display: inline-block;
+}
+#t #b .container-fluid {
+    padding-left: 10px;
+}
+#t #b .span8 .row-fluid .span4 {
+    width: 240px;
+    margin-right: 25px;
 }
