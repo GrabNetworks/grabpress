@@ -42,7 +42,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="span8" >
+					<div class="span8 right-pane" >
 						<div class="row-fluid">
 							<div class="span4">
 								<div class="row-fluid">

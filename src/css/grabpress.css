@@ -927,12 +927,21 @@ line-height: 24px;
 }
 #t #b .container-fluid {
     padding-left: 10px;
+    min-height: 580px;
 }
 #t #b .span8 .row-fluid .span4 {
     width: 240px;
     margin-right: 25px;
 }
-#t #b .row-fluid .span8 {
-    float: right !important;
-    width: 66.812% !important;
+#t #b .right-pane{
+    width:752px !important;
+    float:right !important;
+    position: absolute !important;
+    right:0 !important;
+    top:0 !important;
+}
+
+#t #b .watchlist{
+    width:100% !important;
+    padding-right:760px !important;
 }
