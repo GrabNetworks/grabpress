@@ -744,7 +744,7 @@ line-height: 24px;
 
 
 .nano{
-    height:190px;
+    height:198px;
 }
 .nano .content{
     margin:10px;
@@ -858,22 +858,22 @@ line-height: 24px;
 }
 #t #b .row-fluid .messages .panel{
     width: 240px !important;
-    height: 240px !important;
+    height: 228px !important;
     padding: 6px !important;
     margin: 8px !important;
 }
 #t #b .row-fluid .welcome {
-    /*width: 240px !important;*/
-    width: 100%\9;
-    /*height: 240px !important;*/
+    width: 256px !important;
+    padding:0 !important;
 }
 #t #b .row-fluid .welcome .panel {
-    width: 226px !important;
-    width: 100%\9;
-    height: 218px !important;
+    width: 240px !important;
+    height: 228px !important;
+    padding: 6px !important;
+    margin: 8px !important;
 }
 #t #b .row-fluid .welcome .panel .tab-content {
-    height: 218px;
+    height: 100%;
 }
 #t #b .row-fluid .span12 {
     /*width: 100%;*/
