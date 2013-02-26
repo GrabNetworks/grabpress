@@ -70,15 +70,19 @@
 								<div class="row-fluid">
 									<div class="span12 welcome">
 										<div class="panel">
-											<p>
-												<?php echo html_entity_decode($pills[0]->message->body); ?>
-											</p>
+											<div class="tab-content">
+												<div class="tab-pane active nano" id="messages-tab1">
+													<div class="content">
+														<?php echo html_entity_decode($pills[0]->message->body); ?>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 									
 								</div>
 							</div>
-							<div class="span8 feeds">
+							<div class="feeds">
 								<?php
 									$admin = get_admin_url();
 									$admin_page = $admin.'admin.php?page=account';

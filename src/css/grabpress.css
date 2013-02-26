@@ -626,8 +626,9 @@ line-height: 24px;
     display: inline-block;
     padding-top: 5px;
     margin-top: 4px;
-    height: 510px;
-    width: 466px !important;    
+    height: 474px;
+    width: 466px !important;  
+    float: right;  
 }
 #t #b .feeds a{
     text-decoration: none;
@@ -641,7 +642,7 @@ line-height: 24px;
     padding-left: 0;
     padding-right: 0;
     padding: 0;
-    height: 441px;
+    height: 412px;
 }
 #t #b .feeds .table-hover{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
@@ -743,7 +744,7 @@ line-height: 24px;
 
 
 .nano{
-    height:210px;
+    height:190px;
 }
 .nano .content{
     margin:10px;
@@ -853,27 +854,31 @@ line-height: 24px;
     margin-left: 8px !important;
 }
 #t #b .row-fluid .messages{
-    width: 240px !important;
+    /*width: 240px !important;*/
     width: 100%\9;
-    height: 240px !important;
-    margin-bottom: 23px;
+    /*height: 240px !important;*/
+    margin-bottom: 8px;
     margin-right: 16px;
 }
 #t #b .row-fluid .messages .panel{
-    width: 240px !important;
+    width: 226px !important;
     width: 100%\9;
-    height: 240px !important;
+    height: 218px !important;
 }
 #t #b .row-fluid .welcome {
-    width: 240px !important;
+    /*width: 240px !important;*/
     width: 100%\9;
-    height: 240px !important;
-    margin-bottom: 23px;
+    /*height: 240px !important;*/
+    margin-bottom: 6px;
 }
 #t #b .row-fluid .welcome .panel {
-    width: 240px !important;
+    width: 226px !important;
     width: 100%\9;
-    height: 240px !important;
+    height: 218px !important;
+    padding-top: 10px;
+}
+#t #b .row-fluid .welcome .panel .tab-content {
+    height: 218px;
 }
 #t #b .row-fluid .span12 {
     /*width: 100%;*/
@@ -891,9 +896,8 @@ line-height: 24px;
 }
 #t #b .feeds {
     float: right\9 !important;
-    width: 458px !important;
+    width: 485px !important;
 }
-
 
 #t #b .row-fluid {
     width: 100%;
@@ -927,4 +931,8 @@ line-height: 24px;
 #t #b .span8 .row-fluid .span4 {
     width: 240px;
     margin-right: 25px;
+}
+#t #b .row-fluid .span8 {
+    float: right !important;
+    width: 66.812% !important;
 }
