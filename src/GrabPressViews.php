@@ -595,7 +595,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$response = new stdClass();
 			$response->environment = GrabPress::$environment;
 			$response->embed_id = GrabPressAPI::get_connector()->ctp_embed_id;
-			$response->results = GrabpressAPI::get_watchlist();
+			$response->results = array_splice(GrabpressAPI::get_watchlist(), 0 , 10);
 			echo json_encode($response);
 						
 			die(); // this is required to return a proper result

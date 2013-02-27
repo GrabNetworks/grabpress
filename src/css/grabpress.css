@@ -602,6 +602,7 @@ line-height: 24px;
     padding: 8px 0 0 0;
     font: 12px 'Calibri W01 Regular 904604';
     background: none;
+    text-indent: 6px;
 }
 #t #b .accordion{
     background-color: #000;
@@ -617,9 +618,7 @@ line-height: 24px;
     text-decoration: none;
 }
 #t #b .accordion-inner {
-     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
-     padding: 9px 15px;
-     height: 300px;
+     padding: 0;
 }
 #t #b .feeds{
     background: #FFF url( '../images/panel.png' ) repeat;
@@ -683,8 +682,8 @@ line-height: 24px;
 #t #b table td:last-child {
     border-right: none;
 }
-#t #b tr:nth-child(even) { background: #D3D3D3; }
-#t #b tr:nth-child(odd) { background: #C0C0C0}
+#t #b tr.even { background: #D3D3D3; }
+#t #b tr.odd { background: #C0C0C0} 
 #t #b .accordion-left {
     background: url("../images/accordion_left.png") repeat scroll 0 0 #000000;
     *background: none;
@@ -754,16 +753,39 @@ line-height: 24px;
     margin:4px;
 }
 #t #b #btn-account-settings{
-    background: #3D3C3C;
-    border: none;
+    border: 0 none;
+    height: 33px;
+    margin-left: 354px;
+    margin-top: 6px;
+    padding: 0;
+    position: absolute;
+    width: 15px;  
+}
+#t #b #btn-account-settings .accordion-left {
+    background: url("../images/accordion_left.png") repeat-y scroll 0 0 #000000;
+    height: 33px;
+    left: 0;
+    position: absolute;
+    width: 3px;
+}
+#t #b #btn-account-settings .accordion-center {
+    background: url("../images/accordion_center.png") repeat-x scroll 0 0 #000000;
+    height: 33px;
+    padding: 0 3px;
+    width: 99px;
+}
+#t #b #btn-account-settings .accordion-right {
+    background: url("../images/accordion_right.png") repeat-y scroll 0 0 #000000;
+    height: 33px;
+    position: absolute;
+    right: -92px;
+    top: 0;
+    width: 3px;
+}
+#t #b #btn-account-settings a{
     color: #FFF;
-    float: right;
-    margin-left: 2px;
-    margin-right: 17px;
-    margin-top: 13px;
-    padding: 5px 5px 5px 14px;
-    width: 82px;
-    text-decoration: none;
+    display: block;
+    padding: 8px 0px 0px 5px;
 }
 #t #b td.watch{
     width: 70px;

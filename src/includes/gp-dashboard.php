@@ -24,7 +24,7 @@
 											<div class="accordion-heading">
 												<div class="accordion-left"></div>
 												<div class="accordion-center">
-													<a class="accordion-toggle" data-guid="<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+													<a class="accordion-toggle" data-guid="v<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
 													<?php echo $item->video->title;?>
 													</a>
 												</div>
@@ -86,9 +86,14 @@
 								<?php
 									$admin = get_admin_url();
 									$admin_page = $admin.'admin.php?page=account';
-								?>
-								<a href="<?php echo $admin_page; ?>" id="btn-account-settings" class="button-primary">Account Settings</a>
-								
+								?>								
+								<div id="btn-account-settings">
+								<div class="accordion-left">&nbsp;</div>
+								<div class="accordion-center">
+									<a href="<?php echo $admin_page; ?>" >Account Settings</a>
+								</div>
+								<div class="accordion-right">&nbsp;</div>
+							</div>
 								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
@@ -131,8 +136,9 @@
 												$feedId = $feed->id;
 												$schedule = $feed->update_frequency;
 												$schedule = $times[$schedule];
+												$rowColor = ($n % 2) == 1 ? "odd" : "even";
 										?>
-										<tr id="tr-<?php echo $feedId; ?>">
+										<tr id="tr-<?php echo $feedId; ?>" class="<?php echo $rowColor; ?>">
 											<td>
 												<?php 
 													echo urldecode($feed->name);
@@ -227,6 +233,7 @@
 
 </form>
 <script type="text/javascript">
+
 	jQuery(function($){	
 
 		function watchlist_binding(){
@@ -256,7 +263,7 @@
 									+'<div class="accordion-heading">'
 									+'	<div class="accordion-left"></div>'
 									+'	<div class="accordion-center">'
-									+'		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
+									+'		<a class="accordion-toggle" data-guid=v"'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
 									+ 		parsedJson.results[i].video.title
 									+'		</a>'
 									+'	</div>'
@@ -264,8 +271,6 @@
 									+'</div>'
 									+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
 									+'	<div class="accordion-inner">'
-									+'	<script type="text/javascript"' 
-									+'	src="http://player.'+parsedJson.environment+'.com/js/Player.js?id='+parsedJson.embed_id+'&content=v'+parsedJson.results[i].video.guid+'&tgt='+parsedJson.environment+'" />'
 									+'	</div>'
 									+'</div>'
 									+'</div>';
@@ -308,17 +313,18 @@
 							var embed = $("#gcontainer"+embed_id).detach();
 							if(embed.length == 0){
 								embed = '<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>';
+								panel.find(".accordion-inner").append(embed);
+								active_video = new com.grabnetworks.Player({
+									"id": embed_id,
+									"width": "100%",
+									"height": "100%",
+									"content": anchor.data("guid"),
+									"autoPlay": true
+								});
+							}else{
+								panel.find(".accordion-inner").append(embed);
+								active_video.loadNewVideo(anchor.data("guid"));
 							}
-							
-							panel.find(".accordion-inner").append(embed);
-
-							active_video = new com.grabnetworks.Player({
-								"id": embed_id,
-								"width": "100%",
-								"height": "100%",
-								"content": anchor.data("guid")
-							});
-
 							panel.toggleClass("collapse");
 
 						});
@@ -349,10 +355,20 @@
 
 		}
 
+		function resize_accordion(){
+			console.log("resize");
+			var width = jQuery(jQuery(".accordion-center")[0]).css("width");
+			width = width.replace("px","");
+			jQuery(".accordion-inner").css("height", width* 0.5625 )
+		}
+
 		function init(){
 			watchlist_binding();
 			accordion_binding('<?php echo GrabPress::$environment; ?>', <?php echo $embed_id ?>);
 			$(".nano").nanoScroller({"alwaysVisible":true});
+
+			$(window).resize(resize_accordion).resize();
+			
 		}
 		init();
 
