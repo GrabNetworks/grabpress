@@ -617,8 +617,7 @@ line-height: 24px;
     text-decoration: none;
 }
 #t #b .accordion-inner {
-     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
-     padding: 9px 15px;
+     padding: 0;
      height: 300px;
 }
 #t #b .feeds{

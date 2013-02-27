@@ -644,7 +644,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
 			wp_enqueue_script( 'nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
 
-			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
+			wp_enqueue_script( 'grab-player', 'http://player.'.GrabPress::$environment.'.com/js/Player.js' );
 
 			$wpversion = floatval(get_bloginfo('version'));
 			if ( $wpversion <= 3.1 ) {		

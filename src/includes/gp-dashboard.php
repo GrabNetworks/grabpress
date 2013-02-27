@@ -24,7 +24,7 @@
 											<div class="accordion-heading">
 												<div class="accordion-left"></div>
 												<div class="accordion-center">
-													<a class="accordion-toggle" data-guid="<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+													<a class="accordion-toggle" data-guid="v<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
 													<?php echo $item->video->title;?>
 													</a>
 												</div>
@@ -256,7 +256,7 @@
 									+'<div class="accordion-heading">'
 									+'	<div class="accordion-left"></div>'
 									+'	<div class="accordion-center">'
-									+'		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
+									+'		<a class="accordion-toggle" data-guid=v"'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
 									+ 		parsedJson.results[i].video.title
 									+'		</a>'
 									+'	</div>'
@@ -264,8 +264,6 @@
 									+'</div>'
 									+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
 									+'	<div class="accordion-inner">'
-									+'	<script type="text/javascript"' 
-									+'	src="http://player.'+parsedJson.environment+'.com/js/Player.js?id='+parsedJson.embed_id+'&content=v'+parsedJson.results[i].video.guid+'&tgt='+parsedJson.environment+'" />'
 									+'	</div>'
 									+'</div>'
 									+'</div>';
@@ -308,17 +306,18 @@
 							var embed = $("#gcontainer"+embed_id).detach();
 							if(embed.length == 0){
 								embed = '<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>';
+								panel.find(".accordion-inner").append(embed);
+								active_video = new com.grabnetworks.Player({
+									"id": embed_id,
+									"width": "100%",
+									"height": "100%",
+									"content": anchor.data("guid"),
+									"autoPlay": true
+								});
+							}else{
+								panel.find(".accordion-inner").append(embed);
+								active_video.loadNewVideo(anchor.data("guid"));
 							}
-							
-							panel.find(".accordion-inner").append(embed);
-
-							active_video = new com.grabnetworks.Player({
-								"id": embed_id,
-								"width": "100%",
-								"height": "100%",
-								"content": anchor.data("guid")
-							});
-
 							panel.toggleClass("collapse");
 
 						});
