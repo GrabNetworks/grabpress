@@ -86,9 +86,14 @@
 								<?php
 									$admin = get_admin_url();
 									$admin_page = $admin.'admin.php?page=account';
-								?>
-								<a href="<?php echo $admin_page; ?>" id="btn-account-settings" class="button-primary">Account Settings</a>
-								
+								?>								
+								<div id="btn-account-settings">
+								<div class="accordion-left">&nbsp;</div>
+								<div class="accordion-center">
+									<a href="<?php echo $admin_page; ?>" >Account Settings</a>
+								</div>
+								<div class="accordion-right">&nbsp;</div>
+							</div>
 								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
