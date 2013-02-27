@@ -227,6 +227,7 @@
 
 </form>
 <script type="text/javascript">
+
 	jQuery(function($){	
 
 		function watchlist_binding(){
@@ -348,10 +349,20 @@
 
 		}
 
+		function resize_accordion(){
+			console.log("resize");
+			var width = jQuery(jQuery(".accordion-center")[0]).css("width");
+			width = width.replace("px","");
+			jQuery(".accordion-inner").css("height", width* 0.5625 )
+		}
+
 		function init(){
 			watchlist_binding();
 			accordion_binding('<?php echo GrabPress::$environment; ?>', <?php echo $embed_id ?>);
 			$(".nano").nanoScroller({"alwaysVisible":true});
+
+			$(window).resize(resize_accordion).resize();
+			
 		}
 		init();
 
