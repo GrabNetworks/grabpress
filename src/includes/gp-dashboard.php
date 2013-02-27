@@ -131,8 +131,9 @@
 												$feedId = $feed->id;
 												$schedule = $feed->update_frequency;
 												$schedule = $times[$schedule];
+												$rowColor = ($n % 2) == 1 ? "odd" : "even";
 										?>
-										<tr id="tr-<?php echo $feedId; ?>">
+										<tr id="tr-<?php echo $feedId; ?>" class="<?php echo $rowColor; ?>">
 											<td>
 												<?php 
 													echo urldecode($feed->name);

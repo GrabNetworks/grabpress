@@ -683,8 +683,8 @@ line-height: 24px;
 #t #b table td:last-child {
     border-right: none;
 }
-#t #b tr:nth-child(even) { background: #D3D3D3; }
-#t #b tr:nth-child(odd) { background: #C0C0C0}
+#t #b tr.even { background: #D3D3D3; }
+#t #b tr.odd { background: #C0C0C0} 
 #t #b .accordion-left {
     background: url("../images/accordion_left.png") repeat scroll 0 0 #000000;
     *background: none;
