@@ -447,6 +447,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			foreach ($feeds as $feed) {
 				$submissions = GrabPressAPI::get_items_from_last_submission($feed);
 				$feed->feed->feed_health = $submissions/$feed->feed->posts_per_update;
+				$feed->feed->submissions = $submissions;
 			}
 			return $feeds;
 		}
@@ -455,10 +456,13 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$submissions = json_decode($submissions);
 			$count = 0;
 			if(count($submissions)){
-				$last_submission = new DateTime($submissions[0]->submission->created_at);
-				
 				foreach ($submissions as $sub) {
-					if(new DateTime($sub->submission->created_at) > $last_submission->sub(date_interval_create_from_date_string($feed->feed->update_frequency." seconds"))){
+					$last_submission = new DateTime($submissions[0]->submission->created_at);
+					if(
+						new DateTime($sub->submission->created_at) > 
+						$last_submission->sub(date_interval_create_from_date_string($feed->feed->update_frequency." seconds"))
+					){
+
 						$count++;
 					}
 				}
