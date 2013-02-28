@@ -18,8 +18,26 @@
 							<div class="tab-content">
 								<div class="tab-pane active" id="watchlist-tab1">
 									<div class="accordion" id="accordion2">
-										<?php $i = 1;?>
-										<?php foreach($watchlist as $item){?>
+										<?php $i = 1;
+										if(empty($watchlist)){  										
+										?>
+										<div class="accordion-group">
+											<div class="accordion-heading">
+												<div class="accordion-left"></div>
+												<div class="accordion-center">
+													&nbsp;
+												</div>
+												<div class="accordion-right"></div>
+											</div>
+											<div id="collapse<?php echo $i;?>" class="accordion-body" >
+												<div class="accordion-inner">
+													<span><?php echo "Add a feed to your watch list in the Feed Activity panel";?></span>
+												</div>
+											</div>
+										</div>
+										<?php	
+										}else{										
+										foreach($watchlist as $item){ ?>
 										<div class="accordion-group">
 											<div class="accordion-heading">
 												<div class="accordion-left"></div>
@@ -36,7 +54,9 @@
 											</div>
 										</div>
 										<?php $i++;
-										}?>
+										 }
+										} // else
+										?>
 									</div>
 								</div>
 							</div>
