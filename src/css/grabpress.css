@@ -840,7 +840,6 @@ line-height: 24px;
     background: url("../images/account-linked.png") no-repeat scroll 0 0 #000000;
     border: none;
     cursor: auto;
-    float: left;
     height: 46px;
     width: 332px;
     margin-left: 3px;
@@ -850,7 +849,6 @@ line-height: 24px;
     background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
     border: none;
     cursor: auto;
-    /*float: left;*/
     height: 46px;
     width: 332px;
     margin-left: 3px;
