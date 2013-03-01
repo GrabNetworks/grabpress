@@ -480,13 +480,11 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			$feeds = GrabPressAPI::get_feeds();
 			$num_feeds = count( $feeds );
-
+			$duplicated_name = "false";
 			foreach ( $feeds as $record_feed ) {
 				if($record_feed->feed->name == $name){
 					$duplicated_name = "true";
 					break;
-				}else{
-					$duplicated_name = "false";
 				}
 			}
 
