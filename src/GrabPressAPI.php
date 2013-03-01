@@ -50,6 +50,9 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			}else{
 				$params = strstr($resource, '?') ? '&' : '?';
 				foreach ($data as $key => $value) {
+					if(is_array($value)){
+						$value = "[".implode(",", $value)."]";
+					}
 					$params .=$key.'='.$value.'&';
 				}
 				$params = substr($params, 0, -1);
