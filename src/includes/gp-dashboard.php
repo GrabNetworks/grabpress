@@ -73,7 +73,11 @@
 											<div class="tab-content">
 												<div class="tab-pane active nano" id="messages-tab1">
 													<div class="content">
-														<?php echo html_entity_decode($pills[0]->message->body); ?>
+														<?php
+															$p = count($pills);
+															$r = rand(0, $p);
+															echo html_entity_decode($pills[$r]->message->body); 
+														?> 
 													</div>
 												</div>
 											</div>
