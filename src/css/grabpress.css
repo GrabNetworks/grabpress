@@ -965,3 +965,25 @@ line-height: 24px;
     font-size: 18px\9;
     font: 18px 'Gill Sans W01 Light';    
 }
+
+#t #b .welcome .content {
+    font: 26px 'DIN 1451 W01 Engschrift';
+    text-transform: uppercase;
+    width: 220px;
+    line-height: 30px;
+    height: 220px;
+    font-weight: normal;
+    color: #333;
+}
+#t #b .welcome .content a {
+    color: #1B75BB;
+}
+#t #b .welcome .nano {
+    height: 220px;
+}
+
+#t #b .feeds h3 {
+    font: 18px 'Gill Sans W01 Light';
+    padding: 15px;
+    color: #000;
+}
