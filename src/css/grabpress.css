@@ -840,7 +840,6 @@ line-height: 24px;
     background: url("../images/account-linked.png") no-repeat scroll 0 0 #000000;
     border: none;
     cursor: auto;
-    float: left;
     height: 46px;
     width: 332px;
     margin-left: 3px;
@@ -850,7 +849,6 @@ line-height: 24px;
     background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
     border: none;
     cursor: auto;
-    /*float: left;*/
     height: 46px;
     width: 332px;
     margin-left: 3px;
@@ -955,4 +953,15 @@ line-height: 24px;
 #t #b .watchlist{
     width:100% !important;
     padding-right:752px !important;
+}
+#t #b .accordion-inner .accordion-warning {
+    color: #999;
+    display:block;    
+    padding-top: 25px;
+    text-align: center;
+    text-align: left\9;
+    padding-left: 20px\9 !important;
+    font-family: inherit\9;
+    font-size: 18px\9;
+    font: 18px 'Gill Sans W01 Light';    
 }
