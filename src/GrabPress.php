@@ -279,16 +279,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		}
 		static function generate_catalog_url($options, $unlimited = false){
+			
 			$defaults = array("providers" => "", "categories" => "");
 			$options = array_merge($defaults, $options);
 			$options = array_map(array("GrabPress", "_escape_params"), $options);
+			if(isset($options["keywords_or"])){
+				$options["keywords"] = $options["keywords_or"];
+			}
 
 			$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?'.
 					'keywords_and='.$options["keywords_and"].
 					'&categories='.$options["categories"].
 					'&providers='.$options["providers"].
 					'&keywords_not='.$options["keywords_not"].
-					"&keywords=".$options["keywords_or"].
+					"&keywords=".$options["keywords"].
 					"&keywords_phrase=".$options["keywords_phrase"];
 			if(isset($options["sort_by"]) && $options["sort_by"] != ""){
 				$url .= "&sort_by=".$options["sort_by"];
@@ -365,7 +369,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$string .= ' "'.trim($keywords["keywords_phrase"]).'"';
 			}
 
-			if($keywords["keywords_or"]){
+			if(isset($keywords["keywords_or"])){
 
 				$or = preg_split("/\s+/", $keywords["keywords_or"]);
 				if($string){
