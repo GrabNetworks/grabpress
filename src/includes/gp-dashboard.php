@@ -93,7 +93,21 @@
 											<div class="tab-content">
 												<div class="tab-pane active nano" id="messages-tab1">
 													<div class="content">
-														<?php echo html_entity_decode($pills[0]->message->body); ?>
+														     <?php
+                                                                                                                        $num_feeds = count($feeds);
+                                                                                                                        if($publisher_status == "account-unlinked"){
+                                                                                                                                echo "Want to earn money? <a href=\"admin.php?page=account&action=create\">Create</a> or <a href=\"admin.php?page=account&action=default\">link an existing</a> Grab Publisher account.";
+                                                                                                                        }
+                                                                                                                        elseif($num_feeds == 0){
+                                                                                                                                echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=autoposter\">here</a>";
+                                                                                                                        }
+                                                                                                                        else{
+                                                                                                                                $p = count($pills);
+                                                                                                                                $p--;
+                                                                                                                                $r = rand(0, $p);
+                                                                                                                                echo html_entity_decode($pills[$r]->message->body);
+                                                                                                                        }
+                                                                                                                ?>	
 													</div>
 												</div>
 											</div>
@@ -168,24 +182,20 @@
 												<?php echo $schedule?>
 											</td>
 											<?php
+												$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												if($feed->feed_health > 0.8) {
 													$feed_health = "feed-health-100";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
+													
 												}elseif($feed->feed_health > 0.6){
 													$feed_health = "feed-health-80";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}elseif ($feed->feed_health > 0.4) {
 													$feed_health = "feed-health-60";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}elseif ($feed->feed_health > 0.2) {
 													$feed_health = "feed-health-40";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}elseif($feed->feed_health > 0) {
 													$feed_health = "feed-health-20";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}else{
 													$feed_health = "feed-health-0";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}
 											?>
 											<td class="<?php echo $feed_health; ?>">
