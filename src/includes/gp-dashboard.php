@@ -29,9 +29,9 @@
 												</div>
 												<div class="accordion-right"></div>
 											</div>
-											<div id="collapse<?php echo $i;?>" class="accordion-body" >
-												<div class="accordion-inner">
-													<span><?php echo "Add a feed to your watch list in the Feed Activity panel";?></span>
+											<div id="collapse<?php echo $i;?>" class="accordion-body" style="height:95px;" >
+												<div class="accordion-inner" >
+													<span class="accordion-warning">Add a feed to your watch list in the Feed Activity panel</span>
 												</div>
 											</div>
 										</div>
@@ -271,26 +271,44 @@
 		      $.post(ajaxurl, data, function(response) {	        
 				    var parsedJson = $.parseJSON(response);
 				    var accordion = '';
-				    for(var i in parsedJson.results) {
-					  if(!isNaN(i)) {
-					  	accordion += '<div class="accordion-group">'
-									+'<div class="accordion-heading">'
-									+'	<div class="accordion-left"></div>'
-									+'	<div class="accordion-center">'
-									+'		<a class="accordion-toggle" data-guid=v"'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
-									+ 		parsedJson.results[i].video.title
-									+'		</a>'
-									+'	</div>'
-									+'	<div class="accordion-right"></div>'
-									+'</div>'
-									+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
-									+'	<div class="accordion-inner">'
-									+'	</div>'
-									+'</div>'
-									+'</div>';
-					  }
-					}
-					$('#accordion2').html(accordion);		
+				    if (parsedJson.results != ''){				    	
+					    for(var i in parsedJson.results) {
+						  if(!isNaN(i)) {
+						  	accordion += '<div class="accordion-group">'
+										+'<div class="accordion-heading">'
+										+'	<div class="accordion-left"></div>'
+										+'	<div class="accordion-center">'
+										+'		<a class="accordion-toggle" data-guid=v"'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
+										+ 		parsedJson.results[i].video.title
+										+'		</a>'
+										+'	</div>'
+										+'	<div class="accordion-right"></div>'
+										+'</div>'
+										+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
+										+'	<div class="accordion-inner">'
+										+'	</div>'
+										+'</div>'
+										+'</div>';
+						  }
+						}						
+				    }else{
+				    	accordion += '<div class="accordion-group">'
+										+'<div class="accordion-heading">'
+										+'	<div class="accordion-left"></div>'
+										+'	<div class="accordion-center">'										
+										+'			&nbsp;'
+										+'	</div>'
+										+'	<div class="accordion-right"></div>'
+										+'</div>'
+										+'<div id="collapse1" class="accordion-body" style="height:95px;">'
+										+'	<div class="accordion-inner">'
+										+'		<span class="accordion-warning">Add a feed to your watch list in the Feed Activity panel</span>'
+										+'	</div>'
+										+'</div>'
+										+'</div>';
+				    }
+				    $('#accordion2').html(accordion);	
+				    	
 
 				if(watchlist_check.val() == 1) {
 		          watchlist_check.val('0');
@@ -370,7 +388,6 @@
 		}
 
 		function resize_accordion(){
-			console.log("resize");
 			var width = jQuery(jQuery(".accordion-center")[0]).css("width");
 			width = width.replace("px","");
 			jQuery(".accordion-inner").css("height", width* 0.5625 )
