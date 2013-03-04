@@ -49,13 +49,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
 			}else{
 				$params = strstr($resource, '?') ? '&' : '?';
-				foreach ($data as $key => $value) {
-					if(is_array($value)){
-						$value = "[".implode(",", $value)."]";
-					}
-					$params .=$key.'='.$value.'&';
-				}
-				$params = substr($params, 0, -1);
+				$params = http_build_query($data);
 			}
 			switch($method){
 				case 'GET':		
