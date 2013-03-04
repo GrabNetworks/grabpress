@@ -148,24 +148,20 @@
 												<?php echo $schedule?>
 											</td>
 											<?php
+												$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												if($feed->feed_health > 0.8) {
 													$feed_health = "feed-health-100";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
+													
 												}elseif($feed->feed_health > 0.6){
 													$feed_health = "feed-health-80";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}elseif ($feed->feed_health > 0.4) {
 													$feed_health = "feed-health-60";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}elseif ($feed->feed_health > 0.2) {
 													$feed_health = "feed-health-40";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}elseif($feed->feed_health > 0) {
 													$feed_health = "feed-health-20";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}else{
 													$feed_health = "feed-health-0";
-													$feed_health_value = $feed->submissions . "/" . $feed->posts_per_update;
 												}
 											?>
 											<td class="<?php echo $feed_health; ?>">
