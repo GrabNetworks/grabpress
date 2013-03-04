@@ -73,12 +73,21 @@
 											<div class="tab-content">
 												<div class="tab-pane active nano" id="messages-tab1">
 													<div class="content">
-														<?php
-															$p = count($pills);
-															$p--;
-															$r = rand(0, $p);
-															echo html_entity_decode($pills[$r]->message->body); 
-														?> 
+														     <?php
+                                                                                                                        $num_feeds = count($feeds);
+                                                                                                                        if($publisher_status == "account-unlinked"){
+                                                                                                                                echo "Want to earn money? <a href=\"admin.php?page=account&action=create\">Create</a> or <a href=\"admin.php?page=account&action=default\">link an existing</a> Grab Publisher account.";
+                                                                                                                        }
+                                                                                                                        elseif($num_feeds == 0){
+                                                                                                                                echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=autoposter\">here</a>";
+                                                                                                                        }
+                                                                                                                        else{
+                                                                                                                                $p = count($pills);
+                                                                                                                                $p--;
+                                                                                                                                $r = rand(0, $p);
+                                                                                                                                echo html_entity_decode($pills[$r]->message->body);
+                                                                                                                        }
+                                                                                                                ?>	
 													</div>
 												</div>
 											</div>
