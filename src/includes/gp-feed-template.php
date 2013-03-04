@@ -556,6 +556,10 @@
 						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />					
 						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 							<?php								
+								if(!array_key_exists("channel", $form)){
+									$form["channel"] = array();
+								}
+								
 								if(is_array($form["channel"])){
 									$channels = $form["channel"];
 								}else{
