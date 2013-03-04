@@ -75,6 +75,7 @@
 													<div class="content">
 														<?php
 															$p = count($pills);
+															$p--;
 															$r = rand(0, $p);
 															echo html_entity_decode($pills[$r]->message->body); 
 														?> 
