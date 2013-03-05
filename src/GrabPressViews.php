@@ -255,10 +255,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
 			}elseif(isset($request["feed_id"])){
 				$feed = GrabPressAPI::get_feed($request["feed_id"]);
+
 				$url = array();
 				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
 				$adv_search_params = $url;
 				$request["keywords"] = Grabpress::generate_adv_search_string($adv_search_params);
+				$request["providers"] = explode(",", $url["providers"]);
+				$request["channels"] = explode(",", $url["categories"]);
 			}else{
 				$adv_search_params = $request;
 				$request["keywords"] = Grabpress::generate_adv_search_string($adv_search_params);
