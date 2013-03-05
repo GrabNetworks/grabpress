@@ -575,9 +575,9 @@ line-height: 24px;
 #form-dashboard{
     background: #000 url("../images/background.png") repeat;
     margin: 0;
-    padding: 0 !important;
+    padding: 0 0 160px 0 !important;
     box-shadow: 0 0 5px 2px rgb(0,0,0) inset;
-    height: 100%;
+    height: auto;
     width: 100%;
 }
 
@@ -595,6 +595,9 @@ line-height: 24px;
 #form-dashboard .tab-content{
     background: #FFF url( '../images/inset.png' ) repeat-x left bottom;
     box-shadow: 0 0 5px 2px rgb(0,0,0) inset, 0 1px 0 0 rgba(255, 255,255,0.25);
+}
+#form-dashboard .faq .tab-content{
+    padding: 10px 10px 20px 10px;
 }
 #t #b .nav .active > a {
     height: 20px;
@@ -986,4 +989,7 @@ line-height: 24px;
     font: 18px 'Gill Sans W01 Light';
     padding: 15px;
     color: #000;
+}
+#form-dashboard #message{
+    display:none;
 }
