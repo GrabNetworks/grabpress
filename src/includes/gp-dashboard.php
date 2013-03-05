@@ -236,7 +236,7 @@
 									</ul>
 									<div class="tab-content">
 										<div class="tab-pane active" id="faq-tab1">
-											<p> Placeholder </p>
+											<p> Read more about GrabMedia and our GrabPress and Autoposter technology:</p>
 											<?php foreach($resources as $msg){ ?>
 											<p>
 												<?php echo html_entity_decode($msg->message->body); ?>
