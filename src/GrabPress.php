@@ -357,11 +357,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$string .= $keywords["keywords_and"];
 
 			if($keywords["keywords_not"]){
-				$not = preg_split("/\s\s+/", $keywords["keywords_not"]);
-				if(count($not) > 1){
-					$string .= join(" -",$not);
-				}else{
-					$string .= " -".$not[0];
+				$not = preg_split("/\s+/", $keywords["keywords_not"]);
+				foreach ($not as $value) {
+					$string .= " -".$value;
 				}
 			}
 
@@ -370,16 +368,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 
 			if(isset($keywords["keywords_or"])){
-
 				$or = preg_split("/\s+/", $keywords["keywords_or"]);
-				if($string){
-					$string .= " OR ";
-				}
-
-				if(count($or) > 1){
-					$string .= join(" OR ", $or);
-				}else{
+				if(count($or) == 1){
 					$string .= $or[0];
+				}elseif(count($or) > 1){
+					$string .= join(" OR ", $or);
 				}
 			}
 			return $string;
