@@ -105,29 +105,35 @@
 			<input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
 		</div>	
 		<?php
-			foreach ($list_feeds["results"] as $result) {
-		?>
-		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
-		<div class="tile-left">
-			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72" width="123" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
+			if(count($list_feeds["results"])){
+				foreach ($list_feeds["results"] as $result) {
+			?>
+			<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
+			<div class="tile-left">
+				<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72" width="123" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
+			</div>
+			<div class="tile-right">			
+				<h2 class="video_title">
+				<?php echo $result["video"]["title"]; ?>	
+				</h2>
+				<p class="video_summary">
+					<?php echo $result["video"]["summary"] ?>
+				</p>
+				<p class="video_date">
+					<?php $date = new DateTime( $result["video"]["created_at"] );
+					$stamp = $date->format('m/d/Y') ?>
+				<span><?php echo $stamp; ?>&nbsp;&nbsp;</span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+				<input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+				
+			</div>
 		</div>
-		<div class="tile-right">			
-			<h2 class="video_title">
-			<?php echo $result["video"]["title"]; ?>	
-			</h2>
-			<p class="video_summary">
-				<?php echo $result["video"]["summary"] ?>
-			</p>
-			<p class="video_date">
-				<?php $date = new DateTime( $result["video"]["created_at"] );
-				$stamp = $date->format('m/d/Y') ?>
-			<span><?php echo $stamp; ?>&nbsp;&nbsp;</span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
-			
-		</div>
-	</div>
-		<?php
-			}
+			<?php
+				}
+		}else{
+			?>
+			<h1>It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed</h1>
+			<?php
+		}
 		?>
 		</fieldset>
 	</div>
