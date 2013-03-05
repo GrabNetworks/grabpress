@@ -1,7 +1,8 @@
 <form method="post" action="" id="form-dashboard">
 
 <div class="wrap" >
-			<img src="<?php echo plugin_dir_url( __FILE__ ).'images/logo.png' ?>"/>
+		<img src="<?php echo plugin_dir_url( __FILE__ ).'images/logo.png' ?>"/>
+		<h2>&nbsp;</h2>
 
 		<div id="t">
 		  <div id="b">		    
@@ -334,6 +335,8 @@
 		};
 
 		function accordion_binding(env, embed_id){
+
+			$("#form-dashboard").parent().css("margin", "-10px 0 0 -18px");
 
 			var active_video = null;
 			// var move_embed = function(embed_id, from, to){
