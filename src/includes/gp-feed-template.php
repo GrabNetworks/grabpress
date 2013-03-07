@@ -24,7 +24,7 @@
 	                	var and = [], or = [], phrase = [], not = [],
 	                	kwrds = $("#keywords").val(),
 	                	regPhrase = /"[^"]*"/ig,
-	                	regOR = /OR\s+([a-zA-Z0-9_]*)/;
+	                	regOR = /OR\s+[\w]*/ig;
 
 	                	phrase = regPhrase.exec(kwrds);
 	                	if(!phrase){
@@ -37,12 +37,13 @@
 
 	                	kwrds = kwrds.replace(regPhrase, "");
 
-	                	or = regOR.exec(kwrds);
+
+	                	or = kwrds.match(regOR);
 	                	
 	                	if(!or){
 	                		or = [];
 	                	}else{
-	                		or = or.filter(function(n){return n.slice(0,2)!="OR";});
+	                		or = or.map(function(n){return n.slice(3,n.length)});
 	                	}
 
 						kwrds = kwrds.replace(regOR, "");
@@ -556,6 +557,10 @@
 						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />					
 						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 							<?php								
+								if(!array_key_exists("channel", $form)){
+									$form["channel"] = array();
+								}
+								
 								if(is_array($form["channel"])){
 									$channels = $form["channel"];
 								}else{

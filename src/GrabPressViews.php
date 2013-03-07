@@ -255,10 +255,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
 			}elseif(isset($request["feed_id"])){
 				$feed = GrabPressAPI::get_feed($request["feed_id"]);
+
 				$url = array();
 				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
 				$adv_search_params = $url;
 				$request["keywords"] = Grabpress::generate_adv_search_string($adv_search_params);
+				$request["providers"] = explode(",", $url["providers"]);
+				$request["channels"] = explode(",", $url["categories"]);
 			}else{
 				$adv_search_params = $request;
 				$request["keywords"] = Grabpress::generate_adv_search_string($adv_search_params);
@@ -414,11 +417,22 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$resources = json_decode($resources_json);
 
 			$watchlist = GrabpressAPI::get_watchlist();
+			$feeds = GrabPressAPI::get_feeds();
+			$feeds = GrabPressAPI::watchlist_activity($feeds);
+			$num_feeds = count( $feeds );
+
+			$user = GrabPressAPI::get_user();
+			$linked = isset($user->email);
+       		$publisher_status = $linked ? "account-linked" : "account-unlinked";
+
 			print GrabPress::fetch( 'includes/gp-dashboard.php' , array(
 				"messages" => $messages,
 				"pills" => $pills,
 				"resources" => $resources,
-				"watchlist" => array_splice($watchlist,0,10)
+				"feeds" => $feeds,
+				"watchlist" => array_splice($watchlist,0,10),
+				"embed_id" => GrabPressAPI::get_connector()->ctp_embed_id,
+				"publisher_status" => $publisher_status
 				));
 		}
 
@@ -469,13 +483,11 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			$feeds = GrabPressAPI::get_feeds();
 			$num_feeds = count( $feeds );
-
+			$duplicated_name = "false";
 			foreach ( $feeds as $record_feed ) {
 				if($record_feed->feed->name == $name){
 					$duplicated_name = "true";
 					break;
-				}else{
-					$duplicated_name = "false";
 				}
 			}
 
@@ -487,21 +499,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$video_id = $_REQUEST['video_id'];
 			$format = $_REQUEST['format'];
 			$id = GrabPressAPI::get_connector_id();
-			$url= 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/'.$video_id.'.mrss';
-			
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_HEADER, false);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$xml = curl_exec($ch);
-			
-			curl_close($ch);
 
-			$search = array('grab:', 'media:', 'type="flash"');
-			$replace = array('grab', 'media', '');
+			$objXml = GrabPressAPI::get_video_mrss($video_id);
 
-			$xmlString = str_replace( $search, $replace, $xml);
-			$objXml = simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
 			$settings = GrabPressAPI::get_player_settings_for_embed();
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
@@ -511,7 +511,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 						<p>".$item->description."</p> 
 						<!--more-->
 						<div id=\"grabembed\">
-						<p><div id=\"".$item->mediagroup->grabembed->attributes()->embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".$item->mediagroup->grabembed->attributes()->embed_id."&content=v".$item->guid."&width=".$settings["width"]."&height=".$settings["height"]."&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
+						<p><div id=\"".GrabPressAPI::get_connector()->ctp_embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".GrabPressAPI::get_connector()->ctp_embed_id."&content=v".$item->guid."&width=".$settings["width"]."&height=".$settings["height"]."&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
 						</div>
 						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
 						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
@@ -567,7 +567,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				}elseif($format == 'embed'){
 					echo json_encode(array(
 						"status" => "ok",
-					 	"content" => '<div id="grabDiv'.$item->mediagroup->grabembed->attributes()->embed_id.'"><script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$item->mediagroup->grabembed->attributes()->embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
+					 	"content" => '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'"><script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.GrabPressAPI::get_connector()->ctp_embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
 				}		
 			}	
 
@@ -583,7 +583,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );
-			$watchlist = intval( $_REQUEST['watchlist'] );							
+			$watchlist = intval( $_REQUEST['watchlist'] );
 
 			$post_data = array(
 				'feed' => array(
@@ -592,6 +592,12 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			);
 
 			GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
+
+			$response = new stdClass();
+			$response->environment = GrabPress::$environment;
+			$response->embed_id = GrabPressAPI::get_connector()->ctp_embed_id;
+			$response->results = array_splice(GrabpressAPI::get_watchlist(), 0 , 10);
+			echo json_encode($response);
 						
 			die(); // this is required to return a proper result
 

@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.1.0-02082013
+Version: 2.1.1-03052013
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.1.0-02082013';
+		static $version = '2.1.1-03052013';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -279,16 +279,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		}
 		static function generate_catalog_url($options, $unlimited = false){
+			
 			$defaults = array("providers" => "", "categories" => "");
 			$options = array_merge($defaults, $options);
 			$options = array_map(array("GrabPress", "_escape_params"), $options);
+			if(isset($options["keywords_or"])){
+				$options["keywords"] = $options["keywords_or"];
+			}
 
 			$url = 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/videos/search.json?'.
 					'keywords_and='.$options["keywords_and"].
 					'&categories='.$options["categories"].
 					'&providers='.$options["providers"].
 					'&keywords_not='.$options["keywords_not"].
-					"&keywords=".$options["keywords_or"].
+					"&keywords=".$options["keywords"].
 					"&keywords_phrase=".$options["keywords_phrase"];
 			if(isset($options["sort_by"]) && $options["sort_by"] != ""){
 				$url .= "&sort_by=".$options["sort_by"];
@@ -353,11 +357,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$string .= $keywords["keywords_and"];
 
 			if($keywords["keywords_not"]){
-				$not = preg_split("/\s\s+/", $keywords["keywords_not"]);
-				if(count($not) > 1){
-					$string .= join(" -",$not);
-				}else{
-					$string .= " -".$not[0];
+				$not = preg_split("/\s+/", $keywords["keywords_not"]);
+				foreach ($not as $value) {
+					$string .= " -".$value;
 				}
 			}
 
@@ -365,17 +367,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$string .= ' "'.trim($keywords["keywords_phrase"]).'"';
 			}
 
-			if($keywords["keywords_or"]){
-
+			if(isset($keywords["keywords_or"])){
 				$or = preg_split("/\s+/", $keywords["keywords_or"]);
-				if($string){
-					$string .= " OR ";
-				}
-
-				if(count($or) > 1){
-					$string .= join(" OR ", $or);
-				}else{
-					$string .= $or[0];
+				if(count($or) == 1){
+					if(!$string){
+						$string .= $or[0];
+					}else{
+						$string .= " OR ".$or[0];
+					}
+				}elseif(count($or) > 1){
+					if(!$string){
+						$string .= join(" OR ", $or);
+					}else{
+						$string .= " OR ".join(" OR ", $or);
+					}
 				}
 			}
 			return $string;
@@ -642,8 +647,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js', array("jquery-ui-widget" ));
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' , array("jquery"));
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
+			wp_enqueue_script( 'nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
 
-			wp_enqueue_script( 'grab-player', 'http://player.grabnetworks.com/js/Player.js' );
+			wp_enqueue_script( 'grab-player', 'http://player.'.GrabPress::$environment.'.com/js/Player.js' );
 
 			$wpversion = floatval(get_bloginfo('version'));
 			if ( $wpversion <= 3.1 ) {		
@@ -653,14 +659,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			wp_enqueue_script( 'thickbox' );
 
-
-			wp_enqueue_script( 'twitter-bootstrap', $plugin_url.'/js/bootstrap/bootstrap.min.js'  , array("jquery"));
-
-			wp_enqueue_style( 'jquery-css', $plugin_url.'/css/grabpress.css' );
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
-			wp_enqueue_style( 'thickbox' );
 			wp_enqueue_style( 'bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
-			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );			
+			wp_enqueue_style( 'thickbox' );
+			wp_enqueue_style( 'nanoscroller', $plugin_url.'/css/nanoscroller.css');		
+			wp_enqueue_style( 'grabpress-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "bootstrap", "nanoscroller"));			
+			
+			
+			wp_enqueue_style( 'grabpresss-fonts', "http://fast.fonts.com/cssapi/7ece15ec-35ef-4a92-bc79-b5349675eb23.css");
+			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
+			
 		}
 
 		static function content_by_request( $content, $post )
