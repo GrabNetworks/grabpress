@@ -407,11 +407,6 @@
 						slideDownCurrent(panel);
 					}
 
-				}else{
-					panel.slideUp(400, function(){
-						panel.toggleClass("collapse");
-						panel.find(".accordion-inner").empty();	
-					});
 				}
 				
 				e.preventDefault();
