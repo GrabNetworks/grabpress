@@ -273,7 +273,7 @@
 			});
 			$("#collapse1").toggleClass("collapse");
 		}
-		function watchlist_binding(){
+		function watchlist_binding(embed_id){
 			$('.watchlist-check').bind('click', function(e){
 
 			var id = this.id.replace('watchlist-check-','');
@@ -297,23 +297,54 @@
 					if (parsedJson.results != ''){				    	
 						for(var i in parsedJson.results) {
 						  if(!isNaN(i)) {
-							accordion += '<div class="accordion-group">'
+						  	if(i==0){
+
+								accordion += '<div class="accordion-group">'
 										+'<div class="accordion-heading">'
 										+'	<div class="accordion-left"></div>'
 										+'	<div class="accordion-center">'
-										+'		<a class="accordion-toggle" data-guid=v"'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
+										+'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
 										+ 		parsedJson.results[i].video.title
 										+'		</a>'
 										+'	</div>'
 										+'	<div class="accordion-right"></div>'
 										+'</div>'
-										+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
+										+'<div id="collapse' + (i+1) + '" class="accordion-body collapse in" >'
+										+'	<div class="accordion-inner">'
+										+'		<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>'
+										+'	</div>'
+										+'</div>'
+										+'</div>';
+						  	}else{
+								accordion += '<div class="accordion-group">'
+										+'<div class="accordion-heading">'
+										+'	<div class="accordion-left"></div>'
+										+'	<div class="accordion-center">'
+										+'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
+										+ 		parsedJson.results[i].video.title
+										+'		</a>'
+										+'	</div>'
+										+'	<div class="accordion-right"></div>'
+										+'</div>'
+										+'<div id="collapse' + (i+1) + '" class="accordion-body collapse in" style="display:none;">'
 										+'	<div class="accordion-inner">'
 										+'	</div>'
 										+'</div>'
 										+'</div>';
+							}
 						  }
-						}						
+						}
+					  		$('#accordion2').html(accordion);	
+							active_video = new com.grabnetworks.Player({
+							
+							"id": embed_id,
+							"width": "100%",
+							"height": "100%",
+							"content": parsedJson.results[0].video.guid,
+							"autoPlay": false
+						});
+						$("#collapse1").toggleClass("collapse");
+										
 					}else{
 						accordion += '<div class="accordion-group">'
 										+'<div class="accordion-heading">'
@@ -329,9 +360,10 @@
 										+'	</div>'
 										+'</div>'
 										+'</div>';
+					$('#accordion2').html(accordion);
 					}
-					$('#accordion2').html(accordion);	
-						
+					
+					
 
 				if(watchlist_check.val() == 1) {
 				  watchlist_check.val('0');
@@ -395,7 +427,7 @@
 		}
 
 		function init(){
-			watchlist_binding();
+			watchlist_binding(<?php echo $embed_id ?>);
 			accordion_binding('<?php echo GrabPress::$environment; ?>', <?php echo $embed_id ?>);
 			onload_openvideo(<?php echo $embed_id ?>);
 			$(".nano").nanoScroller({"alwaysVisible":true});
