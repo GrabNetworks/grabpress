@@ -170,37 +170,37 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			return GrabPressAPI::get_connector()->id;
 		}
 		
-		static function create_feed() {
+		static function create_feed($params) {
 			GrabPress::log();
 			if ( GrabPressAPI::validate_key() ) {
-				$channels = $_REQUEST[ 'channel' ];
+				$channels = $params[ 'channel' ];
 				$channelsList = implode( ',', $channels );
 				$channelsListTotal = count( $channels ); // Total providers chosen by the user
-				$channels_total = $_REQUEST['channels_total']; // Total providers from the catalog list
+				$channels_total = $params['channels_total']; // Total providers from the catalog list
 				if ( $channelsListTotal == $channels_total ) {
 					$channelsList = '';
 				}
 
-				$name = rawurlencode( $_REQUEST[ 'name' ] );
+				$name = rawurlencode( $params[ 'name' ] );
 
-				$providers = $_REQUEST['provider'];
+				$providers = $params['provider'];
 				$providersList = implode( ',', $providers );
 				$providersListTotal = count( $providers ); // Total providers chosen by the user
-				$providers_total = $_REQUEST['providers_total']; // Total providers from the catalog list
+				$providers_total = $params['providers_total']; // Total providers from the catalog list
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
 				$url = GrabPress::generate_catalog_url(array(
-			   		"keywords_and" => $_REQUEST["keywords_and"],
-			   		"keywords_not" => $_REQUEST["keywords_not"],
-			   		"keywords_or" => $_REQUEST["keywords_or"],
-			   		"keywords_phrase" => $_REQUEST["keywords_phrase"],
+			   		"keywords_and" => $params["keywords_and"],
+			   		"keywords_not" => $params["keywords_not"],
+			   		"keywords_or" => $params["keywords_or"],
+			   		"keywords_phrase" => $params["keywords_phrase"],
 			   		"providers" => $providersList,
 			   		"categories" => $channelsList
 			   	));
 
 				$connector_id = GrabPressAPI::get_connector_id();
-				$category_list = $_REQUEST[ 'category' ];
+				$category_list = $params[ 'category' ];
 				$category_length = count( $category_list );
 				$cats = array();
 				if ( is_array( $category_list ) ) {
@@ -214,27 +214,27 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				}else {
 					$cats[] = 'Uncategorized';
 				}
-				$schedule = $_REQUEST['schedule'];
+				$schedule = $params['schedule'];
 
-				if ( $_REQUEST['click_to_play'] == "1" ) {
+				if ( $params['click_to_play'] == "1" ) {
 					$auto_play = "1";
 				}else {
 					$auto_play = "0";
 				}
 
-				$author_id = (int)$_REQUEST['author'];
+				$author_id = (int)$params['author'];
 
 				$post_data = array(
 					'feed' => array(
 						'name' => $name,
-						'posts_per_update' => $_REQUEST[ 'limit' ],
+						'posts_per_update' => $params[ 'limit' ],
 						'url' => $url,
 						'custom_options' => array(
 							'category' => $cats,
-							'publish' => (bool)( $_REQUEST[ 'publish' ] ),
+							'publish' => (bool)( $params[ 'publish' ] ),
 							'author_id' => $author_id
 						),
-						'update_frequency' => $_REQUEST[ 'schedule' ] ,
+						'update_frequency' => $params[ 'schedule' ] ,
 						'auto_play' => $auto_play
 
 					)

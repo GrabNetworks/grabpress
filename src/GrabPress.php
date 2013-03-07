@@ -385,23 +385,21 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $string;
 		}
-
-		static function dispatcher() {			
+		static function dispatcher() {
 			GrabPress::log();
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
 			$_REQUEST = GrabPress::form_default_values( $_REQUEST );
-			$action = $_REQUEST[ 'action' ];		
-			$params = $_REQUEST;			
+			$action = $_REQUEST[ 'action' ];
+			$params = $_REQUEST;
 			switch ( $_GET[ 'page' ] ) {
 			case 'autoposter':
 				switch ( $action ) {
 				case 'update':
-					if ( GrabPressAPI::validate_key() && $_REQUEST[ 'channel' ] != '' && $_REQUEST[ 'provider' ] != '' ) {
-						GrabPressAPI::create_feed();
-						GrabPressViews::feed_creation_success();
+					if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
+						GrabPressViews::feed_creation_success($params);
 					}else {
 						GrabPress::$invalid = true;
-						GrabPressViews::feed_management();
+						GrabPressViews::feed_management($params);
 					}
 					break;
 				case 'delete':

@@ -334,8 +334,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					"blogusers" => $blogusers ) );
 		}
 
-		static function feed_creation_success(){
-			print GrabPress::fetch( "includes/gp-feed-created-template.php" );
+		static function feed_creation_success($params){
+			GrabPressAPI::create_feed($params);
+			print GrabPress::fetch( "includes/gp-feed-created-template.php", array("request" => $params));
 		}
 
 		static function template_management($request){
