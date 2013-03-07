@@ -251,7 +251,12 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				GrabPress::$feed_message = 'Your API key is no longer valid. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
 			}
 		}
-
+		static function validate_user($credentials){
+			$credentials = array( 'user' => $params[ 'email' ], 'pass' => $params[ 'password' ] );
+			$user_json = GrabPressAPI::call( 'GET', '/user/validate', $credentials, true );
+			$user_data = json_decode( $user_json );
+			return isset( $user_data -> user );
+		}
 		static function validate_key() {
 			GrabPress::log();
 			$api_key = get_option( 'grabpress_key' );

@@ -132,6 +132,80 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			GrabPress::log();
 			print GrabPress::fetch( 'includes/gp-account-template.php' );
 		}
+		static function link_account($params){
+			if( isset( $params[ 'email' ] ) && isset( $params[ 'password' ]) ){
+				$credentials = array( 'user' => $params[ 'email' ], 'pass' => $params[ 'password' ] );
+				$user_json = GrabPressAPI::call( 'GET', '/user/validate', $credentials, true );
+				$user_data = json_decode( $user_json );
+				if( isset( $user_data -> user ) ){
+					$user = $user_data -> user;
+					$connector_data = array(
+						'user_id' 	=> $user -> id,
+						'email' 	=> $user -> email
+					);
+					GrabPress::log( 'PUTting to connector ' . GrabPressAPI::get_connector_id() . ':' . $user -> id );
+					$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
+					GrabPress::grabpress_plugin_messages();
+					$params[ 'action' ] = 'default';
+				}else{
+					GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
+					$params[ 'action' ] = 'default';
+				}
+			}else {
+				GrabPress::abort( 'Attempt to link user with incomplete form data.' );
+			}
+			GrabPressViews::account_management();
+		}
+		static function unlink_account($params){
+			if( isset( $params[ 'confirm' ]) ){
+				$user = GrabPress::get_user_by("slug");
+				$connector_data = array(
+					'user_id' 	=> null,
+					'email' 	=> $user -> email
+				);
+				$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
+				GrabPress::grabpress_plugin_messages();
+				$params[ 'action' ] = 'default';
+			}
+			GrabPressViews::account_management();						
+		}
+		static function create_user($params){
+			$payment = isset( $params['paypal_id']) ? 'paypal' : '';
+			$user_data = array(
+				'user'=>array(
+					'email'=>trim($params['email']),
+					 'password'=>$params['password'],
+					 'first_name'=>$params['first_name'],
+					 'last_name'=>$params['last_name'],
+					 'publisher_category_id'=>$params['publisher_category_id'],
+					 'payment_detail' => array(
+						'payee' => $params['first_name'] . ' ' . $params['last_name'],
+						'company'=>$params['company'],
+						'address1'=>$params['address1'],
+						'address2'=>$params['address2'],
+						'city'=>$params['city'],
+						'state'=>$params['state'],
+						'zip'=>$params['zip'],
+						'country_id' => 214,
+						'preferred_payment_type'=> 'Paypal',
+						'phone_number'=>$params['phone_number'],
+						'paypal_id'=>$params['paypal_id']
+					 )
+				)
+			);
+			$user_json = json_encode($user_data);
+			$result_json = GrabPressAPI::call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
+			$result_data = json_decode( $result_json);
+
+			if(!isset( $result_data->error ) ){
+				$params[ 'action' ] = 'link-user';
+				return GrabPress::dispatcher();
+			}else{
+				GrabPress::$error = 'We already have a registered user with the email address '.$params["email"].'. If you would like to update your account information, please login to the <a href="http://www.grab-media.com/publisherAdmin/">Grab Publisher Dashboard</a>, or contact our <a href="http://www.grab-media.com/support/">support</a> if you need assistance.';
+				$params['action'] = 'create';
+			}
+			GrabPressViews::account_management($params);
+		}
 
 		static function catalog_management() {
 			GrabPress::log();

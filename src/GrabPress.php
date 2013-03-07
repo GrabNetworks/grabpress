@@ -422,90 +422,28 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				case 'account':
 					
-					if(isset($_REQUEST[ 'action' ])){
-						switch ( $_REQUEST[ 'action' ] ) {
+					if(isset($params[ 'action' ])){
+						switch ( $params[ 'action' ] ) {
 							case 'default':
 								break;
 							case 'link-user' :
-								if( isset( $_REQUEST[ 'email' ] ) && isset( $_REQUEST[ 'password' ]) ){
-									$credentials = array( 'user' => $_REQUEST[ 'email' ], 'pass' => $_REQUEST[ 'password' ] );
-									$user_json = GrabPressAPI::call( 'GET', '/user/validate', $credentials, true );
-									$user_data = json_decode( $user_json );
-									if( isset( $user_data -> user ) ){
-										$user = $user_data -> user;
-										$connector_data = array(
-											'user_id' 	=> $user -> id,
-											'email' 	=> $user -> email
-										);
-										GrabPress::log( 'PUTting to connector ' . GrabPressAPI::get_connector_id() . ':' . $user -> id );
-										$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
-										GrabPress::grabpress_plugin_messages();
-										$_REQUEST[ 'action' ] = 'default';
-									}else{
-										GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
-										$_REQUEST[ 'action' ] = 'default';
-									}
-								}else {
-									GrabPress::abort( 'Attempt to link user with incomplete form data.' );
-								}
+								GrabPressViews::link_user($params);
 								break;
 							case 'unlink-user' :
-								if( isset( $_REQUEST[ 'confirm' ]) ){
-									$user = GrabPress::get_user_by("slug");
-									$connector_data = array(
-										'user_id' 	=> null,
-										'email' 	=> $user -> email
-									);
-									$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
-									GrabPress::grabpress_plugin_messages();
-									$_REQUEST[ 'action' ] = 'default';
-								}
+								GrabPressViews::unlink_user($params);
 								break;
-								case 'create-user':							
-									$payment = isset( $_REQUEST['paypal_id']) ? 'paypal' : '';
-									$user_data = array(
-										'user'=>array(
-											'email'=>trim($_REQUEST['email']),
-											 'password'=>$_REQUEST['password'],
-											 'first_name'=>$_REQUEST['first_name'],
-											 'last_name'=>$_REQUEST['last_name'],
-											 'publisher_category_id'=>$_REQUEST['publisher_category_id'],
-											 'payment_detail' => array(
-												'payee' => $_REQUEST['first_name'] . ' ' . $_REQUEST['last_name'],
-												'company'=>$_REQUEST['company'],
-												'address1'=>$_REQUEST['address1'],
-												'address2'=>$_REQUEST['address2'],
-												'city'=>$_REQUEST['city'],
-												'state'=>$_REQUEST['state'],
-												'zip'=>$_REQUEST['zip'],
-												'country_id' => 214,
-												'preferred_payment_type'=> 'Paypal',
-												'phone_number'=>$_REQUEST['phone_number'],
-												'paypal_id'=>$_REQUEST['paypal_id']
-											 )
-										)
-									);
-									$user_json = json_encode($user_data);
-									$result_json = GrabPressAPI::call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
-									$result_data = json_decode( $result_json);
-
-									if(!isset( $result_data->error ) ){
-										$_REQUEST[ 'action' ] = 'link-user';
-										return GrabPress::dispatcher();
-									}else{
-										GrabPress::$error = 'We already have a registered user with the email address '.$_REQUEST["email"].'. If you would like to update your account information, please login to the <a href="http://www.grab-media.com/publisherAdmin/">Grab Publisher Dashboard</a>, or contact our <a href="http://www.grab-media.com/support/">support</a> if you need assistance.';
-										$_REQUEST['action'] = 'create';
-									}
-									break;
-								case 'link':
-								case 'unlink':
-								case 'create':
-								case 'switch':
-									break;
-								default:
-									$_REQUEST[ 'action' ] = 'default';
+							case 'create-user':							
+								GrabPressViews::create_user($params);
+								break;
+							case 'link':
+							case 'unlink':
+							case 'create':
+							case 'switch':
+							default:
+								$params[ 'action' ] = 'default';
+								GrabPressViews::account_management($params);
+								break;
 							}
-							GrabPressViews::account_management();
 							break;
 						}
 
