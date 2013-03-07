@@ -583,7 +583,7 @@ line-height: 24px;
 
 #t #b {
     background: none;
-    font: 12px 'Calibri W01 Regular 904604';
+    font: 12px 'Calibri W01 Regular 904604', Verdana;
 }
 
 #form-dashboard .panel {
@@ -603,7 +603,7 @@ line-height: 24px;
     height: 20px;
     color: #FFF;
     padding: 8px 0 0 0;
-    font: 12px 'Calibri W01 Regular 904604';
+    font: 12px 'Calibri W01 Regular 904604', Verdana;
     background: none;
     text-indent: 6px;
 }
@@ -966,11 +966,11 @@ line-height: 24px;
     padding-left: 20px\9 !important;
     font-family: inherit\9;
     font-size: 18px\9;
-    font: 18px 'Gill Sans W01 Light';    
+    font: 18px 'Gill Sans W01 Light', Arial;    
 }
 
 #t #b .welcome .content {
-    font: 26px 'DIN 1451 W01 Engschrift';
+    font: 26px 'DIN 1451 W01 Engschrift', Arial;
     text-transform: uppercase;
     width: 220px;
     line-height: 30px;
@@ -986,7 +986,7 @@ line-height: 24px;
 }
 
 #t #b .feeds h3 {
-    font: 18px 'Gill Sans W01 Light';
+    font: 18px 'Gill Sans W01 Light', Arial;
     padding: 15px;
     color: #000;
 }
