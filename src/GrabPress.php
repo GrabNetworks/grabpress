@@ -12,18 +12,18 @@ License: GPL2
 */
 /*  Copyright 2012  Grab Networks Holdings, Inc.  (email : licensing@grab-media.com)
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as
-    published by the Free Software Foundation.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License, version 2, as
+	published by the Free Software Foundation.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
@@ -332,7 +332,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			for ($i = 0; $i < count($keywords); $i++) {
 				if (preg_match("/^-/", $keywords[$i])) { 
 				  $temp_not = str_replace('-', '', $keywords[$i]);
-		          $keywords_not[] = $temp_not;	          
+				  $keywords_not[] = $temp_not;	          
 				}else{
 					$keywords_and[] = $keywords[$i];
 				}
@@ -426,13 +426,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						$providersList = '';
 					}
 						$url = GrabPress::generate_catalog_url(array(
-				   		"keywords_and" => $_REQUEST["keywords_and"],
-				   		"keywords_not" => $_REQUEST["keywords_not"],
-				   		"keywords_or" => $_REQUEST["keywords_or"],
-				   		"keywords_phrase" => $_REQUEST["keywords_phrase"],
-				   		"providers" => $providersList,
-				   		"categories" => $channelsList
-				   	));
+						"keywords_and" => $_REQUEST["keywords_and"],
+						"keywords_not" => $_REQUEST["keywords_not"],
+						"keywords_or" => $_REQUEST["keywords_or"],
+						"keywords_phrase" => $_REQUEST["keywords_phrase"],
+						"providers" => $providersList,
+						"categories" => $channelsList
+					));
 						
 					$connector_id = GrabPressAPI::get_connector_id();
 					$active = (bool)$_REQUEST['active'];
@@ -490,7 +490,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				break;	
 				case 'default':
 				default:				
-					GrabPressViews::feed_management();
+					GrabPressViews::feed_management($params);
 					break;
 				}
 				break;
@@ -508,7 +508,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							if( isset( $user_data -> user ) ){
 								$user = $user_data -> user;
 								$connector_data = array(
-								 	'user_id' 	=> $user -> id,
+									'user_id' 	=> $user -> id,
 									'email' 	=> $user -> email
 								);
 								GrabPress::log( 'PUTting to connector ' . GrabPressAPI::get_connector_id() . ':' . $user -> id );
@@ -527,7 +527,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						if( isset( $_REQUEST[ 'confirm' ]) ){
 							$user = GrabPress::get_user_by("slug");
 							$connector_data = array(
-							 	'user_id' 	=> null,
+								'user_id' 	=> null,
 								'email' 	=> $user -> email
 							);
 							$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
@@ -538,25 +538,25 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						case 'create-user':							
 							$payment = isset( $_REQUEST['paypal_id']) ? 'paypal' : '';
 							$user_data = array(
-							   	'user'=>array(
-							   		'email'=>trim($_REQUEST['email']),
-							         'password'=>$_REQUEST['password'],
-							         'first_name'=>$_REQUEST['first_name'],
-							         'last_name'=>$_REQUEST['last_name'],
-							         'publisher_category_id'=>$_REQUEST['publisher_category_id'],
-							         'payment_detail' => array(
-							         	'payee' => $_REQUEST['first_name'] . ' ' . $_REQUEST['last_name'],
-							         	'company'=>$_REQUEST['company'],
-								        'address1'=>$_REQUEST['address1'],
-								        'address2'=>$_REQUEST['address2'],
-								        'city'=>$_REQUEST['city'],
-								        'state'=>$_REQUEST['state'],
-								        'zip'=>$_REQUEST['zip'],
-								        'country_id' => 214,
-								        'preferred_payment_type'=> 'Paypal',
-								        'phone_number'=>$_REQUEST['phone_number'],
-								        'paypal_id'=>$_REQUEST['paypal_id']
-							         )
+								'user'=>array(
+									'email'=>trim($_REQUEST['email']),
+									 'password'=>$_REQUEST['password'],
+									 'first_name'=>$_REQUEST['first_name'],
+									 'last_name'=>$_REQUEST['last_name'],
+									 'publisher_category_id'=>$_REQUEST['publisher_category_id'],
+									 'payment_detail' => array(
+										'payee' => $_REQUEST['first_name'] . ' ' . $_REQUEST['last_name'],
+										'company'=>$_REQUEST['company'],
+										'address1'=>$_REQUEST['address1'],
+										'address2'=>$_REQUEST['address2'],
+										'city'=>$_REQUEST['city'],
+										'state'=>$_REQUEST['state'],
+										'zip'=>$_REQUEST['zip'],
+										'country_id' => 214,
+										'preferred_payment_type'=> 'Paypal',
+										'phone_number'=>$_REQUEST['phone_number'],
+										'paypal_id'=>$_REQUEST['paypal_id']
+									 )
 								)
 							);
 							$user_json = json_encode($user_data);
@@ -608,7 +608,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 				break;			
 			case 'gp-dashboard':
-           		GrabPressViews::dashboard_management($_REQUEST);
+				GrabPressViews::dashboard_management($_REQUEST);
 				break;
 			case 'gp-template':
 				GrabPressViews::template_management($_REQUEST);
@@ -648,7 +648,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$wpversion = floatval(get_bloginfo('version'));
 			if ( $wpversion <= 3.1 ) {		
-			    wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.1.8.7.js'  , array("jquery"));
+				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.1.8.7.js'  , array("jquery"));
 			}else{				
 				wp_enqueue_script( 'jquery-placeholder', $plugin_url.'/js/ui/jquery.placeholder.min.js' , array("jquery") );
 			}
@@ -668,24 +668,24 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function content_by_request( $content, $post )
 		{
-		    if ( ! empty ( $_REQUEST['pre_content'] )
-		        and current_user_can( 'edit_post', $post->ID )
-		        and '' === $content
-		    )
-		    {
-			    if ( ! empty ( $_REQUEST['post_id'] )){
-	              $post->ID = $_REQUEST['post_id'];
-	            }		        
-		        $content = str_replace('&amp;', '&', $_REQUEST['pre_content']);
-		        return stripslashes($content);
-		    }
-		    $content = str_replace('&amp;', '&', $content);
-		    return $content;
+			if ( ! empty ( $_REQUEST['pre_content'] )
+				and current_user_can( 'edit_post', $post->ID )
+				and '' === $content
+			)
+			{
+				if ( ! empty ( $_REQUEST['post_id'] )){
+				  $post->ID = $_REQUEST['post_id'];
+				}		        
+				$content = str_replace('&amp;', '&', $_REQUEST['pre_content']);
+				return stripslashes($content);
+			}
+			$content = str_replace('&amp;', '&', $content);
+			return $content;
 		}
 		static function modified_post_title ($title) {
 
 		  if ( ! empty ( $_REQUEST['post_title'] )){
-		  	return $title = "VIDEO: ".stripslashes($_REQUEST['post_title']);
+			return $title = "VIDEO: ".stripslashes($_REQUEST['post_title']);
 		  }
 		  
 		}

@@ -113,7 +113,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 										   "provider" => $params["provider"],
 										   "publish" => $params["publish"],
 										   "click_to_play" => $params["click_to_play"],
-										   "category" => ""				   
+										   "category" => ""
 											),
 							"list_providers" => $list_providers,
 							"providers_total" => $providers_total,
@@ -122,7 +122,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 							"blogusers" => $blogusers
 					 ) );
 			}
-		}	
+		}
 
 		static function account_management() {
 			GrabPress::log();
@@ -315,7 +315,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die();
 		}
 
-		static function feed_management() {
+		static function feed_management($params) {
 			GrabPress::log();
 
 			$list_providers = GrabPressAPI::get_providers();			
@@ -326,7 +326,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			$blogusers = get_users();
 			print GrabPress::fetch( 'includes/gp-feed-template.php',
-				array( "form" => $_REQUEST,
+				array( "form" => $params,
 					"list_providers" => $list_providers,
 					"providers_total" => $providers_total,
 					"list_channels" => $list_channels,
