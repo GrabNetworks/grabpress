@@ -260,6 +260,9 @@
 	jQuery(function($){
 		var active_video = null;
 		function onload_openvideo(embed_id){
+			if($(".accordion-warning").length == 1){
+				return false;
+			}
 			var embed = "";
 			var anchor = $($(".accordion-toggle[href='#collapse1']")[0]);
 			embed = '<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>';
