@@ -193,28 +193,25 @@ pre.prettyprint { padding: 5px; border:1px solid #d2d2d2; background:#f5f5f5 }
     width:400px;
     float:left;
 }
-.template-preview{
-    width:500px;
-    height:400px;
+.template-preview{        
     border: 1px solid black;
-    margin: 0;
+    float:left;       
+    margin: 9px 0 0 20px;
     padding: 0;
-    text-align: center;
-    float:left;
-    margin-left: 20px;
+    text-align: center; 
 }
 .template-preview .widescreen{
-    width: 480px;
-    height: 270px;
-    border: 2px dotted red;
-    position: absolute;
+    border-left: 2px dotted red;
+    border-right: 2px dotted red;
     display: block;
+    margin-left: 70px;
+    position: absolute;
 }
 .template-preview .standard{
-    width: 480px;
-    height: 360px;
-    border: 2px dotted blue;
+    border-top: 2px dotted blue;
+    border-bottom: 2px dotted blue;
     display: block;
+    margin-top: 40px;
 }
 .result-tile:hover {
 cursor: pointer;
@@ -546,4 +543,453 @@ line-height: 24px;
 #form-create-feed .grabpress-table .ui-multiselect{
     width: 230px !important;
     *width: 244px !important;
+}
+
+#TB_window #TB_title{
+    z-index: 105 !important;
+}
+/*-Preview page ------------*/
+
+
+
+/*--------------------------*/
+#preview-feed #btn-create-feed{
+    float: none;
+    margin-left: 200px;
+}
+.grabgear{ 
+     bottom: 50%;
+    *bottom: -70px;    
+    left: 50%;
+    width: 68px;
+    height: 68px;
+    margin-top: -34px;
+    margin-left: -34px;
+    position: absolute;
+    z-index: 16777271;/* lowest maximum z-index supported cross-browser (safari 3 was 24bit) */
+    top: 50%;
+}
+
+/* Dashboard ------------*/
+/* Custom =======================================================*/
+#form-dashboard{
+    background: #000 url("../images/background.png") repeat;
+    margin: 0;
+    padding: 0 0 160px 0 !important;
+    box-shadow: 0 0 5px 2px rgb(0,0,0) inset;
+    height: auto;
+    width: 100%;
+}
+
+#t #b {
+    background: none;
+    font: 12px 'Calibri W01 Regular 904604';
+}
+
+#form-dashboard .panel {
+    background: #FFF url( '../images/panel.png' ) repeat;
+    margin: 8px;
+    padding: 6px;
+    box-shadow: 8px 8px 4px rgba(0, 0,0,0.25);
+}
+#form-dashboard .tab-content{
+    background: #FFF url( '../images/inset.png' ) repeat-x left bottom;
+    box-shadow: 0 0 5px 2px rgb(0,0,0) inset, 0 1px 0 0 rgba(255, 255,255,0.25);
+}
+#form-dashboard .faq .tab-content{
+    padding: 10px 10px 20px 10px;
+}
+#t #b .nav .active > a {
+    height: 20px;
+    color: #FFF;
+    padding: 8px 0 0 0;
+    font: 12px 'Calibri W01 Regular 904604';
+    background: none;
+    text-indent: 6px;
+}
+#t #b .accordion{
+    background-color: #000;
+}
+#t #b .accordion-group {
+    border: 1px solid #2B2B2B;
+}
+
+#t #b a.accordion-toggle{
+    background-color: #2B2B2B;
+    color: #FFFFFF;
+    font: 18px 'Gill Sans W01 Light';
+    text-decoration: none;
+}
+#t #b .accordion-inner {
+     padding: 0;
+}
+#t #b .feeds{
+    background: #FFF url( '../images/panel.png' ) repeat;
+    box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.25);
+    display: inline-block;
+    height: 484px !important;
+    width: 468px !important;  
+    float: right;  
+    padding: 6px !important;
+    margin: 8px !important;
+}
+#t #b .feeds a{
+    text-decoration: none;
+}
+#t #b .feeds .panel{
+    background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+    -moz-border-radius: 3px; 
+    -webkit-border-radius: 3px; 
+    border-radius: 3px; 
+    margin: 10px 2px 2px 3px;
+    padding-left: 0;
+    padding-right: 0;
+    padding: 0;
+    height: 428px;
+}
+#t #b .feeds .table-hover{
+     background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+}
+#t #b table{
+    border-bottom: none;
+    margin-bottom: 0;
+}
+#t #b table thead{
+    border-bottom: none;
+}
+#t #b table tbody{
+    border-bottom: none;
+}
+
+#t #b table th {
+    background-color: #818181;
+    color: #FFF;
+    text-align: center;
+    border-right: 1px solid #5D5B5B;
+    border-bottom: 1px solid #818181;
+}
+#t #b table th:last-child {
+    border-right: none;
+}
+#t #b table td {
+    color: #000;
+    text-align: center;
+    padding: 4px 10px;
+    border-right: 1px solid #5D5B5B;
+    height: 16px;
+    border-bottom: none;
+}
+#t #b table td:first-child {
+    text-align: left;
+}
+#t #b table td:last-child {
+    border-right: none;
+}
+#t #b tr.even { background: #D3D3D3; }
+#t #b tr.odd { background: #C0C0C0} 
+#t #b .accordion-left {
+    background: url("../images/accordion_left.png") repeat scroll 0 0 #000000;
+    *background: none;
+    width: 3px;
+    *display: none;
+}
+#t #b .accordion-center {
+    background: url("../images/accordion_center.png") repeat scroll 0 0 #000000;
+}
+#t #b .accordion-right {
+    background: url("../images/accordion_right.png") repeat scroll 0 0 #000000;
+    *background: none;
+    width: 3px;
+    *display: none;
+}
+#t #b h3 {
+    padding: 5px 10px;
+}
+
+#t #b .tab-content{
+    clear: both;
+}
+#t #b .accordion {
+    clear: both;
+}
+#t #b .accordion-group {
+    border-radius: 4px 4px 4px 4px;
+    margin-bottom: 2px;
+}
+#t #b .accordion-heading {
+    border-bottom: 0 none;
+    background-color: #EEE;
+}
+#t #b .accordion-toggle {
+    cursor: pointer;
+}
+#t #b .accordion-heading .accordion-toggle {
+    display: block;
+    padding: 8px 15px;
+}
+#t #b .collapse {
+    height: 0;
+    overflow: hidden;
+    position: relative;
+    transition: height 0.35s ease 0s;
+}
+#t #b .collapse.in {
+    height: auto;
+}
+
+#t #b table th {
+    background-color: #818181;
+}
+#t #b table .rowspan1{height:20px;}
+#t #b table .rowspan2{height:60px;}
+#t #b table .rowspan3{height:100px;}
+
+
+.nano{
+    height:198px;
+}
+.nano .content{
+    margin:10px;
+    right: -27px !important;
+}
+.nano .pane{
+    margin:4px;
+}
+#t #b #btn-account-settings{
+    border: 0 none;
+    height: 33px;
+    margin-left: 354px;
+    margin-top: 6px;
+    padding: 0;
+    position: absolute;
+    width: 15px;  
+}
+#t #b #btn-account-settings .accordion-left {
+    background: url("../images/accordion_left.png") repeat-y scroll 0 0 #000000;
+    height: 33px;
+    left: 0;
+    position: absolute;
+    width: 3px;
+}
+#t #b #btn-account-settings .accordion-center {
+    background: url("../images/accordion_center.png") repeat-x scroll 0 0 #000000;
+    height: 33px;
+    padding: 0 3px;
+    width: 99px;
+}
+#t #b #btn-account-settings .accordion-right {
+    background: url("../images/accordion_right.png") repeat-y scroll 0 0 #000000;
+    height: 33px;
+    position: absolute;
+    right: -92px;
+    top: 0;
+    width: 3px;
+}
+#t #b #btn-account-settings a{
+    color: #FFF;
+    display: block;
+    padding: 8px 0px 0px 5px;
+}
+#t #b td.watch{
+    width: 70px;
+}
+#t #b .watch-on{
+    background: url("../images/watch-on.png") no-repeat scroll 0 0;
+    border: none;
+    display: block;
+    height: 14px !important;
+    width: 15px !important;
+    margin-right: 30px;
+    margin-top: 4px;
+    padding-top: 3px;
+    text-indent: -3000px;
+}
+#t #b .watch-off{
+    background: url("../images/watch-off.png") no-repeat scroll 0 0;
+    border: none;
+    display: block;
+    height: 14px !important;
+    width: 15px !important;
+    margin-right: 30px;
+    margin-top: 4px;
+    padding-top: 3px;
+    text-indent: -3000px;
+}
+#t #b td.feed-health-0 {
+    background: url("../images/health-0.png") repeat-x scroll 2px 3px transparent;
+    width: 40px;
+}
+#t #b td.feed-health-20 {
+    background: url("../images/health-20.png") repeat-x scroll 2px 3px transparent;
+    width: 40px;
+}
+#t #b td.feed-health-40 {
+    background: url("../images/health-40.png") repeat-x scroll 2px 3px transparent;
+    width: 40px;
+}
+#t #b td.feed-health-60 {
+    background: url("../images/health-60.png") repeat-x scroll 2px 3px transparent;
+    width: 40px;
+}
+#t #b td.feed-health-80 {
+    background: url("../images/health-80.png") repeat-x scroll 2px 3px transparent;
+    width: 40px;
+}
+#t #b td.feed-health-100 {
+    background: url("../images/health-100.png") repeat-x scroll 2px 3px transparent;
+    width: 40px;
+}
+#t #b .feeds .account-linked{
+    background: url("../images/account-linked.png") no-repeat scroll 0 0 #000000;
+    border: none;
+    cursor: auto;
+    height: 46px;
+    width: 332px;
+    margin-left: 3px;
+    text-indent: -3000px;
+}
+#t #b .feeds .account-unlinked{
+    background: url("../images/account-unlinked.png") no-repeat scroll 0 0 #000000;
+    border: none;
+    cursor: auto;
+    height: 46px;
+    width: 332px;
+    margin-left: 3px;
+    text-indent: -3000px;
+}
+#t #b .content p {
+    width: 185px;
+}
+
+#t #b .faq {
+    margin-left: 0 !important;
+    width: 752px;
+}
+#t #b .span4 {
+    width: 31.6239%\9 !important;
+}
+#t #b .watchlist {
+    float: left\9;
+}
+#t #b .span8 {
+    width: 65.812%\9 !important;
+    float: left\9 !important;
+}
+#t #b .row-fluid .messages{
+    width: 256px !important;
+    padding:0 !important;
+}
+#t #b .row-fluid .messages .panel{
+    width: 240px !important;
+    height: 228px !important;
+    padding: 6px !important;
+    margin: 8px !important;
+}
+#t #b .row-fluid .welcome {
+    width: 256px !important;
+    padding:0 !important;
+}
+#t #b .row-fluid .welcome .panel {
+    width: 240px !important;
+    height: 228px !important;
+    padding: 6px !important;
+    margin: 8px !important;
+}
+#t #b .row-fluid .welcome .panel .tab-content {
+    height: 100%;
+}
+#t #b .row-fluid .span12 {
+    /*width: 100%;*/
+    min-height: 10px !important;
+}
+#t #b .faq {
+    width: 100%\9;
+    float: left\9;
+}
+#t #b .nano .content {
+    right: -10px\9;
+}
+#t #b .watchlist .span4{
+    float: left\9;
+}
+
+#t #b .row-fluid {
+    width: 100%;
+}
+#t #b .row-fluid:before, #t #b .row-fluid:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+#t #b .row-fluid:after {
+    clear: both;
+}
+#t #b .row-fluid [class*="span"] {
+    -moz-box-sizing: border-box;
+    display: block;
+    float: left;
+    margin-left: 2.5641%;
+    min-height: 30px;
+    width: 100%;
+}
+
+#t #b .row-fluid [class*="span"]:first-child {
+    margin-left: 0;
+}
+#t #b .nav a {
+    display: inline-block;
+}
+#t #b .container-fluid {
+    padding:0 !important;
+    min-height: 580px;
+}
+
+#t #b .right-pane{
+    width:752px !important;
+    float:right !important;
+    position: absolute !important;
+    right:0 !important;
+    top:0 !important;
+    margin: 0 !important;
+}
+
+#t #b .watchlist{
+    width:100% !important;
+    padding-right:752px !important;
+}
+#t #b .accordion-inner .accordion-warning {
+    color: #999;
+    display:block;    
+    padding-top: 25px;
+    text-align: center;
+    text-align: left\9;
+    padding-left: 20px\9 !important;
+    font-family: inherit\9;
+    font-size: 18px\9;
+    font: 18px 'Gill Sans W01 Light';    
+}
+
+#t #b .welcome .content {
+    font: 26px 'DIN 1451 W01 Engschrift';
+    text-transform: uppercase;
+    width: 220px;
+    line-height: 30px;
+    height: 220px;
+    font-weight: normal;
+    color: #333;
+}
+#t #b .welcome .content a {
+    color: #1B75BB;
+}
+#t #b .welcome .nano {
+    height: 220px;
+}
+
+#t #b .feeds h3 {
+    font: 18px 'Gill Sans W01 Light';
+    padding: 15px;
+    color: #000;
+}
+#form-dashboard #message{
+    display:none;
 }

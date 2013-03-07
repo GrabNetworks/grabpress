@@ -16,8 +16,8 @@
 		$channel_text = count($channels)." of ".$channels_total." selected";
 	}
 
-	$id = GrabPress::get_connector_id();
-	$player_json = GrabPress::api_call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
+	$id = GrabPressAPI::get_connector_id();
+	$player_json = GrabPressAPI::call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
 	$player_data = json_decode( $player_json, true );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
@@ -42,7 +42,7 @@
 			<h2>GrabPress: Find a Video in our Catalog</h2>
 			<p>Grab video content delivered fresh to your blog <a href="#" onclick='return false;' id="how-it-works">how it works</a></p>
 	<fieldset id="preview-feed">
-	<legend>Preview Feed</legend>
+	<legend>Search Criteria</legend>
 		<div class="label-tile-one-column">
 			<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords'] : '' ?>" maxlength="255" /></span>
 			<a href="#" id="help">help</a>
@@ -102,8 +102,7 @@
 		</div>	
 		<div class="label-tile">	
 			<div class="tile-right">
-				<a href="#" id="clear-search" onclick="return false;" >clear search</a>
-				<input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />				
+				<a href="#" id="clear-search" onclick="return false;" >clear search</a>				
 				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
@@ -120,7 +119,10 @@
                        $relevance_checked = ((isset($form["sort_by"])) &&($form["sort_by"]=="relevance")) ?'checked="checked";':"";
                ?>
                <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
-               <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
+               <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance
+               <?php if(!empty($list_feeds["results"])){ ?>
+               <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
+               <?php } ?>
        </div>
 	<?php
 			foreach ($list_feeds["results"] as $result) {
@@ -166,22 +168,22 @@
 	    	var errors = hasValidationErrors();
 			if ( !errors ){
 				$('#btn-create-feed').removeAttr('disabled');
-				$('#btn-preview-feed').removeAttr('disabled');
+				$('#update-search').removeAttr('disabled');
 
-				if( $( '#btn-preview-feed' ).off ){
-					$( '#btn-preview-feed' ).off('click');
+				if( $( '#update-search' ).off ){
+					$( '#update-search' ).off('click');
 				}else{
-					$( '#btn-preview-feed' ).unbind('click');
+					$( '#update-search' ).unbind('click');
 				}
 				$('.hide').show();					
 			}else{
 				$( '#btn-create-feed' ).attr('disabled', 'disabled');
-				$( '#btn-preview-feed' ).attr('disabled', 'disabled');
+				$( '#update-search' ).attr('disabled', 'disabled');
 			
-				if( $( '#btn-preview-feed' ).off ){
-					$( '#btn-preview-feed' ).off('click');
+				if( $( '#update-search' ).off ){
+					$( '#update-search' ).off('click');
 				}else{
-					$( '#btn-preview-feed' ).unbind('click');
+					$( '#update-search' ).unbind('click');
 				}
 
 				$('.hide').hide();
@@ -302,7 +304,7 @@
 		    var v_id = this.id.replace('btn-create-feed-single-','');
 
 		    var data = {
-				action: 'get_mrss_format',
+				action: 'gp_insert_video',
 				format : 'post',
 				video_id: v_id
 			};

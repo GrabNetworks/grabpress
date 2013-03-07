@@ -13,7 +13,7 @@
 			<tr valign="bottom">
 	   			<th scope="row">Ratio <span class="asterisk">*</span></th>
 				<td>
-					<input type="radio" name="ratio" value="widescreen" <?php echo $form["widescreen_selected"]?$checked:""; ?> /> Widescreen 16:9
+					<input type="radio" name="ratio" value="widescreen" <?php if(!isset($form["widescreen_selected"])) echo $checked; echo $form["widescreen_selected"]?$checked:""; ?> /> Widescreen 16:9
 					<input type="radio" name="ratio" value="standard" <?php echo $form["standard_selected"]?$checked:""; ?> /> Standard 4:3 
 				</td>
 			</tr>
@@ -45,26 +45,41 @@
 	</fieldset>
 </form>
 
-<div class="template-preview">
+<div class="template-preview" style="width:<?php echo $form['width']?>px;height:<?php echo $form['height']?>px;">
 	<div class="widescreen" <?php if(!$form["widescreen_selected"]){?>style="display:none;" <?php }?> ></div>
 	<div class="standard" <?php if(!$form["standard_selected"]){?>style="display:none;" <?php }?> ></div>
 </div>
 </div>
 <script type="text/javascript">
- 	jQuery(function($){
+ 	jQuery(function($){ 		
  		var updateHeightValue = function(){
+ 			var player_width = $("form input[name=width]").val();
+ 			$(".template-preview").width(player_width); 
 		 	if($("form input[name=ratio]:checked").val() == "widescreen"){
-		 		var height = ($("form input[name=width]").val()/16)*9;
+		 		$(".template-preview .widescreen").css("display", "block");
+		 		$(".template-preview .standard").css("display", "none");
+		 		var height = parseInt(($("form input[name=width]").val()/16),10)*9;
+		 		var widescreen_width = (player_width * 3) / 4;
+		 		var margin_left = (player_width - widescreen_width) / 2;
+		 		$(".widescreen").width(widescreen_width);
+		 		$(".widescreen").height(height);
+		 		$(".widescreen").css({"border-top": "none", "border-bottom" : "none", "margin-left" : margin_left});
 		 	}else{
-				var height = ($("form input[name=width]").val()/4)*3;
+				$(".template-preview .standard").css("display", "block");
+				$(".template-preview .widescreen").css("display", "none");
+				var height = parseInt(($("form input[name=width]").val()/4),10)*3;
+				var standard_height = (height * 3) / 4;
+				var margin_top = (height - standard_height) / 2;
+				$(".standard").width(player_width);
+		 		$(".standard").height(standard_height);
+		 		$(".standard").css({"border-left": "none", "border-right" : "none", "margin-top" : margin_top });
 		 	}
-	 		$(".height").text(parseInt(height,10));
+	 		$(".height").text(height);
+	 		$(".template-preview").height(height);
  		};
+ 		updateHeightValue();
  		$("form input[name=width]").change(updateHeightValue);
  		$("form input[name=ratio]").change(updateHeightValue);
- 		$("form input[name=ratio]").change(function(){
-			$(".template-preview .widescreen").toggle();
- 			$(".template-preview .standard").toggle();
- 		})
+ 			
  	});
 </script>
