@@ -337,12 +337,13 @@
 					  		$('#accordion2').html(accordion);	
 							active_video = new com.grabnetworks.Player({
 							
-							"id": embed_id,
-							"width": "100%",
-							"height": "100%",
-							"content": parsedJson.results[0].video.guid,
-							"autoPlay": false
-						});
+								"id": embed_id,
+								"width": "100%",
+								"height": "100%",
+								"content": parsedJson.results[0].video.guid,
+								"autoPlay": false
+							});
+							$(window).resize();
 						$("#collapse1").toggleClass("collapse");
 										
 					}else{
@@ -428,6 +429,7 @@
 			$(".nano").nanoScroller({"alwaysVisible":true});
 
 			$(window).resize(resize_accordion).resize();
+			$("#message").hide();//hack
 			
 		}
 		init();
