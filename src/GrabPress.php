@@ -403,10 +403,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 					break;
 				case 'delete':
-					$feed_id = $_REQUEST['feed_id'];
-					$connector_id = GrabPressAPI::get_connector_id();
-					GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
-					GrabPressViews::feed_management();					
+					GrabPressViews::delete_feed($params);
 					break;
 				case 'modify':
 					$feed_id = $_REQUEST['feed_id'];
@@ -485,11 +482,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPressViews::feed_creation_success();
 					break;
 				case 'edit-feed':			
-					$feed_id = $_REQUEST['feed_id'];
-					GrabPressViews::edit_feed($feed_id);
+					
+					GrabPressViews::edit_feed($params);
 					break;	
 				case 'prefill':
-					GrabPressViews::prefill_feed();
+					GrabPressViews::prefill_feed($params);
 				break;	
 				case 'default':
 				default:				

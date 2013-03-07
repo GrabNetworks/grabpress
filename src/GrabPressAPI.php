@@ -312,6 +312,10 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				GrabPress::abort( 'no valid key' );
 			}
 		}
+		static function delete_feed($feed_id){
+			$connector_id = GrabPressAPI::get_connector_id();
+			GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
+		}
 
 		static function create_connection() {
 			GrabPress::log();

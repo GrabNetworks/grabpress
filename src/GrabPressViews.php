@@ -3,7 +3,7 @@
 if ( ! class_exists( 'GrabPressViews' ) ) {
 	class GrabPressViews {
 
-		static function edit_feed($feed_id){
+		static function edit_feed($params){
 			GrabPress::log();
 			$list_channels = GrabPressAPI::get_channels();
 			$channels_total = count( $list_channels );				
@@ -12,7 +12,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			if ( GrabPressAPI::validate_key() ) {
 
-				$feed = GrabPressAPI::get_feed($feed_id);
+				$feed = GrabPressAPI::get_feed($params["feed_id");
 				
 				$url = array();
 				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
@@ -22,25 +22,25 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				
 				$blogusers = get_users();
 
-				if(isset($_REQUEST) && isset($_REQUEST["channel"]) != "" && isset($_REQUEST["provider"]) != ""){
+				if(isset($params) && isset($params["channel"]) != "" && isset($params["provider"]) != ""){
 					print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "edit",
 										   "action" => "modify",
-										   "feed_id" => $_REQUEST["feed_id"],
-										   "name" => $_REQUEST["name"],
-										   "channel" => $_REQUEST["channel"],
-										   "keywords_and" => $_REQUEST["keywords_and"],
-										   "keywords_not" => $_REQUEST["keywords_not"],
+										   "feed_id" => $params["feed_id"],
+										   "name" => $params["name"],
+										   "channel" => $params["channel"],
+										   "keywords_and" => $params["keywords_and"],
+										   "keywords_not" => $params["keywords_not"],
 										   "keywords_or" => $url['keywords'],
 						   				   "keywords_phrase" => $url['keywords_phrase'],										   
-										   "limit" => $_REQUEST["limit"],
-										   "schedule" => $_REQUEST["schedule"],
-										   "active" => $_REQUEST["active"],
-										   "publish" => $_REQUEST["publish"],
-										   "click_to_play" => $_REQUEST["click_to_play"],
-										   "author" => $_REQUEST["author"],
-										   "provider" => $_REQUEST["provider"],
-										   "category" => $_REQUEST["category"]								   
+										   "limit" => $params["limit"],
+										   "schedule" => $params["schedule"],
+										   "active" => $params["active"],
+										   "publish" => $params["publish"],
+										   "click_to_play" => $params["click_to_play"],
+										   "author" => $params["author"],
+										   "provider" => $params["provider"],
+										   "category" => $params["category"]								   
 											),
 							"list_providers" => $list_providers,
 							"providers_total" => $providers_total,
@@ -89,7 +89,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			}
 		}
 
-		static function prefill_feed(){
+		static function prefill_feed($params){
 			GrabPress::log();
 			if ( GrabPressAPI::validate_key() ) {
 				$list_providers = GrabPressAPI::get_providers();			
@@ -100,19 +100,19 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 				$blogusers = get_users();
 
-				$keywords = GrabPress::parse_adv_search_string(isset($_REQUEST["keywords"])?$_REQUEST["keywords"]:"");
+				$keywords = GrabPress::parse_adv_search_string(isset($params["keywords"])?$params["keywords"]:"");
 
 				print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "create",
 										   "action" => "update",
-										   "channel" => $_REQUEST["channel"],
+										   "channel" => $params["channel"],
 										   "keywords_and" => $keywords["keywords_and"],
 										   "keywords_not" => $keywords["keywords_not"],
 										   "keywords_or" => $keywords['keywords_or'],
 						   				   "keywords_phrase" => $keywords['keywords_phrase'],
-										   "provider" => $_REQUEST["provider"],
-										   "publish" => $_REQUEST["publish"],
-										   "click_to_play" => $_REQUEST["click_to_play"],
+										   "provider" => $params["provider"],
+										   "publish" => $params["publish"],
+										   "click_to_play" => $params["click_to_play"],
 										   "category" => ""				   
 											),
 							"list_providers" => $list_providers,
@@ -477,6 +477,10 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
 
 			die(); // this is required to return a proper result
+		}
+		static function delete_feed($params){
+			GrabPressAPI::delete_feed($params["feed_id"]);
+			GrabPressViews::feed_management();
 		}
 
 		static function feed_name_unique_callback() {
