@@ -422,30 +422,28 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				case 'account':
 					
-					if(isset($params[ 'action' ])){
-						switch ( $params[ 'action' ] ) {
-							case 'default':
-								break;
-							case 'link-user' :
-								GrabPressViews::link_user($params);
-								break;
-							case 'unlink-user' :
-								GrabPressViews::unlink_user($params);
-								break;
-							case 'create-user':							
-								GrabPressViews::create_user($params);
-								break;
-							case 'link':
-							case 'unlink':
-							case 'create':
-							case 'switch':
-							default:
-								$params[ 'action' ] = 'default';
-								GrabPressViews::account_management($params);
-								break;
-							}
+					switch ( $params[ 'action' ] ) {
+						case 'default':
 							break;
-						}
+						case 'link-user' :
+							GrabPressViews::link_user($params);
+							break;
+						case 'unlink-user' :
+							GrabPressViews::unlink_user($params);
+							break;
+						case 'create-user':							
+							GrabPressViews::create_user($params);
+							break;
+						case 'link':
+						case 'unlink':
+						case 'create':
+						case 'switch':
+						default:
+							$params[ 'action' ] = 'default';
+							GrabPressViews::account_management($params);
+							break;
+					}
+					break;
 
 				case 'catalog':
 
