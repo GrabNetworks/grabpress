@@ -183,7 +183,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					));
 		}
 
-		static function get_catalog_callback(){
+		static function gp_get_catalog_callback(){
 			$defaults = array(
 				"providers" => array(),
 				"channels" => array(),
@@ -436,7 +436,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				));
 		}
 
-		static function toggle_feed_callback() {
+		static function gp_toggle_feed_callback() {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );
@@ -467,7 +467,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die(); // this is required to return a proper result
 		}
 
-		static function delete_feed_callback() {
+		static function gp_delete_feed_callback() {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );	
@@ -478,7 +478,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die(); // this is required to return a proper result
 		}
 
-		static function feed_name_unique_callback() {
+		static function gp_feed_name_unique_callback() {
 			$name = $_REQUEST['name'];	
 
 			$feeds = GrabPressAPI::get_feeds();
@@ -495,7 +495,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die(); // this is required to return a proper result
 		}
 		
-		static function insert_video_callback() {	
+		static function gp_insert_video_callback() {	
 			$video_id = $_REQUEST['video_id'];
 			$format = $_REQUEST['format'];
 			$id = GrabPressAPI::get_connector_id();
@@ -574,12 +574,12 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die(); // this is required to return a proper result
 		}
 
-		static function get_preview_callback(){
+		static function gp_get_preview_callback(){
 			GrabPressViews::grabpress_preview_videos();
 			die();
 		}
 
-		static function toggle_watchlist_callback() {
+		static function gp_toggle_watchlist_callback() {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );
