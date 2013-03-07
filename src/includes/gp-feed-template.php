@@ -139,7 +139,7 @@
 					};
 
 					$.post(ajaxurl, data, function(response) {
-						window.location = "admin.php?page=autoposter";
+						window.location = "admin.php?page=gp-autoposter";
 					});
 
 				} else{					
@@ -150,7 +150,7 @@
 		selectedCategories = <?php echo json_encode( $form["category"] );?>;
 
 		editFeed = function(id) {
-			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
+			window.location = "admin.php?page=gp-autoposter&action=edit-feed&feed_id="+id;
 		}
 
 		doValidation = function(){
@@ -266,10 +266,10 @@
 		    var referer = $("input[name=referer]").val();
 		    
 		    if( referer == "create" ){
-		    	window.location = "admin.php?page=autoposter";
+		    	window.location = "admin.php?page=gp-autoposter";
 		    }else{
 		    	var id = $("input[name=feed_id]").val();
-		    	window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
+		    	window.location = "admin.php?page=gp-autoposter&action=edit-feed&feed_id="+id;
 		    }
 		    
 		});
@@ -418,7 +418,7 @@
 		   $('#cancel-editing').bind('click', function(e){ 
 				var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
 				if(answer){				
-					window.location = "admin.php?page=autoposter";
+					window.location = "admin.php?page=gp-autoposter";
 				} else{				
 					return false;
 				}

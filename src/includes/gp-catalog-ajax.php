@@ -204,7 +204,7 @@
 			var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 			if(feed_action == "preview-feed"){
 			  	$(".close-preview").click(function() {		  
-			  		window.location = "admin.php?page=autoposter";
+			  		window.location = "admin.php?page=gp-autoposter";
 		  		});
 			}else{
 				$(".close-preview").click(function() {		  

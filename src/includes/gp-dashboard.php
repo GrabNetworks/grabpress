@@ -97,10 +97,10 @@
 														     <?php
                                                                                                                         $num_feeds = count($feeds);
                                                                                                                         if($publisher_status == "account-unlinked"){
-                                                                                                                                echo "Want to earn money? <a href=\"admin.php?page=account&action=create\">Create</a> or <a href=\"admin.php?page=account&action=default\">link an existing</a> Grab Publisher account.";
+                                                                                                                                echo "Want to earn money? <a href=\"admin.php?page=gp-account&action=create\">Create</a> or <a href=\"admin.php?page=gp-account&action=default\">link an existing</a> Grab Publisher account.";
                                                                                                                         }
                                                                                                                         elseif($num_feeds == 0){
-                                                                                                                                echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=autoposter\">here</a>";
+                                                                                                                                echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=gp-autoposter\">here</a>";
                                                                                                                         }
                                                                                                                         else{
                                                                                                                                 $p = count($pills);
@@ -120,7 +120,7 @@
 							<div class="feeds">
 								<?php
 									$admin = get_admin_url();
-									$admin_page = $admin.'admin.php?page=account';
+									$admin_page = $admin.'admin.php?page=gp-account';
 								?>								
 								<div id="btn-account-settings">
 								<div class="accordion-left">&nbsp;</div>
@@ -212,7 +212,7 @@
 												?>		
 											</td>
 											<td>
-												<a href="admin.php?page=autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
+												<a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
 													edit
 												</a>
 												<i class="icon-pencil"></i>

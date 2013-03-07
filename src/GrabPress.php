@@ -176,7 +176,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$admin = get_admin_url();
 			$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 			if ( $num_feeds == 0 ) {
-				$admin_page = $admin.'admin.php?page=autoposter';
+				$admin_page = $admin.'admin.php?page=gp-autoposter';
 				if ( $current_page != $admin_page ) {
 					$here = '<a href="'.$admin_page.'">here</a>';
 				}else {
@@ -198,8 +198,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 					$user = GrabPressAPI::get_user();
 					$linked = isset($user->email);
-					$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
-					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
+					$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=gp-account&action=create">Create</a>';
+					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=gp-account&action=default">link an existing</a>';
 					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
 					$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
 					if( $active_feeds == 0 ){
