@@ -12,7 +12,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			if ( GrabPressAPI::validate_key() ) {
 
-				$feed = GrabPressAPI::get_feed($params["feed_id");
+				$feed = GrabPressAPI::get_feed($params["feed_id"]);
 				
 				$url = array();
 				parse_str( parse_url( $feed->feed->url, PHP_URL_QUERY ), $url );
@@ -89,6 +89,10 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			}
 		}
 
+		static function do_edit_feed($params){
+			GrabPressApi::edit_feed($params);
+			GrabPressViews::feed_creation_success($params);
+		}
 		static function prefill_feed($params){
 			GrabPress::log();
 			if ( GrabPressAPI::validate_key() ) {

@@ -316,6 +316,81 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$connector_id = GrabPressAPI::get_connector_id();
 			GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
 		}
+		static function edit_feed($params){
+			$feed_id = $_REQUEST['feed_id'];
+			$name = htmlspecialchars( $params['name'] );
+				
+			//$categories = $_REQUEST[ 'channel' ];
+			$channels = $params[ 'channel' ];
+			$channelsList = implode( ',', $channels );
+			$channelsListTotal = count( $channels ); // Total providers chosen by the user
+			$channels_total = $params['channels_total']; // Total providers from the catalog list
+			if ( $channelsListTotal == $channels_total ) {
+				$channelsList = '';					}
+
+
+			$providers = $params['provider'];
+			$providersList = implode( ',', $providers );
+			$providersListTotal = count( $providers ); // Total providers chosen by the user
+			$providers_total = $params['providers_total']; // Total providers from the catalog list
+			if ( $providersListTotal == $providers_total ) {
+				$providersList = '';
+			}
+				$url = GrabPress::generate_catalog_url(array(
+				"keywords_and" => $params["keywords_and"],
+				"keywords_not" => $params["keywords_not"],
+				"keywords_or" => $params["keywords_or"],
+				"keywords_phrase" => $params["keywords_phrase"],
+				"providers" => $providersList,
+				"categories" => $channelsList
+			));
+				
+			$connector_id = GrabPressAPI::get_connector_id();
+			$active = (bool)$params['active'];
+
+			$category_list = $params[ 'category' ];
+
+			$category_length = count( $category_list );
+
+			$cats = array();
+			if ( is_array( $category_list ) ) {
+				foreach ( $category_list as $cat ) {
+					if ( $category_length == 1 ) {
+						$cats[] = get_cat_name( $cat );
+					}else {
+						$cats[] = get_cat_name( $cat );
+					}
+				}
+			}else {
+				$cats[] = 'Uncategorized';
+			}
+
+			if ( $params['click_to_play'] == "1" ) {//defaults to false
+				$auto_play = '1';
+			}else {
+				$auto_play = '0';
+			}
+
+			$author_id = (int)$params['author'];
+
+			$post_data = array(
+				'feed' => array(
+					'active' => $active,
+					'name' => $name,
+					'posts_per_update' => $params[ 'limit' ],
+					'url' => $url,
+					'custom_options' => array(
+						'category' => $cats,
+						'publish' => (bool)( $params[ 'publish' ] ),
+						'author_id' => $author_id
+					),
+					'update_frequency' => $params['schedule'],
+					'auto_play' => $auto_play
+				)
+			);
+
+			GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
+		}
 
 		static function create_connection() {
 			GrabPress::log();

@@ -406,83 +406,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPressViews::delete_feed($params);
 					break;
 				case 'modify':
-					$feed_id = $_REQUEST['feed_id'];
-					$name = htmlspecialchars( $_REQUEST['name'] );
-						
-					//$categories = $_REQUEST[ 'channel' ];
-					$channels = $_REQUEST[ 'channel' ];
-					$channelsList = implode( ',', $channels );
-					$channelsListTotal = count( $channels ); // Total providers chosen by the user
-					$channels_total = $_REQUEST['channels_total']; // Total providers from the catalog list
-					if ( $channelsListTotal == $channels_total ) {
-						$channelsList = '';					}
-
-
-					$providers = $_REQUEST['provider'];
-					$providersList = implode( ',', $providers );
-					$providersListTotal = count( $providers ); // Total providers chosen by the user
-					$providers_total = $_REQUEST['providers_total']; // Total providers from the catalog list
-					if ( $providersListTotal == $providers_total ) {
-						$providersList = '';
-					}
-						$url = GrabPress::generate_catalog_url(array(
-						"keywords_and" => $_REQUEST["keywords_and"],
-						"keywords_not" => $_REQUEST["keywords_not"],
-						"keywords_or" => $_REQUEST["keywords_or"],
-						"keywords_phrase" => $_REQUEST["keywords_phrase"],
-						"providers" => $providersList,
-						"categories" => $channelsList
-					));
-						
-					$connector_id = GrabPressAPI::get_connector_id();
-					$active = (bool)$_REQUEST['active'];
-
-					$category_list = $_REQUEST[ 'category' ];
-
-					$category_length = count( $category_list );
-
-					$cats = array();
-					if ( is_array( $category_list ) ) {
-						foreach ( $category_list as $cat ) {
-							if ( $category_length == 1 ) {
-								$cats[] = get_cat_name( $cat );
-							}else {
-								$cats[] = get_cat_name( $cat );
-							}
-						}
-					}else {
-						$cats[] = 'Uncategorized';
-					}
-
-					if ( $_REQUEST['click_to_play'] == "1" ) {//defaults to false
-						$auto_play = '1';
-					}else {
-						$auto_play = '0';
-					}
-
-					$author_id = (int)$_REQUEST['author'];
-
-					$post_data = array(
-						'feed' => array(
-							'active' => $active,
-							'name' => $name,
-							'posts_per_update' => $_REQUEST[ 'limit' ],
-							'url' => $url,
-							'custom_options' => array(
-								'category' => $cats,
-								'publish' => (bool)( $_REQUEST[ 'publish' ] ),
-								'author_id' => $author_id
-							),
-							'update_frequency' => $_REQUEST['schedule'],
-							'auto_play' => $auto_play
-						)
-					);
-
-					GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
-					GrabPressViews::feed_creation_success();
+					GrabPressViews::do_edit_feed($params);
 					break;
 				case 'edit-feed':			
-					
 					GrabPressViews::edit_feed($params);
 					break;	
 				case 'prefill':
