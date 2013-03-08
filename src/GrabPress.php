@@ -62,7 +62,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 
-		static function gp_show_message() {
+		static function show_message() {
 			GrabPress::log();
 			$show = false;
 			if ( GrabPress::$error ) {
@@ -143,12 +143,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			register_setting( 'grab_press', 'access_key' );
 		}
 
-		static function gp_setup() {
+		static function setup() {
 			GrabPress::log();
 			GrabPressAPI::validate_key();
 			GrabPress::enable_xmlrpc();
 		}
-		static function gp_delete_connector() {
+		static function delete_connector() {
 			GrabPress::log();
 			$connector_id = GrabPressAPI::get_connector_id();
 
@@ -170,7 +170,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			};
 		}
 
-		static function gp_plugin_messages() {
+		static function plugin_messages() {
 			$feeds = GrabPressAPI::get_feeds();
 			$num_feeds = count( $feeds );
 			$admin = get_admin_url();
@@ -216,7 +216,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 		}
 
-		static function gp_grabpress_plugin_menu() {
+		static function grabpress_plugin_menu() {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
 			add_submenu_page( 'grabpress', 'Dashboard', 'Dashboard', 'publish_posts', 'gp-dashboard', array( 'GrabPress', 'dispatcher' ) );
@@ -518,7 +518,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								);
 								GrabPress::log( 'PUTting to connector ' . GrabPressAPI::get_connector_id() . ':' . $user -> id );
 								$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
-								GrabPress::gp_plugin_messages();
+								GrabPress::plugin_messages();
 								$_REQUEST[ 'action' ] = 'default';
 							}else{
 								GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
@@ -536,7 +536,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								'email' 	=> $user -> email
 							);
 							$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
-							GrabPress::gp_plugin_messages();
+							GrabPress::plugin_messages();
 							$_REQUEST[ 'action' ] = 'default';
 						}
 						break;
@@ -623,7 +623,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function grabpress_plugin_url(){
 			return plugin_dir_url( __FILE__ ) ;
 		}
-		static function gp_enqueue_scripts($page) {
+		static function enqueue_scripts($page) {
 
 			$handlerparts = explode("_", $page);
 			if($handlerparts[0] !="grabpress" && $page != "post-new.php" && $page != "post.php"){
@@ -647,7 +647,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js', array("jquery-ui-widget" ));
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' , array("jquery"));
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
-			wp_enqueue_script( 'nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
+			wp_enqueue_script( 'gp-nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
 
 			wp_enqueue_script( 'grab-player', 'http://player.'.GrabPress::$environment.'.com/js/Player.js' );
 
@@ -660,18 +660,18 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'thickbox' );
 
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
-			wp_enqueue_style( 'bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
+			wp_enqueue_style( 'gp-bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
 			wp_enqueue_style( 'thickbox' );
-			wp_enqueue_style( 'nanoscroller', $plugin_url.'/css/nanoscroller.css');		
-			wp_enqueue_style( 'grabpress-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "bootstrap", "nanoscroller"));			
+			wp_enqueue_style( 'gp-nanoscroller', $plugin_url.'/css/nanoscroller.css');		
+			wp_enqueue_style( 'gp-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "gp-bootstrap", "gp-nanoscroller"));			
 			
 			
-			wp_enqueue_style( 'grabpresss-fonts', "http://fast.fonts.com/cssapi/7ece15ec-35ef-4a92-bc79-b5349675eb23.css");
-			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
+			wp_enqueue_style( 'gp-fonts', "http://fast.fonts.com/cssapi/7ece15ec-35ef-4a92-bc79-b5349675eb23.css");
+			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
 			
 		}
 
-		static function gp_content_by_request( $content, $post )
+		static function content_by_request( $content, $post )
 		{
 		    if ( ! empty ( $_REQUEST['pre_content'] )
 		        and current_user_can( 'edit_post', $post->ID )
@@ -687,7 +687,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		    $content = str_replace('&amp;', '&', $content);
 		    return $content;
 		}
-		static function gp_modified_post_title ($title) {
+		static function modified_post_title ($title) {
 
 		  if ( ! empty ( $_REQUEST['post_title'] )){
 		  	return $title = "VIDEO: ".stripslashes($_REQUEST['post_title']);
@@ -695,7 +695,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		  
 		}
 
-		static function gp_add_my_custom_button($context){
+		static function add_my_custom_button($context){
 			//path to my icon
 			$img = GrabPress::get_g_icon_src();
 
@@ -708,7 +708,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		
 		
-		static function gp_mce_settings($settings){
+		static function mce_settings($settings){
 			
 			if(!isset($settings["extended_valid_elements"])){
 				$settings["extended_valid_elements"] = "div[*],script[*]";
@@ -722,23 +722,23 @@ if ( ! class_exists( 'GrabPress' ) ) {
 }//ifndefclass
 if( is_admin() ){
 	GrabPress::log( '-------------------------------------------------------' );
-	add_action( 'admin_enqueue_scripts', array( 'GrabPress', 'gp_enqueue_scripts' ) );
-	register_activation_hook( __FILE__, array( 'GrabPress', 'gp_setup' ) );
-	register_uninstall_hook(__FILE__, array( 'GrabPress', 'gp_delete_connector' ));
-	add_action( 'admin_menu', array( 'GrabPress', 'gp_grabpress_plugin_menu' ) );
-	add_action( 'admin_footer', array( 'GrabPress', 'gp_show_message' ) );
-	add_action( 'wp_loaded', array( 'GrabPress', 'gp_plugin_messages' ) );
-	add_action( 'wp_ajax_gp_toggle_feed', array( 'GrabPressViews', 'gp_toggle_feed_callback' ));
-	add_action( 'wp_ajax_gp_delete_feed', array( 'GrabPressViews', 'gp_delete_feed_callback' ));
-	add_action( 'wp_ajax_gp_feed_name_unique', array( 'GrabPressViews', 'gp_feed_name_unique_callback' ));
-	add_action( 'wp_ajax_gp_insert_video', array( 'GrabPressViews', 'gp_insert_video_callback' ));
-	add_action( 'wp_ajax_gp_get_catalog', array( 'GrabPressViews', 'gp_get_catalog_callback' ));
-	add_action( 'wp_ajax_gp_get_preview', array( 'GrabPressViews', 'gp_get_preview_callback' ));
-	add_action( 'wp_ajax_gp_toggle_watchlist', array( 'GrabPressViews', 'gp_toggle_watchlist_callback' ));
-	add_action( 'media_buttons_context',  array("GrabPress", 'gp_add_my_custom_button'));
-	add_filter( 'default_content', array( 'GrabPress', 'gp_content_by_request' ), 10, 2 );
-	add_filter( 'default_title', array( 'GrabPress', 'gp_modified_post_title' ) );
-	add_filter( 'tiny_mce_before_init', array("GrabPress", "gp_mce_settings") );
+	add_action( 'admin_enqueue_scripts', array( 'GrabPress', 'enqueue_scripts' ) );
+	register_activation_hook( __FILE__, array( 'GrabPress', 'setup' ) );
+	register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector' ));
+	add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
+	add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
+	add_action( 'wp_loaded', array( 'GrabPress', 'plugin_messages' ) );
+	add_action( 'wp_ajax_gp_toggle_feed', array( 'GrabPressViews', 'toggle_feed_callback' ));
+	add_action( 'wp_ajax_gp_delete_feed', array( 'GrabPressViews', 'delete_feed_callback' ));
+	add_action( 'wp_ajax_gp_feed_name_unique', array( 'GrabPressViews', 'feed_name_unique_callback' ));
+	add_action( 'wp_ajax_gp_insert_video', array( 'GrabPressViews', 'insert_video_callback' ));
+	add_action( 'wp_ajax_gp_get_catalog', array( 'GrabPressViews', 'get_catalog_callback' ));
+	add_action( 'wp_ajax_gp_get_preview', array( 'GrabPressViews', 'get_preview_callback' ));
+	add_action( 'wp_ajax_gp_toggle_watchlist', array( 'GrabPressViews', 'toggle_watchlist_callback' ));
+	add_action( 'media_buttons_context',  array("GrabPress", 'add_my_custom_button'));
+	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
+	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
+	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
 }
 
 GrabPress::allow_tags();
