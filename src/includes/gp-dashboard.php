@@ -265,7 +265,7 @@
 			}
 			var embed = "";
 			var anchor = $($(".accordion-toggle[href='#collapse1']")[0]);
-			embed = '<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>';
+			embed = '<div id="gcontainer'+embed_id+'" style="height:100%"><div id="grabDiv'+embed_id+'"></div></div>';
 			$("#collapse1").find(".accordion-inner").append(embed);
 			active_video = new com.grabnetworks.Player({
 				"id": embed_id,
@@ -314,7 +314,7 @@
 										+'</div>'
 										+'<div id="collapse' + (i+1) + '" class="accordion-body collapse in" >'
 										+'	<div class="accordion-inner">'
-										+'		<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>'
+										+'		<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>'
 										+'	</div>'
 										+'</div>'
 										+'</div>';
