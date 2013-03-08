@@ -413,7 +413,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 		}
 
 		static function feed_creation_success($params){
-			GrabPressAPI::create_feed($params);
+			
 			print GrabPress::fetch( "includes/gp-feed-created-template.php", array("request" => $params));
 		}
 

@@ -410,10 +410,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							break;
 						case 'edit-feed':			
 							GrabPressViews::edit_feed($params);
-							break;	
+							break;
 						case 'prefill':
 							GrabPressViews::prefill_feed($params);
-						break;	
+							break;
 						case 'default':
 						default:				
 							GrabPressViews::feed_management($params);
@@ -423,8 +423,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'account':
 					
 					switch ( $params[ 'action' ] ) {
-						case 'default':
-							break;
 						case 'link-user' :
 							GrabPressViews::link_user($params);
 							break;
@@ -438,6 +436,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						case 'unlink':
 						case 'create':
 						case 'switch':
+						case "default":
 						default:
 							$params[ 'action' ] = 'default';
 							GrabPressViews::account_management($params);
@@ -447,11 +446,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 				case 'catalog':
 
-					if(isset($_REQUEST[ 'action' ])){
-						switch ( $_REQUEST[ 'action' ] ) {
+					if(isset($params[ 'action' ])){
+						switch ( $params[ 'action' ] ) {
 							case 'update':
-							if ( GrabPressAPI::validate_key() && $_REQUEST[ 'channel' ] != '' && $_REQUEST[ 'provider' ] != '' ) {
-								GrabPressAPI::create_feed();
+							if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
+								GrabPressAPI::create_feed($params);
 								GrabPressViews::feed_creation_success();
 							}else {
 								GrabPress::$invalid = true;
@@ -470,10 +469,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 					break;			
 				case 'gp-dashboard':
-					GrabPressViews::dashboard_management($_REQUEST);
+					GrabPressViews::dashboard_management($params);
 					break;
 				case 'gp-template':
-					GrabPressViews::template_management($_REQUEST);
+					GrabPressViews::template_management($params);
 					break;
 				}
 		}
