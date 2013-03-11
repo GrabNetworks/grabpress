@@ -224,6 +224,15 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 
 				$author_id = (int)$_REQUEST['author'];
 
+				$feeds = GrabPressAPI::get_feeds();
+				$num_feeds = count( $feeds );
+				echo "NUMFEEDS: "; var_dump($num_feeds); echo "<br/><br/>";
+				if($num_feeds == 0) {
+		          $watchlist = 1;
+		        }else{
+		          $watchlist = 0;	    
+		        }  				
+
 				$post_data = array(
 					'feed' => array(
 						'name' => $name,
@@ -235,7 +244,8 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 							'author_id' => $author_id
 						),
 						'update_frequency' => $_REQUEST[ 'schedule' ] ,
-						'auto_play' => $auto_play
+						'auto_play' => $auto_play,
+						'watchlist' => $watchlist,
 
 					)
 				);
