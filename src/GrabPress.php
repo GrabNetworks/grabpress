@@ -396,7 +396,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					switch ( $action ) {
 						case 'update':
 							if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
-								GrabPressViews::feed_creation_success($params);
+								GrabPressViews::do_create_feed($params);
 							}else {
 								GrabPress::$invalid = true;
 								GrabPressViews::feed_management($params);
@@ -408,14 +408,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						case 'modify':
 							GrabPressViews::do_edit_feed($params);
 							break;
-						case 'edit-feed':			
+						case 'edit-feed':
 							GrabPressViews::edit_feed($params);
-							break;
+							break;	
 						case 'prefill':
 							GrabPressViews::prefill_feed($params);
-							break;
+							break;	
 						case 'default':
-						default:				
+						default:
 							GrabPressViews::feed_management($params);
 							break;
 					}
@@ -424,48 +424,43 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					
 					switch ( $params[ 'action' ] ) {
 						case 'link-user' :
-							GrabPressViews::link_user($params);
+							GrabPressViews::link_account($params);
 							break;
 						case 'unlink-user' :
-							GrabPressViews::unlink_user($params);
+							GrabPressViews::unlink_account($params);
 							break;
 						case 'create-user':							
 							GrabPressViews::create_user($params);
 							break;
+						case 'default':
 						case 'link':
 						case 'unlink':
 						case 'create':
 						case 'switch':
-						case "default":
 						default:
-							$params[ 'action' ] = 'default';
 							GrabPressViews::account_management($params);
 							break;
 					}
 					break;
 
 				case 'catalog':
-
-					if(isset($params[ 'action' ])){
 						switch ( $params[ 'action' ] ) {
 							case 'update':
 							if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
-								GrabPressAPI::create_feed($params);
-								GrabPressViews::feed_creation_success();
+								GrabPressViews::do_create_feed($params);
 							}else {
 								GrabPress::$invalid = true;
-								GrabPressViews::feed_management();
+								GrabPressViews::feed_management($params);
 							}
 							break;
 							case 'prefill':
-								GrabPressViews::prefill_feed();
+								GrabPressViews::prefill_feed($params);
 							break;
 							case 'catalog-search':
 							default:							
-								GrabPressViews::catalog_management();
+								GrabPressViews::catalog_management($params);
 							break;
 						}
-					}
 
 					break;			
 				case 'gp-dashboard':

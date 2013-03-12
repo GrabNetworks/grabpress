@@ -411,9 +411,12 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					"channels_total" => $channels_total,
 					"blogusers" => $blogusers ) );
 		}
+		static function do_create_feed($params){
+			GrabPressAPI::create_feed($params);
+			GrabPressViews::feed_creation_success($params);
+		}
 
 		static function feed_creation_success($params){
-			
 			print GrabPress::fetch( "includes/gp-feed-created-template.php", array("request" => $params));
 		}
 
