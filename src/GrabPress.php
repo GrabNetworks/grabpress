@@ -385,12 +385,18 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $string;
 		}
+		static function _escape_request($request){
+			if(function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()){
+				return json_decode(stripslashes(json_encode($request, JSON_HEX_APOS)), true);
+			}
+			
+			return $request;
+		}
 		static function dispatcher() {
 			GrabPress::log();
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
-			// $_REQUEST = GrabPress::form_default_values( $_REQUEST );
 			$action = $_REQUEST[ 'action' ];
-			$params = $_REQUEST;
+			$params = GrabPress::_escape_request($_REQUEST);
 			switch ( $_GET[ 'page' ] ) {
 				case 'autoposter':
 					switch ( $action ) {

@@ -196,10 +196,10 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$user_json = json_encode($user_data);
 			$result_json = GrabPressAPI::call('POST', '/register?api_key='.GrabPress::$api_key, $user_data);
 			$result_data = json_decode( $result_json);
+			
 
-			if(!isset( $result_data->error ) ){
+			if(isset($result_data->user)){
 				$params[ 'action' ] = 'link-user';
-				return GrabPress::dispatcher();
 			}else{
 				GrabPress::$error = 'We already have a registered user with the email address '.$params["email"].'. If you would like to update your account information, please login to the <a href="http://www.grab-media.com/publisherAdmin/">Grab Publisher Dashboard</a>, or contact our <a href="http://www.grab-media.com/support/">support</a> if you need assistance.';
 				$params['action'] = 'create';
