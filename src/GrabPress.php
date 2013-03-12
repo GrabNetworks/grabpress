@@ -388,19 +388,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function dispatcher() {
 			GrabPress::log();
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
-			$_REQUEST = GrabPress::form_default_values( $_REQUEST );
+			// $_REQUEST = GrabPress::form_default_values( $_REQUEST );
 			$action = $_REQUEST[ 'action' ];
 			$params = $_REQUEST;
 			switch ( $_GET[ 'page' ] ) {
 				case 'autoposter':
 					switch ( $action ) {
 						case 'update':
-							if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
-								GrabPressViews::do_create_feed($params);
-							}else {
-								GrabPress::$invalid = true;
-								GrabPressViews::feed_management($params);
-							}
+							GrabPressViews::do_create_feed($params);
 							break;
 						case 'delete':
 							GrabPressViews::delete_feed($params);
@@ -446,12 +441,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'catalog':
 						switch ( $params[ 'action' ] ) {
 							case 'update':
-							if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
 								GrabPressViews::do_create_feed($params);
-							}else {
-								GrabPress::$invalid = true;
-								GrabPressViews::feed_management($params);
-							}
 							break;
 							case 'prefill':
 								GrabPressViews::prefill_feed($params);
@@ -462,7 +452,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							break;
 						}
 
-					break;			
+					break;
 				case 'gp-dashboard':
 					GrabPressViews::dashboard_management($params);
 					break;
@@ -475,7 +465,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function grabpress_plugin_url(){
 			return plugin_dir_url( __FILE__ ) ;
 		}
-		
+
 		static function enqueue_scripts($page) {
 
 			$handlerparts = explode("_", $page);

@@ -412,8 +412,14 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					"blogusers" => $blogusers ) );
 		}
 		static function do_create_feed($params){
-			GrabPressAPI::create_feed($params);
-			GrabPressViews::feed_creation_success($params);
+			if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
+				GrabPressAPI::create_feed($params);
+				GrabPressViews::feed_creation_success($params);
+			}else {
+				GrabPress::$invalid = true;
+				GrabPressViews::feed_management($params);
+			}
+		
 		}
 
 		static function feed_creation_success($params){
