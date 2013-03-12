@@ -240,7 +240,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function fetch( $file = null, $data = array() ) {
-			
 			GrabPress::_escape_params_template($data);
 						
 			GrabPress::log();
@@ -543,7 +542,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$content = str_replace('&amp;', '&', $content);
 			return $content;
 		}
-		
+
 		static function modified_post_title ($title) {
 
 		  if ( ! empty ( $_REQUEST['post_title'] )){

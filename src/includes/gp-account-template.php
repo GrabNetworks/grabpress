@@ -12,7 +12,7 @@
 				<?php }?>
 			<p class="account-help">From here you can:</p>
 			<?php
-				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php', $request) : GrabPress::fetch('includes/account/chooser/unlinked.php', $request);
+				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php', array("request" =>$request)) : GrabPress::fetch('includes/account/chooser/unlinked.php', array("request" =>$request));
 			?>
 			<script>
 				(function( $ ){
@@ -28,13 +28,13 @@
 							break;
 						}
 					case 'switch':
-						echo GrabPress::fetch('includes/account/forms/link.php', $request);
+						echo GrabPress::fetch('includes/account/forms/link.php', array("request" =>$request));
 						break;
 					case 'create':
-						echo GrabPress::fetch('includes/account/forms/create.php', $request);
+						echo GrabPress::fetch('includes/account/forms/create.php', array("request" =>$request));
 						break;
 					case 'unlink':
-						echo GrabPress::fetch('includes/account/forms/unlink.php', $request);
+						echo GrabPress::fetch('includes/account/forms/unlink.php', array("request" =>$request));
 						break;
 				}
 			?>

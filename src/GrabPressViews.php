@@ -131,8 +131,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 		static function account_management($request) {
 			GrabPress::log();
-			print GrabPress::fetch( 'includes/gp-account-template.php', $request );
+			print GrabPress::fetch( 'includes/gp-account-template.php', array("request" =>$request ));
 		}
+		
 		static function link_account($params){
 			if( isset( $params[ 'email' ] ) && isset( $params[ 'password' ]) ){
 				$credentials = array( 'user' => $params[ 'email' ], 'pass' => $params[ 'password' ] );
@@ -155,7 +156,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			}else {
 				GrabPress::abort( 'Attempt to link user with incomplete form data.' );
 			}
-			GrabPressViews::account_management();
+			GrabPressViews::account_management($params);
 		}
 		static function unlink_account($params){
 			if( isset( $params[ 'confirm' ]) ){
@@ -168,7 +169,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				GrabPress::grabpress_plugin_messages();
 				$params[ 'action' ] = 'default';
 			}
-			GrabPressViews::account_management();						
+			GrabPressViews::account_management($params);
 		}
 		static function create_user($params){
 			$payment = isset( $params['paypal_id']) ? 'paypal' : '';
@@ -412,7 +413,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					"channels_total" => $channels_total,
 					"blogusers" => $blogusers ) );
 		}
-		
+
 		static function do_create_feed($params){
 			if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
 				GrabPressAPI::create_feed($params);
