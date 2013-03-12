@@ -412,6 +412,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					"channels_total" => $channels_total,
 					"blogusers" => $blogusers ) );
 		}
+		
 		static function do_create_feed($params){
 			if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
 				GrabPressAPI::create_feed($params);

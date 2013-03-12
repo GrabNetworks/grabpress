@@ -148,6 +148,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPressAPI::validate_key();
 			GrabPress::enable_xmlrpc();
 		}
+
 		static function delete_connector() {
 			GrabPress::log();
 			$connector_id = GrabPressAPI::get_connector_id();
@@ -228,7 +229,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			unset( $submenu['grabpress'][0] );
 		}
 
-		
 		static function _escape_params_template(&$data){
 			if(is_array($data)||is_object($data)){
 				foreach ($data as $key => &$value) {
@@ -262,6 +262,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return rawurlencode(stripslashes(urldecode($x)));
 
 		}
+
 		static function generate_catalog_url($options, $unlimited = false){
 			
 			$defaults = array("providers" => "", "categories" => "");
@@ -335,6 +336,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				"keywords_or" => $keywords_or
 				);
 		}
+
 		static function generate_adv_search_string($keywords){
 			$string = "";
 
@@ -369,6 +371,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $string;
 		}
+
 		static function _escape_request($request){
 			if(function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()){
 				return json_decode(stripslashes(json_encode($request, JSON_HEX_APOS)), true);
@@ -376,6 +379,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			return $request;
 		}
+
 		static function _account_form_default_values($request){
 			$defaults = array( "publish" => true,
 				"click_to_play" => true,
@@ -392,6 +396,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $request;
 		}
+
 		static function dispatcher() {
 			GrabPress::log();
 
@@ -538,6 +543,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$content = str_replace('&amp;', '&', $content);
 			return $content;
 		}
+		
 		static function modified_post_title ($title) {
 
 		  if ( ! empty ( $_REQUEST['post_title'] )){
