@@ -471,9 +471,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					break;
 				}
 		}
+
 		static function grabpress_plugin_url(){
 			return plugin_dir_url( __FILE__ ) ;
 		}
+		
 		static function enqueue_scripts($page) {
 
 			$handlerparts = explode("_", $page);

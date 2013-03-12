@@ -207,13 +207,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			GrabPressViews::account_management($params);
 		}
 
-		static function catalog_management() {
+		static function catalog_management($request) {
 			GrabPress::log();
 			$defaults = array(
 				"sort_by" => "created_at",
 				"providers" => array(),
 				"channels" => array());
-			$request = array_merge($defaults, $_REQUEST);
+			$request = array_merge($defaults, $request);
 
 			if(isset($request["keywords"])){
 				$adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
@@ -261,13 +261,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					));
 		}
 
-		static function get_catalog_callback(){
+		static function get_catalog_callback($request){
 			$defaults = array(
 				"providers" => array(),
 				"channels" => array(),
 				"sort_by" => "created_at",
 				"empty" => "true");
-			$request = array_merge($defaults, $_REQUEST);
+			$request = array_merge($defaults, $request);
 			
 			if($request["empty"] == "true"){
 				$list_feeds["results"] = array();
@@ -318,13 +318,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die();
 		}
 
-		static function grabpress_preview_videos() {
+		static function grabpress_preview_videos($request) {
 			GrabPress::log();
 			$defaults = array(
 				"sort_by" => "created_at",
 				"providers" => array(),
 				"channels" => array());
-			$request = array_merge($defaults, $_REQUEST);
+			$request = array_merge($defaults, $request);
 
 			$providers =  GrabPressAPI::get_providers();			
 
@@ -518,7 +518,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				));
 		}
 
-		static function toggle_feed_callback() {
+		static function toggle_feed_callback($request) {
 			global $wpdb; // this is how you get access to the database
 
 			$feed_id = intval( $_REQUEST['feed_id'] );
@@ -661,7 +661,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 		}
 
 		static function get_preview_callback(){
-			GrabPressViews::grabpress_preview_videos();
+			GrabPressViews::grabpress_preview_videos($_REQUEST);
 			die();
 		}
 
