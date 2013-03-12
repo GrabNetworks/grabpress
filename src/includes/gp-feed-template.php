@@ -491,11 +491,11 @@
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
-			if(isset($form["feed_id"])) {
+			if(isset($form["feed_id"]) && $form["feed_id"] < 0) {
 				$feed_id = $form["feed_id"];
 		?>
 			<input type="hidden"  name="feed_id" value="<?php echo $feed_id; ?>" />
-		<?php		
+		<?php
 			}
 		?>
 		<?php 

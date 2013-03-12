@@ -90,9 +90,10 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 		}
 
 		static function do_edit_feed($params){
-			GrabPressApi::edit_feed($params);
+			GrabPressAPI::edit_feed($params);
 			GrabPressViews::feed_creation_success($params);
 		}
+		
 		static function prefill_feed($params){
 			GrabPress::log();
 			if ( GrabPressAPI::validate_key() ) {

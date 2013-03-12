@@ -44,17 +44,18 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
 				'Content-type: application/json'
 			) );
-			$params = '';
+			
 			if( isset($auth) && isset($data['user']) && isset($data['pass'])){
 				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
-			}else{
-				$params = strstr($resource, '?') ? '&' : '?';
-				$params = http_build_query($data);
 			}
+
 			switch($method){
 				case 'GET':		
 					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
+					$params = '';
 					$location.=$params;
+					$params = strstr($resource, '?') ? '&' : '?';
+					$params = http_build_query($data);
 					break;
 				case 'POST';
 					curl_setopt( $ch, CURLOPT_POST, true );
@@ -393,8 +394,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 					'auto_play' => $auto_play
 				)
 			);
-
-			GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
+			$response = GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
 		}
 
 		static function create_connection() {

@@ -254,23 +254,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::show_message();
 		}
 
-		static function form_default_values( $params = array() ) {
-			GrabPress::log();
-			$defaults = array( "publish" => true,
-				"click_to_play" => true,
-				"category" => array(),
-				"provider" => array(),
-				"keywords_and" => "",
-				"keywords_not" => "",
-				"keywords_or" => "",
-				"keywords_phrase" => "");
-			foreach ( $defaults as $key => $value ) {
-				if ( !array_key_exists( $key, $params ) ) {
-					$params[$key] = $value;
-				}
-			}
-			return $params;
-		}
+		
 		static function _escape_params($x){
 			if(is_array($x)){
 				$x = serialize($x);
@@ -389,16 +373,34 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			if(function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()){
 				return json_decode(stripslashes(json_encode($request, JSON_HEX_APOS)), true);
 			}
-			
+
+			return $request;
+		}
+		static function _account_form_default_values($request){
+			$defaults = array( "publish" => true,
+				"click_to_play" => true,
+				"category" => array(),
+				"provider" => array(),
+				"keywords_and" => "",
+				"keywords_not" => "",
+				"keywords_or" => "",
+				"keywords_phrase" => "");
+			foreach ( $defaults as $key => $value ) {
+				if ( !array_key_exists( $key, $request ) ) {
+					$request[$key] = $value;
+				}
+			}
 			return $request;
 		}
 		static function dispatcher() {
 			GrabPress::log();
+
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
 			$action = $_REQUEST[ 'action' ];
 			$params = GrabPress::_escape_request($_REQUEST);
 			switch ( $_GET[ 'page' ] ) {
 				case 'autoposter':
+					$params = GrabPress::_account_form_default_values($params);
 					switch ( $action ) {
 						case 'update':
 							GrabPressViews::do_create_feed($params);
@@ -430,7 +432,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						case 'unlink-user' :
 							GrabPressViews::unlink_account($params);
 							break;
-						case 'create-user':							
+						case 'create-user':
 							GrabPressViews::create_user($params);
 							break;
 						case 'default':
