@@ -129,9 +129,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			}
 		}
 
-		static function account_management() {
+		static function account_management($request) {
 			GrabPress::log();
-			print GrabPress::fetch( 'includes/gp-account-template.php' );
+			print GrabPress::fetch( 'includes/gp-account-template.php', $request );
 		}
 		static function link_account($params){
 			if( isset( $params[ 'email' ] ) && isset( $params[ 'password' ]) ){

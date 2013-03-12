@@ -12,7 +12,7 @@
 				<?php }?>
 			<p class="account-help">From here you can:</p>
 			<?php
-				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php') : GrabPress::fetch('includes/account/chooser/unlinked.php');
+				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php', $request) : GrabPress::fetch('includes/account/chooser/unlinked.php', $request);
 			?>
 			<script>
 				(function( $ ){
@@ -21,20 +21,20 @@
 					})
 				})( jQuery )
 			</script>
-			<?php switch( $_REQUEST[ 'action' ] ){
+			<?php switch( $request[ 'action' ] ){
 					case 'default':
 					case NULL:
 						if($linked){
 							break;
 						}
 					case 'switch':
-						echo GrabPress::fetch('includes/account/forms/link.php');
+						echo GrabPress::fetch('includes/account/forms/link.php', $request);
 						break;
 					case 'create':
-						echo GrabPress::fetch('includes/account/forms/create.php');
+						echo GrabPress::fetch('includes/account/forms/create.php', $request);
 						break;
 					case 'unlink':
-						echo GrabPress::fetch('includes/account/forms/unlink.php');
+						echo GrabPress::fetch('includes/account/forms/unlink.php', $request);
 						break;
 				}
 			?>
