@@ -274,6 +274,7 @@
 				"content": anchor.data("guid"),
 				"autoPlay": false
 			});
+
 			$("#collapse1").toggleClass("collapse");
 		}
 		function watchlist_binding(embed_id){
@@ -394,8 +395,8 @@
 				if(panel.hasClass("collapse")){
 					var slideDownCurrent = function(panel){
 						panel.slideDown(400, function(){
-							var embed = $("#gcontainer"+embed_id).detach();
-							panel.find(".accordion-inner").append(embed);
+							 /* XXX */							var embed = $("#gcontainer"+embed_id).detach();
+							/* XXX */							$("body").append(embed);
 							active_video.loadNewVideo(anchor.data("guid"));
 							panel.toggleClass("collapse");
 
