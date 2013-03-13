@@ -30,7 +30,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $version = '2.2.0';
 		static $api_key;
 		static $invalid = false;
-		static $environment =  'grabqa';
+		static $environment =  'grabnetworks';
 		static $debug = true;
 		static $message = false;
 		static $error = false;
