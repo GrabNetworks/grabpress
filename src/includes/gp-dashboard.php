@@ -393,7 +393,7 @@
 				var openPanels = $(".accordion-group .accordion-body").not(".collapse");
 				// debugger;
 				if(panel.hasClass("collapse")){
-					var slideDownCurrent = function(panel){
+					var slideDownCurrent = function(panel, onfinish){
 						var embed = $("#gcontainer"+embed_id).detach();
 						panel.slideDown(400,'linear', function(){
 							panel.find('.accordion-inner').append( embed );
@@ -403,10 +403,10 @@
 						});
 					};
 					if(openPanels.length > 0){
-					slideDownCurrent(panel);
 						openPanels.slideUp(400,'linear', function(){
 							active_video.hideEmbed();
 							$(this).toggleClass("collapse");
+							slideDownCurrent(panel);
 						});
 					}else{
 						slideDownCurrent(panel);
