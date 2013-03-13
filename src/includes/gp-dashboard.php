@@ -395,8 +395,11 @@
 				if(panel.hasClass("collapse")){
 					var slideDownCurrent = function(panel){
 						panel.slideDown(400, function(){
-							 /* XXX */							var embed = $("#gcontainer"+embed_id).detach();
-							/* XXX */							$("body").append(embed);
+							setTimeout( 1, function (){
+							 var embed = $("#gcontainer"+embed_id).detach();
+
+							$("#messages-tab1").append(embed);
+						});
 							active_video.loadNewVideo(anchor.data("guid"));
 							panel.toggleClass("collapse");
 
