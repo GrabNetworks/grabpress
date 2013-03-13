@@ -394,22 +394,19 @@
 				// debugger;
 				if(panel.hasClass("collapse")){
 					var slideDownCurrent = function(panel){
-						panel.slideDown(400, function(){
-							setTimeout( 1, function (){
-							 var embed = $("#gcontainer"+embed_id).detach();
-
-							$("#messages-tab1").append(embed);
-						});
+						var embed = $("#gcontainer"+embed_id).detach();
+						panel.slideDown(400,'linear', function(){
+							panel.find('.accordion-inner').append( embed );
 							active_video.loadNewVideo(anchor.data("guid"));
 							panel.toggleClass("collapse");
 
 						});
 					};
 					if(openPanels.length > 0){
-						openPanels.slideUp(400, function(){
+					slideDownCurrent(panel);
+						openPanels.slideUp(400,'linear', function(){
 							active_video.hideEmbed();
 							$(this).toggleClass("collapse");
-							slideDownCurrent(panel);
 						});
 					}else{
 						slideDownCurrent(panel);
