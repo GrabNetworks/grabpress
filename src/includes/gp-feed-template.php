@@ -533,14 +533,13 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 			            <td>
 							<?php echo GrabPress::$version ?>
 						</td>
-					</tr>
+					</tr> <?php } ?>
 	                <tr valign="bottom">
 						<th scope="row">API Key</th>
 			            <td>
 							<?php echo get_option( 'grabpress_key' ); ?>
 						</td>
 					</tr>
-				<?php } ?>
 				<tr>
 					<td>
 						<h3>Search Criteria</h3>
