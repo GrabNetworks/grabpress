@@ -29,8 +29,8 @@
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
 	<input type="hidden" name="publish" value="1" id="publish" />
 	<input type="hidden" name="click_to_play" value="1" id="click_to_play" />
-	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '' ?>" />
-	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
+	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($form['post_id']) ? $form['post_id'] : '' ?>" />
+	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($form['pre_content2']) ? $form['pre_content2'] : '' ?>" />
 	<input type="hidden" id="keywords_and" name="keywords_and" value="<?php echo $keywords_and = isset($keywords_and) ? $keywords_and : ''; ?>" />	
 	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not = isset($keywords_not) ? $keywords_not : ''; ?>" />
 	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or = isset($keywords_or) ? $keywords_or : ''; ?>" />
