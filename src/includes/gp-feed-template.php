@@ -84,7 +84,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 			if(!errors){
 				
 	            var data = {
-                	"action": "gpform_preview",
+                	"action": "gp_get_preview",
                 	"keywords_and": $("#form-create-feed input[name=keywords_and]").val(),
                 	"keywords_or": $("#form-create-feed input[name=keywords_or]").val(),
                 	"keywords_not": $("#form-create-feed input[name=keywords_not]").val(),
@@ -113,7 +113,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 		$(".btn-preview-feed").live("click", function(e){
 			var id = $(this).data("id");
 			var data = {
-                	"action": "gpform_preview",
+                	"action": "gp_get_preview",
                 	"feed_id": id
                 };
 	                	
