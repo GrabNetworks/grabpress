@@ -226,7 +226,6 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 
 				$feeds = GrabPressAPI::get_feeds();
 				$num_feeds = count( $feeds );
-				echo "NUMFEEDS: "; var_dump($num_feeds); echo "<br/><br/>";
 				if($num_feeds == 0) {
 		          $watchlist = 1;
 		        }else{
