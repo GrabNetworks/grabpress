@@ -718,6 +718,20 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $settings;
 		}
 
+		static function gp_shortcode( $atts ) {
+
+			$settings = GrabPressAPI::get_player_settings_for_embed();
+			
+			return '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'">'
+					//.'<script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.GrabPressAPI::get_connector()->ctp_embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">'					
+					.'<script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.GrabPressAPI::get_connector()->ctp_embed_id.'&content=v362cec77065d543898ded87e57ae410d87165859&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">'
+					.'</script>'
+					.'<div id="overlay-adzone" style="overflow:hidden; position:relative">'
+					.'</div>'
+					.'</div>';	 
+					 			
+		}		
+
 	}//class
 }//ifndefclass
 if( is_admin() ){
@@ -739,6 +753,27 @@ if( is_admin() ){
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
 	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
+		
 }
+
+add_shortcode( 'grab', array("GrabPress", "gp_shortcode") );	
+
+/*
+function gp_shortcode( $atts ) {
+
+	//$settings = GrabPressAPI::get_player_settings_for_embed();
+
+	//return 'TEST 2';	
+	
+	return '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'">'
+			.'<script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.GrabPressAPI::get_connector()->ctp_embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">'
+			.'</script>'
+			.'<div id="overlay-adzone" style="overflow:hidden; position:relative">'
+			.'</div>'
+			.'</div>';	 
+			 			
+}
+add_shortcode( 'grab', 'gp_shortcode' );
+*/
 
 GrabPress::allow_tags();
