@@ -41,7 +41,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $providers;
 		static $channels;
 		static $player_settings;
-
+		static $shortcode_submission_template_id;
 		static function log( $message = false ) {
 			if ( GrabPress::$debug ) {
 				if ( !$message ) {
