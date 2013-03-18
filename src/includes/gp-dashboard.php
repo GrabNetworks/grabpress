@@ -2,11 +2,9 @@
 
 <div class="wrap" >
 		<img src="<?php echo plugin_dir_url( __FILE__ ).'images/logo.png' ?>"/>
-		<h2>&nbsp;</h2>
-
 		<div id="t">
 		  <div id="b">		    
-		    <!--************************************************************-->
+			<!--************************************************************-->
 			<div class="container-fluid">
 				<div class="row-fluid">
 					<div class="span4 watchlist">
@@ -49,7 +47,7 @@
 												</div>
 												<div class="accordion-right"></div>
 											</div>
-											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in" style="display:none;">
+											<div id="collapse<?php echo $i;?>" class="accordion-body collapse in" style="<?php print ($i==1)?"":"display:none;";?>">
 												<div class="accordion-inner">
 												</div>
 											</div>
@@ -94,21 +92,21 @@
 											<div class="tab-content">
 												<div class="tab-pane active nano" id="messages-tab1">
 													<div class="content">
-														     <?php
-                                                                $num_feeds = count($feeds);
-                                                                if($publisher_status == "account-unlinked"){
-                                                                    echo "Want to earn money? <a href=\"admin.php?page=gp-account&action=create\">Create</a> or <a href=\"admin.php?page=gp-account&action=default\">link an existing</a> Grab Publisher account.";
-                                                                }
-                                                                elseif($num_feeds == 0){
-                                                                    echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=gp-autoposter\">here</a>";
-                                                                }
-                                                                else{
-                                                                    $p = count($pills);
-                                                                    $p--;
-                                                                    $r = rand(0, $p);
-                                                                    echo html_entity_decode($pills[$r]->message->body);
-                                                                }
-                                                            ?>	
+													 <?php
+														$num_feeds = count($feeds);
+														if($publisher_status == "account-unlinked"){
+																echo "Want to earn money? <a href=\"admin.php?page=account&action=create\">Create</a> or <a href=\"admin.php?page=account&action=default\">link an existing</a> Grab Publisher account.";
+														}
+														elseif($num_feeds == 0){
+																echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=autoposter\">here</a>";
+														}
+														else{
+																$p = count($pills);
+																$p--;
+																$r = rand(0, $p);
+																echo html_entity_decode($pills[$r]->message->body);
+														}
+												?>	
 													</div>
 												</div>
 											</div>
@@ -236,7 +234,7 @@
 									</ul>
 									<div class="tab-content">
 										<div class="tab-pane active" id="faq-tab1">
-											<p> Placeholder </p>
+											<p> Read more about GrabMedia and our GrabPress and Autoposter technology:</p>
 											<?php foreach($resources as $msg){ ?>
 											<p>
 												<?php echo html_entity_decode($msg->message->body); ?>
@@ -250,7 +248,7 @@
 					</div>
 				</div>
 			</div>
-		    <!--***********************************************************-->		   
+			<!--***********************************************************-->		   
 		  </div>
 		</div>
 	
@@ -259,51 +257,101 @@
 </form>
 <script type="text/javascript">
 
-	jQuery(function($){	
+	jQuery(function($){
+		var active_video = null;
+		function onload_openvideo(embed_id){
+			if($(".accordion-warning").length == 1){
+				return false;
+			}
+			var embed = "";
+			var anchor = $($(".accordion-toggle[href='#collapse1']")[0]);
+			embed = '<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>';
+			$("#collapse1").find(".accordion-inner").append(embed);
+			active_video = new com.grabnetworks.Player({
+				"id": embed_id,
+				"width": "100%",
+				"height": "100%",
+				"content": anchor.data("guid"),
+				"autoPlay": false
+			});
 
-		function watchlist_binding(){
+			$("#collapse1").toggleClass("collapse");
+		}
+		function watchlist_binding(embed_id){
 			$('.watchlist-check').bind('click', function(e){
 
-	        var id = this.id.replace('watchlist-check-','');
-	        var watchlist_check = $(this);
+			var id = this.id.replace('watchlist-check-','');
+			var watchlist_check = $(this);
 
-	        if(watchlist_check.val() == 1) {
-	          var watchlist = 1;
-	        }else{
-	          var watchlist = 0;	    
-	        }  
+			if(watchlist_check.val() == 1) {
+			  var watchlist = 1;
+			}else{
+			  var watchlist = 0;	    
+			}  
 
-		        var data = {
-			        action: 'gp_toggle_watchlist',
-			        feed_id: id,
-			        watchlist: watchlist		        
-			    };	    
+				var data = {
+					action: 'gp_toggle_watchlist',
+					feed_id: id,
+					watchlist: watchlist		        
+				};	    
 
-		      $.post(ajaxurl, data, function(response) {	        
-				    var parsedJson = $.parseJSON(response);
-				    var accordion = '';
-				    if (parsedJson.results != ''){				    	
-					    for(var i in parsedJson.results) {
+			  $.post(ajaxurl, data, function(response) {	        
+					var parsedJson = $.parseJSON(response);
+					var accordion = '';
+					if (parsedJson.results != ''){				    	
+						for(var i in parsedJson.results) {
 						  if(!isNaN(i)) {
-						  	accordion += '<div class="accordion-group">'
+						  	if(i==0){
+
+								accordion += '<div class="accordion-group">'
 										+'<div class="accordion-heading">'
 										+'	<div class="accordion-left"></div>'
 										+'	<div class="accordion-center">'
-										+'		<a class="accordion-toggle" data-guid=v"'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + i + '">'
+										+'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
 										+ 		parsedJson.results[i].video.title
 										+'		</a>'
 										+'	</div>'
 										+'	<div class="accordion-right"></div>'
 										+'</div>'
-										+'<div id="collapse' + i + '" class="accordion-body collapse in" style="display:none;">'
+										+'<div id="collapse' + (i+1) + '" class="accordion-body collapse in" >'
+										+'	<div class="accordion-inner">'
+										+'		<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>'
+										+'	</div>'
+										+'</div>'
+										+'</div>';
+						  	}else{
+								accordion += '<div class="accordion-group">'
+										+'<div class="accordion-heading">'
+										+'	<div class="accordion-left"></div>'
+										+'	<div class="accordion-center">'
+										+'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
+										+ 		parsedJson.results[i].video.title
+										+'		</a>'
+										+'	</div>'
+										+'	<div class="accordion-right"></div>'
+										+'</div>'
+										+'<div id="collapse' + (i+1) + '" class="accordion-body collapse in" style="display:none;">'
 										+'	<div class="accordion-inner">'
 										+'	</div>'
 										+'</div>'
 										+'</div>';
+							}
 						  }
-						}						
-				    }else{
-				    	accordion += '<div class="accordion-group">'
+						}
+					  		$('#accordion2').html(accordion);	
+							active_video = new com.grabnetworks.Player({
+							
+								"id": embed_id,
+								"width": "100%",
+								"height": "100%",
+								"content": parsedJson.results[0].video.guid,
+								"autoPlay": false
+							});
+							$(window).resize();
+						$("#collapse1").toggleClass("collapse");
+										
+					}else{
+						accordion += '<div class="accordion-group">'
 										+'<div class="accordion-heading">'
 										+'	<div class="accordion-left"></div>'
 										+'	<div class="accordion-center">'										
@@ -317,20 +365,21 @@
 										+'	</div>'
 										+'</div>'
 										+'</div>';
-				    }
-				    $('#accordion2').html(accordion);	
-				    	
+					$('#accordion2').html(accordion);
+					}
+					
+					
 
 				if(watchlist_check.val() == 1) {
-		          watchlist_check.val('0');
-		          watchlist_check.addClass('watch-on').removeClass('watch-off');
-		        }else{
-		          watchlist_check.val('1');
-		          watchlist_check.addClass('watch-off').removeClass('watch-on');	    
-		        } 
+				  watchlist_check.val('0');
+				  watchlist_check.addClass('watch-on').removeClass('watch-off');
+				}else{
+				  watchlist_check.val('1');
+				  watchlist_check.addClass('watch-off').removeClass('watch-on');	    
+				} 
 			   });
-	      			
-	      }); 	
+					
+		  }); 	
 
 		};
 
@@ -338,44 +387,23 @@
 
 			$("#form-dashboard").parent().css("margin", "-10px 0 0 -18px");
 
-			var active_video = null;
-			// var move_embed = function(embed_id, from, to){
-			// 	if($("#grabDiv"+embed_id).length > 0){
-			// 		$(from).find("#grabDiv"+embed_id).appendTo(to);
-			// 		$(from).find("#grabDiv"+embed_id).remove();
-			// 	}else{
-			// 		$(to).append('<div id="grabDiv'+embed_id+'"></div>');
-			// 	}
-			// }
 			$(".accordion-toggle").live("click", function(e){
 				var anchor = $(this);
 				var panel = $(anchor.attr("href"));
 				var openPanels = $(".accordion-group .accordion-body").not(".collapse");
 				// debugger;
 				if(panel.hasClass("collapse")){
-					var slideDownCurrent = function(panel){
-						panel.slideDown(400, function(){
-							var embed = $("#gcontainer"+embed_id).detach();
-							if(embed.length == 0){
-								embed = '<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>';
-								panel.find(".accordion-inner").append(embed);
-								active_video = new com.grabnetworks.Player({
-									"id": embed_id,
-									"width": "100%",
-									"height": "100%",
-									"content": anchor.data("guid"),
-									"autoPlay": true
-								});
-							}else{
-								panel.find(".accordion-inner").append(embed);
-								active_video.loadNewVideo(anchor.data("guid"));
-							}
+					var slideDownCurrent = function(panel, onfinish){
+						var embed = $("#gcontainer"+embed_id).detach();
+						panel.slideDown(400,'linear', function(){
+							panel.find('.accordion-inner').append( embed );
+							active_video.loadNewVideo(anchor.data("guid"));
 							panel.toggleClass("collapse");
 
 						});
 					};
 					if(openPanels.length > 0){
-						openPanels.slideUp(400, function(){
+						openPanels.slideUp(400,'linear', function(){
 							active_video.hideEmbed();
 							$(this).toggleClass("collapse");
 							slideDownCurrent(panel);
@@ -384,14 +412,6 @@
 						slideDownCurrent(panel);
 					}
 
-
-					
-					
-				}else{
-					panel.slideUp(400, function(){
-						panel.toggleClass("collapse");
-						panel.find(".accordion-inner").empty();	
-					});
 				}
 				
 				e.preventDefault();
@@ -407,11 +427,13 @@
 		}
 
 		function init(){
-			watchlist_binding();
+			watchlist_binding(<?php echo $embed_id ?>);
 			accordion_binding('<?php echo GrabPress::$environment; ?>', <?php echo $embed_id ?>);
+			onload_openvideo(<?php echo $embed_id ?>);
 			$(".nano").nanoScroller({"alwaysVisible":true});
 
 			$(window).resize(resize_accordion).resize();
+			$("#message").hide();//hack
 			
 		}
 		init();
