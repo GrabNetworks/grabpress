@@ -147,7 +147,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					);
 					GrabPress::log( 'PUTting to connector ' . GrabPressAPI::get_connector_id() . ':' . $user -> id );
 					$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
-					GrabPress::grabpress_plugin_messages();
+					GrabPress::plugin_messages();
 					$params[ 'action' ] = 'default';
 				}else{
 					GrabPress::$error = 'No user with the supplied email and password combination exists in our system. Please try again.';
