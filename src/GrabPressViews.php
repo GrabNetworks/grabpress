@@ -263,7 +263,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					));
 		}
 
-		static function get_catalog_callback($request){
+		static function get_catalog_callback(){
+			$request = Grabpress::_escape_request($_REQUEST);
 			$defaults = array(
 				"providers" => array(),
 				"channels" => array(),
