@@ -170,7 +170,21 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		static function get_connector_id(){
 			return GrabPressAPI::get_connector()->id;
 		}
-		
+		static function get_shortcode_template_id(){
+		  GrabPress::log();
+		  if(GrabPress::$shortcode_submission_template_id){
+		   return GrabPress::$shortcode_submission_template_id;
+		  }
+		  $submission_templates_json = GrabPressAPI::call('GET', '/submission_templates/default');
+		  $submission_templates = json_decode($submission_templates_json);
+		  for ( $n = 0; $n < count( $submission_templates ); $n++ ) {
+		   $submission_template = $submission_templates[$n] -> submission_template;
+		   if ( $submission_template -> name =='ShortCode Template' ) {
+		    GrabPress::$shortcode_submission_template_id = $submission_template -> id;
+		   }
+		  }
+		  return GrabPress::$shortcode_submission_template_id;
+		}		
 		static function create_feed($params) {
 			GrabPress::log();
 			if ( GrabPressAPI::validate_key() ) {
@@ -232,9 +246,10 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		        }else{
 		          $watchlist = 0;	    
 		        }  				
-
+		        $submission_template_id = GrabPressAPI::get_shortcode_template_id();
 				$post_data = array(
 					'feed' => array(
+						'submission_template_id' => "$submission_template_id",					
 						'name' => $name,
 						'posts_per_update' => $params[ 'limit' ],
 						'url' => $url,
