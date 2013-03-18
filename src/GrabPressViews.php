@@ -628,6 +628,11 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$image_url = $item->mediagroup->mediathumbnail[1]->attributes()->url;
 					$image_data = file_get_contents($image_url);
 					$filename = basename($image_url);
+
+					if(validate_file($filename)){//sanitize file path
+						GrabPress::error(" invalid filename ". $filename);
+					}
+
 					if(wp_mkdir_p($upload_dir['path']))
 					    $file = $upload_dir['path'] . '/' . $filename;
 					else
@@ -644,7 +649,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					    'post_status' => 'inherit'
 					);
 					$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
-					require_once(ABSPATH . 'wp-admin/includes/image.php');
+					include_once(ABSPATH . 'wp-admin/includes/image.php');
 					$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
 					wp_update_attachment_metadata( $attach_id, $attach_data );
 
