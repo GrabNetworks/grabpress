@@ -575,6 +575,31 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 	
 
+		static function gp_shortcode( $atts ) {
+
+			extract( shortcode_atts( array(
+				'guid' => 'default',
+			), $atts ) );
+			
+			$settings = GrabPressAPI::get_player_settings_for_embed();
+			
+			$player_script = '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'">
+					          <script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.GrabPressAPI::get_connector()->ctp_embed_id.'&content=v'.$guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">
+							  </script>
+							  <div id="overlay-adzone" style="overflow:hidden; position:relative">
+							  </div>
+							  </div>
+							  <script type="text/javascript">
+							  var _gaq = _gaq || [];
+							  _gaq.push([\'_setAccount\', \'UA-31934587-1\']);
+							  _gaq.push([\'_trackPageview\']);
+							  (function() { var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true; ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\'; var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s); })();
+							  </script>';	
+
+		  	return $player_script;		
+					 			
+		}		
+
 	}//class
 }//ifndefclass
 if( is_admin() ){
@@ -598,5 +623,5 @@ if( is_admin() ){
 	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
 		
 }
-
+add_shortcode( 'grabpress', array("GrabPress", "gp_shortcode") );	
 GrabPress::allow_tags();

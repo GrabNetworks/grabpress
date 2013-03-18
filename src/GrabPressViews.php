@@ -263,7 +263,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					));
 		}
 
-		static function get_catalog_callback($request){
+		static function get_catalog_callback(){
+			$request = Grabpress::_escape_request($_REQUEST);
 			$defaults = array(
 				"providers" => array(),
 				"channels" => array(),
@@ -606,8 +607,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 						<p>".$item->description."</p> 
 						<!--more-->
 						<div id=\"grabembed\">
-						<p><div id=\"".GrabPressAPI::get_connector()->ctp_embed_id."\"><script language=\"javascript\" type=\"text/javascript\" src=\"http://player.".GrabPress::$environment.".com/js/Player.js?id=".GrabPressAPI::get_connector()->ctp_embed_id."&content=v".$item->guid."&width=".$settings["width"]."&height=".$settings["height"]."&tgt=".GrabPress::$environment."\"></script><div id=\"overlay-adzone\" style=\"overflow:hidden; position:relative\"></div></div></p> 
-						</div>
+						[grabpress guid=\"".$item->guid."\"]
 						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
 						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
 						<p>To stay in the loop, bookmark <a href=\"/\">our homepage</a>.</p>
@@ -615,25 +615,24 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 						div#grabpreview {
 						display:none !important;
 						}
-						</style>
-						<script type=\"text/javascript\">
-						var _gaq = _gaq || [];
-						_gaq.push(['_setAccount', 'UA-31934587-1']);
-						_gaq.push(['_trackPageview']);
-						(function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
-						</script>"; 
+						</style>"; 
 					$post_id = wp_insert_post(array(
 						"post_content" => $text,
 						"post_title" => "VIDEO: ".$item->title,
 						"post_type" => "post",
 						"post_status" => "draft",
 						"tags_input" => $item->mediagroup->mediakeywords
-					));				
+					));
 
 					$upload_dir = wp_upload_dir();
 					$image_url = $item->mediagroup->mediathumbnail[1]->attributes()->url;
 					$image_data = file_get_contents($image_url);
 					$filename = basename($image_url);
+
+					if(validate_file($filename)){//sanitize file path
+						GrabPress::error(" invalid filename ". $filename);
+					}
+
 					if(wp_mkdir_p($upload_dir['path']))
 					    $file = $upload_dir['path'] . '/' . $filename;
 					else
@@ -650,7 +649,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					    'post_status' => 'inherit'
 					);
 					$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
-					require_once(ABSPATH . 'wp-admin/includes/image.php');
+					include_once(ABSPATH . 'wp-admin/includes/image.php');
 					$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
 					wp_update_attachment_metadata( $attach_id, $attach_data );
 
@@ -662,7 +661,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				}elseif($format == 'embed'){
 					echo json_encode(array(
 						"status" => "ok",
-					 	"content" => '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'"><script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.GrabPressAPI::get_connector()->ctp_embed_id.'&content=v'.$item->guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'"></script><div id="overlay-adzone" style="overflow:hidden; position:relative"></div></div>'));
+						"content" => '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'">[grabpress guid="'.$item->guid.'"]</div>'));
 				}		
 			}	
 
