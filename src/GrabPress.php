@@ -171,13 +171,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			};
 		}
 
-		static function grabpress_plugin_messages() {
+		static function plugin_messages() {
 			$feeds = GrabPressAPI::get_feeds();
 			$num_feeds = count( $feeds );
 			$admin = get_admin_url();
 			$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 			if ( $num_feeds == 0 ) {
-				$admin_page = $admin.'admin.php?page=autoposter';
+				$admin_page = $admin.'admin.php?page=gp-autoposter';
 				if ( $current_page != $admin_page ) {
 					$here = '<a href="'.$admin_page.'">here</a>';
 				}else {
@@ -199,8 +199,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 					$user = GrabPressAPI::get_user();
 					$linked = isset($user->email);
-					$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=account&action=create">Create</a>';
-					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=account&action=default">link an existing</a>';
+					$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=gp-account&action=create">Create</a>';
+					$link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=gp-account&action=default">link an existing</a>';
 					$linked_message = $linked ? '' : 'Want to earn money? ' . $create .' or '. $link . ' Grab Publisher account.';
 					$environment = ( GrabPress::$environment == "grabqa" ) ? '  ENVIRONMENT = ' . GrabPress::$environment : '';
 					if( $active_feeds == 0 ){
@@ -221,9 +221,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
 			add_submenu_page( 'grabpress', 'Dashboard', 'Dashboard', 'publish_posts', 'gp-dashboard', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'account', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'autoposter', array( 'GrabPress', 'dispatcher' ) );			
-			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'catalog', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'gp-account', array( 'GrabPress', 'dispatcher' ) );
+			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );			
+			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'gp-catalog', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
@@ -403,7 +403,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$action = $_REQUEST[ 'action' ];
 			$params = GrabPress::_escape_request($_REQUEST);
 			switch ( $_GET[ 'page' ] ) {
-				case 'autoposter':
+				case 'gp-autoposter':
 					$params = GrabPress::_account_form_default_values($params);
 					switch ( $action ) {
 						case 'update':
@@ -427,7 +427,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							break;
 					}
 					break;
-				case 'account':
+				case 'gp-account':
 					
 					switch ( $params[ 'action' ] ) {
 						case 'link-user' :
@@ -450,7 +450,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 					break;
 
-				case 'catalog':
+				case 'gp-catalog':
+
 						switch ( $params[ 'action' ] ) {
 							case 'update':
 								GrabPressViews::do_create_feed($params);
@@ -502,7 +503,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-ui-selectmenu', $plugin_url.'/js/ui/jquery.ui.selectmenu.js', array("jquery-ui-widget" ));
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' , array("jquery"));
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
-			wp_enqueue_script( 'nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
+			wp_enqueue_script( 'gp-nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
 
 			wp_enqueue_script( 'grab-player', 'http://player.'.GrabPress::$environment.'.com/js/Player.js' );
 
@@ -515,13 +516,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'thickbox' );
 
 			wp_enqueue_style( 'jquery-ui-theme', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css' );
-			wp_enqueue_style( 'bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
+			wp_enqueue_style( 'gp-bootstrap', $plugin_url.'/css/bootstrap-sandbox.css' );
 			wp_enqueue_style( 'thickbox' );
-			wp_enqueue_style( 'nanoscroller', $plugin_url.'/css/nanoscroller.css');		
-			wp_enqueue_style( 'grabpress-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "bootstrap", "nanoscroller"));			
+			wp_enqueue_style( 'gp-nanoscroller', $plugin_url.'/css/nanoscroller.css');		
+			wp_enqueue_style( 'gp-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "gp-bootstrap", "gp-nanoscroller"));			
 			
-			wp_enqueue_style( 'grabpresss-fonts', "http://static.grab-media.com/fonts/font-face.css");
-			wp_enqueue_style( 'bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
+			wp_enqueue_style( 'gp-fonts', "http://static.grab-media.com/fonts/font-face.css");
+			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
 			
 		}
 
@@ -572,6 +573,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			return $settings;
 		}
+	
 
 	}//class
 }//ifndefclass
@@ -582,7 +584,7 @@ if( is_admin() ){
 	register_uninstall_hook(__FILE__, array( 'GrabPress', 'delete_connector' ));
 	add_action( 'admin_menu', array( 'GrabPress', 'grabpress_plugin_menu' ) );
 	add_action( 'admin_footer', array( 'GrabPress', 'show_message' ) );
-	add_action( 'wp_loaded', array( 'GrabPress', 'grabpress_plugin_messages' ) );
+	add_action( 'wp_loaded', array( 'GrabPress', 'plugin_messages' ) );
 	add_action( 'wp_ajax_gp_toggle_feed', array( 'GrabPressViews', 'toggle_feed_callback' ));
 	add_action( 'wp_ajax_gp_delete_feed', array( 'GrabPressViews', 'delete_feed_callback' ));
 	add_action( 'wp_ajax_gp_feed_name_unique', array( 'GrabPressViews', 'feed_name_unique_callback' ));
@@ -594,6 +596,7 @@ if( is_admin() ){
 	add_filter( 'default_content', array( 'GrabPress', 'content_by_request' ), 10, 2 );
 	add_filter( 'default_title', array( 'GrabPress', 'modified_post_title' ) );
 	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
+		
 }
 
 GrabPress::allow_tags();

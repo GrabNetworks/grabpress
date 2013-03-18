@@ -118,7 +118,7 @@
 							<div class="feeds">
 								<?php
 									$admin = get_admin_url();
-									$admin_page = $admin.'admin.php?page=account';
+									$admin_page = $admin.'admin.php?page=gp-account';
 								?>								
 								<div id="btn-account-settings">
 								<div class="accordion-left">&nbsp;</div>
@@ -210,7 +210,7 @@
 												?>		
 											</td>
 											<td>
-												<a href="admin.php?page=autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
+												<a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
 													edit
 												</a>
 												<i class="icon-pencil"></i>

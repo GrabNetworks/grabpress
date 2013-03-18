@@ -3,7 +3,7 @@ jQuery('#message').hide();
 jQuery(document).ready(function($) {
     $('#wpbody-content').append($('#message'));
 });
-var gp_redirect_url = "admin.php?page=autoposter";
+var gp_redirect_url = "admin.php?page=gp-autoposter";
 var gp_redirect_seconds = 4;
 var gp_redirect_time;
 function gp_redirect() {
@@ -23,7 +23,7 @@ jQuery(function(){
 
 <div id="message-feed-created" class="updated fade">
   <p>
-    Feed created successfully.  Redirecting in 5 seconds ...  If you are not redirected automatically, please press <a href="admin.php?page=autoposter">here</a>
+    Feed created successfully.  Redirecting in 5 seconds ...  If you are not redirected automatically, please press <a href="admin.php?page=gp-autoposter">here</a>
   </p>
 </div>
 
