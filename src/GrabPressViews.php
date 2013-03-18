@@ -621,7 +621,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 						"post_type" => "post",
 						"post_status" => "draft",
 						"tags_input" => $item->mediagroup->mediakeywords
-					));				
+					));
 
 					$upload_dir = wp_upload_dir();
 					$image_url = $item->mediagroup->mediathumbnail[1]->attributes()->url;
