@@ -231,7 +231,7 @@
 					<?php if(isset($form['action']) && ($form['action']=='edit-feed') && ($form['feed_id']==$feedId)){ 
 						echo $text_edit_button;
 					 }else{ ?>				
-					<a href="admin.php?page=autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="<?php echo $class_edit_button; ?> btn-update-feed">
+					<a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="<?php echo $class_edit_button; ?> btn-update-feed">
 						<?php echo $text_edit_button; ?>
 					</a>
 					<?php } ?>
