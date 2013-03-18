@@ -227,7 +227,7 @@
 		var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 		if(feed_action == "preview-feed"){
 		  	$(".close-preview").click(function() {		  
-		  		window.location = "admin.php?page=autoposter";
+		  		window.location = "admin.php?page=gp-autoposter";
 	  		});
 		}else{
 			$(".close-preview").click(function() {		  
@@ -291,7 +291,7 @@
 		    var action = jQuery('#action-catalog');
 		    
 		    action.val("prefill");
-		    form.attr("action", "admin.php?page=autoposter");
+		    form.attr("action", "admin.php?page=gp-autoposter");
 		    form.submit();
 		});
 		$(".sort_by").change(function(e){
@@ -317,7 +317,7 @@
 		});	
 
 	   	$('#clear-search').bind('click', function(e){
-	   		window.location = "admin.php?page=catalog";		    
+	   		window.location = "admin.php?page=gp-catalog";		    
 		});
 		$(".video_summary").ellipsis(2, true, "more", "less");
 
