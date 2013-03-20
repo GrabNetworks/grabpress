@@ -202,11 +202,12 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			if(isset($result_data->user)){
 				$params[ 'action' ] = 'link-user';
+				GrabPressViews::link_account($params);
 			}else{
 				GrabPress::$error = 'We already have a registered user with the email address '.$params["email"].'. If you would like to update your account information, please login to the <a href="http://www.grab-media.com/publisherAdmin/">Grab Publisher Dashboard</a>, or contact our <a href="http://www.grab-media.com/support/">support</a> if you need assistance.';
 				$params['action'] = 'create';
+				GrabPressViews::account_management($params);
 			}
-			GrabPressViews::account_management($params);
 		}
 
 		static function catalog_management($request) {
