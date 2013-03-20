@@ -118,7 +118,7 @@
 							<div class="feeds">
 								<?php
 									$admin = get_admin_url();
-									$admin_page = $admin.'admin.php?page=account';
+									$admin_page = $admin.'admin.php?page=gp-account';
 								?>								
 								<div id="btn-account-settings">
 								<div class="accordion-left">&nbsp;</div>
@@ -210,7 +210,7 @@
 												?>		
 											</td>
 											<td>
-												<a href="admin.php?page=autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
+												<a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
 													edit
 												</a>
 												<i class="icon-pencil"></i>
@@ -265,7 +265,7 @@
 			}
 			var embed = "";
 			var anchor = $($(".accordion-toggle[href='#collapse1']")[0]);
-			embed = '<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>';
+			embed = '<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>';
 			$("#collapse1").find(".accordion-inner").append(embed);
 			active_video = new com.grabnetworks.Player({
 				"id": embed_id,
@@ -274,6 +274,7 @@
 				"content": anchor.data("guid"),
 				"autoPlay": false
 			});
+
 			$("#collapse1").toggleClass("collapse");
 		}
 		function watchlist_binding(embed_id){
@@ -314,7 +315,7 @@
 										+'</div>'
 										+'<div id="collapse' + (i+1) + '" class="accordion-body collapse in" >'
 										+'	<div class="accordion-inner">'
-										+'		<div id="gcontainer'+embed_id+'"><div id="grabDiv'+embed_id+'"></div></div>'
+										+'		<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>'
 										+'	</div>'
 										+'</div>'
 										+'</div>';
@@ -392,17 +393,17 @@
 				var openPanels = $(".accordion-group .accordion-body").not(".collapse");
 				// debugger;
 				if(panel.hasClass("collapse")){
-					var slideDownCurrent = function(panel){
-						panel.slideDown(400, function(){
-							var embed = $("#gcontainer"+embed_id).detach();
-							panel.find(".accordion-inner").append(embed);
+					var slideDownCurrent = function(panel, onfinish){
+						var embed = $("#gcontainer"+embed_id).detach();
+						panel.slideDown(400,'linear', function(){
+							panel.find('.accordion-inner').append( embed );
 							active_video.loadNewVideo(anchor.data("guid"));
 							panel.toggleClass("collapse");
 
 						});
 					};
 					if(openPanels.length > 0){
-						openPanels.slideUp(400, function(){
+						openPanels.slideUp(400,'linear', function(){
 							active_video.hideEmbed();
 							$(this).toggleClass("collapse");
 							slideDownCurrent(panel);
