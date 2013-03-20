@@ -623,5 +623,5 @@ if( is_admin() ){
 	add_filter( 'tiny_mce_before_init', array("GrabPress", "mce_settings") );
 		
 }
-add_shortcode( 'grabpress', array("GrabPress", "gp_shortcode") );	
+add_shortcode( 'grabpress_video', array("GrabPress", "gp_shortcode") );	
 GrabPress::allow_tags();

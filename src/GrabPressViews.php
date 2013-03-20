@@ -608,7 +608,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 						<p>".$item->description."</p> 
 						<!--more-->
 						<div id=\"grabembed\">
-						[grabpress guid=\"".$item->guid."\"]
+						[grabpress_video guid=\"".$item->guid."\"]
 						<p>Thanks for checking us out. Please take a look at the rest of our videos and articles.</p> <br/> 
 						<p><img src='".$item->grabprovider->attributes()->logo."' /></p> 
 						<p>To stay in the loop, bookmark <a href=\"/\">our homepage</a>.</p>
@@ -662,7 +662,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				}elseif($format == 'embed'){
 					echo json_encode(array(
 						"status" => "ok",
-						"content" => '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'">[grabpress guid="'.$item->guid.'"]</div>'));
+						"content" => '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'">[grabpress_video guid="'.$item->guid.'"]</div>'));
 				}		
 			}	
 
