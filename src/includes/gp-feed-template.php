@@ -1,10 +1,15 @@
-<!--<form method="post" action="" id="form-create-feed">-->
+<?php 
+
+$is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
+
+?>
 <div class="wrap">
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Category and Keywords</h2>
 	<p>Feed your blog with fresh video content.</p>
-		<fieldset id="create-form" class="<?php echo isset($_GET['action'])=='edit-feed' ? 'edit-mode':''?>">
-		<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
+
+		<fieldset id="create-form" class="<?php echo $is_edit ? 'edit-mode':''?>">
+		<legend><?php echo $is_edit ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 		var previewdialogConf = null;
@@ -139,7 +144,7 @@
 					};
 
 					$.post(ajaxurl, data, function(response) {
-						window.location = "admin.php?page=autoposter";
+						window.location = "admin.php?page=gp-autoposter";
 					});
 
 				} else{					
@@ -150,7 +155,7 @@
 		selectedCategories = <?php echo json_encode( $form["category"] );?>;
 
 		editFeed = function(id) {
-			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
+			window.location = "admin.php?page=gp-autoposter&action=edit-feed&feed_id="+id;
 		}
 
 		doValidation = function(){
@@ -266,10 +271,10 @@
 		    var referer = $("input[name=referer]").val();
 		    
 		    if( referer == "create" ){
-		    	window.location = "admin.php?page=autoposter";
+		    	window.location = "admin.php?page=gp-autoposter";
 		    }else{
 		    	var id = $("input[name=feed_id]").val();
-		    	window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
+		    	window.location = "admin.php?page=gp-autoposter&action=edit-feed&feed_id="+id;
 		    }
 		    
 		});
@@ -418,7 +423,7 @@
 		   $('#cancel-editing').bind('click', function(e){ 
 				var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
 				if(answer){				
-					window.location = "admin.php?page=autoposter";
+					window.location = "admin.php?page=gp-autoposter";
 				} else{				
 					return false;
 				}
@@ -491,11 +496,11 @@
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
-			if(isset($form["feed_id"])) {
+			if(isset($form["feed_id"]) && $form["feed_id"] > 0) {
 				$feed_id = $form["feed_id"];
 		?>
 			<input type="hidden"  name="feed_id" value="<?php echo $feed_id; ?>" />
-		<?php		
+		<?php
 			}
 		?>
 		<?php 
@@ -512,7 +517,7 @@
 			}else{
 				$referer = "create";
 			}	
-			if(isset($form["action"])){		
+			if($is_edit){		
 				$value = ($form["action"] == "modify") ? 'modify' : 'update';
 			}else{
 				$value = "update";
@@ -524,18 +529,17 @@
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
 	                <tr valign="bottom">
-						<th scope="row">Plug-in Version & Build Number</th>
+						<th scope="row">Plug-in Version &amp; Build Number</th>
 			            <td>
 							<?php echo GrabPress::$version ?>
 						</td>
-					</tr>
+					</tr> <?php } ?>
 	                <tr valign="bottom">
 						<th scope="row">API Key</th>
 			            <td>
 							<?php echo get_option( 'grabpress_key' ); ?>
 						</td>
 					</tr>
-				<?php } ?>
 				<tr>
 					<td>
 						<h3>Search Criteria</h3>
@@ -627,7 +631,7 @@
 				</tr>
 				<tr valign="bottom">
 					<td colspan="2" class="button-tip">						
-						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
+						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php $is_edit ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
 						<span class="hide preview-btn-text">Click here to sample the kinds of videos that will be auto posted by this feed in the future.</span>
 					</td>
 				</tr>
@@ -751,17 +755,17 @@
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<?php $click = ( isset($_GET['action'])=='edit-feed' ) ? 'onclick="validateFeedName(\'update\')"' : 'onclick="validateFeedName()"' ?>
-						<input type="button" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
+						<?php $click = ( $is_edit ) ? 'onclick="validateFeedName(\'update\')"' : 'onclick="validateFeedName()"' ?>
+						<input type="button" class="button-primary" disabled="disabled" value="<?php ( $is_edit ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
 						<a id="reset-form" href="#">reset form</a>
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>				
+						<?php if($is_edit){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>	
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
 					</td>
 				</tr>
 				</table>
 			</form>
 </fieldset>
-<?php if(isset($_GET['action'])=='edit-feed') { ?>
+<?php if($is_edit) { ?>
 <span class="edit-form-text display-element" >Please use the form above to edit the settings of the feed marked "editing" below</span>
 <?php } ?>
 
@@ -777,7 +781,7 @@
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
-			array( "form" => $_REQUEST,
+			array( "form" => $params,
 				"list_providers" => $list_providers,
 				"providers_total" => $providers_total,
 				"list_channels" => $list_channels,

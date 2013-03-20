@@ -44,17 +44,18 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			curl_setopt( $ch, CURLOPT_HTTPHEADER, array(
 				'Content-type: application/json'
 			) );
-			$params = '';
+			
 			if( isset($auth) && isset($data['user']) && isset($data['pass'])){
 				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
-			}else{
-				$params = strstr($resource, '?') ? '&' : '?';
-				$params = http_build_query($data);
 			}
+
 			switch($method){
 				case 'GET':		
 					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
+					$params = '';
 					$location.=$params;
+					$params = strstr($resource, '?') ? '&' : '?';
+					$params = http_build_query($data);
 					break;
 				case 'POST';
 					curl_setopt( $ch, CURLOPT_POST, true );
@@ -169,38 +170,52 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		static function get_connector_id(){
 			return GrabPressAPI::get_connector()->id;
 		}
-		
-		static function create_feed() {
+		static function get_shortcode_template_id(){
+		  GrabPress::log();
+		  if(GrabPress::$shortcode_submission_template_id){
+		   return GrabPress::$shortcode_submission_template_id;
+		  }
+		  $submission_templates_json = GrabPressAPI::call('GET', '/submission_templates/default');
+		  $submission_templates = json_decode($submission_templates_json);
+		  for ( $n = 0; $n < count( $submission_templates ); $n++ ) {
+		   $submission_template = $submission_templates[$n] -> submission_template;
+		   if ( $submission_template -> name =='ShortCode Template' ) {
+		    GrabPress::$shortcode_submission_template_id = $submission_template -> id;
+		   }
+		  }
+		  return GrabPress::$shortcode_submission_template_id;
+		}		
+		static function create_feed($params) {
 			GrabPress::log();
 			if ( GrabPressAPI::validate_key() ) {
-				$channels = $_REQUEST[ 'channel' ];
+				$channels = $params[ 'channel' ];
 				$channelsList = implode( ',', $channels );
 				$channelsListTotal = count( $channels ); // Total providers chosen by the user
-				$channels_total = $_REQUEST['channels_total']; // Total providers from the catalog list
+				$channels_total = $params['channels_total']; // Total providers from the catalog list
 				if ( $channelsListTotal == $channels_total ) {
 					$channelsList = '';
 				}
 
-				$name = rawurlencode( $_REQUEST[ 'name' ] );
+				$name = rawurlencode( $params[ 'name' ] );
 
-				$providers = $_REQUEST['provider'];
+				$providers = $params['provider'];
 				$providersList = implode( ',', $providers );
 				$providersListTotal = count( $providers ); // Total providers chosen by the user
-				$providers_total = $_REQUEST['providers_total']; // Total providers from the catalog list
+				$providers_total = $params['providers_total']; // Total providers from the catalog list
 				if ( $providersListTotal == $providers_total ) {
 					$providersList = '';
 				}
 				$url = GrabPress::generate_catalog_url(array(
-			   		"keywords_and" => $_REQUEST["keywords_and"],
-			   		"keywords_not" => $_REQUEST["keywords_not"],
-			   		"keywords_or" => $_REQUEST["keywords_or"],
-			   		"keywords_phrase" => $_REQUEST["keywords_phrase"],
+			   		"keywords_and" => $params["keywords_and"],
+			   		"keywords_not" => $params["keywords_not"],
+			   		"keywords_or" => $params["keywords_or"],
+			   		"keywords_phrase" => $params["keywords_phrase"],
 			   		"providers" => $providersList,
 			   		"categories" => $channelsList
 			   	));
 
 				$connector_id = GrabPressAPI::get_connector_id();
-				$category_list = $_REQUEST[ 'category' ];
+				$category_list = $params[ 'category' ];
 				$category_length = count( $category_list );
 				$cats = array();
 				if ( is_array( $category_list ) ) {
@@ -214,28 +229,38 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				}else {
 					$cats[] = 'Uncategorized';
 				}
-				$schedule = $_REQUEST['schedule'];
+				$schedule = $params['schedule'];
 
-				if ( $_REQUEST['click_to_play'] == "1" ) {
+				if ( $params['click_to_play'] == "1" ) {
 					$auto_play = "1";
 				}else {
 					$auto_play = "0";
 				}
 
-				$author_id = (int)$_REQUEST['author'];
+				$author_id = (int)$params['author'];
 
+				$feeds = GrabPressAPI::get_feeds();
+				$num_feeds = count( $feeds );
+				if($num_feeds == 0) {
+		          $watchlist = 1;
+		        }else{
+		          $watchlist = 0;	    
+		        }  				
+		        $submission_template_id = GrabPressAPI::get_shortcode_template_id();
 				$post_data = array(
 					'feed' => array(
+						'submission_template_id' => "$submission_template_id",					
 						'name' => $name,
-						'posts_per_update' => $_REQUEST[ 'limit' ],
+						'posts_per_update' => $params[ 'limit' ],
 						'url' => $url,
 						'custom_options' => array(
 							'category' => $cats,
-							'publish' => (bool)( $_REQUEST[ 'publish' ] ),
+							'publish' => (bool)( $params[ 'publish' ] ),
 							'author_id' => $author_id
 						),
-						'update_frequency' => $_REQUEST[ 'schedule' ] ,
-						'auto_play' => $auto_play
+						'update_frequency' => $params[ 'schedule' ] ,
+						'auto_play' => $auto_play,
+						'watchlist' => $watchlist,
 
 					)
 				);
@@ -251,7 +276,12 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				GrabPress::$feed_message = 'Your API key is no longer valid. Please <a href = "https://getsatisfaction.com/grabmedia" target="_blank">contact Grab support.</a>';
 			}
 		}
-
+		static function validate_user($credentials){
+			$credentials = array( 'user' => $params[ 'email' ], 'pass' => $params[ 'password' ] );
+			$user_json = GrabPressAPI::call( 'GET', '/user/validate', $credentials, true );
+			$user_data = json_decode( $user_json );
+			return isset( $user_data -> user );
+		}
 		static function validate_key() {
 			GrabPress::log();
 			$api_key = get_option( 'grabpress_key' );
@@ -311,6 +341,84 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			}else {
 				GrabPress::abort( 'no valid key' );
 			}
+		}
+		static function delete_feed($feed_id){
+			$connector_id = GrabPressAPI::get_connector_id();
+			GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$feed_id.'?api_key='.GrabPress::$api_key, $feed_id );
+		}
+		static function edit_feed($request){
+			$feed_id = $request['feed_id'];
+			$name = htmlspecialchars( $request['name'] );
+				
+			$channels = $request[ 'channel' ];
+			$channelsList = implode( ',', $channels );
+			$channelsListTotal = count( $channels ); // Total providers chosen by the user
+			$channels_total = $request['channels_total']; // Total providers from the catalog list
+			if ( $channelsListTotal == $channels_total ) {
+				$channelsList = '';					
+			}
+
+
+			$providers = $request['provider'];
+			$providersList = implode( ',', $providers );
+			$providersListTotal = count( $providers ); // Total providers chosen by the user
+			$providers_total = $request['providers_total']; // Total providers from the catalog list
+			if ( $providersListTotal == $providers_total ) {
+				$providersList = '';
+			}
+				$url = GrabPress::generate_catalog_url(array(
+				"keywords_and" => $request["keywords_and"],
+				"keywords_not" => $request["keywords_not"],
+				"keywords_or" => $request["keywords_or"],
+				"keywords_phrase" => $request["keywords_phrase"],
+				"providers" => $providersList,
+				"categories" => $channelsList
+			));
+				
+			$connector_id = GrabPressAPI::get_connector_id();
+			$active = (bool)$request['active'];
+
+			$category_list = $request[ 'category' ];
+
+			$category_length = count( $category_list );
+
+			$cats = array();
+			if ( is_array( $category_list ) ) {
+				foreach ( $category_list as $cat ) {
+					if ( $category_length == 1 ) {
+						$cats[] = get_cat_name( $cat );
+					}else {
+						$cats[] = get_cat_name( $cat );
+					}
+				}
+			}else {
+				$cats[] = 'Uncategorized';
+			}
+
+			if ( $request['click_to_play'] == "1" ) {//defaults to false
+				$auto_play = '1';
+			}else {
+				$auto_play = '0';
+			}
+
+			$author_id = (int)$request['author'];
+
+			$post_data = array(
+				'feed' => array(
+					'active' => $active,
+					'name' => $name,
+					'posts_per_update' => $request[ 'limit' ],
+					'url' => $url,
+					'custom_options' => array(
+						'category' => $cats,
+						'publish' => (bool)( $request[ 'publish' ] ),
+						'author_id' => $author_id
+					),
+					'update_frequency' => $request['schedule'],
+					'auto_play' => $auto_play
+				)
+			);
+			$response = GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
 		}
 
 		static function create_connection() {

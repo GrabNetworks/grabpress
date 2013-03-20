@@ -1,11 +1,11 @@
 <fieldset id = "account">
-	<legend><?php echo $_REQUEST[ 'action' ] == 'switch' ? 'Another' : 'Existing' ?> Account</legend>
+	<legend><?php echo $request[ 'action' ] == 'switch' ? 'Another' : 'Existing' ?> Account</legend>
 	<form id="link-existing" method="post" action="">
 		<table>
 			<input id="action-link-user" type="hidden" name="action" value="link-user" />
 			<tr>
 				<td>
-					Email address<input name="email" id="email" type="text" value="<?php echo $email = (isset($_REQUEST['email']) && ($_REQUEST['email'] !== NULL)) ? $_REQUEST['email'] : ''; ?>" />
+					Email address<input name="email" id="email" type="text" value="<?php echo $email = (isset($request['email']) && ($request['email'] !== NULL)) ? $request['email'] : ''; ?>" />
 				</td>
 			</tr>
 
@@ -16,7 +16,7 @@
 			</tr>
 			<tr valign="bottom"><td class = "account-help">
 					<a href="http://www.grab-media.com/publisherAdmin/forgotpw" target="_blank">I don't remember my password</a>
-					<input type="button" class="button-primary" disabled="disabled" id="submit_button" value="<?php _e( ($_REQUEST[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
+					<input type="button" class="button-primary" disabled="disabled" id="submit_button" value="<?php _e( ($request[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
 					
 					<input type="button" class="button-secondary" id="cancel_button" value="<?php _e('Cancel') ?>"/>
 				</td>
