@@ -712,8 +712,10 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 								foreach ( $blogusers as $user ) {
 									$author_name = $user->display_name;
 									$author_id = $user->ID;
-									$selected = ((isset($form["author"])) && ( $form["author"]==$author_id ) )?'selected="selected"':"";
-									echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
+									if($author_name != "GrabPress"){
+										$selected = ((isset($form["author"])) && ( $form["author"]==$author_id ) )?'selected="selected"':"";
+										echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
+									}
 								}
 							?>
 							</select>
