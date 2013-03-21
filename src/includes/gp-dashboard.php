@@ -393,20 +393,28 @@
 				var openPanels = $(".accordion-group .accordion-body").not(".collapse");
 				// debugger;
 				if(panel.hasClass("collapse")){
+					var monitor = 0;
 					var slideDownCurrent = function(panel, onfinish){
 						var embed = $("#gcontainer"+embed_id).detach();
 						panel.slideDown(400,'linear', function(){
 							panel.find('.accordion-inner').append( embed );
-							active_video.loadNewVideo(anchor.data("guid"));
 							panel.toggleClass("collapse");
-
+							monitor++;
+							onfinish(monitor);
 						});
 					};
 					if(openPanels.length > 0){
+						slideDownCurrent(panel, function(monitor){
+							setTimeout(function(){
+								if(monitor == 2){
+									active_video.loadNewVideo(anchor.data("guid"));
+							}}, 100);
+						});
 						openPanels.slideUp(400,'linear', function(){
 							active_video.hideEmbed();
 							$(this).toggleClass("collapse");
-							slideDownCurrent(panel);
+							monitor++;
+							
 						});
 					}else{
 						slideDownCurrent(panel);
