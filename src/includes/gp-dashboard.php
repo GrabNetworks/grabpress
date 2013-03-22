@@ -77,7 +77,7 @@
 													<div class="content">
 														<?php foreach($messages as $msg){ ?>
 														<p>
-															<?php echo $msg->message->body; ?>
+															<?php echo html_entity_decode($msg->message->body); ?>
 														</p>
 														<?php }?>
 													</div>
