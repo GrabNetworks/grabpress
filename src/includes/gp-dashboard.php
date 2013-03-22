@@ -406,9 +406,7 @@
 					if(openPanels.length > 0){
 						slideDownCurrent(panel, function(){
 							setTimeout(function(){
-								console.log("monitor1");
 								if(monitor == 2){
-									console.log("monitor2");
 									active_video.loadNewVideo(anchor.data("guid"));
 							}}, 100);
 						});
