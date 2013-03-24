@@ -339,7 +339,7 @@
 								"autoPlay": false
 							});
 							$(window).resize();
-							active_video.showEmbed();
+							$("#gcontainer"+embed_id+" object").css("visibility","visible");
 
 					}else{
 						accordion += '<div class="accordion-group">'
