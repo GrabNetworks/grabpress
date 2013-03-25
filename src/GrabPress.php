@@ -352,8 +352,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$string .= ' "'.trim($keywords["keywords_phrase"]).'"';
 			}
 
-			if(isset($keywords["keywords_or"])){
-				$or = preg_split("/\s+/", $keywords["keywords_or"]);
+			if(isset($keywords["keywords_or"]) || isset($keywords["keywords"])){
+				if(isset($keywords["keywords_or"])){
+					$or = preg_split("/\s+/", $keywords["keywords_or"]);
+				}else{
+					$or = preg_split("/\s+/", $keywords["keywords"]);
+				}
 				if(count($or) == 1){
 					if(!$string){
 						$string .= $or[0];
