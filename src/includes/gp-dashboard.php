@@ -386,12 +386,13 @@
 					e.preventDefault();
 					return false;
 				}
-				accordion_lock = true;
+				
 				var anchor = $(this);
 				var panel = $(anchor.attr("href"));
 				var openPanels = $(".accordion-group .accordion-body").not(".collapse");
 				// debugger;
 				if(panel.hasClass("collapse")){
+					accordion_lock = true;
 					var monitor = 0;
 					var slideDownCurrent = function(panel, onfinish){
 						var embed = $("#gcontainer"+embed_id).detach();
