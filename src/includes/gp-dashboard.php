@@ -99,8 +99,10 @@
                         $link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=gp-account&action=default">link an existing</a>';                                                 echo "Want to earn money?" . $create . " or " . $link. " Grab Publisher account.";
 		}
 		elseif($num_feeds == 0){
-																echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=autoposter\">here</a>";
-														}
+			$admin = get_admin_url();
+			$admin_page = $admin.'admin.php?page=gp-autoposter';
+			$here = '<a href="'.$admin_page.'">here</a>';
+			echo "Thank you for activating GrabPress. Try creating your first Autoposter feed " . $here . ".";										      }
 														else{
 																$p = count($pills);
 																$p--;
