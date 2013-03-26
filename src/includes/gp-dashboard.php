@@ -94,12 +94,15 @@
 													<div class="content">
 													 <?php
 														$num_feeds = count($feeds);
-														if($publisher_status == "account-unlinked"){
-																echo "Want to earn money? <a href=\"admin.php?page=account&action=create\">Create</a> or <a href=\"admin.php?page=account&action=default\">link an existing</a> Grab Publisher account.";
-														}
-														elseif($num_feeds == 0){
-																echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=autoposter\">here</a>";
-														}
+		 if($publisher_status == "account-unlinked"){
+                 	$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=gp-account&action=create">Create</a>';
+                        $link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=gp-account&action=default">link an existing</a>';                                                 echo "Want to earn money?" . $create . " or " . $link. " Grab Publisher account.";
+		}
+		elseif($num_feeds == 0){
+			$admin = get_admin_url();
+			$admin_page = $admin.'admin.php?page=gp-autoposter';
+			$here = '<a href="'.$admin_page.'">here</a>';
+			echo "Thank you for activating GrabPress. Try creating your first Autoposter feed " . $here . ".";										      }
 														else{
 																$p = count($pills);
 																$p--;
