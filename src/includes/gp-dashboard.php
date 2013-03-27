@@ -133,6 +133,7 @@
 								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
+								<a href="#" id="help">help</a>
 								<table class="table table-hover">
 									<thead>
 										<tr>
@@ -446,6 +447,13 @@
 			$("#message").hide();//hack
 			
 		}
+
+		$("#help").simpletip({
+		  	 content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
+		  	 fixed: true,
+		  	 position: [155, 40]
+		});
+
 		init();
 
 	});
