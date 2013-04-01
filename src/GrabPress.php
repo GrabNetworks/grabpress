@@ -339,25 +339,27 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function generate_adv_search_string($keywords){
 			$string = "";
 
-			$string .= $keywords["keywords_and"];
-
-			if($keywords["keywords_not"]){
+			$string .= trim($keywords["keywords_and"]);
+                        
+			$keywords["keywords_not"] = trim($keywords["keywords_not"]);
+                        if($keywords["keywords_not"]){                                
 				$not = preg_split("/\s+/", $keywords["keywords_not"]);
 				foreach ($not as $value) {
 					$string .= " -".$value;
 				}
 			}
-
+                        $keywords["keywords_phrase"] = trim($keywords["keywords_phrase"]);   
 			if($keywords["keywords_phrase"]){
-				$string .= ' "'.trim($keywords["keywords_phrase"]).'"';
+				$string .= ' "'.$keywords["keywords_phrase"].'"';
 			}
-
-			if(isset($keywords["keywords_or"]) || isset($keywords["keywords"])){
-				if(isset($keywords["keywords_or"])){
-					$or = preg_split("/\s+/", $keywords["keywords_or"]);
-				}else{
-					$or = preg_split("/\s+/", $keywords["keywords"]);
-				}
+                        
+                        $or_keywords = isset($keywords["keywords_or"])
+                                            ?trim($keywords["keywords_or"])
+                                            :(isset($keywords["keywords"])?trim($keywords["keywords"]):'');
+                        
+			if(!empty($or_keywords)){
+				
+				$or = preg_split("/\s+/", $or_keywords);
 				if(count($or) == 1){
 					if(!$string){
 						$string .= $or[0];
