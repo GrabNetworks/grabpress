@@ -166,7 +166,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					'email' 	=> $user -> email
 				);
 				$result_json = GrabPressAPI::call( 'PUT', '/connectors/' . GrabPressAPI::get_connector_id() . '?api_key=' . GrabPress::$api_key, $connector_data );
-				GrabPress::grabpress_plugin_messages();
+				GrabPress::plugin_messages();
 				$params[ 'action' ] = 'default';
 			}
 			GrabPressViews::account_management($params);
