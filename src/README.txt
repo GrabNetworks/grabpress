@@ -1,9 +1,9 @@
 === GrabPress ===
 Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
-Requires at least: 3.0.1   
+Requires at least: 3.4   
 Tested up to: 3.5  
-Stable tag: 2.1
+Stable tag: 2.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,19 @@ We hope to allow users to edit the layout / posting template in future updates o
 5. Video results are automatically posted to your Blog.
 
 == Changelog ==  
+
+= 2.2.2 =
+ * Various bux fixes.
+
+= 2.2.1 =
+ * Introducing: The GrabPress shortcode!
+ * Various fixes for wordpress.com VIP compatibility.
+
+= 2.2.0 =
+ * Introducing: The Dashboard Tab!
+
+= 2.1.1 =
+ * Fixed an issue with not using the correct embed_id.
 
 = 2.1.0 =
 *Features:*
