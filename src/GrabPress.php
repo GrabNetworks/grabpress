@@ -228,6 +228,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'gp-template':
 					return current_user_can("edit_others_posts");
 					break;
+				case 'single-post':
+					return current_user_can("edit_posts");
 				default:
 					return true;
 					break;

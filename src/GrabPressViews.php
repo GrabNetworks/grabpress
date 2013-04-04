@@ -592,7 +592,10 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die(); // this is required to return a proper result
 		}
 		
-		static function insert_video_callback() {	
+		static function insert_video_callback() {
+			if(!GrabPress::check_permissions_for("single-post")){
+				GrabPress::abort("Insuficcient Permissions ");
+			}
 			$video_id = $_REQUEST['video_id'];
 			$format = $_REQUEST['format'];
 			$id = GrabPressAPI::get_connector_id();
