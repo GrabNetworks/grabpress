@@ -221,6 +221,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'gp-autopost':
 					return current_user_can("edit_others_posts") && current_user_can("publish_posts");
 					break;
+				case 'gp-account':
+					return current_user_can("edit_plugins");
 				case 'gp-template':
 					return current_user_can("edit_others_posts");
 					break;
@@ -234,7 +236,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
 			add_submenu_page( 'grabpress', 'Dashboard', 'Dashboard', 'publish_posts', 'gp-dashboard', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'gp-account', array( 'GrabPress', 'dispatcher' ) );
+			if(GrabPress::check_permissions_for("gp-account")){
+				add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'gp-account', array( 'GrabPress', 'dispatcher' ) );
+			}
 			if(GrabPress::check_permissions_for("gp-autopost")){
 				add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );
 			}
@@ -244,7 +248,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 
 			global $submenu;
-			unset( $submenu['grabpress'][0] );
+			if(current_user_can("manage_options")){
+				unset( $submenu['grabpress'][0] );
+			}
 		}
 
 		static function _escape_params_template(&$data){
