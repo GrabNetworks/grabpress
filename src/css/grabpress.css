@@ -955,6 +955,7 @@ line-height: 24px;
 
 #t #b .watchlist{
     width:100% !important;
+    width:auto\9 !important;
     padding-right:752px !important;
 }
 #t #b .accordion-inner .accordion-warning {

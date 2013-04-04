@@ -58,7 +58,11 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 							if(words[i][0] == "-"){
 								not.push(words[i].slice(1,words[i].length));
 							}else{
-								and.push(words[i]);
+                                                            if ($("#form-create-feed input[name=keywords_and]").val() != '') {
+                                                                and.push(words[i]);
+                                                            }else{
+                                                                or.unshift(words[i]);
+                                                            }                                                            								
 							}
 						}
 						$("#form-create-feed input[name=keywords_and]").val(and.join(" "));
