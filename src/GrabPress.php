@@ -216,15 +216,28 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				}
 			}
 		}
+		static function check_permissions_for($page = "default", $action = "defaut"){
+			switch ($page) {
+				case 'gp-autopost':
+					return current_user_can("edit_others_posts") || current_user_can("publish_posts");
+					break;
+				default:
+					return true;
+					break;
+			}
 
+		}
 		static function grabpress_plugin_menu() {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
 			add_submenu_page( 'grabpress', 'Dashboard', 'Dashboard', 'publish_posts', 'gp-dashboard', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'gp-account', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );			
+			if(GrabPress::check_permissions_for("gp-autopost")){
+				add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );
+			}
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'gp-catalog', array( 'GrabPress', 'dispatcher' ) );
 			add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
+
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
 		}
@@ -407,8 +420,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
 			$action = $_REQUEST[ 'action' ];
+			$page = $_GET["page"];
 			$params = GrabPress::_escape_request($_REQUEST);
-			switch ( $_GET[ 'page' ] ) {
+			if(!GrabPress::check_permissions_for($page, $action)){
+				GrabPress::abort("Insufficient permissions");
+			}
+			switch ( $page ) {
 				case 'gp-autoposter':
 					$params = GrabPress::_account_form_default_values($params);
 					switch ( $action ) {
