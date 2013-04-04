@@ -219,7 +219,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function check_permissions_for($page = "default", $action = "defaut"){
 			switch ($page) {
 				case 'gp-autopost':
-					return current_user_can("edit_others_posts") || current_user_can("publish_posts");
+					return current_user_can("edit_others_posts") && current_user_can("publish_posts");
 					break;
 				case 'gp-template':
 					return current_user_can("edit_others_posts");
