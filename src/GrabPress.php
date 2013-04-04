@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.2.1
+Version: 2.2.2
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.2.1';
+		static $version = '2.2.2';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabnetworks';
@@ -339,21 +339,27 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static function generate_adv_search_string($keywords){
 			$string = "";
 
-			$string .= $keywords["keywords_and"];
-
-			if($keywords["keywords_not"]){
+			$string .= trim($keywords["keywords_and"]);
+                        
+			$keywords["keywords_not"] = trim($keywords["keywords_not"]);
+                        if($keywords["keywords_not"]){                                
 				$not = preg_split("/\s+/", $keywords["keywords_not"]);
 				foreach ($not as $value) {
 					$string .= " -".$value;
 				}
 			}
-
+                        $keywords["keywords_phrase"] = trim($keywords["keywords_phrase"]);   
 			if($keywords["keywords_phrase"]){
-				$string .= ' "'.trim($keywords["keywords_phrase"]).'"';
+				$string .= ' "'.$keywords["keywords_phrase"].'"';
 			}
-
-			if(isset($keywords["keywords_or"])){
-				$or = preg_split("/\s+/", $keywords["keywords_or"]);
+                        
+                        $or_keywords = isset($keywords["keywords_or"])
+                                            ?trim($keywords["keywords_or"])
+                                            :(isset($keywords["keywords"])?trim($keywords["keywords"]):'');
+                        
+			if(!empty($or_keywords)){
+				
+				$or = preg_split("/\s+/", $or_keywords);
 				if(count($or) == 1){
 					if(!$string){
 						$string .= $or[0];

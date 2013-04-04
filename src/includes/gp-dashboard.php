@@ -77,7 +77,7 @@
 													<div class="content">
 														<?php foreach($messages as $msg){ ?>
 														<p>
-															<?php echo $msg->message->body; ?>
+															<?php echo html_entity_decode($msg->message->body); ?>
 														</p>
 														<?php }?>
 													</div>
@@ -94,12 +94,15 @@
 													<div class="content">
 													 <?php
 														$num_feeds = count($feeds);
-														if($publisher_status == "account-unlinked"){
-																echo "Want to earn money? <a href=\"admin.php?page=account&action=create\">Create</a> or <a href=\"admin.php?page=account&action=default\">link an existing</a> Grab Publisher account.";
-														}
-														elseif($num_feeds == 0){
-																echo "Thank you for activating GrabPress. Try creating your first Autoposter feed <a href=\"admin.php?page=autoposter\">here</a>";
-														}
+		 if($publisher_status == "account-unlinked"){
+                 	$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=gp-account&action=create">Create</a>';
+                        $link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=gp-account&action=default">link an existing</a>';                                                 echo "Want to earn money?" . $create . " or " . $link. " Grab Publisher account.";
+		}
+		elseif($num_feeds == 0){
+			$admin = get_admin_url();
+			$admin_page = $admin.'admin.php?page=gp-autoposter';
+			$here = '<a href="'.$admin_page.'">here</a>';
+			echo "Thank you for activating GrabPress. Try creating your first Autoposter feed " . $here . ".";										      }
 														else{
 																$p = count($pills);
 																$p--;
@@ -130,6 +133,7 @@
 								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
+								<a href="#" id="help">help</a>
 								<table class="table table-hover">
 									<thead>
 										<tr>
@@ -274,7 +278,7 @@
 				"content": anchor.data("guid"),
 				"autoPlay": false
 			});
-
+			active_video.showEmbed();
 			$("#collapse1").toggleClass("collapse");
 		}
 		function watchlist_binding(embed_id){
@@ -301,44 +305,35 @@
 					if (parsedJson.results != ''){				    	
 						for(var i in parsedJson.results) {
 						  if(!isNaN(i)) {
-						  	if(i==0){
-
-								accordion += '<div class="accordion-group">'
-										+'<div class="accordion-heading">'
-										+'	<div class="accordion-left"></div>'
-										+'	<div class="accordion-center">'
-										+'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
-										+ 		parsedJson.results[i].video.title
-										+'		</a>'
-										+'	</div>'
-										+'	<div class="accordion-right"></div>'
-										+'</div>'
-										+'<div id="collapse' + (i+1) + '" class="accordion-body collapse in" >'
-										+'	<div class="accordion-inner">'
-										+'		<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>'
-										+'	</div>'
-										+'</div>'
-										+'</div>';
+						  	var style = "";
+						  	var embed = "";
+						  	var collapse = "collapse";
+						  	if(i != 0){
+						  		style = 'style="display:none;"';
 						  	}else{
-								accordion += '<div class="accordion-group">'
-										+'<div class="accordion-heading">'
-										+'	<div class="accordion-left"></div>'
-										+'	<div class="accordion-center">'
-										+'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
-										+ 		parsedJson.results[i].video.title
-										+'		</a>'
-										+'	</div>'
-										+'	<div class="accordion-right"></div>'
-										+'</div>'
-										+'<div id="collapse' + (i+1) + '" class="accordion-body collapse in" style="display:none;">'
-										+'	<div class="accordion-inner">'
-										+'	</div>'
-										+'</div>'
-										+'</div>';
-							}
+						  		embed = '<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>';
+						  		collapse = "";
+						  	}
+
+							accordion += '<div class="accordion-group">'
+									+'<div class="accordion-heading">'
+									+'	<div class="accordion-left"></div>'
+									+'	<div class="accordion-center">'
+									+'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
+									+ 		parsedJson.results[i].video.title
+									+'		</a>'
+									+'	</div>'
+									+'	<div class="accordion-right"></div>'
+									+'</div>'
+									+'<div id="collapse' + (i+1) + '" class="accordion-body '+collapse+' in" '+style+'>'
+									+'	<div class="accordion-inner">'
+									+ embed
+									+'	</div>'
+									+'</div>'
+									+'</div>';
 						  }
 						}
-					  		$('#accordion2').html(accordion);	
+					  		$('#accordion2').html(accordion);
 							active_video = new com.grabnetworks.Player({
 							
 								"id": embed_id,
@@ -348,8 +343,8 @@
 								"autoPlay": false
 							});
 							$(window).resize();
-						$("#collapse1").toggleClass("collapse");
-										
+							$("#gcontainer"+embed_id+" object").css("visibility","visible");
+
 					}else{
 						accordion += '<div class="accordion-group">'
 										+'<div class="accordion-heading">'
@@ -384,32 +379,48 @@
 		};
 
 		function accordion_binding(env, embed_id){
-
+			var accordion_lock = false;
 			$("#form-dashboard").parent().css("margin", "-10px 0 0 -18px");
 
 			$(".accordion-toggle").live("click", function(e){
+				if(accordion_lock){
+					e.preventDefault();
+					return false;
+				}
+				
 				var anchor = $(this);
 				var panel = $(anchor.attr("href"));
 				var openPanels = $(".accordion-group .accordion-body").not(".collapse");
 				// debugger;
 				if(panel.hasClass("collapse")){
+					accordion_lock = true;
+					var monitor = 0;
 					var slideDownCurrent = function(panel, onfinish){
 						var embed = $("#gcontainer"+embed_id).detach();
 						panel.slideDown(400,'linear', function(){
 							panel.find('.accordion-inner').append( embed );
-							active_video.loadNewVideo(anchor.data("guid"));
 							panel.toggleClass("collapse");
-
+							monitor++;
+							onfinish(monitor);
 						});
 					};
 					if(openPanels.length > 0){
+						slideDownCurrent(panel, function(){
+							setTimeout(function(){
+								if(monitor == 2){
+									active_video.loadNewVideo(anchor.data("guid"));
+									accordion_lock = false;
+							}}, 100);
+						});
 						openPanels.slideUp(400,'linear', function(){
 							active_video.hideEmbed();
+							console.log("hide embed");
 							$(this).toggleClass("collapse");
-							slideDownCurrent(panel);
+							monitor++;
+							
 						});
 					}else{
-						slideDownCurrent(panel);
+						slideDownCurrent(panel, function(){accordion_lock=false;});
 					}
 
 				}
@@ -436,6 +447,13 @@
 			$("#message").hide();//hack
 			
 		}
+
+		$("#help").simpletip({
+		  	 content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
+		  	 fixed: true,
+		  	 position: [155, 40]
+		});
+
 		init();
 
 	});

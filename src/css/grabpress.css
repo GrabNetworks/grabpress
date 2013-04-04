@@ -955,6 +955,7 @@ line-height: 24px;
 
 #t #b .watchlist{
     width:100% !important;
+    width:auto\9 !important;
     padding-right:752px !important;
 }
 #t #b .accordion-inner .accordion-warning {
@@ -992,4 +993,10 @@ line-height: 24px;
 }
 #form-dashboard #message{
     display:none;
+}
+#form-dashboard .feeds a#help{
+    float: right;
+    margin-top: -47px;
+    padding: 15px;
+    text-decoration: underline !important;
 }

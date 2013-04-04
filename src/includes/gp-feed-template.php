@@ -58,7 +58,11 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 							if(words[i][0] == "-"){
 								not.push(words[i].slice(1,words[i].length));
 							}else{
-								and.push(words[i]);
+                                                            if ($("#form-create-feed input[name=keywords_and]").val() != '') {
+                                                                and.push(words[i]);
+                                                            }else{
+                                                                or.unshift(words[i]);
+                                                            }                                                            								
 							}
 						}
 						$("#form-create-feed input[name=keywords_and]").val(and.join(" "));
@@ -712,8 +716,10 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 								foreach ( $blogusers as $user ) {
 									$author_name = $user->display_name;
 									$author_id = $user->ID;
-									$selected = ((isset($form["author"])) && ( $form["author"]==$author_id ) )?'selected="selected"':"";
-									echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
+									if($author_name != "GrabPress"){
+										$selected = ((isset($form["author"])) && ( $form["author"]==$author_id ) )?'selected="selected"':"";
+										echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
+									}
 								}
 							?>
 							</select>
