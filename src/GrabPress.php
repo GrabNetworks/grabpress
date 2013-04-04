@@ -221,6 +221,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'gp-autopost':
 					return current_user_can("edit_others_posts") || current_user_can("publish_posts");
 					break;
+				case 'gp-template':
+					return current_user_can("edit_others_posts");
+					break;
 				default:
 					return true;
 					break;
@@ -236,7 +239,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );
 			}
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'gp-catalog', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
+			if(GrabPress::check_permissions_for("gp-template")){
+				add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
+			}
 
 			global $submenu;
 			unset( $submenu['grabpress'][0] );
