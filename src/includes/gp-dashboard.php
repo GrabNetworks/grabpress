@@ -94,16 +94,18 @@
 													<div class="content">
 													 <?php
 														$num_feeds = count($feeds);
-		 if($publisher_status == "account-unlinked"){
-                 	$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create' ? 'Create' : '<a href="admin.php?page=gp-account&action=create">Create</a>';
-                        $link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' ? 'link an existing' : '<a href="admin.php?page=gp-account&action=default">link an existing</a>';                                                 echo "Want to earn money?" . $create . " or " . $link. " Grab Publisher account.";
-		}
-		elseif($num_feeds == 0){
-			$admin = get_admin_url();
-			$admin_page = $admin.'admin.php?page=gp-autoposter';
-			$here = '<a href="'.$admin_page.'">here</a>';
-			echo "Thank you for activating GrabPress. Try creating your first Autoposter feed " . $here . ".";										      }
-														else{
+														 if($publisher_status == "account-unlinked" && GrabPress::check_permissions_for("gp-account")){
+												         	$create = isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'create'
+												         	? 'Create' : '<a href="admin.php?page=gp-account&action=create">Create</a>';
+												            $link =  isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'account' && isset($_REQUEST[ 'action']) &&  $_REQUEST[ 'action'] == 'default' 
+												            ? 'link an existing' : '<a href="admin.php?page=gp-account&action=default">link an existing</a>';
+												  			echo "Want to earn money?" . $create . " or " . $link. " Grab Publisher account.";
+														}elseif($num_feeds == 0 && GrabPress::check_permissions_for("gp-autopost")){
+															$admin = get_admin_url();
+															$admin_page = $admin.'admin.php?page=gp-autoposter';
+															$here = '<a href="'.$admin_page.'">here</a>';
+															echo "Thank you for activating GrabPress. Try creating your first Autoposter feed " . $here . ".";
+														}else{
 																$p = count($pills);
 																$p--;
 																$r = rand(0, $p);
@@ -122,14 +124,16 @@
 								<?php
 									$admin = get_admin_url();
 									$admin_page = $admin.'admin.php?page=gp-account';
+									if(GrabPress::check_permissions_for("gp-autopost")){
 								?>								
 								<div id="btn-account-settings">
-								<div class="accordion-left">&nbsp;</div>
-								<div class="accordion-center">
-									<a href="<?php echo $admin_page; ?>" >Account Settings</a>
+									<div class="accordion-left">&nbsp;</div>
+									<div class="accordion-center">
+										<a href="<?php echo $admin_page; ?>" >Account Settings</a>
+									</div>
+									<div class="accordion-right">&nbsp;</div>
 								</div>
-								<div class="accordion-right">&nbsp;</div>
-							</div>
+								<?php } ?>
 								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>
 								<div class="panel">
 								<h3>Feed Activity (Latest Auto-post)</h3>
@@ -214,10 +218,12 @@
 												?>		
 											</td>
 											<td>
+												<?php if(GrabPress::check_permissions_for("gp-autopost")){?>
 												<a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
 													edit
 												</a>
 												<i class="icon-pencil"></i>
+												<?php } ?>
 											</td>
 										</tr>
 										<?php
