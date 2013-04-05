@@ -787,7 +787,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
-			array( "form" => $params,
+			array( "form" => $form,
 				"list_providers" => $list_providers,
 				"providers_total" => $providers_total,
 				"list_channels" => $list_channels,
