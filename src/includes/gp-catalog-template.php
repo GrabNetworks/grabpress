@@ -120,8 +120,8 @@
                ?>
                <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
                <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance
-               <?php if(!empty($list_feeds["results"])){ ?>
-               <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
+               <?php if(!empty($list_feeds["results"]) && GrabPress::check_permissions_for("gp-autopost")){ ?>
+                    <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                <?php } ?>
        </div>
 	<?php
@@ -142,7 +142,10 @@
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
 			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+			<?php if(GrabPress::check_permissions_for("single-post")){ ?>
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<?php } ?>
+			<input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
 			
 		</div>
 	</div>

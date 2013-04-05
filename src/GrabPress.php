@@ -182,8 +182,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$here = '<a href="'.$admin_page.'">here</a>';
 				}else {
 					$here = 'here';
-				}								
-				GrabPress::$message = 'Thank you for activating GrabPress. Try creating your first Autoposter feed '.$here.'.';				
+				}
+				if(GrabPress::check_permissions_for("gp-autopost")){
+					GrabPress::$message = 'Thank you for activating GrabPress. Try creating your first Autoposter feed '.$here.'.';				
+				}
 			}else{
 				$active_feeds = 0;
 			
@@ -211,22 +213,48 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						$autoposter_status = 'ON';
 						$feeds_status = 'active';
 					}
-					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;						
+					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;
 														
 				}
 			}
 		}
+		static function check_permissions_for($page = "default", $action = "defaut"){
+			switch ($page) {
+				case 'gp-autopost':
+					return current_user_can("edit_others_posts") && current_user_can("publish_posts");
+					break;
+				case 'gp-account':
+					return current_user_can("edit_plugins");
+				case 'gp-template':
+					return current_user_can("edit_others_posts");
+					break;
+				case 'single-post':
+					return current_user_can("edit_posts");
+				default:
+					return true;
+					break;
+			}
 
+		}
 		static function grabpress_plugin_menu() {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
 			add_submenu_page( 'grabpress', 'Dashboard', 'Dashboard', 'publish_posts', 'gp-dashboard', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'gp-account', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );			
+			if(GrabPress::check_permissions_for("gp-account")){
+				add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'gp-account', array( 'GrabPress', 'dispatcher' ) );
+			}
+			if(GrabPress::check_permissions_for("gp-autopost")){
+				add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );
+			}
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'gp-catalog', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
+			if(GrabPress::check_permissions_for("gp-template")){
+				add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
+			}
+
 			global $submenu;
-			unset( $submenu['grabpress'][0] );
+			if(current_user_can("manage_options")){
+				unset( $submenu['grabpress'][0] );
+			}
 		}
 
 		static function _escape_params_template(&$data){
@@ -407,8 +435,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
 			$action = $_REQUEST[ 'action' ];
+			$page = $_GET["page"];
 			$params = GrabPress::_escape_request($_REQUEST);
-			switch ( $_GET[ 'page' ] ) {
+			if(!GrabPress::check_permissions_for($page, $action)){
+				GrabPress::abort("Insufficient permissions");
+			}
+			switch ( $page ) {
 				case 'gp-autoposter':
 					$params = GrabPress::_account_form_default_values($params);
 					switch ( $action ) {
