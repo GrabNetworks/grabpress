@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.2.1-04022013
+Version: 2.2.2-04042013
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.2.1-04022013';
+		static $version = '2.2.2-04022013';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -617,12 +617,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			extract( shortcode_atts( array(
 				'guid' => 'default',
-			), $atts ) );
+				'embed_id' => GrabPressAPI::get_connector()->ctp_embed_id,
+			), $atts, EXTR_SKIP ) );
 			
 			$settings = GrabPressAPI::get_player_settings_for_embed();
 			
-			$player_script = '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'">
-					          <script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.GrabPressAPI::get_connector()->ctp_embed_id.'&content=v'.$guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">
+			$player_script = '<div id="grabDiv'.$embed_id.'">
+					          <script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$embed_id.'&content=v'.$guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">
 							  </script>
 							  <div id="overlay-adzone" style="overflow:hidden; position:relative">
 							  </div>
