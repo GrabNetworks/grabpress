@@ -601,12 +601,14 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$id = GrabPressAPI::get_connector_id();
 
 			$objXml = GrabPressAPI::get_video_mrss($video_id);
-
+			
+			$img_url = GrabPressAPI::get_preview_url($objXml);
+			
 			$settings = GrabPressAPI::get_player_settings_for_embed();
 			foreach ($objXml->channel->item as $item) {   
 				if($format == 'post'){
 					$text = "<div id=\"grabpreview\"> 
-						<p><img src='".$item->mediagroup->mediathumbnail[1]->attributes()->url."' /></p> 
+						<p><img src='".$img_url."' /></p> 
 						</div>
 						<p>".$item->description."</p> 
 						<!--more-->
@@ -629,7 +631,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					));
 
 					$upload_dir = wp_upload_dir();
-					$image_url = $item->mediagroup->mediathumbnail[1]->attributes()->url;
+					$image_url = $img_url;
 					$image_data = file_get_contents($image_url);
 					$filename = basename($image_url);
 
