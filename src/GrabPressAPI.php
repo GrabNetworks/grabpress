@@ -590,5 +590,15 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$xmlString = str_replace( $search, $replace, $xml);
 			return  simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
 		}
+		static function get_preview_url($mrss){
+                        GrabPress::log();
+                        if(intval($mrss->channel->item->mediagroup->mediathumbnail[0]->attributes()->width) > intval($mrss->channel->item->mediagroup->mediathumbnail[1]->attributes()->width)){
+                                return $mrss->channel->item->mediagroup->mediathumbnail[0]->attributes()->url;
+                        }
+                        else{
+                                return $mrss->channel->item->mediagroup->mediathumbnail[1]->attributes()->url;
+                        }
+
+                }
 	}
 }
