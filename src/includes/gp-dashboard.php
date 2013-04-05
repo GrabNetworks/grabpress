@@ -262,7 +262,12 @@
 <script type="text/javascript">
 
 	jQuery(function($){
-		var active_video = null;
+		//add max-width property for IE7
+                if ($.browser.msie && $.browser.version < 8.0) {
+                    $("#t #b .watchlist").css("max-width", "640px");
+                }
+                
+                var active_video = null;
 		function onload_openvideo(embed_id){
 			if($(".accordion-warning").length == 1){
 				return false;

@@ -1,6 +1,7 @@
 <?php
 require_once dirname(__FILE__)."/GrabPressViews.php";
 require_once dirname(__FILE__)."/GrabPressAPI.php";
+define("PLUGIN_URL", plugins_url('grabpress'));
 /*
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
@@ -125,10 +126,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		
 		static function get_g_icon_src(){
-				return plugin_dir_url( __FILE__ ).'images/icons/g.png';
+				return PLUGIN_URL.'/images/icons/g.png';
 		}
 		static function get_green_icon_src( $name ){
-				return plugin_dir_url( __FILE__ ).'images/icons/green/'.$name.'.png';
+				return PLUGIN_URL.'/images/icons/green/'.$name.'.png';
 		}
 		static function enable_xmlrpc() {
 			GrabPress::log();
@@ -482,7 +483,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function grabpress_plugin_url(){
-			return plugin_dir_url( __FILE__ ) ;
+			return PLUGIN_URL ;
 		}
 
 		static function enqueue_scripts($page) {
