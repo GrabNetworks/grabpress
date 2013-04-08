@@ -785,10 +785,25 @@ line-height: 24px;
     top: 0;
     width: 3px;
 }
-#t #b #btn-account-settings a{
+#t #b #btn-account-settings a{    
     color: #FFF;
     display: block;
     padding: 8px 0px 0px 5px;
+}
+#t #b #btn-account-settings a:hover{
+    color: #FF0000;
+    cursor: auto;
+}
+#t #b #btn-account-settings .accordion-center:hover{
+    color: #FF0000;
+    -webkit-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    border-radius: 3px;
+    padding-right: 6px;
+}
+#t #b #btn-account-settings .accordion-center:hover a{
+    color: #FF0000;
 }
 #t #b td.watch{
     width: 70px;
