@@ -40,9 +40,9 @@
 										<div class="accordion-group">
 											<div class="accordion-heading">
 												<div class="accordion-left"></div>
-												<div class="accordion-center feed_title">
-													<a class="accordion-toggle" data-guid="v<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
-                                                                                                            <?php echo $item->video->title;?>
+												<div class="accordion-center">
+													<a class="accordion-toggle feed_title" data-guid="v<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+                                                                                                        <?php echo $item->video->title;?>
 													</a>
 												</div>
 												<div class="accordion-right"></div>
