@@ -28,8 +28,9 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	                close: function(){
 	                	var and = [], or = [], phrase = [], not = [],
 	                	kwrds = $("#keywords").val(),
-	                	regPhrase = /"[^"]*"/ig,
-	                	regOR = /OR\s+[\w]*/ig;
+	                	regPhrase = /"[^"]*"/ig,                                
+	                	regAfterOR = /OR\s+[\w]*/ig,//regEx for keywords after OR
+                                regBeforeOR = /[\w+(\?\:\-\w+)+]*\s+OR/;//regEx for keyword in front of OR
 
 	                	phrase = regPhrase.exec(kwrds);
 	                	if(!phrase){
@@ -42,17 +43,22 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 	                	kwrds = kwrds.replace(regPhrase, "");
 
-
-	                	or = kwrds.match(regOR);
-	                	
+	                	or = $.trim(kwrds.match(regAfterOR));//match regex for all keywords after 'OR'
+	                	beforeOr = $.trim(kwrds.match(regBeforeOR));//match regex for the first keyword in front of the first 'OR'
 	                	if(!or){
 	                		or = [];
-	                	}else{
-	                		or = or.map(function(n){return n.slice(3,n.length)});
+	                	}else{	                		                                        
+                                        //split the string of keywords into an array and replace OR with ''
+                                        or = $.trim(String(or).replace(/OR/g,'')).split(/\,/);                                        
+                                        if (beforeOr) {
+                                            beforeOr = beforeOr.replace(/\s+OR/,'');//replace 'OR' with so that beforeOr containd only the keyword
+                                            //add the keyword in front of the or array of keywords
+                                            or.unshift(beforeOr);
+                                        }
 	                	}
-
-						kwrds = kwrds.replace(regOR, "");
-
+                                                //cut off the OR separated keywords from the kwrds string
+						kwrds = kwrds.replace(regAfterOR, "");
+                                                kwrds = kwrds.replace(beforeOr, "");
 						var words = kwrds.replace(/^\s+|\s+$/g, '').split(/\s+/);
 						for(var i=0;i<words.length;i++){
 							if(words[i][0] == "-"){
