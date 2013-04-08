@@ -620,6 +620,13 @@ line-height: 24px;
     font: 18px 'Gill Sans W01 Light';
     text-decoration: none;
 }
+#t #b a.accordion-toggle:hover{
+    color: #FF0000;
+    -webkit-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    border-radius: 3px;
+}
 #t #b .accordion-inner {
      padding: 0;
 }
