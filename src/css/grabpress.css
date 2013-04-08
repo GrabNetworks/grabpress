@@ -954,6 +954,7 @@ line-height: 24px;
     width:auto\9 !important;
     padding-right:752px !important;
     max-width:1392px;
+    min-width:1082px;
 }
 #t #b .accordion-inner .accordion-warning {
     color: #999;
