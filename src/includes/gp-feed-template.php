@@ -30,7 +30,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	                	kwrds = $("#keywords").val(),
 	                	regPhrase = /"[^"]*"/ig,                                
 	                	regAfterOR = /OR\s+[\w]\S*/ig,//regEx for keywords after OR
-                                regBeforeOR = /[\w+(\?\:\-\w+)+]\S*\s+OR/;//regEx for keyword in front of OR
+                                regBeforeOR = /[\w+(\?\:\-\w+)\S+]*\s+OR/;//regEx for keyword in front of OR
 
 	                	phrase = regPhrase.exec(kwrds);
 	                	if(!phrase){
