@@ -41,8 +41,8 @@
 											<div class="accordion-heading">
 												<div class="accordion-left"></div>
 												<div class="accordion-center">
-													<a class="accordion-toggle" data-guid="v<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
-													<?php echo $item->video->title;?>
+													<a class="accordion-toggle feed_title" data-guid="v<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+                                                                                                        <?php echo $item->video->title;?>
 													</a>
 												</div>
 												<div class="accordion-right"></div>
@@ -464,6 +464,8 @@
 		  	 fixed: true,
 		  	 position: [155, 40]
 		});
+                
+                $(".feed_title").ellipsis(0, true, "", "");
 
 		init();
 
