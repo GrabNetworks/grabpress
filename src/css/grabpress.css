@@ -945,18 +945,18 @@ line-height: 24px;
 }
 
 #t #b .right-pane{
-    width:752px !important;
-    float:right !important;
-    position: absolute !important;
-    right:0 !important;
-    top:0 !important;
-    margin: 0 !important;
+    width:752px !important;   
+    margin-left: -752px !important;
 }
 
 #t #b .watchlist{
-    width:100% !important;
-    width:auto\9 !important;
+    width:100% !important;    
     padding-right:752px !important;
+    max-width:1392px;
+    min-width:1072px;
+    width:auto\9 !important; 
+    min-width:360px\9;
+    max-width:640px\9;
 }
 #t #b .accordion-inner .accordion-warning {
     color: #999;
