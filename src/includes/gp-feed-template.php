@@ -29,7 +29,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	                	var and = [], or = [], phrase = [], not = [],
 	                	kwrds = $("#keywords").val(),
 	                	regPhrase = /"[^"]*"/ig,                                
-	                	regAfterOR = /OR\s+[\w]\S*/ig,//regEx for keywords after OR
+	                	regAfterOR = /OR\s+[\w\S]*/ig,//regEx for keywords after OR
                                 regBeforeOR = /[\w+(\?\:\-\w+)\S+]*\s+OR/;//regEx for keyword in front of OR
 
 	                	phrase = regPhrase.exec(kwrds);
@@ -43,8 +43,8 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 	                	kwrds = kwrds.replace(regPhrase, "");
 
-	                	or = $.trim(kwrds.match(regAfterOR));console.log(or);//match regex for all keywords after 'OR'
-	                	beforeOr = $.trim(kwrds.match(regBeforeOR));console.log(beforeOr);//match regex for the first keyword in front of the first 'OR'
+	                	or = $.trim(kwrds.match(regAfterOR));//match regex for all keywords after 'OR'
+	                	beforeOr = $.trim(kwrds.match(regBeforeOR));//match regex for the first keyword in front of the first 'OR'
 	                	if(!or){
 	                		or = [];
 	                	}else{	                		                                        
