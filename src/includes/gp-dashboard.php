@@ -268,7 +268,12 @@
 <script type="text/javascript">
 
 	jQuery(function($){
-		var active_video = null;
+		//fix for watchlist min-width and max-width for ie9 and ie10
+                if ($.browser.msie && $.browser.version > 8.0) {
+                    $("#t #b .watchlist").css('max-width','1392px');
+                    $("#t #b .watchlist").css('min-width','1072px');                    
+                }             
+                var active_video = null;
 		function onload_openvideo(embed_id){
 			if($(".accordion-warning").length == 1){
 				return false;
