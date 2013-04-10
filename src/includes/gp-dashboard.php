@@ -90,8 +90,8 @@
 									<div class="span12 welcome">
 										<div class="panel">
 											<div class="tab-content">
-												<div class="tab-pane active nano" id="messages-tab1">
-													<div class="content">
+												<div class="tab-pane active noscroll" id="messages-tab1">
+													<div class="content">                                                                                                            
 													 <?php
 														$num_feeds = count($feeds);
 		 if($publisher_status == "account-unlinked"){
