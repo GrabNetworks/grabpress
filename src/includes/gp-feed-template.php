@@ -44,7 +44,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	                	kwrds = kwrds.replace(regPhrase, "");
 
 	                	or = $.trim(kwrds.match(regAfterOR));//match regex for all keywords after 'OR'
-	                	beforeOr = $.trim(kwrds.match(regBeforeOR));//match regex for the first keyword in front of the first 'OR'
+	                	beforeOr = $.trim(kwrds.match(regBeforeOR));console.log(beforeOr);//match regex for the first keyword in front of the first 'OR'
 	                	if(!or){
 	                		or = [];
 	                	}else{	                		                                        
@@ -66,9 +66,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 							}else{
                                                             if ($("#form-create-feed input[name=keywords_and]").val() != '') {
                                                                 and.push(words[i]);
-                                                            }else{
-                                                                or.unshift(words[i]);
-                                                            }                                                            								
+                                                            }                                                          								
 							}
 						}
 						$("#form-create-feed input[name=keywords_and]").val(and.join(" "));
