@@ -49,7 +49,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	                		or = [];
 	                	}else{	                		                                        
                                         //split the string of keywords into an array and replace OR with ''
-                                        or = $.trim(String(or).replace(/OR/g,'')).split(/\,/);                                        
+                                        or = $.trim(String(or).replace(/OR\s/g,'')).split(/\,/);                                        
                                         if (beforeOr) {
                                             beforeOr = beforeOr.replace(/\s+OR/,'');//replace 'OR' with so that beforeOr containd only the keyword
                                             //add the keyword in front of the or array of keywords
