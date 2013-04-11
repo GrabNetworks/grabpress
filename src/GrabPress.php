@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.2.2-04052013
+Version: 2.2.2-04092013
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.2.2-04052013';
+		static $version = '2.2.2-04092013';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -213,8 +213,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						$autoposter_status = 'ON';
 						$feeds_status = 'active';
 					}
-					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;
-														
+					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span>. ';
+                                        if(GrabPress::check_permissions_for("gp-account")){
+                                                GrabPress::$message .= $linked_message;
+                                        }
+                                        GrabPress::$message .= $environment;	
 				}
 			}
 		}
@@ -389,12 +392,16 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				
 				$or = preg_split("/\s+/", $or_keywords);
 				if(count($or) == 1){
-					$string .= $or[0];					
+					if(!$string){
+						$string .= $or[0];
+					}else{
+						$string .= " OR ".$or[0];
+					}
 				}elseif(count($or) > 1){
 					if(!$string){
 						$string .= join(" OR ", $or);
 					}else{
-						$string .= ' '.join(" OR ", $or);
+						$string .= " OR ".join(" OR ", $or);
 					}
 				}
 			}
@@ -510,7 +517,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function grabpress_plugin_url(){
-                    return plugin_dir_url( __FILE__ ) ;
+			return plugin_dir_url( __FILE__ ) ;
 		}
 
 		static function enqueue_scripts($page) {
