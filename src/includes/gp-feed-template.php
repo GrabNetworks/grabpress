@@ -29,7 +29,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	                	var and = [], or = [], phrase = [], not = [],
 	                	kwrds = $("#keywords").val(),
 	                	regPhrase = /"[^"]*"/ig,                                
-	                	regAfterOR = /OR\s+[\w\S]*/ig,//regEx for keywords after OR
+	                	regAfterOR = /\sOR\s+[\w\S]*/ig,//regEx for keywords after OR
                                 regBeforeOR = /[\w+(\?\:\-\w+)\S+]*\s+OR/;//regEx for keyword in front of OR
 
 	                	phrase = regPhrase.exec(kwrds);
@@ -43,13 +43,13 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 	                	kwrds = kwrds.replace(regPhrase, "");
 
-	                	or = $.trim(kwrds.match(regAfterOR));console.log(or);//match regex for all keywords after 'OR'
-	                	beforeOr = $.trim(kwrds.match(regBeforeOR));console.log(beforeOr);//match regex for the first keyword in front of the first 'OR'
+	                	or = $.trim(kwrds.match(regAfterOR));//match regex for all keywords after 'OR'
+	                	beforeOr = $.trim(kwrds.match(regBeforeOR));//match regex for the first keyword in front of the first 'OR'
 	                	if(!or){
 	                		or = [];
 	                	}else{	                		                                        
                                         //split the string of keywords into an array and replace OR with ''
-                                        or = $.trim(String(or).replace(/OR\s/g,'')).split(/\,/);                                        
+                                        or = $.trim(String(or).replace(/OR\s/g,'')).split(/\,\s/);                                        
                                         if (beforeOr) {
                                             beforeOr = beforeOr.replace(/\s+OR/,'');//replace 'OR' with so that beforeOr containd only the keyword
                                             //add the keyword in front of the or array of keywords
@@ -57,9 +57,9 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
                                         }console.log(or);
 	                	}
                                                 //cut off the OR separated keywords from the kwrds string
-						kwrds = kwrds.replace(regAfterOR, "");console.log(kwrds);
-                                                kwrds = kwrds.replace(new RegExp(beforeOr  + '$'), "");console.log(kwrds);
-						var words = kwrds.replace(/^\s+|\s+$/g, '').split(/\s+/);console.log(words);
+						kwrds = $.trim(kwrds.replace(regAfterOR, "")); 
+                                                kwrds = kwrds.replace(new RegExp(beforeOr  + '$'), "");
+						var words = kwrds.replace(/^\s+|\s+$/g, '').split(/\s+/);
 						for(var i=0;i<words.length;i++){
 							if(words[i][0] == "-"){
 								not.push(words[i].slice(1,words[i].length));
