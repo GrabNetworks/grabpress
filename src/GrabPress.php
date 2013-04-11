@@ -510,8 +510,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function grabpress_plugin_url(){
-                    //return plugin_dir_url( __FILE__ ) ;
-                    return plugins_url( 'grabpress' ) ;
+                    return plugin_dir_url( __FILE__ ) ;
 		}
 
 		static function enqueue_scripts($page) {
