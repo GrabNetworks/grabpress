@@ -629,7 +629,9 @@ line-height: 24px;
 }
 #t #b .feed_title{
     overflow: hidden;
-    white-space: nowrap;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #t #b .feed_title{white-space: nowrap;}
 }
 #t #b .accordion-inner {
      padding: 0;
