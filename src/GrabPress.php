@@ -1,12 +1,11 @@
 <?php
 require_once dirname(__FILE__)."/GrabPressViews.php";
 require_once dirname(__FILE__)."/GrabPressAPI.php";
-define("PLUGIN_URL", plugins_url('grabpress'));
 /*
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.2.2-04092013
+Version: 2.2.2-04122013
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -28,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.2.2-04092013';
+		static $version = '2.2.2-04122013';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -126,10 +125,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 		
 		static function get_g_icon_src(){
-				return PLUGIN_URL.'/images/icons/g.png';
+				return plugin_dir_url( __FILE__ ).'images/icons/g.png';
 		}
 		static function get_green_icon_src( $name ){
-				return PLUGIN_URL.'/images/icons/green/'.$name.'.png';
+				return plugin_dir_url( __FILE__ ).'images/icons/green/'.$name.'.png';
 		}
 		static function enable_xmlrpc() {
 			GrabPress::log();
@@ -392,17 +391,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			if(!empty($or_keywords)){
 				
 				$or = preg_split("/\s+/", $or_keywords);
-				if(count($or) == 1){
-					if(!$string){
-						$string .= $or[0];
-					}else{
-						$string .= " OR ".$or[0];
-					}
+				if(count($or) == 1){					
+                                    $string .= $or[0];				
 				}elseif(count($or) > 1){
 					if(!$string){
 						$string .= join(" OR ", $or);
 					}else{
-						$string .= " OR ".join(" OR ", $or);
+						$string .= ' '.join(" OR ", $or);
 					}
 				}
 			}
@@ -518,7 +513,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function grabpress_plugin_url(){
-			return PLUGIN_URL ;
+			return plugin_dir_url( __FILE__ ) ;
 		}
 
 		static function enqueue_scripts($page) {
