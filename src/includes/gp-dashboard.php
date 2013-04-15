@@ -41,8 +41,8 @@
 											<div class="accordion-heading">
 												<div class="accordion-left"></div>
 												<div class="accordion-center">
-													<a class="accordion-toggle" data-guid="v<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
-													<?php echo $item->video->title;?>
+													<a class="accordion-toggle feed_title" data-guid="v<?php echo $item->video->guid;?>" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $i;?>">
+                                                                                                        <?php echo $item->video->title;?>
 													</a>
 												</div>
 												<div class="accordion-right"></div>
@@ -268,7 +268,12 @@
 <script type="text/javascript">
 
 	jQuery(function($){
-		var active_video = null;
+		//fix for watchlist min-width and max-width for ie9 and ie10
+                if ($.browser.msie && $.browser.version > 8.0) {
+                    $("#t #b .watchlist").css('max-width','1392px');
+                    $("#t #b .watchlist").css('min-width','1072px');                    
+                }             
+                var active_video = null;
 		function onload_openvideo(embed_id){
 			if($(".accordion-warning").length == 1){
 				return false;
@@ -459,6 +464,8 @@
 		  	 fixed: true,
 		  	 position: [155, 40]
 		});
+                
+                $(".feed_title").ellipsis(0, true, "", "");
 
 		init();
 
