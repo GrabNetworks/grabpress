@@ -90,8 +90,8 @@
 									<div class="span12 welcome">
 										<div class="panel">
 											<div class="tab-content">
-												<div class="tab-pane active nano" id="messages-tab1">
-													<div class="content">
+												<div class="tab-pane active noscroll" id="messages-tab1">
+													<div class="content">                                                                                                            
 													 <?php
 														$num_feeds = count($feeds);
 														 if($publisher_status == "account-unlinked" && GrabPress::check_permissions_for("gp-account")){
@@ -211,7 +211,7 @@
 											<td class="watch">												
 												<?php
 													if($feed->watchlist == '1'){
-														echo '<input type="button" value="0" class=" watchlist-check watch-on" id="watchlist-check-'.$feedId.'" >';
+														echo '<input type="button" value="0" class="watchlist-check watch-on" id="watchlist-check-'.$feedId.'" >';
 													}else{
 														echo '<input type="button" value="1" class="watchlist-check watch-off" id="watchlist-check-'.$feedId.'" >';
 													}													
