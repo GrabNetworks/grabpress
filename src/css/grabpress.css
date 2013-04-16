@@ -620,6 +620,17 @@ line-height: 24px;
     font: 18px 'Gill Sans W01 Light';
     text-decoration: none;
 }
+#t #b a.accordion-toggle:hover{
+    color: #FF0000;
+    -webkit-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    border-radius: 3px;
+}
+#t #b .feed_title{
+    overflow: hidden;
+    white-space: nowrap;
+}
 #t #b .accordion-inner {
      padding: 0;
 }
@@ -948,18 +959,18 @@ line-height: 24px;
 }
 
 #t #b .right-pane{
-    width:752px !important;
-    float:right !important;
-    position: absolute !important;
-    right:0 !important;
-    top:0 !important;
-    margin: 0 !important;
+    width:752px !important;   
+    margin-left: -752px !important;
 }
 
 #t #b .watchlist{
-    width:100% !important;
-    width:auto\9 !important;
+    width:100% !important;    
     padding-right:752px !important;
+    max-width:1392px;
+    min-width:1072px;
+    width:auto\9 !important; 
+    min-width:360px\9;
+    max-width:640px\9;
 }
 #t #b .accordion-inner .accordion-warning {
     color: #999;

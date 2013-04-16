@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.2.1-04022013
+Version: 2.2.2-04122013
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.2.1-04022013';
+		static $version = '2.2.2-04122013';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -182,8 +182,10 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					$here = '<a href="'.$admin_page.'">here</a>';
 				}else {
 					$here = 'here';
-				}								
-				GrabPress::$message = 'Thank you for activating GrabPress. Try creating your first Autoposter feed '.$here.'.';				
+				}
+				if(GrabPress::check_permissions_for("gp-autopost")){
+					GrabPress::$message = 'Thank you for activating GrabPress. Try creating your first Autoposter feed '.$here.'.';				
+				}
 			}else{
 				$active_feeds = 0;
 			
@@ -211,22 +213,51 @@ if ( ! class_exists( 'GrabPress' ) ) {
 						$autoposter_status = 'ON';
 						$feeds_status = 'active';
 					}
-					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span> . '.$linked_message .$environment;						
-														
+					GrabPress::$message = 'Grab Autoposter is <span id="autoposter-status">'.$autoposter_status.'</span> with <span id="num-active-feeds">'.$active_feeds.'</span> <span id="feeds-status">'.$feeds_status.'</span> <span id="noun-active-feeds"> '.$noun.'</span>. ';
+                                        if(GrabPress::check_permissions_for("gp-account")){
+                                                GrabPress::$message .= $linked_message;
+                                        }
+                                        GrabPress::$message .= $environment;	
 				}
 			}
 		}
+		static function check_permissions_for($page = "default", $action = "defaut"){
+			switch ($page) {
+				case 'gp-autopost':
+					return current_user_can("edit_others_posts") && current_user_can("publish_posts");
+					break;
+				case 'gp-account':
+					return current_user_can("edit_plugins");
+				case 'gp-template':
+					return current_user_can("edit_others_posts");
+					break;
+				case 'single-post':
+					return current_user_can("edit_posts");
+				default:
+					return true;
+					break;
+			}
 
+		}
 		static function grabpress_plugin_menu() {
 			GrabPress::log();
 			add_menu_page( 'GrabPress', 'GrabPress', 'manage_options', 'grabpress', array( 'GrabPress', 'dispatcher' ), GrabPress::get_g_icon_src(), 11 );
 			add_submenu_page( 'grabpress', 'Dashboard', 'Dashboard', 'publish_posts', 'gp-dashboard', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'gp-account', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );			
+			if(GrabPress::check_permissions_for("gp-account")){
+				add_submenu_page( 'grabpress', 'Account', 'Account', 'publish_posts', 'gp-account', array( 'GrabPress', 'dispatcher' ) );
+			}
+			if(GrabPress::check_permissions_for("gp-autopost")){
+				add_submenu_page( 'grabpress', 'AutoPoster', 'AutoPoster', 'publish_posts', 'gp-autoposter', array( 'GrabPress', 'dispatcher' ) );
+			}
 			add_submenu_page( 'grabpress', 'Catalog', 'Catalog', 'publish_posts', 'gp-catalog', array( 'GrabPress', 'dispatcher' ) );
-			add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
+			if(GrabPress::check_permissions_for("gp-template")){
+				add_submenu_page( 'grabpress', 'Template', 'Template', 'publish_posts', 'gp-template', array( 'GrabPress', 'dispatcher' ) );
+			}
+
 			global $submenu;
-			unset( $submenu['grabpress'][0] );
+			if(current_user_can("manage_options")){
+				unset( $submenu['grabpress'][0] );
+			}
 		}
 
 		static function _escape_params_template(&$data){
@@ -360,17 +391,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			if(!empty($or_keywords)){
 				
 				$or = preg_split("/\s+/", $or_keywords);
-				if(count($or) == 1){
-					if(!$string){
-						$string .= $or[0];
-					}else{
-						$string .= " OR ".$or[0];
-					}
+				if(count($or) == 1){					
+                                    $string .= $or[0];				
 				}elseif(count($or) > 1){
 					if(!$string){
 						$string .= join(" OR ", $or);
 					}else{
-						$string .= " OR ".join(" OR ", $or);
+						$string .= ' '.join(" OR ", $or);
 					}
 				}
 			}
@@ -407,8 +434,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
 			$action = $_REQUEST[ 'action' ];
+			$page = $_GET["page"];
 			$params = GrabPress::_escape_request($_REQUEST);
-			switch ( $_GET[ 'page' ] ) {
+			if(!GrabPress::check_permissions_for($page, $action)){
+				GrabPress::abort("Insufficient permissions");
+			}
+			switch ( $page ) {
 				case 'gp-autoposter':
 					$params = GrabPress::_account_form_default_values($params);
 					switch ( $action ) {
@@ -585,12 +616,13 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			extract( shortcode_atts( array(
 				'guid' => 'default',
-			), $atts ) );
+				'embed_id' => GrabPressAPI::get_connector()->ctp_embed_id,
+			), $atts, EXTR_SKIP ) );
 			
 			$settings = GrabPressAPI::get_player_settings_for_embed();
 			
-			$player_script = '<div id="grabDiv'.GrabPressAPI::get_connector()->ctp_embed_id.'">
-					          <script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.GrabPressAPI::get_connector()->ctp_embed_id.'&content=v'.$guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">
+			$player_script = '<div id="grabDiv'.$embed_id.'">
+					          <script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$embed_id.'&content=v'.$guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">
 							  </script>
 							  <div id="overlay-adzone" style="overflow:hidden; position:relative">
 							  </div>
