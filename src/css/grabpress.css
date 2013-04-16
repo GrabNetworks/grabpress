@@ -629,7 +629,7 @@ line-height: 24px;
 }
 #t #b .feed_title{
     overflow: hidden;
-   /* white-space: nowrap;*/
+    white-space: nowrap;
 }
 #t #b .accordion-inner {
      padding: 0;
