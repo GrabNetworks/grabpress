@@ -580,7 +580,7 @@ line-height: 24px;
     height: auto;
     width: 100%;
 }
-
+#form-dashboard #t #b input{-webkit-transform-style:flat !important;}
 #t #b {
     background: none;
     font: 12px 'Calibri W01 Regular 904604', Verdana;
