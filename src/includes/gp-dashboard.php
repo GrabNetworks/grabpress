@@ -211,7 +211,7 @@
 											<td class="watch">												
 												<?php
 													if($feed->watchlist == '1'){
-														echo '<input type="button" value="0" class=" watchlist-check watch-on" id="watchlist-check-'.$feedId.'" >';
+														echo '<input type="button" value="0" class="watchlist-check watch-on" id="watchlist-check-'.$feedId.'" >';
 													}else{
 														echo '<input type="button" value="1" class="watchlist-check watch-off" id="watchlist-check-'.$feedId.'" >';
 													}													
