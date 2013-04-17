@@ -619,7 +619,6 @@ line-height: 24px;
     color: #FFFFFF;
     font: 18px 'Gill Sans W01 Light';
     text-decoration: none;
-    outline:none;
 }
 #t #b a.accordion-toggle:hover{
     color: #FF0000;
@@ -630,7 +629,7 @@ line-height: 24px;
 }
 #t #b .feed_title{
     overflow: hidden;
-   /* white-space: nowrap;*/
+    white-space: nowrap;
 }
 #t #b .accordion-inner {
      padding: 0;
@@ -739,9 +738,11 @@ line-height: 24px;
     display: block;
     padding: 8px 15px;
 }
-#t #b .collapse {   
+#t #b .collapse {
+    height: 0;
     overflow: hidden;
-    position: relative;    
+    position: relative;
+    transition: height 0.35s ease 0s;
 }
 #t #b .collapse.in {
     height: auto;
