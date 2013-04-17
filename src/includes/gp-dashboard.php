@@ -90,8 +90,8 @@
 									<div class="span12 welcome">
 										<div class="panel">
 											<div class="tab-content">
-												<div class="tab-pane active nano" id="messages-tab1">
-													<div class="content">
+												<div class="tab-pane active noscroll" id="messages-tab1">
+													<div class="content">                                                                                                            
 													 <?php
 														$num_feeds = count($feeds);
 														 if($publisher_status == "account-unlinked" && GrabPress::check_permissions_for("gp-account")){
@@ -211,7 +211,7 @@
 											<td class="watch">												
 												<?php
 													if($feed->watchlist == '1'){
-														echo '<input type="button" value="0" class=" watchlist-check watch-on" id="watchlist-check-'.$feedId.'" >';
+														echo '<input type="button" value="0" class="watchlist-check watch-on" id="watchlist-check-'.$feedId.'" >';
 													}else{
 														echo '<input type="button" value="1" class="watchlist-check watch-off" id="watchlist-check-'.$feedId.'" >';
 													}													
@@ -271,8 +271,26 @@
 		//fix for watchlist min-width and max-width for ie9 and ie10
                 if ($.browser.msie && $.browser.version > 8.0) {
                     $("#t #b .watchlist").css('max-width','1392px');
-                    $("#t #b .watchlist").css('min-width','1072px');                    
-                }             
+                    $("#t #b .watchlist").css('min-width','1072px');
+                    $("#t #b #btn-account-settings a").hover(function(){
+                            $(this).css('margin-left', '0');
+                    });
+                    $("#t #b #btn-account-settings .accordion-center").css('filter','none');                    
+                    $("#t #b #btn-account-settings a").css('width','auto');
+                    $("#t #b #btn-account-settings a").css('height','auto');
+                    $("#t #b #btn-account-settings .accordion-center").hover(function(){
+                            $(this).css('width','99px');
+                            $(this).css('padding-right','6px');
+                            $(this).css('margin-left','0');
+                            $(this).css('filter','none');
+                        },
+                        function(){                            
+                            $(this).css('padding-right','3px');                                                        
+                    });
+                    $("#t #b #btn-account-settings .accordion-left").css('top','0');
+                    $("#t #b #btn-account-settings .accordion-right").css('top','0');
+                                        
+                }            
                 var active_video = null;
 		function onload_openvideo(embed_id){
 			if($(".accordion-warning").length == 1){
