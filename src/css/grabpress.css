@@ -619,6 +619,7 @@ line-height: 24px;
     color: #FFFFFF;
     font: 18px 'Gill Sans W01 Light';
     text-decoration: none;
+    outline: none;
 }
 #t #b a.accordion-toggle:hover{
     color: #FF0000;
@@ -741,10 +742,8 @@ line-height: 24px;
     padding: 8px 15px;
 }
 #t #b .collapse {
-    height: 0;
     overflow: hidden;
     position: relative;
-    transition: height 0.35s ease 0s;
 }
 #t #b .collapse.in {
     height: auto;
