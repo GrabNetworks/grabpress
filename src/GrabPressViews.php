@@ -259,8 +259,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					"list_channels" => GrabPressAPI::get_channels(),
 					"list_providers" => GrabPressAPI::get_providers(),
 					"list_feeds" => $list_feeds,
-					"providers" => $request["providers"],
-					"channels" => $request["channels"]
+					"providers" => $request["provider"],
+					"channels" => $request["channel"]
 					));
 		}
 
