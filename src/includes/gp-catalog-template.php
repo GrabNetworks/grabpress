@@ -55,7 +55,7 @@
 				</span>
 			</div>
 			<div class="tile-right">
-				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+				<select name="channels[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 					<?php
 						foreach ( $list_channels as $record ) {
 							$channel = $record -> category;
@@ -75,7 +75,7 @@
 				<span class="preview-text-catalog"><b>Providers: </b></span>
 			</div>
 			<div class="tile-right">
-				<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
+				<select name="providers[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
 				<?php			
 					foreach ( $list_providers as $record_provider ) {
 						$provider = $record_provider->provider;
