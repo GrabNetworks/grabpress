@@ -567,16 +567,16 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 					<th scope="row">Grab Video Categories<span class="asterisk">*</span></th>
 					<td>
 						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />					
-						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+						<select  style="<?php GrabPress::outline_invalid() ?>" name="channels[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 							<?php								
-								if(!array_key_exists("channel", $form)){
-									$form["channel"] = array();
+								if(!array_key_exists("channels", $form)){
+									$form["channels"] = array();
 								}
 								
-								if(is_array($form["channel"])){
-									$channels = $form["channel"];
+								if(is_array($form["channels"])){
+									$channels = $form["channels"];
 								}else{
-									$channels = explode( ",", rawurldecode($form["channel"])); // Video categories chosen by the user
+									$channels = explode( ",", rawurldecode($form["channels"])); // Video categories chosen by the user
 								}
 								
 								foreach ( $list_channels as $record ) {
@@ -623,13 +623,13 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 						<th scope="row">Content Providers</th>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
-							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
+							<select name="providers[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
 							<?php
 								foreach ( $list_providers as $record_provider ) {
 									$provider = $record_provider->provider;
 									$provider_name = $provider->name;
 									$provider_id = $provider->id;
-									$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
+									$provider_selected = ( in_array( $provider_id, $form["providers"] ) )?'selected="selected"':"";
 									echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
 								}
 							?>
