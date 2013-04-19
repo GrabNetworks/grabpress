@@ -22,13 +22,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				
 				$blogusers = get_users();
 
-				if(isset($params) && isset($params["channel"]) != "" && isset($params["provider"]) != ""){
+				if(isset($params) && isset($params["channels"]) != "" && isset($params["providers"]) != ""){
 					print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "edit",
 										   "action" => "modify",
 										   "feed_id" => $params["feed_id"],
 										   "name" => $params["name"],
-										   "channel" => $params["channel"],
+										   "channels" => $params["channels"],
 										   "keywords_and" => $params["keywords_and"],
 										   "keywords_not" => $params["keywords_not"],
 										   "keywords_or" => $url['keywords'],
@@ -39,7 +39,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 										   "publish" => $params["publish"],
 										   "click_to_play" => $params["click_to_play"],
 										   "author" => $params["author"],
-										   "provider" => $params["provider"],
+										   "providers" => $params["providers"],
 										   "category" => $params["category"]								   
 											),
 							"list_providers" => $list_providers,
@@ -63,7 +63,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 											   "feed_id" => $feed_id,
 											   "name" => $feed->feed->name,
 											   //"channel" => $feed->feed->name,
-											   "channel" => $url['categories'],
+											   "channels" => $url['categories'],
 											   "keywords_and" => $url['keywords_and'],
 											   "keywords_not" => $url['keywords_not'],
 											   "keywords_or" => $url['keywords'],
@@ -74,7 +74,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 											   "publish" => $feed->feed->custom_options->publish,
 											   "click_to_play" => $feed->feed->auto_play,
 											   "author" => $feed->feed->custom_options->author_id,
-											   "provider" => $providers,
+											   "providers" => $providers,
 											   "category" => $cats
 												),
 								"list_providers" => $list_providers,
@@ -110,12 +110,12 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				print GrabPress::fetch( "includes/gp-feed-template.php", 
 					array("form" => array( "referer" => "create",
 										   "action" => "update",
-										   "channel" => $params["channel"],
+										   "channels" => $params["channels"],
 										   "keywords_and" => $keywords["keywords_and"],
 										   "keywords_not" => $keywords["keywords_not"],
 										   "keywords_or" => $keywords['keywords_or'],
 						   				   "keywords_phrase" => $keywords['keywords_phrase'],
-										   "provider" => $params["provider"],
+										   "providers" => $params["providers"],
 										   "publish" => $params["publish"],
 										   "click_to_play" => $params["click_to_play"],
 										   "category" => ""
@@ -417,7 +417,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 		}
 
 		static function do_create_feed($params){
-			if ( GrabPressAPI::validate_key() && $params[ 'channel' ] != '' && $params[ 'provider' ] != '' ) {
+			if ( GrabPressAPI::validate_key() && $params[ 'channels' ] != '' && $params[ 'providers' ] != '' ) {
 				GrabPressAPI::create_feed($params);
 				GrabPressViews::feed_creation_success($params);
 			}else {

@@ -41,8 +41,8 @@
 				</div>
 				<div class="tile-right">
 
-					<select name="channel[]" id="channel-select-preview" class="channel-select-preview multiselect" multiple="multiple" style="width:500px" >
-						<?php	
+					<select name="channels[]" id="channel-select-preview" class="channel-select-preview multiselect" multiple="multiple" style="width:500px" >
+						<?php
 							foreach ( $list_channels as $record ) {
 								$channel = $record -> category;
 								$name = $channel -> name;
@@ -61,7 +61,7 @@
 					<span class="preview-text-catalog"><b>Providers: </b></span>
 				</div>
 				<div class="tile-right">
-					<select name="provider[]" id="provider-select-preview" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doPreviewValidation()" >
+					<select name="providers[]" id="provider-select-preview" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doPreviewValidation()" >
 					<?php			
 						foreach ( $list_providers as $record_provider ) {
 							$provider = $record_provider->provider;
