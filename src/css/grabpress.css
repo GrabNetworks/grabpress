@@ -611,22 +611,35 @@ line-height: 24px;
     background-color: #000;
 }
 #t #b .accordion-group {
-    border: 1px solid #2B2B2B;
+    border: 1px solid #2B2B2B;    
 }
-
+#t #b:last-child a.accordion-toggle{filter:none}
 #t #b a.accordion-toggle{
     background-color: #2B2B2B;
     color: #FFFFFF;
     font: 18px 'Gill Sans W01 Light';
     text-decoration: none;
-    outline: none;
+    outline: none;    
+    display:block;
+    width:inherit\9;
+    filter: 
+        progid:DXImageTransform.Microsoft.Shadow(color=#2b2b2b,direction=0,strength=1),
+        progid:DXImageTransform.Microsoft.Shadow(color=#2b2b2b,direction=90,strength=1),
+        progid:DXImageTransform.Microsoft.Shadow(color=#2b2b2b,direction=180,strength=1),
+        progid:DXImageTransform.Microsoft.Shadow(color=#2b2b2b,direction=270,strength=1);
 }
+#t #b:last-child a.accordion-toggle:hover{filter:none}
 #t #b a.accordion-toggle:hover{
     color: #FF0000;
     -webkit-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
     -moz-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
     box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
     border-radius: 3px;
+     filter: 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=0,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=90,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=180,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=270,strength=1);
 }
 #t #b .feed_title{
     overflow: hidden;
@@ -729,6 +742,9 @@ line-height: 24px;
 #t #b .accordion-group {
     border-radius: 4px 4px 4px 4px;
     margin-bottom: 2px;
+    position: relative; 
+    z-index:500;
+    behavior: url(http://grabpressh.3pillar.corp/border-radius.htc); /* This lets IE know to call the script on all elements which get the 'box' class */
 }
 #t #b .accordion-heading {
     border-bottom: 0 none;
@@ -784,7 +800,7 @@ line-height: 24px;
     height: 33px;
     left: 0;
     top:0;
-    top:2px\9;
+    top:1px\9;
     position: absolute;
     width: 3px;
 }
@@ -794,18 +810,18 @@ line-height: 24px;
     padding: 0 3px;
     width: 99px;
     filter: 
-        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=0,strength=2), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=90,strength=2), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=180,strength=2), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=270,strength=2);
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=0,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=90,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=180,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=270,strength=1);
 }
 #t #b #btn-account-settings .accordion-right {
     background: url("../images/accordion_right.png") repeat-y scroll 0 0 #000000;
     height: 33px;
     position: absolute;
-    right: -92px;
+    right: -91px;
     top: 0;
-    top:2px\9;
+    top:1px\9;
     width: 3px;
 }
 #t #b #btn-account-settings a{ 
@@ -827,14 +843,14 @@ line-height: 24px;
     box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
     border-radius: 3px;
     padding-right: 6px;
-    padding-right: 3px\9;    
+    padding-right: 2px\9;    
     width:101px\9;
-    margin-left:-2px\9;
+    margin-left:-1px\9;
     filter: 
-        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=0,strength=2), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=90,strength=2), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=180,strength=2), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=270,strength=2); 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=0,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=90,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=180,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=270,strength=1); 
 }
 #t #b #btn-account-settings .accordion-center:hover a{
     color: #FF0000;
