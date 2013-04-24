@@ -465,7 +465,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					}
 					break;
 				case 'gp-account':
-					
+					$plugins_url = self::grabpress_plugin_url();
+                                        wp_enqueue_script('gp-catalog-ajax', $plugins_url.'/js/catalog-ajax.js', array('jquery'));
 					switch ( $params[ 'action' ] ) {
 						case 'link-user' :
 							GrabPressViews::link_account($params);
@@ -560,7 +561,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			
 			wp_enqueue_style( 'gp-fonts', "http://static.grab-media.com/fonts/font-face.css");
 			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
-			
+                        
+                        wp_enqueue_script('gp-catalog-ajax', $plugin_url.'/js/catalog-ajax.js', array('jquery'));
 		}
 
 		static function content_by_request( $content, $post )

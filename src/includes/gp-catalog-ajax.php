@@ -1,5 +1,5 @@
 <?php 
-
+        
 	$providers_total = count( $list_providers );
 	if(($providers_total == count($providers)) || in_array("", $providers)){
 		$provider_text = "All Providers";
@@ -24,6 +24,7 @@
 <div id="gp-catalog-container">
 	<form method="post" action="" id="form-catalog-page">
     <input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
+    <input type="hidden" name="environment" value="<?php echo GrabPress::$environment; ?>"  id="environment" />
 
 	<div class="wrap" >
 		<fieldset id="preview-feed">
@@ -135,7 +136,7 @@
 	</form>
 	<script type="text/javascript">
 	<?php $qa = GrabPress::$environment == 'grabqa'; ?>
-		( function ( global, $ ) {
+		/*( function ( global, $ ) {
 			global.defaultthickboxresizehandler = null;
 			global.hasValidationErrors = function () {
 				if(($("#channel-select :selected").length == 0) || ($("#provider-select :selected").length == 0)){
@@ -357,8 +358,24 @@
 			jQuery('.ui-multiselect-menu').css('overflow', 'auto');
 			jQuery('.ui-multiselect-menu').css('top', channelHeight + 61);		
 			
-		});
-		
+		});*/
+                if(!window.grabModal){
+                    try{
+                        var env = jQuery("#environment").val();
+                        if (env == 'grabqa') {
+                            modalId = '1000014775';               
+                        } else {
+                            modalId = '1720202';                
+                        }
+                        window.grabModal = new com.grabnetworks.Modal( { id : modalId , tgt: env, width: 1100, height: 450 } );
+                        window.grabModal.hide();
+                    }catch(err){
+
+                    }
+                }
+		jQuery(function($){
+                    Catalog.initSearchForm();       
+                });
 	</script>
 
 
