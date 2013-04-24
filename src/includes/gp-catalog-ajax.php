@@ -115,6 +115,7 @@
 				        cssStyle: 'light-theme',
 				        displayedPages:10,
 				        onPageClick: function(pagenumber , event){
+				        	debugger;
 						   submitSearch(pagenumber);
 				        }
 				    });
@@ -289,8 +290,9 @@
 		   					 "created_before" : $("#created_before").val(),
 		   					 "created_after" : $("#created_after").val(),
 		   					 "page" : page};
-
+		   		debugger;
 		   		$.post(ajaxurl, data, function(response) {
+		   			debugger;
 		   			$("#gp-catalog-container").replaceWith(response);
 		   		});
 		    }
