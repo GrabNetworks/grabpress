@@ -129,7 +129,9 @@
 								<div id="btn-account-settings">
 									<div class="accordion-left">&nbsp;</div>
 									<div class="accordion-center">
-										<a href="<?php echo $admin_page; ?>" >Account Settings</a>
+                                                                                <a href="#" class="big-link" data-reveal-id="myModal3" data-animation="fade">
+                                                                                Account Settings
+                                                                                </a>										
 									</div>
 									<div class="accordion-right">&nbsp;</div>
 								</div>
@@ -154,7 +156,7 @@
 												Watchlist
 											</th>
 											<th>
-												&nbsp;
+												&nbsp;                                                                                                
 											</th>
 										</tr>
 									</thead>
@@ -233,7 +235,7 @@
 								</table>
 								</div>
 							</div>
-						</div>
+						</div>                                            
 						<div clas="row-fluid">
 							<div class="span12 faq">
 								<div class="tabbable panel">
@@ -265,6 +267,11 @@
 </div>
 
 </form>
+<div id="myModal3" class="reveal-modal">
+    <p>API Key: <?php echo get_option( 'grabpress_key' ); ?></p>
+    <a class="button-primary" href="<?php echo $admin_page; ?>" >Account Settings</a>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
 <script type="text/javascript">
 
 	jQuery(function($){
