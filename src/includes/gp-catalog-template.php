@@ -153,6 +153,7 @@
 			} // end foreach
 		} // end if	
 	?>
+	
 	</fieldset>
 </div>
 </form>

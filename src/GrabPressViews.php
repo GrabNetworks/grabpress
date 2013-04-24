@@ -270,7 +270,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				"providers" => array(),
 				"channels" => array(),
 				"sort_by" => "created_at",
-				"empty" => "true");
+				"empty" => "true",
+				"page" => 1);
 			$request = array_merge($defaults, $request);
 			
 			if($request["empty"] == "true"){
@@ -298,6 +299,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				}
 				
 				$adv_search_params["sort_by"] = $request["sort_by"];
+				$adv_search_params["page"] = $request["page"];
 				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
 				$json_preview = GrabPressAPI::get_json($url_catalog);
@@ -310,6 +312,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 				$empty = "false";
 			}
+
 			print GrabPress::fetch("includes/gp-catalog-ajax.php", array(
 				"form" => $request,
 				"list_providers" => GrabPressAPI::get_providers(),

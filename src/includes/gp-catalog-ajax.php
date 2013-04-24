@@ -104,6 +104,24 @@
 			<input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
 			<input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
 		</div>	
+		 	<?php if($empty == "false"){ ?>
+		 	<div class="label-tile-one-column">
+				<div id="pagination"></div>
+				<script type="text/javascript">
+				jQuery(function($){	
+					$("#pagination").pagination({
+				        items: <?php echo $list_feeds["total_count"]>2000?2000:$list_feeds["total_count"]; ?>,
+				        itemsOnPage: 20,
+				        cssStyle: 'light-theme',
+				        displayedPages:10,
+				        onPageClick: function(pagenumber , event){
+						   submitSearch(pagenumber);
+				        }
+				    });
+				});
+				</script>
+			</div>
+			<?php }?>
 		<?php
 			foreach ($list_feeds["results"] as $result) {
 		?>
@@ -260,7 +278,8 @@
 			   showAnim: 'slideDown',
 			   duration: 'fast'
 			});
-			var submitSearch = function(){
+			var submitSearch = function(page){
+				page = page || 1;
 		   		var data = { "action" : "gp_get_catalog",
 		   					 "empty" : false,
 		   					 "keywords" : $("#keywords").val(),
@@ -268,11 +287,13 @@
 		   					 "channels" : $("#channel-select").val(),
 		   					 "sort_by" : $('.sort_by:checked').val(),
 		   					 "created_before" : $("#created_before").val(),
-		   					 "created_after" : $("#created_after").val()};
+		   					 "created_after" : $("#created_after").val(),
+		   					 "page" : page};
+
 		   		$.post(ajaxurl, data, function(response) {
 		   			$("#gp-catalog-container").replaceWith(response);
 		   		});
-		   }
+		    }
 		   	var submitClear = function(){
 		   		var data = { "action" : "gp_get_catalog",
 		   					 "empty" : true,

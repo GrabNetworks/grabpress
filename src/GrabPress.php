@@ -322,6 +322,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			}
 			if($unlimited){
 				$url .= "&limit=-1";
+			}else{
+				$url .= "&offset=".($page*20)."&limit=20";	
 			}
 			return $url;
 		}
@@ -541,6 +543,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' , array("jquery"));
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
 			wp_enqueue_script( 'gp-nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
+			wp_enqueue_script( 'jquery-simplePagination', $plugin_url.'/js/jquery.simplePagination.js' , array("jquery") );
 
 			wp_enqueue_script( 'grab-player', 'http://player.'.GrabPress::$environment.'.com/js/Player.js' );
 
@@ -557,6 +560,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_style( 'thickbox' );
 			wp_enqueue_style( 'gp-nanoscroller', $plugin_url.'/css/nanoscroller.css');		
 			wp_enqueue_style( 'gp-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "gp-bootstrap", "gp-nanoscroller"));			
+			wp_enqueue_style( 'jquery-simplePagination', $plugin_url.'/css/simplePagination.css');
 			
 			wp_enqueue_style( 'gp-fonts', "http://static.grab-media.com/fonts/font-face.css");
 			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
