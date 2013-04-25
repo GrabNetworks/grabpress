@@ -58,7 +58,7 @@ class CatalogTests(GrabPressAutomation):
 	driver.find_element_by_id("btn-create-feed-single-4400635").click()
 	self.assertRegexpMatches(driver.find_element_by_id("content").text, r"grabpress_video guid=\"d811f4d7f6bd7de097b0e6dd09930411b44c0ab1\"")
 
-    def test_CTLC_2a_DeleteCreatedPost(self):
+    def test_CTLG_2a_DeleteCreatedPost(self):
 	driver = self.driver
 	GrabPressAutomation.Login(self)
 	driver.get(self.base_url + "wordpress/wp-admin/edit.php")
@@ -69,10 +69,75 @@ class CatalogTests(GrabPressAutomation):
 	driver.get(self.base_url + "wordpress/wp-admin/edit.php?post_status=trash&post_type=post")
 	self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"VIDEO: Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
 
-#class AccountTests(GrabPressAutomation):
-#    def test_ACNT_1_CreateNewAccount(self):
-#    def test_ACNT_2_LinkExistingAccount(self):
-#    def test_ACNT_3_UnlinkAccount(self):
+class AccountTests(GrabPressAutomation):
+    def UnlinkAccountNoLogin(self):
+        driver = self.driver
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
+        driver.find_element_by_xpath("(//input[@name='action'])[2]").click()
+        driver.find_element_by_id("confirm").click()
+        driver.find_element_by_id("submit_button").click()
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"This installation is not linked to a Publisher account")    
+
+    def test_ACCT_1_LinkExistingAccount(self):
+        driver = self.driver
+        GrabPressAutomation.Login(self)
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
+        driver.find_element_by_id("email").clear()
+        driver.find_element_by_id("email").send_keys(r"jpduquette00@gmail.com")
+        driver.find_element_by_id("password").clear()
+        driver.find_element_by_id("password").send_keys(r"dukey177")
+        driver.find_element_by_id("submit_button").click()
+        # Warning: assertTextPresent may require manual changes
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"This installation is linked to jpduquette00@gmail.com")
+
+    def test_ACCT_2_UnlinkAccount(self):
+        driver = self.driver
+        GrabPressAutomation.Login(self)
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
+        #driver.find_element_by_link_text("Account").click()
+        driver.find_element_by_xpath("(//input[@name='action'])[2]").click()
+        driver.find_element_by_id("confirm").click()
+        driver.find_element_by_id("submit_button").click()
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"This installation is not linked to a Publisher account")
+
+    def test_ACCT_3_CreateNewAccount(self):
+        driver = self.driver
+        GrabPressAutomation.Login(self)
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
+        driver.find_element_by_xpath("(//input[@name='action'])[2]").click()
+        driver.find_element_by_id("id_email").clear()
+        acct = "automated_user_test"
+        acct += str(time.time())
+        acct += "@grab-media.com"
+        driver.find_element_by_id("id_email").send_keys(acct)
+        driver.find_element_by_id("id_password").clear()
+        driver.find_element_by_id("id_password").send_keys("test123")
+        driver.find_element_by_id("id_password2").clear()
+        driver.find_element_by_id("id_password2").send_keys("test123")
+        driver.find_element_by_id("id_first_name").clear()
+        driver.find_element_by_id("id_first_name").send_keys("Automated")
+        driver.find_element_by_id("id_last_name").clear()
+        driver.find_element_by_id("id_last_name").send_keys("User")
+        driver.find_element_by_id("company").clear()
+        driver.find_element_by_id("company").send_keys("Grab Media, Inc.")
+        driver.find_element_by_id("id_address1").clear()
+        driver.find_element_by_id("id_address1").send_keys("21000 Atlantic Blvd.")
+        driver.find_element_by_id("id_address2").clear()
+        driver.find_element_by_id("id_address2").send_keys("Suite 600")
+        driver.find_element_by_id("id_city").clear()
+        driver.find_element_by_id("id_city").send_keys("Sterling")
+        Select(driver.find_element_by_id("id_state")).select_by_visible_text("Virginia")
+        driver.find_element_by_id("id_zip").clear()
+        driver.find_element_by_id("id_zip").send_keys("20166")
+        driver.find_element_by_id("id_phone_number").clear()
+        driver.find_element_by_id("id_phone_number").send_keys("703-555-5555")
+        driver.find_element_by_id("id_site").clear()
+        driver.find_element_by_id("id_site").send_keys("grab-media.com")
+        driver.find_element_by_id("id_agree").click()
+        driver.find_element_by_id("submit-button").click()
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"This installation is linked to ")
+        AccountTests.UnlinkAccountNoLogin(self)
+
 #    def test_ACNT_4_LinkNonExistingAccount(self):
 #    def test_ACNT_5_CreateExistingAccount(self):
 
