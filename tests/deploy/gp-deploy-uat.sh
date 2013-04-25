@@ -1,5 +1,5 @@
 # Make a backup of the current install!
-ssh -i /home/jduquette/scripts/grabdev1 bitnami@grabpress.grabstaging.com "mkdir /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/backups;cp -R /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/grabpress /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/backups/grabpress-BACKUP" 
+ssh -i /home/jduquette/scripts/grabdev1 bitnami@grabpress.grabstaging.com "cp -R /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/grabpress /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/backups/grabpress-BACKUP" 
 
 # Remove the old build
 ssh -i /home/jduquette/scripts/grabdev1 bitnami@grabpress.grabstaging.com "rm -rf /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/grabpress"
