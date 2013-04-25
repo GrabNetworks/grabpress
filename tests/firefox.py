@@ -8,7 +8,8 @@ class GrabPressAutomation(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(10)
-        self.base_url = sys.argv[1]
+#        self.base_url = sys.argv[1]
+	self.base_url = "http://grabpress-ci.grab-media.com/"
 	self.verificationErrors = []
         self.accept_next_alert = True
 
