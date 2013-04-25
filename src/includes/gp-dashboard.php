@@ -268,12 +268,47 @@
 
 </form>
 <div id="myModal3" class="reveal-modal">
-    <p>API Key: <?php echo get_option( 'grabpress_key' ); ?></p>
-    <a class="button-primary" href="<?php echo $admin_page; ?>" >Account Settings</a>
-    <a class="close-reveal-modal">&#215;</a>
+    <p>Account Details</p>
+    <div class="infoBox">
+    <p>Linked Account Email Adrress: <br />
+    <?php
+        $user = GrabPressAPI::get_user();
+        $linked = isset( $user->email);
+        if( $linked ){?>
+        <?php echo $user->email;			
+        }else{?>					
+        <p>This installation is not linked to a Publisher account.<br/>
+        Linking GrabPress to your account allows us to keep track of the video ads displayed with your Grab content and make sure you get paid.</p>
+    <?php }?>
+    </p>
+    <p>API Key: <br /><?php echo get_option( 'grabpress_key' ); ?>
+        <input type="hidden" value="<?php echo get_option( 'grabpress_key' ); ?>" id="fe_text" />
+        
+    </p>
+    </div>
+    <?php
+        if(GrabPress::check_permissions_for("gp-autopost")){
+    ?>
+    <div class="btn-modal-box">
+        <div class="accordion-left">&nbsp;</div>
+        <div class="accordion-center"><a href="<?php echo $admin_page; ?>" >Account Settings</a></div>
+        <div class="accordion-right">&nbsp;</div>
+    </div>    
+    <?php } ?>
+    
+    <div class="btn-modal-box">
+        <div class="accordion-left">&nbsp;</div>
+        <div class="accordion-center"><a id="d_clip_button" data-clipboard-target="fe_text" data-clipboard-text="Default clipboard text from attribute" href="#">Copy API Key</a></div>
+        <div class="accordion-right">&nbsp;</div>
+    </div>
+    <div class="btn-modal-box">
+        <div class="accordion-left">&nbsp;</div>
+        <div class="accordion-center"><a class="close-reveal-modal" href="#">Back to Dashboard</a></div>
+        <div class="accordion-right">&nbsp;</div>
+    </div>
 </div>
+<?php $plugin_url = GrabPress::grabpress_plugin_url(); ?>
 <script type="text/javascript">
-
 	jQuery(function($){
 		//fix for watchlist min-width and max-width for ie9 and ie10
                 if ($.browser.msie && $.browser.version > 8.0) {
@@ -491,6 +526,17 @@
 		});
                 
                 $(".feed_title").ellipsis(0, true, "", "");
+                
+                var clip = new ZeroClipboard($("#d_clip_button"), {
+                    moviePath: "<?php echo $plugin_url; ?>/js/ZeroClipboard.swf"
+                });
+                clip.on('complete', function (client, args) {
+                  debugstr("Copied text to clipboard: " + args.text );
+                });
+                function debugstr(text) {
+                    alert(text);
+                }
+                  
 
 		init();
 
