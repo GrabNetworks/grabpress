@@ -8,7 +8,8 @@ class GrabPressAutomation(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(10)
-        self.base_url = sys.argv[1]
+#        self.base_url = sys.argv[1]
+	self.base_url = "http://grabpress-ci.grab-media.com/"
 	self.verificationErrors = []
         self.accept_next_alert = True
 
@@ -20,7 +21,7 @@ class GrabPressAutomation(unittest.TestCase):
 	driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys("\user")
-        driver.find_element_by_id("user_pass").send_keys("bitnamji")
+        driver.find_element_by_id("user_pass").send_keys("bitnaijmi")
         driver.find_element_by_id("wp-submit").click()
 	self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Welcome to WordPress!")
 
