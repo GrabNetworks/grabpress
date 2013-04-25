@@ -1,10 +1,15 @@
-<!--<form method="post" action="" id="form-create-feed">-->
+<?php 
+
+$is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
+
+?>
 <div class="wrap">
 	<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 	<h2>GrabPress: Autopost Videos by Category and Keywords</h2>
 	<p>Feed your blog with fresh video content.</p>
-		<fieldset id="create-form" class="<?php echo isset($_GET['action'])=='edit-feed' ? 'edit-mode':''?>">
-		<legend><?php echo isset($_GET['action'])=='edit-feed' ? 'Edit':'Create'?> Feed</legend>
+
+		<fieldset id="create-form" class="<?php echo $is_edit ? 'edit-mode':''?>">
+		<legend><?php echo $is_edit ? 'Edit':'Create'?> Feed</legend>
 	<script type="text/javascript">
 	jQuery(document).ready(function($) {
 		var previewdialogConf = null;
@@ -23,8 +28,9 @@
 	                close: function(){
 	                	var and = [], or = [], phrase = [], not = [],
 	                	kwrds = $("#keywords").val(),
-	                	regPhrase = /"[^"]*"/ig,
-	                	regOR = /OR\s+[\w]*/ig;
+	                	regPhrase = /"[^"]*"/ig,                                
+	                	regAfterOR = /\sOR\s+[\w\S]*/ig,//regEx for keywords after OR
+                                regBeforeOR = /[\w+(\?\:\-\w+)\S+]*\s+OR/;//regEx for keyword in front of OR
 
 	                	phrase = regPhrase.exec(kwrds);
 	                	if(!phrase){
@@ -37,23 +43,30 @@
 
 	                	kwrds = kwrds.replace(regPhrase, "");
 
-
-	                	or = kwrds.match(regOR);
-	                	
+	                	or = $.trim(kwrds.match(regAfterOR));//match regex for all keywords after 'OR'
+	                	beforeOr = $.trim(kwrds.match(regBeforeOR));//match regex for the first keyword in front of the first 'OR'
 	                	if(!or){
 	                		or = [];
-	                	}else{
-	                		or = or.map(function(n){return n.slice(3,n.length)});
+	                	}else{	                		                                        
+                                        //split the string of keywords into an array and replace OR with ''
+                                        or = $.trim(String(or).replace(/OR\s/g,'')).split(/\,\s/);                                        
+                                        if (beforeOr) {
+                                            beforeOr = beforeOr.replace(/\s+OR/,'');//replace 'OR' with so that beforeOr containd only the keyword
+                                            //add the keyword in front of the or array of keywords
+                                            or.unshift(beforeOr);
+                                        }console.log(or);
 	                	}
-
-						kwrds = kwrds.replace(regOR, "");
-
+                                                //cut off the OR separated keywords from the kwrds string
+						kwrds = $.trim(kwrds.replace(regAfterOR, "")); 
+                                                kwrds = kwrds.replace(new RegExp(beforeOr  + '$'), "");
 						var words = kwrds.replace(/^\s+|\s+$/g, '').split(/\s+/);
 						for(var i=0;i<words.length;i++){
 							if(words[i][0] == "-"){
 								not.push(words[i].slice(1,words[i].length));
 							}else{
-								and.push(words[i]);
+                                                            if ($("#form-create-feed input[name=keywords_and]").val() != '') {
+                                                                and.push(words[i]);
+                                                            }                                                          								
 							}
 						}
 						$("#form-create-feed input[name=keywords_and]").val(and.join(" "));
@@ -139,7 +152,7 @@
 					};
 
 					$.post(ajaxurl, data, function(response) {
-						window.location = "admin.php?page=autoposter";
+						window.location = "admin.php?page=gp-autoposter";
 					});
 
 				} else{					
@@ -150,7 +163,7 @@
 		selectedCategories = <?php echo json_encode( $form["category"] );?>;
 
 		editFeed = function(id) {
-			window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
+			window.location = "admin.php?page=gp-autoposter&action=edit-feed&feed_id="+id;
 		}
 
 		doValidation = function(){
@@ -266,10 +279,10 @@
 		    var referer = $("input[name=referer]").val();
 		    
 		    if( referer == "create" ){
-		    	window.location = "admin.php?page=autoposter";
+		    	window.location = "admin.php?page=gp-autoposter";
 		    }else{
 		    	var id = $("input[name=feed_id]").val();
-		    	window.location = "admin.php?page=autoposter&action=edit-feed&feed_id="+id;
+		    	window.location = "admin.php?page=gp-autoposter&action=edit-feed&feed_id="+id;
 		    }
 		    
 		});
@@ -418,7 +431,7 @@
 		   $('#cancel-editing').bind('click', function(e){ 
 				var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
 				if(answer){				
-					window.location = "admin.php?page=autoposter";
+					window.location = "admin.php?page=gp-autoposter";
 				} else{				
 					return false;
 				}
@@ -491,11 +504,11 @@
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
-			if(isset($form["feed_id"])) {
+			if(isset($form["feed_id"]) && $form["feed_id"] > 0) {
 				$feed_id = $form["feed_id"];
 		?>
 			<input type="hidden"  name="feed_id" value="<?php echo $feed_id; ?>" />
-		<?php		
+		<?php
 			}
 		?>
 		<?php 
@@ -512,7 +525,7 @@
 			}else{
 				$referer = "create";
 			}	
-			if(isset($form["action"])){		
+			if($is_edit){		
 				$value = ($form["action"] == "modify") ? 'modify' : 'update';
 			}else{
 				$value = "update";
@@ -524,18 +537,17 @@
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
 	                <tr valign="bottom">
-						<th scope="row">Plug-in Version & Build Number</th>
+						<th scope="row">Plug-in Version &amp; Build Number</th>
 			            <td>
 							<?php echo GrabPress::$version ?>
 						</td>
-					</tr>
+					</tr> <?php } ?>
 	                <tr valign="bottom">
 						<th scope="row">API Key</th>
 			            <td>
 							<?php echo get_option( 'grabpress_key' ); ?>
 						</td>
 					</tr>
-				<?php } ?>
 				<tr>
 					<td>
 						<h3>Search Criteria</h3>
@@ -555,16 +567,16 @@
 					<th scope="row">Grab Video Categories<span class="asterisk">*</span></th>
 					<td>
 						<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />					
-						<select  style="<?php GrabPress::outline_invalid() ?>" name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+						<select  style="<?php GrabPress::outline_invalid() ?>" name="channels[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 							<?php								
-								if(!array_key_exists("channel", $form)){
-									$form["channel"] = array();
+								if(!array_key_exists("channels", $form)){
+									$form["channels"] = array();
 								}
 								
-								if(is_array($form["channel"])){
-									$channels = $form["channel"];
+								if(is_array($form["channels"])){
+									$channels = $form["channels"];
 								}else{
-									$channels = explode( ",", rawurldecode($form["channel"])); // Video categories chosen by the user
+									$channels = explode( ",", rawurldecode($form["channels"])); // Video categories chosen by the user
 								}
 								
 								foreach ( $list_channels as $record ) {
@@ -611,13 +623,13 @@
 						<th scope="row">Content Providers</th>
 						<td>
 							<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
-							<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
+							<select name="providers[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
 							<?php
 								foreach ( $list_providers as $record_provider ) {
 									$provider = $record_provider->provider;
 									$provider_name = $provider->name;
 									$provider_id = $provider->id;
-									$provider_selected = ( in_array( $provider_id, $form["provider"] ) )?'selected="selected"':"";
+									$provider_selected = ( in_array( $provider_id, $form["providers"] ) )?'selected="selected"':"";
 									echo '<option '.$provider_selected.' value = "'.$provider_id.'">'.$provider_name.'</option>\n';
 								}
 							?>
@@ -627,7 +639,7 @@
 				</tr>
 				<tr valign="bottom">
 					<td colspan="2" class="button-tip">						
-						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php isset($_GET['action'])=='edit-feed' ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
+						<input type="button" onclick="previewVideos()" class="button-secondary" disabled="disabled" value="<?php $is_edit ?_e( 'Preview Changes' ):  _e( 'Preview Feed' )  ?>" id="btn-preview-feed" />
 						<span class="hide preview-btn-text">Click here to sample the kinds of videos that will be auto posted by this feed in the future.</span>
 					</td>
 				</tr>
@@ -708,8 +720,10 @@
 								foreach ( $blogusers as $user ) {
 									$author_name = $user->display_name;
 									$author_id = $user->ID;
-									$selected = ((isset($form["author"])) && ( $form["author"]==$author_id ) )?'selected="selected"':"";
-									echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
+									if($author_name != "GrabPress"){
+										$selected = ((isset($form["author"])) && ( $form["author"]==$author_id ) )?'selected="selected"':"";
+										echo '<option value = "'.$author_id.'" '.$selected.'>'.$author_name.'</option>\n';
+									}
 								}
 							?>
 							</select>
@@ -751,17 +765,17 @@
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<?php $click = ( isset($_GET['action'])=='edit-feed' ) ? 'onclick="validateFeedName(\'update\')"' : 'onclick="validateFeedName()"' ?>
-						<input type="button" class="button-primary" disabled="disabled" value="<?php ( isset($_GET['action'])=='edit-feed' ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
+						<?php $click = ( $is_edit ) ? 'onclick="validateFeedName(\'update\')"' : 'onclick="validateFeedName()"' ?>
+						<input type="button" class="button-primary" disabled="disabled" value="<?php ( $is_edit ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
 						<a id="reset-form" href="#">reset form</a>
-						<?php if(isset($_GET['action'])=='edit-feed'){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>				
+						<?php if($is_edit){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>	
 						<span class="description" style="<?php GrabPress::outline_invalid() ?>color:red"> <?php echo GrabPress::$feed_message; ?> </span>
 					</td>
 				</tr>
 				</table>
 			</form>
 </fieldset>
-<?php if(isset($_GET['action'])=='edit-feed') { ?>
+<?php if($is_edit) { ?>
 <span class="edit-form-text display-element" >Please use the form above to edit the settings of the feed marked "editing" below</span>
 <?php } ?>
 
@@ -777,7 +791,7 @@
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
-			array( "form" => $_REQUEST,
+			array( "form" => $form,
 				"list_providers" => $list_providers,
 				"providers_total" => $providers_total,
 				"list_channels" => $list_channels,

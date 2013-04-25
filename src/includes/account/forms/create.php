@@ -40,7 +40,7 @@
 	<div id="buttons" >
 		<span id="required" class = "account-help" >Note: All fields marked with an asterisk* are required.</span>
 		<a id = "clear-form" href ="#">clear form</a>	
-		<input type="button" class="button-primary" disabled="disabled" id="submit-button" value="<?php _e( $text = ($_REQUEST[ 'action' ] == 'switch') ? 'Change' : 'Link'.' Account') ?>"/>
+		<input type="button" class="button-primary" disabled="disabled" id="submit-button" value="<?php _e( $text = ($request[ 'action' ] == 'switch') ? 'Change' : 'Link'.' Account') ?>"/>
 		<input type="button" class="button-secondary" id="cancel-button" value="<?php _e('Cancel') ?>"/>
 	</div>
 </fieldset>

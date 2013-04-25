@@ -3,7 +3,7 @@ jQuery('#message').hide();
 jQuery(document).ready(function($) {
     $('#wpbody-content').append($('#message'));
 });
-var gp_redirect_url = "admin.php?page=autoposter";
+var gp_redirect_url = "admin.php?page=gp-autoposter";
 var gp_redirect_seconds = 4;
 var gp_redirect_time;
 function gp_redirect() {
@@ -23,12 +23,12 @@ jQuery(function(){
 
 <div id="message-feed-created" class="updated fade">
   <p>
-    Feed created successfully.  Redirecting in 5 seconds ...  If you are not redirected automatically, please press <a href="admin.php?page=autoposter">here</a>
+    Feed created successfully.  Redirecting in 5 seconds ...  If you are not redirected automatically, please press <a href="admin.php?page=gp-autoposter">here</a>
   </p>
 </div>
 
 <?php 
-    if(isset($_REQUEST[ 'page']) && $_REQUEST[ 'page'] == 'autoposter' && isset($_REQUEST[ 'action']) &&  (($_REQUEST[ 'action'] == 'update') || ($_REQUEST[ 'action'] == 'modify')) )
+    if(isset($request[ 'page']) && $request[ 'page'] == 'autoposter' && isset($request[ 'action']) &&  (($request[ 'action'] == 'update') || ($request[ 'action'] == 'modify')) )
       {
         if ( GrabPress::$environment == 'grabqa' ) {
           $times = array( '15 mins', '30  mins', '45 mins', '01 hr', '02 hrs', '06 hrs', '12 hrs', '01 day', '02 days', '03 days' );
@@ -44,11 +44,11 @@ jQuery(function(){
           $values = array( 360*60, 720*60, 1440*60, 2880*60, 4320*60 );
         }
 
-        if(isset($_REQUEST['schedule'])){
+        if(isset($request['schedule'])){
           for ( $o = 0; $o < count( $times ); $o++ ) {
             $time = $times[$o];
             $value = $values[$o];
-            if($value == $_REQUEST["schedule"]){
+            if($value == $request["schedule"]){
               GrabPress::$message = 'A new draft or post will be created every '.$time.' if videos that meet your search criteria have been added to our catalog.';           
             }
           }

@@ -29,8 +29,8 @@
 	<input type="hidden" name="bloginfo" value="<?php echo get_bloginfo('url'); ?>"  id="bloginfo" />
 	<input type="hidden" name="publish" value="1" id="publish" />
 	<input type="hidden" name="click_to_play" value="1" id="click_to_play" />
-	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '' ?>" />
-	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($_REQUEST['pre_content2']) ? $_REQUEST['pre_content2'] : '' ?>" />
+	<input type="hidden" id="post_id" name="post_id" value="<?php echo $post_id = isset($form['post_id']) ? $form['post_id'] : '' ?>" />
+	<input type="hidden" id="pre_content2" name="pre_content2" value="<?php echo $pre_content2 = isset($form['pre_content2']) ? $form['pre_content2'] : '' ?>" />
 	<input type="hidden" id="keywords_and" name="keywords_and" value="<?php echo $keywords_and = isset($keywords_and) ? $keywords_and : ''; ?>" />	
 	<input type="hidden" id="keywords_not" name="keywords_not" value="<?php echo $keywords_not = isset($keywords_not) ? $keywords_not : ''; ?>" />
 	<input type="hidden" id="keywords_or" name="keywords_or" value="<?php echo $keywords_or = isset($keywords_or) ? $keywords_or : ''; ?>" />
@@ -55,7 +55,7 @@
 				</span>
 			</div>
 			<div class="tile-right">
-				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+				<select name="channels[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 					<?php
 						foreach ( $list_channels as $record ) {
 							$channel = $record -> category;
@@ -75,7 +75,7 @@
 				<span class="preview-text-catalog"><b>Providers: </b></span>
 			</div>
 			<div class="tile-right">
-				<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
+				<select name="providers[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
 				<?php			
 					foreach ( $list_providers as $record_provider ) {
 						$provider = $record_provider->provider;
@@ -120,8 +120,8 @@
                ?>
                <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
                <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance
-               <?php if(!empty($list_feeds["results"])){ ?>
-               <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
+               <?php if(!empty($list_feeds["results"]) && GrabPress::check_permissions_for("gp-autopost")){ ?>
+                    <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                <?php } ?>
        </div>
 	<?php
@@ -142,7 +142,10 @@
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
 			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+			<?php if(GrabPress::check_permissions_for("single-post")){ ?>
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<?php } ?>
+			<input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
 			
 		</div>
 	</div>
@@ -227,7 +230,7 @@
 		var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 		if(feed_action == "preview-feed"){
 		  	$(".close-preview").click(function() {		  
-		  		window.location = "admin.php?page=autoposter";
+		  		window.location = "admin.php?page=gp-autoposter";
 	  		});
 		}else{
 			$(".close-preview").click(function() {		  
@@ -291,7 +294,7 @@
 		    var action = jQuery('#action-catalog');
 		    
 		    action.val("prefill");
-		    form.attr("action", "admin.php?page=autoposter");
+		    form.attr("action", "admin.php?page=gp-autoposter");
 		    form.submit();
 		});
 		$(".sort_by").change(function(e){
@@ -317,7 +320,7 @@
 		});	
 
 	   	$('#clear-search').bind('click', function(e){
-	   		window.location = "admin.php?page=catalog";		    
+	   		window.location = "admin.php?page=gp-catalog";		    
 		});
 		$(".video_summary").ellipsis(2, true, "more", "less");
 
