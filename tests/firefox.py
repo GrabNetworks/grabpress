@@ -21,7 +21,7 @@ class GrabPressAutomation(unittest.TestCase):
 	driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys("\user")
-        driver.find_element_by_id("user_pass").send_keys("bitnaijmi")
+        driver.find_element_by_id("user_pass").send_keys("bitjnami")
         driver.find_element_by_id("wp-submit").click()
 	self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Welcome to WordPress!")
 
@@ -118,10 +118,11 @@ class CatalogTests(GrabPressAutomation):
 
 
 
-searchTestSuite =  unittest.TestSuite()
-searchTestSuite.addTest(CatalogTests('test_CTLG_1_ExactPhraseSearch'))
-searchTestSuite.addTest(CatalogTests('test_CTLG_2_CreatePostFromCatalogSearch'))
-searchTestSuite.addTest(CatalogTests('test_CTLC_2a_DeleteCreatedPost'))
-suite = unittest.TestSuite(searchTestSuite)
-unittest.TextTestRunner(verbosity=2).run(suite)
-
+#searchTestSuite =  unittest.TestSuite()
+#searchTestSuite.addTest(CatalogTests('test_CTLG_1_ExactPhraseSearch'))
+#searchTestSuite.addTest(CatalogTests('test_CTLG_2_CreatePostFromCatalogSearch'))
+#searchTestSuite.addTest(CatalogTests('test_CTLC_2a_DeleteCreatedPost'))
+#suite = unittest.TestSuite(searchTestSuite)
+#unittest.TextTestRunner(verbosity=2).run(suite)
+if __name__ == "__main__":
+    unittest.main()
