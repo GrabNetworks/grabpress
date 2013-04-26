@@ -172,7 +172,7 @@
 
 		if(!window.grabModal){
 	      try{
-	        window.grabModal = new com.grabnetworks.Modal( { id : <?php echo $qa ? '1000014775' : '1720202'; ?>, tgt: '<?php echo GrabPress::$environment; ?>', width: 800, height: 450 } );
+	        window.grabModal = new com.grabnetworks.Modal( { id : <?php //echo $qa ? '1000014775' : '1720202'; ?>, tgt: '<?php //echo GrabPress::$environment; ?>', width: 800, height: 450 } );
 	        window.grabModal.hide();
 	      }catch(err){
 	        
@@ -202,7 +202,7 @@
 		    
 		jQuery(function($){	
 
-			var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
+			var feed_action = '<?php //echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
 			if(feed_action == "preview-feed"){
 			  	$(".close-preview").click(function() {		  
 			  		window.location = "admin.php?page=gp-autoposter";
@@ -254,7 +254,7 @@
 		   
 		   $(".datepicker").datepicker({
 			   showOn: 'both',
-			   buttonImage: '<?php echo plugin_dir_url( __FILE__ ); ?>images/icon-calendar.gif',
+			   buttonImage: '<?php //echo plugin_dir_url( __FILE__ ); ?>images/icon-calendar.gif',
 			   buttonImageOnly: true,
 			   changeMonth: true,
 			   changeYear: true,
