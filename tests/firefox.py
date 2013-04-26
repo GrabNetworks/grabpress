@@ -189,7 +189,39 @@ class AccountTests(GrabPressAutomation):
         driver.find_element_by_id("submit_button").click()
         self.assertRegexpMatches(driver.find_element_by_id("message").text, r"No user with the supplied email and password combination exists in our system. Please try again.")
 
-#    def test_ACNT_5_CreateExistingAccount(self):
+    def test_ACNT_5_CreateExistingAccount(self):
+        driver = self.driver
+        GrabPressAutomation.Login(self)
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
+        driver.find_element_by_xpath("(//input[@name='action'])[2]").click()
+        driver.find_element_by_id("id_email").clear()
+        driver.find_element_by_id("id_email").send_keys("jpduquette00@gmail.com")
+        driver.find_element_by_id("id_password").clear()
+        driver.find_element_by_id("id_password").send_keys("dukey177")
+        driver.find_element_by_id("id_password2").clear()
+        driver.find_element_by_id("id_password2").send_keys("dukey177")
+        driver.find_element_by_id("id_first_name").clear()
+        driver.find_element_by_id("id_first_name").send_keys("John")
+        driver.find_element_by_id("id_last_name").clear()
+        driver.find_element_by_id("id_last_name").send_keys("Duquette")
+        driver.find_element_by_id("company").clear()
+        driver.find_element_by_id("company").send_keys("Grab Media Inc.")
+        driver.find_element_by_id("id_address1").clear()
+        driver.find_element_by_id("id_address1").send_keys("21000 Atlantic Blvd.")
+        driver.find_element_by_id("id_address2").clear()
+        driver.find_element_by_id("id_address2").send_keys("Suite 600")
+        driver.find_element_by_id("id_city").clear()
+        driver.find_element_by_id("id_city").send_keys("Sterling")
+        Select(driver.find_element_by_id("id_state")).select_by_visible_text("Virginia")
+        driver.find_element_by_id("id_zip").clear()
+        driver.find_element_by_id("id_zip").send_keys("20166")
+        driver.find_element_by_id("id_phone_number").clear()
+        driver.find_element_by_id("id_phone_number").send_keys("571-555-5555")
+        driver.find_element_by_id("id_site").clear()
+        driver.find_element_by_id("id_site").send_keys("grab-media.com")
+        driver.find_element_by_id("id_agree").click()
+        driver.find_element_by_id("submit-button").click()
+        self.assertRegexpMatches(driver.find_element_by_id("message").text, r"We already have a registered user with the email address jpduquette00@gmail.com. If you would like to update your account information, please login to the")
 
 #class InsertIntoPostTests(GrabPressAutomation):
 #    def test_INPT_1_SearchCatalog(self):
