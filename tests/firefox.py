@@ -60,7 +60,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginSubscriberRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("subscriber")
+        driver.find_element_by_id("user_login").send_keys("\subscriber")
         driver.find_element_by_id("user_pass").send_keys("subscriber")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Subscriber Role")
@@ -257,7 +257,19 @@ class AccountTests(GrabPressAutomation):
 #    def test_MISC_5_InsertVideoIntoPost(self):
 #    def test_MISC_6_AddCommentsToPost(self):
 
-#class PermissionsTests(GrabPressAutomation):
+class PermissionsTests(GrabPressAutomation):
+    def test_PERM_1_SubscriberRoleCannotAccessAccountTab(self):
+	driver = self.driver
+	GrabPressAutomation.LoginSubscriberRole(self)
+	driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
+	self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+
+    @unittest.expectedFailure
+    def test_PERM_2_SubscriberRoleNoLinkToAccountTab(self):
+        driver = self.driver
+        GrabPressAutomation.LoginSubscriberRole(self)
+        self.assertRegexpMatches(driver.find_element_by_link_text("Account").text, r"")
+
 #    def test_PERM_1_AdminPermissions(self):
 #    def test_PERM_2_EditorPermissions(self):
 #    def test_PERM_3_AuthorPermissions(self):
@@ -269,7 +281,7 @@ class AccountTests(GrabPressAutomation):
 #searchTestSuite =  unittest.TestSuite()
 #searchTestSuite.addTest(CatalogTests('test_CTLG_1_ExactPhraseSearch'))
 #searchTestSuite.addTest(CatalogTests('test_CTLG_2_CreatePostFromCatalogSearch'))
-#searchTestSuite.addTest(CatalogTests('test_CTLC_2a_DeleteCreatedPost'))
+#searchTestSuite.addTest(PermissionsTests('test_PERM_2_SubscriberRoleNoLinkToAccountTab'))
 #suite = unittest.TestSuite(searchTestSuite)
 #unittest.TextTestRunner(verbosity=2).run(suite)
 if __name__ == "__main__":
