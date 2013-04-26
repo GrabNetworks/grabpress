@@ -332,4 +332,4 @@ class PermissionsTests(GrabPressAutomation):
 #suite = unittest.TestSuite(searchTestSuite)
 #unittest.TextTestRunner(verbosity=2).run(suite)
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
