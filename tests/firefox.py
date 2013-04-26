@@ -20,7 +20,7 @@ class GrabPressAutomation(unittest.TestCase):
     def Login(self):
 	driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("\user")
+        driver.find_element_by_id("user_login").send_keys("user")
         driver.find_element_by_id("user_pass").send_keys("bitnami")
         driver.find_element_by_id("wp-submit").click()
 	self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Welcome to WordPress!")
