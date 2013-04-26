@@ -25,6 +25,46 @@ class GrabPressAutomation(unittest.TestCase):
         driver.find_element_by_id("wp-submit").click()
 	self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Welcome to WordPress!")
 
+    def LoginAdminRole(self):
+        driver = self.driver
+        driver.get(self.base_url + "wordpress/wp-login.php")
+        driver.find_element_by_id("user_login").send_keys("admin")
+        driver.find_element_by_id("user_pass").send_keys("administrator")
+        driver.find_element_by_id("wp-submit").click()
+        self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Admin Role")
+
+    def LoginAuthorRole(self):
+        driver = self.driver
+        driver.get(self.base_url + "wordpress/wp-login.php")
+        driver.find_element_by_id("user_login").send_keys("author")
+        driver.find_element_by_id("user_pass").send_keys("author")
+        driver.find_element_by_id("wp-submit").click()
+        self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Author Role")
+
+    def LoginContributorRole(self):
+        driver = self.driver
+        driver.get(self.base_url + "wordpress/wp-login.php")
+        driver.find_element_by_id("user_login").send_keys("contributor")
+        driver.find_element_by_id("user_pass").send_keys("contributor")
+        driver.find_element_by_id("wp-submit").click()
+        self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Contributor Role")
+
+    def LoginEditorRole(self):
+        driver = self.driver
+        driver.get(self.base_url + "wordpress/wp-login.php")
+        driver.find_element_by_id("user_login").send_keys("editor")
+        driver.find_element_by_id("user_pass").send_keys("editor")
+        driver.find_element_by_id("wp-submit").click()
+        self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Editor Role")
+
+    def LoginSubscriberRole(self):
+        driver = self.driver
+        driver.get(self.base_url + "wordpress/wp-login.php")
+        driver.find_element_by_id("user_login").send_keys("subscriber")
+        driver.find_element_by_id("user_pass").send_keys("subscriber")
+        driver.find_element_by_id("wp-submit").click()
+        self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Subscriber Role")
+
     def is_element_present(self, how, what):
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
@@ -138,7 +178,17 @@ class AccountTests(GrabPressAutomation):
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"This installation is linked to ")
         AccountTests.UnlinkAccountNoLogin(self)
 
-#    def test_ACNT_4_LinkNonExistingAccount(self):
+    def test_ACNT_4_LinkNonExistingAccount(self):
+	driver = self.driver
+        GrabPressAutomation.Login(self)
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
+	driver.find_element_by_id("email").clear()
+        driver.find_element_by_id("email").send_keys("no_way_this_user_exists@limbo.com")
+        driver.find_element_by_id("password").clear()
+        driver.find_element_by_id("password").send_keys("test")
+        driver.find_element_by_id("submit_button").click()
+        self.assertRegexpMatches(driver.find_element_by_id("message").text, r"No user with the supplied email and password combination exists in our system. Please try again.")
+
 #    def test_ACNT_5_CreateExistingAccount(self):
 
 #class InsertIntoPostTests(GrabPressAutomation):
