@@ -103,6 +103,7 @@ class CatalogTests(GrabPressAutomation):
 	GrabPressAutomation.Login(self)
 	driver.get(self.base_url + "wordpress/wp-admin/edit.php")
 	driver.find_element_by_id("post-search-input").send_keys("VIDEO: Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
+	driver.find_element_by_id("search-submit").click()
 	driver.find_element_by_id("cb-select-all-1").click()
 	Select(driver.find_element_by_name("action")).select_by_visible_text("Move to Trash")
         driver.find_element_by_id("doaction").click()
