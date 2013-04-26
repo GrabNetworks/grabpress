@@ -34,7 +34,7 @@
 		}
 	
         .reveal-modal .infoBox {
-                    background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
+                    background: url("../images/grid_noise.png") repeat top left #FFFFFF;
                     border-radius: 3px 3px 3px 3px;
                     padding: 15px;
                     color: #000;
