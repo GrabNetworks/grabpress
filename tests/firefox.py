@@ -44,7 +44,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginContributorRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("contributor")
+        driver.find_element_by_id("user_login").send_keys("\contributor")
         driver.find_element_by_id("user_pass").send_keys("contributor")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Contributor Role")
@@ -258,17 +258,63 @@ class AccountTests(GrabPressAutomation):
 #    def test_MISC_6_AddCommentsToPost(self):
 
 class PermissionsTests(GrabPressAutomation):
-    def test_PERM_1_SubscriberRoleCannotAccessAccountTab(self):
+    def test_PERM_1_SubscriberRoleCannotAccessGrabPressTabs(self):
 	driver = self.driver
 	GrabPressAutomation.LoginSubscriberRole(self)
+	# Account Tab
 	driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
 	self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+        # Dashboard Tab
+	driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+	# Autoposter Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+	# Catalog Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+	# Template Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-template")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
 
     @unittest.expectedFailure
-    def test_PERM_2_SubscriberRoleNoLinkToAccountTab(self):
+    def test_PERM_2_SubscriberRoleNoLinkToGrabPressTabs(self):
         driver = self.driver
         GrabPressAutomation.LoginSubscriberRole(self)
         self.assertRegexpMatches(driver.find_element_by_link_text("Account").text, r"")
+	self.assertRegexpMatches(driver.find_element_by_link_text("Template").text, r"")
+	self.assertRegexpMatches(driver.find_element_by_link_text("Autoposter").text, r"")
+	self.assertRegexpMatches(driver.find_element_by_link_text("Catalog").text, r"")
+	self.assertRegexpMatches(driver.find_element_by_class_name("wp-first-item").text, r"Dashboard")
+
+    def test_PERM_3_ContributorRoleCannotAccessGrabPressTabs(self):
+        driver = self.driver
+        GrabPressAutomation.LoginContributorRole(self)
+        # Account Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+        # Dashboard Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+        # Autoposter Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+        # Catalog Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+        # Template Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-template")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+
+    @unittest.expectedFailure
+    def test_PERM_4_ContributorRoleNoLinkToGrabPressTabs(self):
+        driver = self.driver
+        GrabPressAutomation.LoginContributorRole(self)
+        self.assertRegexpMatches(driver.find_element_by_link_text("Account").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_link_text("Template").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_link_text("Autoposter").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_link_text("Catalog").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_class_name("wp-first-item").text, r"Dashboard")
 
 #    def test_PERM_1_AdminPermissions(self):
 #    def test_PERM_2_EditorPermissions(self):
@@ -281,8 +327,9 @@ class PermissionsTests(GrabPressAutomation):
 #searchTestSuite =  unittest.TestSuite()
 #searchTestSuite.addTest(CatalogTests('test_CTLG_1_ExactPhraseSearch'))
 #searchTestSuite.addTest(CatalogTests('test_CTLG_2_CreatePostFromCatalogSearch'))
-#searchTestSuite.addTest(PermissionsTests('test_PERM_2_SubscriberRoleNoLinkToAccountTab'))
+#searchTestSuite.addTest(PermissionsTests('test_PERM_3_ContributorRoleCannotAccessGrabPressTabs'))
+#searchTestSuite.addTest(PermissionsTests('test_PERM_4_ContributorRoleNoLinkToGrabPressTabs'))
 #suite = unittest.TestSuite(searchTestSuite)
 #unittest.TextTestRunner(verbosity=2).run(suite)
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
