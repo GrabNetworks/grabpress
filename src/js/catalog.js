@@ -1,4 +1,4 @@
-var GPCatalog = {
+var GrabPressCatalog = {
     /* Checks for channels and providers selection */
     hasValidationErrors : function () {
                             if((jQuery("#channel-select :selected").length == 0) || (jQuery("#provider-select :selected").length == 0)){
@@ -9,7 +9,7 @@ var GPCatalog = {
                         },
     /* Validation for search form inputs */                    
     doValidation : function(){
-                        var errors = GPCatalog.hasValidationErrors();
+                        var errors = GrabPressCatalog.hasValidationErrors();
 			if ( !errors ){
 				jQuery('#btn-create-feed').removeAttr('disabled');
 				jQuery('#update-search').removeAttr('disabled');
@@ -74,7 +74,7 @@ var GPCatalog = {
           var v_id = this.id.replace('btn-create-feed-single-','');
 
           var data = {
-               action: 'gp_insert_video',
+               action: 'gp_insert_video', 
                format : 'post',
                video_id: v_id
           };
@@ -223,20 +223,20 @@ var GPCatalog = {
        if(jQuery('#channel-select option:selected').length == 0){
            jQuery('#channel-select option').attr('selected', 'selected');
        }
-       jQuery("#channel-select").multiselect(GPCatalog.multiSelectOptionsChannels, {
+       jQuery("#channel-select").multiselect(GrabPressCatalog.multiSelectOptionsChannels, {
            uncheckAll: function(e, ui){
-               GPCatalog.doValidation();	 	 	
+               GrabPressCatalog.doValidation();	 	 	
            },
            checkAll: function(e, ui){
-               GPCatalog.doValidation();	  	 	
+               GrabPressCatalog.doValidation();	  	 	
            }
        });
-       jQuery("#provider-select").multiselect(GPCatalog.multiSelectOptions, {
+       jQuery("#provider-select").multiselect(GrabPressCatalog.multiSelectOptions, {
            uncheckAll: function(e, ui){
-               GPCatalog.doValidation();
+               GrabPressCatalog.doValidation();
            },
            checkAll: function(e, ui){
-               GPCatalog.doValidation();
+               GrabPressCatalog.doValidation();
            }
       }).multiselectfilter();
 
@@ -249,7 +249,7 @@ var GPCatalog = {
           showAnim: 'slideDown',
           duration: 'fast'
       });
-      jQuery("#form-catalog-page").change(GPCatalog.doValidation);      
+      jQuery("#form-catalog-page").change(GrabPressCatalog.doValidation);      
       
       jQuery(".sort_by").change(function(e){
            var form = jQuery('#form-catalog-page');
@@ -268,6 +268,5 @@ var GPCatalog = {
         jQuery('#TB_window, #TB_iframeContent').width(TB_newWidth).height(TB_newHeight);
         jQuery('#TB_ajaxContent').height(TB_newHeight - 29);
         jQuery('#TB_ajaxContent').width(TB_newWidth - 33);			
-    }
-    
+    }    
 }

@@ -77,7 +77,7 @@
 				<span class="preview-text-catalog"><b>Providers: </b></span>
 			</div>
 			<div class="tile-right">
-				<select name="providers[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="GPCatalog.doValidation()" >
+				<select name="providers[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="GrabPressCatalog.doValidation()" >
 				<?php			
 					foreach ( $list_providers as $record_provider ) {
 						$provider = $record_provider->provider;
@@ -160,14 +160,14 @@
 </form>
 <script>
     jQuery(window).load(function () {
-	    GPCatalog.doValidation();
+	    GrabPressCatalog.doValidation();
 	    var action = jQuery('#action-catalog');	    
 	    action.val("catalog-search");
 	});
 
     jQuery(document).ready(function(){
-        GPCatalog.initSearchForm(); 
-        GPCatalog.tabSearchForm();    
+        GrabPressCatalog.initSearchForm(); 
+        GrabPressCatalog.tabSearchForm();    
     }
 );
 </script>
