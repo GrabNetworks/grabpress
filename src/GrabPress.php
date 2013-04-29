@@ -464,9 +464,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							break;
 					}
 					break;
-				case 'gp-account':
-					$plugins_url = self::grabpress_plugin_url();
-                                        wp_enqueue_script('gp-catalog-ajax', $plugins_url.'/js/catalog-ajax.js', array('jquery'));
+				case 'gp-account':                                        
 					switch ( $params[ 'action' ] ) {
 						case 'link-user' :
 							GrabPressViews::link_account($params);
@@ -502,7 +500,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								GrabPressViews::catalog_management($params);
 							break;
 						}
-
+                                                $plugin_url = GrabPress::grabpress_plugin_url();
+                                                wp_enqueue_script('gp-catalog', $plugin_url.'/js/catalog.js', array('jquery'));
 					break;
 				case 'gp-dashboard':
 					GrabPressViews::dashboard_management($params);
@@ -518,13 +517,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function enqueue_scripts($page) {
-
+                        // Plugin url
+			$plugin_url = GrabPress::grabpress_plugin_url();
 			$handlerparts = explode("_", $page);
 			if($handlerparts[0] !="grabpress" && $page != "post-new.php" && $page != "post.php"){
-				return;
-			}
-			// Plugin url
-			$plugin_url = GrabPress::grabpress_plugin_url();
+                            return;
+			}elseif($page == "post-new.php" || $page == "post.php"){
+                            wp_enqueue_script('gp-catalog', $plugin_url.'/js/catalog.js', array('jquery'));
+                        }			
 
 			// jQuery files
 
@@ -561,8 +561,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			
 			wp_enqueue_style( 'gp-fonts', "http://static.grab-media.com/fonts/font-face.css");
 			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
-                        
-                        wp_enqueue_script('gp-catalog-ajax', $plugin_url.'/js/catalog-ajax.js', array('jquery'));
 		}
 
 		static function content_by_request( $content, $post )
