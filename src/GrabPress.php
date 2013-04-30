@@ -442,6 +442,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			switch ( $page ) {
 				case 'gp-autoposter':
 					$params = GrabPress::_account_form_default_values($params);
+                                        $plugin_url = GrabPress::grabpress_plugin_url();
+                                        wp_enqueue_script( 'gp-autoposter', $plugin_url.'/js/autoposter.js' , array("jquery") );
 					switch ( $action ) {
 						case 'update':
 							GrabPressViews::do_create_feed($params);
@@ -513,7 +515,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function grabpress_plugin_url(){
-			return plugin_dir_url( __FILE__ ) ;                        
+			return plugin_dir_url( __FILE__ ) ;                                            
 		}
 
 		static function enqueue_scripts($page) {
