@@ -80,7 +80,7 @@
         }
         .reveal-modal .btn-modal-box a:hover{
             color: #FF0000;
-            cursor: auto;
+            cursor: default;
         }
         .reveal-modal .btn-modal-box:hover{
             color: #FF0000;
