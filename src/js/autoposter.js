@@ -426,7 +426,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                 "Create Feed": function() {
                   var name = jQuery("#dialog-name").val();
                   jQuery("#name").val(name);
-                  validateFeedName("edit");
+                  GrabPressAutoposter.validateFeedName("edit");
                 }
             }
           }); 
