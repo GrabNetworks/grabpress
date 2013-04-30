@@ -124,7 +124,7 @@
 								<?php
 									$admin = get_admin_url();
 									$admin_page = $admin.'admin.php?page=gp-account';
-									if(GrabPress::check_permissions_for("gp-autopost")){
+									if(GrabPress::check_permissions_for("gp-account")){
 								?>								
 								<div id="btn-account-settings">
 									<div class="accordion-left">&nbsp;</div>
@@ -287,7 +287,7 @@
     </p>
     </div>
     <?php
-        if(GrabPress::check_permissions_for("gp-autopost")){
+        if(GrabPress::check_permissions_for("gp-account")){
     ?>
     <div class="btn-modal-box">
         <div class="accordion-left">&nbsp;</div>
