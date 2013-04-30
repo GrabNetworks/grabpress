@@ -82,7 +82,7 @@
             color: #FF0000;
             cursor: default;
         }
-        .reveal-modal .btn-modal-box:hover{
+        .reveal-modal .btn-modal-box:hover, .global-zeroclipboard-container:hover{
             color: #FF0000;
             -webkit-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
             -moz-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
@@ -94,10 +94,7 @@
                 progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=180,strength=2), 
                 progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=270,strength=2); 
         }
-        .reveal-modal .btn-modal-box .accordion-center:hover a{
-            color: #FF0000;
-        }     
-                
+        
 	.reveal-modal.small 		{ width: 200px; margin-left: -140px;}
 	.reveal-modal.medium 		{ width: 400px; margin-left: -240px;}
 	.reveal-modal.large 		{ width: 600px; margin-left: -340px;}

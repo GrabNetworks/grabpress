@@ -296,9 +296,9 @@
     </div>    
     <?php } ?>
     
-    <div class="btn-modal-box">
+    <div class="btn-modal-box" id="d_clip_button" data-clipboard-target="fe_text" data-clipboard-text="Default clipboard text from attribute">
         <div class="accordion-left">&nbsp;</div>
-        <div class="accordion-center"><a id="d_clip_button" data-clipboard-target="fe_text" data-clipboard-text="Default clipboard text from attribute" href="#">Copy API Key</a></div>
+        <div class="accordion-center"><a href="#">Copy API Key</a></div>
         <div class="accordion-right">&nbsp;</div>
     </div>
     <div class="btn-modal-box">
