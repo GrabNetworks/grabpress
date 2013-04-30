@@ -103,6 +103,57 @@ var GrabPressCatalog = {
            }
        }
     },
+    /* Search submission from modal window */
+    submitSearch : function(action) {
+        var data = {"action": action,
+            "empty": false,
+            "keywords": jQuery("#keywords").val(),
+            "providers": jQuery("#provider-select").val(),
+            "channels": jQuery("#channel-select").val(),
+            "sort_by": jQuery('.sort_by:checked').val(),
+            "created_before": jQuery("#created_before").val(),
+            "created_after": jQuery("#created_after").val()
+        };
+        jQuery.post(ajaxurl, data, function(response) {
+            jQuery("#gp-catalog-container").replaceWith(response);
+        });
+    },
+    /* Submiting clear search form */
+    submitClear : function(action) {
+        var data = {"action": action,
+            "empty": true,
+            "keywords": jQuery("#keywords").val(),
+            "providers": jQuery("#provider-select").val(),
+            "channels": jQuery("#channel-select").val(),
+            "sort_by": jQuery('.sort_by:checked').val(),
+            "created_before": jQuery("#created_before").val(),
+            "created_after": jQuery("#created_after").val()
+        };
+        jQuery.post(ajaxurl, data, function(response) {
+            jQuery("#gp-catalog-container").replaceWith(response);
+        });
+    },
+    /* Binding clear search event */
+    clearSearch : function(action) {
+        jQuery('#clear-search').bind('click', function(e) {
+            jQuery("#keywords").val("");
+            jQuery('#provider-select option').attr('selected', 'selected');
+            jQuery("#provider-select").multiselect("refresh");
+            jQuery("#provider-select").multiselect({
+                selectedText: "All providers selected"
+            });
+            jQuery('#channel-select option').attr('selected', 'selected');
+            jQuery("#channel-select").multiselect("refresh");
+            jQuery("#channel-select").multiselect({
+                selectedText: "All Video Categories"
+            });
+            jQuery('.sort_by[value=relevance]').removeAttr("checked");
+            jQuery('.sort_by[value=created_at]').attr("checked", "checked");
+            jQuery("#created_before").val("");
+            jQuery("#created_after").val("");
+            GrabPressCatalog.submitClear(action);
+        });
+    },
     /* Insert in post ajax search form initializations and bindings */
     postSearchForm : function(){
         jQuery(window).scroll(function () {
@@ -117,39 +168,14 @@ var GrabPressCatalog = {
             jQuery('.ui-multiselect-menu').css('overflow', 'auto');
             jQuery('.ui-multiselect-menu').css('top', channelHeight + 61);		
         });
-        var submitSearch = function() {
-            var data = {"action": "gp_get_catalog",
-                "empty": false,
-                "keywords": jQuery("#keywords").val(),
-                "providers": jQuery("#provider-select").val(),
-                "channels": jQuery("#channel-select").val(),
-                "sort_by": jQuery('.sort_by:checked').val(),
-                "created_before": jQuery("#created_before").val(),
-                "created_after": jQuery("#created_after").val()};
-            jQuery.post(ajaxurl, data, function(response) {
-                jQuery("#gp-catalog-container").replaceWith(response);
-            });
-        };
-        var submitClear = function() {
-            var data = {"action": "gp_get_catalog",
-                "empty": true,
-                "keywords": jQuery("#keywords").val(),
-                "providers": jQuery("#provider-select").val(),
-                "channels": jQuery("#channel-select").val(),
-                "sort_by": jQuery('.sort_by:checked').val(),
-                "created_before": jQuery("#created_before").val(),
-                "created_after": jQuery("#created_after").val()};
-            jQuery.post(ajaxurl, data, function(response) {
-                jQuery("#gp-catalog-container").replaceWith(response);
-            });
-        };
+        
         jQuery("#form-catalog-page").submit(function(e) {
             e.preventDefault();
-            submitSearch();
+            GrabPressCatalog.submitSearch('gp_get_catalog');
             return false;
         });
         jQuery(".sort_by").change(function(e) {
-            submitSearch();
+            GrabPressCatalog.submitSearch('gp_get_catalog');
         });
         jQuery('.insert_into_post').bind('click', function(e) {
             var v_id = this.id.replace('btn-create-feed-single-', '');
@@ -168,39 +194,18 @@ var GrabPressCatalog = {
             }, "json");
         });
 
-        jQuery('#clear-search').bind('click', function(e) {
-            jQuery("#keywords").val("");
-            jQuery('#provider-select option').attr('selected', 'selected');
-            jQuery("#provider-select").multiselect("refresh");
-            jQuery("#provider-select").multiselect({
-                selectedText: "All providers selected"
-            });
-            jQuery('#channel-select option').attr('selected', 'selected');
-            jQuery("#channel-select").multiselect("refresh");
-            jQuery("#channel-select").multiselect({
-                selectedText: "All Video Categories"
-            });
-            jQuery('.sort_by[value=relevance]').removeAttr("checked");
-            jQuery('.sort_by[value=created_at]').attr("checked", "checked");
-            jQuery("#created_before").val("");
-            jQuery("#created_after").val("");
-            submitClear();
+        GrabPressCatalog.clearSearch('gp_get_catalog');       
+    },
+    previewSearchForm : function() {
+        jQuery("#form-catalog-page").submit(function(e) {
+            e.preventDefault();
+            GrabPressCatalog.submitSearch('gp_get_preview');
+            return false;
         });
-        
-        if(!window.grabModal){
-            try{
-                var env = jQuery("#environment").val();
-                if (env == 'grabqa') {
-                    modalId = '1000014775';               
-                } else {
-                    modalId = '1720202';                
-                }
-                window.grabModal = new com.grabnetworks.Modal( { id : modalId , tgt: env, width: 1100, height: 450 } );
-                window.grabModal.hide();
-            }catch(err){
-
-            }
-        }
+        jQuery(".sort_by").change(function(e) {
+            GrabPressCatalog.submitSearch('gp_get_preview');
+        });
+        GrabPressCatalog.clearSearch('gp_get_preview');
     },
     /* Common initializations for the catalog search forms */
     initSearchForm : function(){
@@ -219,9 +224,15 @@ var GrabPressCatalog = {
        if(jQuery('#provider-select option:selected').length == 0){
            jQuery('#provider-select option').attr('selected', 'selected');
        }
+       if(jQuery('#provider-select-preview option:selected').length == 0){
+           jQuery('#provider-select-preview option').attr('selected', 'selected');
+       }
 
        if(jQuery('#channel-select option:selected').length == 0){
            jQuery('#channel-select option').attr('selected', 'selected');
+       }
+       if(jQuery('#channel-select-preview option:selected').length == 0){
+           jQuery('#channel-select-preview option').attr('selected', 'selected');
        }
        jQuery("#channel-select").multiselect(GrabPressCatalog.multiSelectOptionsChannels, {
            uncheckAll: function(e, ui){
@@ -231,7 +242,23 @@ var GrabPressCatalog = {
                GrabPressCatalog.doValidation();	  	 	
            }
        });
+       jQuery("#channel-select-preview").multiselect(GrabPressCatalog.multiSelectOptionsChannels, {
+           uncheckAll: function(e, ui){
+               GrabPressCatalog.doValidation();	 	 	
+           },
+           checkAll: function(e, ui){
+               GrabPressCatalog.doValidation();	  	 	
+           }
+       });
        jQuery("#provider-select").multiselect(GrabPressCatalog.multiSelectOptions, {
+           uncheckAll: function(e, ui){
+               GrabPressCatalog.doValidation();
+           },
+           checkAll: function(e, ui){
+               GrabPressCatalog.doValidation();
+           }
+        }).multiselectfilter();
+        jQuery("#provider-select-preview").multiselect(GrabPressCatalog.multiSelectOptions, {
            uncheckAll: function(e, ui){
                GrabPressCatalog.doValidation();
            },
@@ -257,6 +284,20 @@ var GrabPressCatalog = {
       });
      
       jQuery(".video_summary").ellipsis(2, true, "more", "less");
+      if(!window.grabModal){
+            try{
+                var env = jQuery("#environment").val();
+                if (env == 'grabqa') {
+                    modalId = '1000014775';               
+                } else {
+                    modalId = '1720202';                
+                }
+                window.grabModal = new com.grabnetworks.Modal( { id : modalId , tgt: env, width: 1100, height: 450 } );
+                window.grabModal.hide();
+            }catch(err){
+
+            }
+        }
     } ,
     TB_Position : function(){        
         var SpartaPaymentWidth			= 930;

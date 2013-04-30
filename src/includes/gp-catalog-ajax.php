@@ -1,5 +1,4 @@
 <?php 
-        
 	$providers_total = count( $list_providers );
 	if(($providers_total == count($providers)) || in_array("", $providers)){
 		$provider_text = "All Providers";
@@ -28,7 +27,7 @@
 
 	<div class="wrap" >
 		<fieldset id="preview-feed">
-		<legend>Insert Video</legend>		
+		<legend><?php echo ($form['action'] == 'gp_get_preview')?'Preview or Modify Feed Search Criteria':'Insert Video'; ?></legend>		
 			<div class="label-tile-one-column">
 				<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords'] : '' ?>" maxlength="255" /></span>
 				<a href="#" id="help">help</a>
@@ -42,7 +41,7 @@
 				</div>
 				<div class="tile-right">
 
-					<select name="channels[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+					<select name="channels[]" id="channel-select-preview" class="channel-select multiselect" multiple="multiple" style="width:500px" >
 						<?php	
 							foreach ( $list_channels as $record ) {
 								$channel = $record -> category;
@@ -62,7 +61,7 @@
 					<span class="preview-text-catalog"><b>Providers: </b></span>
 				</div>
 				<div class="tile-right">
-					<select name="providers[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="GrabPressCatalog.doValidation()" >
+					<select name="providers[]" id="provider-select-preview" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="GrabPressCatalog.doValidation()" >
 					<?php			
 						foreach ( $list_providers as $record_provider ) {
 							$provider = $record_provider->provider;
@@ -106,6 +105,7 @@
 			<input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
 		</div>	
 		<?php
+                    if (count($list_feeds["results"])) {
 			foreach ($list_feeds["results"] as $result) {
 		?>
 		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
@@ -123,30 +123,43 @@
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
 			<span><?php echo $stamp; ?>&nbsp;&nbsp;</span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<input type="button" class="insert_into_post" value="<?php _e( 'Insert into Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<?php if ($form['action'] == 'gp_get_catalog') { ?>
+                                <input type="button" class="insert_into_post" value="<?php _e( 'Insert into Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+                        <?php } ?>
 			<input type="button" class="update-search" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
 			
 		</div>
 	</div>
 		<?php
 			}
+		} elseif ($form['action'] == 'gp_get_preview') {
+		?>
+			<h1>It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed</h1>
+			<?php
+		}
 		?>
 		</fieldset>
 	</div>
 	</form>
-	<script type="text/javascript">            
-            ( function ( global, $ ) {
-                    global.backup_tb_position = tb_position;
-                    global.tb_position = GrabPressCatalog.TB_Position;
-              })(window, jQuery);
-		
+	<script type="text/javascript">
+        <?php if ($form['action'] == 'gp_get_catalog') { ?>
+                ( function ( global, $ ) {
+                        global.backup_tb_position = tb_position;
+                        global.tb_position = GrabPressCatalog.TB_Position;
+                  })(window, jQuery);
+                  jQuery(document).ready(function(){                    
+                      GrabPressCatalog.postSearchForm();
+                  });
+        <?php } elseif ($form['action'] == 'gp_get_preview') { ?>
+                  jQuery(document).ready(function(){                    
+                       GrabPressCatalog.previewSearchForm();
+                  });
+        <?php } ?>
             jQuery(window).load(function () {		                        
                 GrabPressCatalog.doValidation();
             });
-            
             jQuery(document).ready(function(){                    
-                GrabPressCatalog.initSearchForm();                 
-                GrabPressCatalog.postSearchForm();
+                GrabPressCatalog.initSearchForm();                                 
             });
 	</script>
 
