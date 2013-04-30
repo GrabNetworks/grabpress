@@ -466,8 +466,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 							break;
 					}
 					break;
-				case 'gp-account':
-					
+				case 'gp-account':                                        
 					switch ( $params[ 'action' ] ) {
 						case 'link-user' :
 							GrabPressViews::link_account($params);
@@ -503,7 +502,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 								GrabPressViews::catalog_management($params);
 							break;
 						}
-
+                                                $plugin_url = GrabPress::grabpress_plugin_url();
+                                                wp_enqueue_script('gp-catalog', $plugin_url.'/js/catalog.js', array('jquery'));
 					break;
 				case 'gp-dashboard':
                                         wp_enqueue_script( 'gp-dashboard', $plugin_url.'/js/dashboard.js' , array("jquery") );
@@ -520,13 +520,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function enqueue_scripts($page) {
-
+                        // Plugin url
+			$plugin_url = GrabPress::grabpress_plugin_url();
 			$handlerparts = explode("_", $page);
 			if($handlerparts[0] !="grabpress" && $page != "post-new.php" && $page != "post.php"){
-				return;
-			}
-			// Plugin url
-			$plugin_url = GrabPress::grabpress_plugin_url();
+                            return;
+			}elseif($page == "post-new.php" || $page == "post.php"){
+                            wp_enqueue_script('gp-catalog', $plugin_url.'/js/catalog.js', array('jquery'));
+                        }			
 
 			// jQuery files
 
@@ -563,7 +564,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			
 			wp_enqueue_style( 'gp-fonts', "http://static.grab-media.com/fonts/font-face.css");
 			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
-			
 		}
 
 		static function content_by_request( $content, $post )
