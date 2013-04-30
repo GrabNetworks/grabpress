@@ -2,7 +2,7 @@
  * Defining all javascript functionality for the Grabpress Autoposter tab under one namespace
  */
 
-var GrabPressAutoposter = {
+var GrabPressAutoposter = GrabPressAutoposter || {
     /* Checks if channels and providers are selected */
     hasValidationErrors : function () {
         if((jQuery("#channel-select :selected").length == 0) || (jQuery("#provider-select :selected").length == 0)){
