@@ -444,6 +444,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				case 'gp-autoposter':
 					$params = GrabPress::_account_form_default_values($params);                                        
                                         wp_enqueue_script( 'gp-autoposter', $plugin_url.'/js/autoposter.js' , array("jquery") );
+                                        wp_enqueue_script( 'gp-catalog', $plugin_url.'/js/catalog.js' , array("jquery") );
 					switch ( $action ) {
 						case 'update':
 							GrabPressViews::do_create_feed($params);
@@ -523,9 +524,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
                         // Plugin url
 			$plugin_url = GrabPress::grabpress_plugin_url();
 			$handlerparts = explode("_", $page);
-			if($handlerparts[0] !="grabpress" && $page != "post-new.php" && $page != "post.php"){
+			if($handlerparts[0] !="grabpress" && $page != "post-new.php" && $page != "post.php" && $page != "index.php"){
                             return;
-			}elseif($page == "post-new.php" || $page == "post.php"){
+			}elseif($page == "post-new.php" || $page == "post.php" || $page == "index.php"){
                             wp_enqueue_script('gp-catalog', $plugin_url.'/js/catalog.js', array('jquery'));
                         }			
 
