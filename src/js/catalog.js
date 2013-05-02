@@ -1,15 +1,21 @@
 var GrabPressCatalog = {
     /* Checks for channels and providers selection */
-    hasValidationErrors : function () {
-                            if((jQuery("#channel-select :selected").length == 0) || (jQuery("#provider-select :selected").length == 0)){
+    hasValidationErrors : function (preview) {                           
+                            var channels_multiselect = "#channel-select :selected";
+                            var providers_multiselect = "#provider-select :selected";
+                            if (preview) {
+                                channels_multiselect = "#channel-select-preview :selected";
+                                providers_multiselect = "#provider-select-preview :selected";
+                            }
+                            if((jQuery(channels_multiselect).length == 0) || (jQuery(providers_multiselect).length == 0)){
 				return true;
                             } else {
 				return false;
                             }
                         },
     /* Validation for search form inputs */                    
-    doValidation : function(){
-                        var errors = GrabPressCatalog.hasValidationErrors();
+    doValidation : function (preview) {
+                        var errors = GrabPressCatalog.hasValidationErrors(preview);
 			if ( !errors ){
 				jQuery('#btn-create-feed').removeAttr('disabled');
 				jQuery('#update-search').removeAttr('disabled');
@@ -244,10 +250,10 @@ var GrabPressCatalog = {
        });
        jQuery("#channel-select-preview").multiselect(GrabPressCatalog.multiSelectOptionsChannels, {
            uncheckAll: function(e, ui){
-               GrabPressCatalog.doValidation();	 	 	
+               GrabPressCatalog.doValidation(1);	 	 	
            },
            checkAll: function(e, ui){
-               GrabPressCatalog.doValidation();	  	 	
+               GrabPressCatalog.doValidation(1);	  	 	
            }
        });
        jQuery("#provider-select").multiselect(GrabPressCatalog.multiSelectOptions, {
@@ -260,23 +266,26 @@ var GrabPressCatalog = {
         }).multiselectfilter();
         jQuery("#provider-select-preview").multiselect(GrabPressCatalog.multiSelectOptions, {
            uncheckAll: function(e, ui){
-               GrabPressCatalog.doValidation();
+               GrabPressCatalog.doValidation(1);
            },
            checkAll: function(e, ui){
-               GrabPressCatalog.doValidation();
+               GrabPressCatalog.doValidation(1);
            }
       }).multiselectfilter();
-
+      
+      var url = window.location.href;
+      var host = url.split('/wp-admin/')[0];
       jQuery(".datepicker").datepicker({
           showOn: 'both',
-          buttonImage: 'http://'+window.location.host+'/wp-content/plugins/grabpress/images/icon-calendar.gif',
+          buttonImage: host+'/wp-content/plugins/grabpress/images/icon-calendar.gif',
           buttonImageOnly: true,
           changeMonth: true,
           changeYear: true,
           showAnim: 'slideDown',
           duration: 'fast'
       });
-      jQuery("#form-catalog-page").change(GrabPressCatalog.doValidation);      
+      if(jQuery("#channel-select-preview")) { preview = 1; };      
+      jQuery("#form-catalog-page").change(GrabPressCatalog.doValidation(preview));      
       
       jQuery(".sort_by").change(function(e){
            var form = jQuery('#form-catalog-page');
