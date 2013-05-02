@@ -182,6 +182,29 @@ var GrabPressDashboard = GrabPressDashboard || {
         });
                 
         jQuery(".feed_title").ellipsis(0, true, "", "");
+        //fix for watchlist min-width and max-width for ie9 and ie10
+                if (jQuery.browser.msie && jQuery.browser.version > 8.0) {
+                    jQuery("#t #b .watchlist").css('max-width','1392px');
+                    jQuery("#t #b .watchlist").css('min-width','1072px');
+                    jQuery("#t #b #btn-account-settings a").hover(function(){
+                            jQuery(this).css('margin-left', '0');
+                    });
+                    jQuery("#t #b #btn-account-settings .accordion-center").css('filter','none');                    
+                    jQuery("#t #b #btn-account-settings a").css('width','auto');
+                    jQuery("#t #b #btn-account-settings a").css('height','auto');
+                    jQuery("#t #b #btn-account-settings .accordion-center").hover(function(){
+                            jQuery(this).css('width','99px');
+                            jQuery(this).css('padding-right','6px');
+                            jQuery(this).css('margin-left','0');
+                            jQuery(this).css('filter','none');
+                        },
+                        function(){                            
+                            jQuery(this).css('padding-right','3px');                                                        
+                    });
+                    jQuery("#t #b #btn-account-settings .accordion-left").css('top','0');
+                    jQuery("#t #b #btn-account-settings .accordion-right").css('top','0');
+                                        
+                }    
     }
 }
 
