@@ -237,7 +237,7 @@
 					<?php } ?>
 				</td>
 				<td>
-					<input type="button" class="btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'x' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
+					<input type="button" class="btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'x' ) ?>" onclick="GrabPressAutoposter.deleteFeed(<?php echo $feedId; ?>);" />
 				</td>
 			</tr>
 		</form>

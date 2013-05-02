@@ -387,14 +387,14 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
 			}	
 			
-			print GrabPress::fetch( "includes/gp-preview-ajax.php", array(
+			print GrabPress::fetch( "includes/gp-catalog-ajax.php", array(
 						"form" => $request ,
 						"list_channels" => GrabPressAPI::get_channels(),
 						"list_providers" => GrabPressAPI::get_providers(),
 						"list_feeds" => $list_feeds,
 						"providers" => $request["providers"],
 						"channels" => $request["channels"],
-						"empty" => "false"
+						"empty" => "false"                                                
 					)
 				 );	
 			die();
