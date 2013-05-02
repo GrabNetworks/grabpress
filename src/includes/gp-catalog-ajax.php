@@ -108,17 +108,35 @@
 		 	<div class="label-tile-one-column">
 				<div id="pagination"></div>
 				<script type="text/javascript">
-				jQuery(function($){	
-					$("#pagination").pagination({
-				        items: <?php echo $list_feeds["total_count"]>2000?2000:$list_feeds["total_count"]; ?>,
-				        itemsOnPage: 20,
-				        cssStyle: 'light-theme',
-				        displayedPages:10,
-				        onPageClick: function(pagenumber , event){
-				        	debugger;
-						   submitSearch(pagenumber);
-				        }
-				    });
+				jQuery(document).ready(function($){
+                                    
+                                        var submitSearch = function(page){
+                                            page = page || 1;
+                                            var data = { "action" : "gp_get_catalog",
+                                                        "empty" : false,
+                                                        "keywords" : $("#keywords").val(),
+                                                        "providers" : $("#provider-select").val(),
+                                                        "channels" : $("#channel-select").val(),
+                                                        "sort_by" : $('.sort_by:checked').val(),
+                                                        "created_before" : $("#created_before").val(),
+                                                        "created_after" : $("#created_after").val(),
+                                                        "page" : page};
+                                            //debugger;
+                                            $.post(ajaxurl, data, function(response) {
+                                                    //debugger;
+                                                    $("#gp-catalog-container").replaceWith(response);
+                                            });
+                                        };
+                                	$("#pagination").pagination({
+                                            items: <?php echo $list_feeds["total_count"]>2000?2000:$list_feeds["total_count"]; ?>,
+                                            itemsOnPage: 20,
+                                            cssStyle: 'light-theme',
+                                            displayedPages:10,
+                                            onPageClick: function(pagenumber , event){
+                                                    //debugger;
+                                                    submitSearch(pagenumber);                                                    
+                                            }
+                                        });
 				});
 				</script>
 			</div>
@@ -290,9 +308,9 @@
 		   					 "created_before" : $("#created_before").val(),
 		   					 "created_after" : $("#created_after").val(),
 		   					 "page" : page};
-		   		debugger;
+		   		//debugger;
 		   		$.post(ajaxurl, data, function(response) {
-		   			debugger;
+		   			//debugger;
 		   			$("#gp-catalog-container").replaceWith(response);
 		   		});
 		    }
