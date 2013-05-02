@@ -129,7 +129,7 @@
 								<div id="btn-account-settings">
 									<div class="accordion-left">&nbsp;</div>
 									<div class="accordion-center">
-                                                                                <a href="#" class="big-link" data-reveal-id="myModal3" data-animation="fade">
+                                                                                <a href="#" class="big-link" data-reveal-id="AccoutDetails_Modal" data-animation="fade">
                                                                                 Account Settings
                                                                                 </a>										
 									</div>
@@ -267,7 +267,7 @@
 </div>
 
 </form>
-<div id="myModal3" class="reveal-modal">
+<div id="AccoutDetails_Modal" class="reveal-modal">
     <p>Account Details</p>
     <div class="infoBox">
     <p>Linked Account Email Adrress: <br />
