@@ -439,11 +439,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			if(!GrabPress::check_permissions_for($page, $action)){
 				GrabPress::abort("Insufficient permissions");
 			}
+                        $plugin_url = GrabPress::grabpress_plugin_url();
 			switch ( $page ) {
 				case 'gp-autoposter':
-                                        $plugin_url = GrabPress::grabpress_plugin_url();
-                                        wp_enqueue_script('gp-catalog', $plugin_url.'/js/catalog.js', array('jquery'));
 					$params = GrabPress::_account_form_default_values($params);
+                                        wp_enqueue_script( 'gp-autoposter', $plugin_url.'/js/autoposter.js' , array("jquery") );
+                                        wp_enqueue_script( 'gp-catalog', $plugin_url.'/js/catalog.js' , array("jquery") );
 					switch ( $action ) {
 						case 'update':
 							GrabPressViews::do_create_feed($params);
@@ -506,6 +507,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
                                                 wp_enqueue_script('gp-catalog', $plugin_url.'/js/catalog.js', array('jquery'));
 					break;
 				case 'gp-dashboard':
+                                        wp_enqueue_script( 'gp-dashboard', $plugin_url.'/js/dashboard.js' , array("jquery") );
 					GrabPressViews::dashboard_management($params);
 					break;
 				case 'gp-template':
