@@ -215,7 +215,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$defaults = array(
 				"sort_by" => "created_at",
 				"providers" => array(),
-				"channels" => array());
+				"channels" => array(),
+                                "page" => 1
+                            );
 			$request = array_merge($defaults, $request);
 
 			if(isset($request["keywords"])){
@@ -240,7 +242,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
 				}
 				$adv_search_params["sort_by"] = $request["sort_by"];
-
+                                $adv_search_params["page"] = $request["page"];
 				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
 				$json_preview = GrabPressAPI::get_json($url_catalog);
@@ -330,7 +332,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$defaults = array(
 				"sort_by" => "created_at",
 				"providers" => array(),
-				"channels" => array());
+				"channels" => array(),
+                                "page" => 1
+                            );
 			$request = array_merge($defaults, $request);
 
 			$providers =  GrabPressAPI::get_providers();			
@@ -376,7 +380,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				unset($adv_search_params["categories"]);
 				unset($adv_search_params["channels"]);
 			}
-
+                        $adv_search_params["page"] = $request["page"];
 			$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
 			$json_preview = GrabPressAPI::get_json($url_catalog);

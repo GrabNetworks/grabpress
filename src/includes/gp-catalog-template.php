@@ -126,6 +126,10 @@
                     <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                <?php } ?>
        </div>
+        <div class="label-tile-one-column">
+            <div id="pagination"></div>
+            <input type="hidden" id="feed_count" val="<?php echo $list_feeds["total_count"]>2000?2000:$list_feeds["total_count"]; ?>" name="feed_count"/>
+        </div>
 	<?php
 			foreach ($list_feeds["results"] as $result) {
 	?>

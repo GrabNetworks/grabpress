@@ -110,7 +110,7 @@ var GrabPressCatalog = {
        }
     },
     /* Search submission from modal window */
-    submitSearch : function(action) {
+    submitSearch : function(action, page) {
         var data = {"action": action,
             "empty": false,
             "keywords": jQuery("#keywords").val(),
@@ -118,11 +118,25 @@ var GrabPressCatalog = {
             "channels": jQuery("#channel-select").val(),
             "sort_by": jQuery('.sort_by:checked').val(),
             "created_before": jQuery("#created_before").val(),
-            "created_after": jQuery("#created_after").val()
+            "created_after": jQuery("#created_after").val(),
+            "page": page
         };
         jQuery.post(ajaxurl, data, function(response) {
             jQuery("#gp-catalog-container").replaceWith(response);
+            jQuery('#page').val(page);
         });
+    },
+    /* Pagination */
+    pagination : function() {
+        jQuery("#pagination").pagination({
+                            items: jQuery("#feed_count").val(),                            
+                            itemsOnPage: 20,
+                            cssStyle: 'light-theme',
+                            displayedPages:10,
+                            onPageClick: function(pagenumber , event){                                                    
+                                    GrabPressCatalog.submitSearch('gp_get_catalog', pagenumber);                                    
+                            }
+                        });
     },
     /* Submiting clear search form */
     submitClear : function(action) {
@@ -306,7 +320,8 @@ var GrabPressCatalog = {
             }catch(err){
 
             }
-        }
+        };
+        GrabPressCatalog.pagination();        
     } ,
     TB_Position : function(){        
         var SpartaPaymentWidth			= 930;
