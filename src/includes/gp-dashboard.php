@@ -308,3 +308,23 @@
         <div class="accordion-right">&nbsp;</div>
     </div>
 </div>
+<?php $plugin_url = GrabPress::grabpress_plugin_url(); ?>
+<script type="text/javascript">
+	jQuery(function($){
+		
+                
+                var clip = new ZeroClipboard($("#d_clip_button"), {
+                    moviePath: "<?php echo $plugin_url; ?>/js/ZeroClipboard.swf"
+                });
+                clip.on('complete', function (client, args) {
+                  debugstr("Copied text to clipboard: " + args.text );
+                });
+                function debugstr(text) {
+                    alert(text);
+                }
+                  
+
+		init();
+
+	});
+</script>
