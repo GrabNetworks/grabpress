@@ -57,7 +57,7 @@
 				</span>
 			</div>
 			<div class="tile-right">
-				<select name="channels[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+				<select name="channels[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" onchange="GrabPressCatalog.doValidation()">
 					<?php
 						foreach ( $list_channels as $record ) {
 							$channel = $record -> category;
@@ -162,9 +162,8 @@
     jQuery(window).load(function () {
 	    GrabPressCatalog.doValidation();
 	    var action = jQuery('#action-catalog');	    
-	    action.val("catalog-search");
-	});
-
+	    action.val("catalog-search");            
+	});    
     jQuery(document).ready(function(){
         GrabPressCatalog.initSearchForm(); 
         GrabPressCatalog.tabSearchForm();    

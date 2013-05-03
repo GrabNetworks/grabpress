@@ -41,7 +41,7 @@
 				</div>
 				<div class="tile-right">
 
-					<select name="channels[]" id="channel-select-preview" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+					<select name="channels[]" id="channel-select-preview" class="channel-select multiselect" multiple="multiple" style="width:500px" onchange="GrabPressCatalog.doValidation(1)">
 						<?php	
 							foreach ( $list_channels as $record ) {
 								$channel = $record -> category;
