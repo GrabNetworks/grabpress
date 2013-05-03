@@ -73,13 +73,13 @@
             float: left;
         }
         .reveal-modal .btn-modal-box a{ 
-            color: #FFF;
+            color: #FFF !important;
             display: block;            
             text-decoration: none;
-            line-height: 33px;
+            line-height: 33px !important;
         }
         .reveal-modal .btn-modal-box a:hover{
-            color: #FF0000;
+            color: #FF0000 !important;
             cursor: default;
         }
         .reveal-modal .btn-modal-box:hover, .global-zeroclipboard-container:hover{
