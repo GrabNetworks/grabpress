@@ -1,5 +1,6 @@
 <form method="post" action="" id="form-dashboard">
-
+<input type="hidden" name="environment" value="<?php echo Grabpress::$environment;?>" id ="environment"/>
+<input type="hidden" name="embed_id" value="<?php echo $embed_id;?>" id ="embed_id"/>
 <div class="wrap" >
 		<img src="<?php echo plugin_dir_url( __FILE__ ).'images/logo.png' ?>"/>
 		<div id="t">
