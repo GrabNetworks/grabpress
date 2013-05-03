@@ -134,7 +134,7 @@ var GrabPressCatalog = {
                             cssStyle: 'light-theme',
                             displayedPages:10,
                             onPageClick: function(pagenumber , event){                                                    
-                                    GrabPressCatalog.submitSearch('gp_get_catalog', pagenumber);                                    
+                                   GrabPressCatalog.submitSearch('gp_get_catalog', pagenumber);                                    
                             }
                         });
     },
@@ -321,7 +321,13 @@ var GrabPressCatalog = {
 
             }
         };
-        GrabPressCatalog.pagination();        
+        
+        if (jQuery("#pagination").length == 0) {
+            jQuery("<div id='pagination'></div>").insertBefore("#gp-catalog-container");                            
+        } else if (jQuery('#pagination').children().length == 0) {
+            GrabPressCatalog.pagination();
+        }
+                
     } ,
     TB_Position : function(){        
         var SpartaPaymentWidth			= 930;
