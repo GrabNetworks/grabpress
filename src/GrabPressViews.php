@@ -516,8 +516,10 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			$user = GrabPressAPI::get_user();
 			$linked = isset($user->email);
-       		$publisher_status = $linked ? "account-linked" : "account-unlinked";
-
+                        $publisher_status = $linked ? "account-linked" : "account-unlinked";  
+                        
+                        $list_providers = GrabPressAPI::get_providers();
+                        
 			print GrabPress::fetch( 'includes/gp-dashboard.php' , array(
 				"messages" => $messages,
 				"pills" => $pills,
@@ -525,7 +527,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				"feeds" => $feeds,
 				"watchlist" => array_splice($watchlist,0,10),
 				"embed_id" => GrabPressAPI::get_connector()->ctp_embed_id,
-				"publisher_status" => $publisher_status
+				"publisher_status" => $publisher_status,
+                                "list_providers" => $list_providers                            
 				));
 		}
 

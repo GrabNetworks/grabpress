@@ -237,9 +237,76 @@
                                                                                                 <p>
                                                                                                         Search Criteria
                                                                                                 </p>
+                                                                                                <?php
+                                                                                                $url = array();
+                                                                                                parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
+                                                                                                GrabPress::_escape_params_template($url);
+                                                                                                ?>
                                                                                                 <p>
-                                                                                                        Grab Video Categories:<br />
-                                                                                                        Keywords:
+                                                                                                        Grab Video Categories: 
+                                                                                                        <?php 
+                                                                                                        if($url['amp;categories'] == ""){
+                                                                                                            echo "All Video Categories";
+                                                                                                        }else {
+                                                                                                            echo $url['amp;categories'];
+                                                                                                        }
+                                                                                                        ?>
+                                                                                                        <br />
+                                                                                                        Keywords(All):
+                                                                                                        <?php 
+                                                                                                            if(isset($url['keywords_and'])){
+                                                                                                                    $keywords_and_num = strlen($url['keywords_and']);
+                                                                                                                    $keywords_and = $url['keywords_and'];
+                                                                                                                    echo $keywords_and = ($keywords_and_num > 15) ? substr($keywords_and,0,15)."..." : $keywords_and;
+                                                                                                            }
+                                                                                                        ?>
+                                                                                                        <br />
+                                                                                                        Excluded Keywords:
+                                                                                                        <?php 
+                                                                                                            if(isset($url['amp;keywords_not'])){
+                                                                                                                    $keywords_not_num = strlen($url['amp;keywords_not']);
+                                                                                                                    $keywords_not = $url['amp;keywords_not'];
+                                                                                                                    echo ($keywords_not_num > 15) ? substr($keywords_not,0,15)."..." : $keywords_not;
+                                                                                                            }
+                                                                                                        ?>
+                                                                                                        <br />
+                                                                                                        Keywords(Any):
+                                                                                                        <?php 
+                                                                                                            if(isset($url['amp;keywords'])){
+                                                                                                                    $keywords_or_num = strlen($url['amp;keywords']);
+                                                                                                                    $keywords = $url['amp;keywords'];
+                                                                                                                    echo $keywords_or = ($keywords_or_num > 15) ? substr($keywords,0,15)."..." : $keywords;
+                                                                                                            }
+                                                                                                        ?>
+                                                                                                        <br />
+                                                                                                        Keywords(Exact Phrase):
+                                                                                                        <?php 
+                                                                                                            if(isset($url['amp;keywords_phrase'])){
+                                                                                                                    $keywords_phrase_num = strlen($url['amp;keywords_phrase']);
+                                                                                                                    $keywords_phrase = $url['amp;keywords_phrase'];
+                                                                                                                    echo $keywords_phrase = ($keywords_phrase_num > 15) ? substr($keywords_phrase,0,15)."..." : $keywords_phrase;
+                                                                                                            }
+                                                                                                        ?>
+                                                                                                        <br />
+                                                                                                        Content Providers: 
+                                                                                                            <?php                                                                                                            
+                                                                                                            $providers = explode( ',' , $url["amp;providers"] ); // providers chosen by the user
+                                                                                                            $providers_selected = count($providers);
+                                                                                                            if ($url["amp;providers"] == "") {
+                                                                                                                 echo "All providers";
+                                                                                                            }
+                                                                                                            else{	
+                                                                                                                    foreach ( $list_providers as $record_provider ) {
+                                                                                                                            $provider = $record_provider->provider;
+                                                                                                                            $provider_name = $provider->name;
+                                                                                                                            $provider_id = $provider->id;											
+                                                                                                                            if(in_array( $provider_id, $providers )) {											
+                                                                                                                                    echo $provider_name.', ';									
+                                                                                                                            }
+                                                                                                                    }
+                                                                                                            }  
+                                                                                                           ?>
+                                                                                                        <br />
                                                                                                 </p>
                                                                                                 
                                                                                                 <br/><br/>
@@ -248,10 +315,17 @@
                                                                                                 </p>
                                                                                                 <p>
                                                                                                         Schedule: <?php echo $schedule?> (last update: <?php echo $feed->updated_at; ?>)<br />
-                                                                                                        Maximun Posts per update: <?php echo $feed->posts_per_update; ?><br />
-                                                                                                        Post Categories: <br />
-                                                                                                        Author: <br />
-                                                                                                        Delivery Mode: 
+                                                                                                        Maximun Posts per update: <?php echo $feed->posts_per_update; ?><br />                                                                                                        
+                                                                                                        Post Categories:
+                                                                                                        <?php 
+                                                                                                            foreach ( $feed->custom_options->category as $categ ) {
+                                                                                                                echo $categ ;
+                                                                                                            } 
+                                                                                                        ?>
+                                                                                                        <br />
+                                                                                                        Author: <?php  the_author_meta( 'nickname' , $feed->custom_options->author_id ); ?>
+                                                                                                        <br />
+                                                                                                        Delivery Mode: <?php echo $publish = $feed->custom_options->publish ? "Publish Posts Automatically" : "Draft"; ?>
                                                                                                 </p>
                                                                                             </div>
                                                                                             <div class="btn-modal-box">
