@@ -166,7 +166,7 @@
                 GrabPressCatalog.doValidation(1);
             });
             jQuery(document).ready(function(){                    
-                GrabPressCatalog.initSearchForm();                
+                GrabPressCatalog.initSearchForm();
             });
 	</script>
 

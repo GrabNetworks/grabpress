@@ -216,7 +216,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				"sort_by" => "created_at",
 				"providers" => array(),
 				"channels" => array(),
-                                "page" => 1
+                                "page_no" => 1
                             );
 			$request = array_merge($defaults, $request);
 
@@ -242,7 +242,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$adv_search_params["categories"] = is_array($request["channels"])?join($request["channels"],","):$request["channels"];
 				}
 				$adv_search_params["sort_by"] = $request["sort_by"];
-                                $adv_search_params["page"] = $request["page"];
+                                $adv_search_params["page"] = $request["page_no"];
 				$url_catalog = GrabPress::generate_catalog_url($adv_search_params);
 
 				$json_preview = GrabPressAPI::get_json($url_catalog);
@@ -262,7 +262,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					"list_providers" => GrabPressAPI::get_providers(),
 					"list_feeds" => $list_feeds,
 					"providers" => $request["providers"],
-					"channels" => $request["channels"]
+					"channels" => $request["channels"],                                        
 					));
 		}
 
@@ -386,7 +386,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$json_preview = GrabPressAPI::get_json($url_catalog);
 
 			$list_feeds = json_decode($json_preview, true);	
-			
+
 			if(empty($list_feeds["results"])){
 				GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
 			}	

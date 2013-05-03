@@ -323,7 +323,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			if($unlimited){
 				$url .= "&limit=-1";
 			}else{
-				$url .= "&offset=".($options['page']*20)."&limit=20";	
+				$url .= "&offset=".(($options['page']-1)*20)."&limit=20";	
 			}
 			return $url;
 		}
