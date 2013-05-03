@@ -220,13 +220,57 @@
 												?>		
 											</td>
 											<td>
-												<?php if(GrabPress::check_permissions_for("gp-autopost")){?>
-												<a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
-													edit
-												</a>
+												
+                                                                                            <a href="#" class="big-link" data-reveal-id="FeedDetails_Modal_<?php echo $feedId; ?>" data-animation="fade">
+                                                                                                details
+                                                                                            </a>
 												<i class="icon-pencil"></i>
-												<?php } ?>
+												
 											</td>
+                                                                                        <div id="FeedDetails_Modal_<?php echo $feedId; ?>" class="reveal-modal">
+                                                                                            <p>Feed Details</p>
+                                                                                            <div class="infoBox">
+                                                                                                <h2 style="text-align:center;"><?php echo urldecode($feed->name); ?></h2>	
+												<p style="text-align:center;">
+                                                                                                        Created at: <?php echo $feed->created_at; ?>
+                                                                                                </p>
+                                                                                                <p>
+                                                                                                        Search Criteria
+                                                                                                </p>
+                                                                                                <p>
+                                                                                                        Grab Video Categories:<br />
+                                                                                                        Keywords:
+                                                                                                </p>
+                                                                                                
+                                                                                                <br/><br/>
+                                                                                                <p>
+                                                                                                        Publish Settings
+                                                                                                </p>
+                                                                                                <p>
+                                                                                                        Schedule: <?php echo $schedule?> (last update: <?php echo $feed->updated_at; ?>)<br />
+                                                                                                        Maximun Posts per update: <?php echo $feed->posts_per_update; ?><br />
+                                                                                                        Post Categories: <br />
+                                                                                                        Author: <br />
+                                                                                                        Delivery Mode: 
+                                                                                                </p>
+                                                                                            </div>
+                                                                                            <div class="btn-modal-box">
+                                                                                                <div class="accordion-left">&nbsp;</div>
+                                                                                                <div class="accordion-center"><a class="close-reveal-modal" href="#">Back to Dashboard</a></div>
+                                                                                                <div class="accordion-right">&nbsp;</div>
+                                                                                            </div>
+                                                                                            <?php if(GrabPress::check_permissions_for("gp-autopost")){?>
+                                                                                            <div class="btn-modal-box">
+                                                                                                <div class="accordion-left">&nbsp;</div>
+                                                                                                <div class="accordion-center">
+                                                                                                    <a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
+													edit
+                                                                                                    </a>
+                                                                                                </div>
+                                                                                                <div class="accordion-right">&nbsp;</div>
+                                                                                            </div>												
+                                                                                            <?php } ?>
+                                                                                        </div>
 										</tr>
 										<?php
 											}
