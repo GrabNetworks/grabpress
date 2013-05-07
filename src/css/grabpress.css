@@ -613,6 +613,7 @@ line-height: 24px;
 #t #b .accordion-group {
     border: 1px solid #2B2B2B;
     border-top:none\9;
+    *border-bottom: none;
 }
 #t #b:last-child .accordion-group {
     border: 1px solid #2B2B2B;
@@ -623,7 +624,7 @@ line-height: 24px;
     text-decoration: none;
     outline: none;    
     display:block;
-    width:inherit\9;   
+   /* width:inherit\9;   */
 }
 #t #b a.accordion-toggle:hover{
     color: #FF0000;
@@ -707,9 +708,9 @@ line-height: 24px;
 #t #b tr.odd { background: #C0C0C0} 
 #t #b .accordion-left {
     background: url("../images/accordion_left.png") repeat scroll 0 0 #000000;
-    *background: none;
+   /*background: none;*/
     width: 3px;
-    *display: none;
+    /*display: none;*/
     height:33px\9;
     float:left\9;
 }
@@ -727,15 +728,17 @@ line-height: 24px;
 }
 #t #b .accordion-heading {   
    height:33px\9;
-   *height:auto;
+   /*height:auto;*/
    margin-left:-2px\9; 
    margin-top:-1px\9;
    margin-right:0px\9;
+   *margin-right:-1px;
+   *margin-bottom: 0px;
    filter: 
-        progid:DXImageTransform.Microsoft.Shadow(color=#2b2b2b,direction=0,strength=1), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#2b2b2b,direction=90,strength=1), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#2b2b2b,direction=180,strength=1), 
-        progid:DXImageTransform.Microsoft.Shadow(color=#2b2b2b,direction=270,strength=1);
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=0,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=90,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=180,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=270,strength=1);   
 }
 #t #b:last-child .accordion-heading {
    height:auto;
@@ -754,14 +757,13 @@ line-height: 24px;
 }
 #t #b .accordion-right {
     background: url("../images/accordion_right.png") repeat scroll 0 0 #000000;
-    *background: none;
-    width: 3px;
-    *display: none;
+    /*background: none;*/
+    width: 3px;    
     height:33px\9;
     float:right\9;
     position:relative;
-    top:-32px;
-    right:-1px;
+    top:-32px;    
+    /*right:-1px;    */
 }
 #t #b:last-child .accordion-right {
     float:none;
@@ -788,10 +790,9 @@ line-height: 24px;
 #t #b .accordion-toggle {
     cursor: default;
 }
-#t #b .accordion-heading .accordion-toggle {
-    display: block;
+#t #b .accordion-heading a.accordion-toggle {    
     padding: 4px 15px;
-    height: 25px;
+    height: 25px;  
 }
 #t #b .collapse {
     overflow: hidden;
