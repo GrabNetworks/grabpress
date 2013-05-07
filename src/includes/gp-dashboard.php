@@ -317,10 +317,15 @@
                                                                                                         Schedule: <?php echo $schedule?> (last update: <?php echo $feed->updated_at; ?>)<br />
                                                                                                         Maximun Posts per update: <?php echo $feed->posts_per_update; ?><br />                                                                                                        
                                                                                                         Post Categories:
-                                                                                                        <?php 
-                                                                                                            foreach ( $feed->custom_options->category as $categ ) {
-                                                                                                                echo $categ ;
-                                                                                                            } 
+                                                                                                        <?php
+                                                                                                            $category_list_length = count( $feed->custom_options->category );
+                                                                                                            if($category_list_length == 0){
+                                                                                                                echo "Uncategorized";
+                                                                                                            }else{
+                                                                                                                foreach ( $feed->custom_options->category as $categ ) {
+                                                                                                                    echo $categ ;
+                                                                                                                }
+                                                                                                            }                                                                                                             
                                                                                                         ?>
                                                                                                         <br />
                                                                                                         Author: <?php  the_author_meta( 'nickname' , $feed->custom_options->author_id ); ?>
