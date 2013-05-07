@@ -104,6 +104,13 @@
 			<input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
 			<input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
 		</div>	
+		 	<?php if($empty == "false"){ ?>
+		 	<div class="label-tile-one-column">
+				
+				<input type="hidden" id="feed_count" value="<?php echo ($list_feeds["total_count"]>2000)?'2000':$list_feeds["total_count"]; ?>" name="feed_count"/>
+                                <input type="hidden" id="page" value="0" name="page"/>
+			</div>
+			<?php }?>
 		<?php
                     if (count($list_feeds["results"])) {
 			foreach ($list_feeds["results"] as $result) {
@@ -159,7 +166,7 @@
                 GrabPressCatalog.doValidation(1);
             });
             jQuery(document).ready(function(){                    
-                GrabPressCatalog.initSearchForm();                
+                GrabPressCatalog.initSearchForm();
             });
 	</script>
 
