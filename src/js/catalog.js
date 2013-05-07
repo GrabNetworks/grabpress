@@ -129,6 +129,7 @@ var GrabPressCatalog = {
             jQuery(content).replaceWith(response);
             if(page == undefined){
                 GrabPressCatalog.pagination(action);
+                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
             }
         });        
     },
@@ -144,17 +145,18 @@ var GrabPressCatalog = {
             jQuery('#pagination').css('top','260px');
             jQuery('#pagination').css('left','10px');
             GrabPressCatalog.pagination(action);
-        }
-        if (jQuery("#pagination-bottom").length == 0) {
-            var content = "#gp-catalog-container";
-            if (jQuery("#action-catalog").val() == 'catalog-search') {
-                content = "#form-catalog-page";
+        
+            if (jQuery("#pagination-bottom").length == 0) {
+                var content = "#gp-catalog-container";
+                if (jQuery("#action-catalog").val() == 'catalog-search') {
+                    content = "#form-catalog-page";
+                }
+                jQuery("<div id='pagination-bottom'></div>").insertAfter(content);            
+                jQuery('#pagination-bottom').css('margin-top','10px');
+                jQuery("#pagination-bottom").addClass('light-theme');            
+                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
             }
-            jQuery("<div id='pagination-bottom'></div>").insertAfter(content);            
-            jQuery('#pagination-bottom').css('margin-top','10px');
-            jQuery("#pagination-bottom").addClass('light-theme');            
-            jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
-        } 
+        }
         /* don't show pagination buttons when there is just one page */
         if (jQuery('#pagination').children().length < 4 && jQuery('#pagination-bottom').children().length < 4) {
             jQuery("#pagination").html('');
