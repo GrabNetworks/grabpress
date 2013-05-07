@@ -189,7 +189,9 @@ var GrabPressDashboard = GrabPressDashboard || {
             jQuery("#t #b #btn-account-settings .accordion-left").css('top','0');
             jQuery("#t #b #btn-account-settings .accordion-right").css('top','0');
 
-        }  
+        } else if ( jQuery.browser.version != 7.0) {
+            jQuery("#t #b .accordion-right").css("right", "-1px");
+        } 
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
