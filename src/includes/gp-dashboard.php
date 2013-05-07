@@ -248,7 +248,7 @@
                                                                                                         if($url['amp;categories'] == ""){
                                                                                                             echo "All Video Categories";
                                                                                                         }else {
-                                                                                                            echo $url['amp;categories'];
+                                                                                                            echo str_replace(',', ', ', $url['amp;categories']);
                                                                                                         }
                                                                                                         ?>
                                                                                                         <br />
@@ -323,7 +323,7 @@
                                                                                                                 echo "Uncategorized";
                                                                                                             }else{
                                                                                                                 foreach ( $feed->custom_options->category as $categ ) {
-                                                                                                                    echo $categ ;
+                                                                                                                    echo $categ.', ';
                                                                                                                 }
                                                                                                             }                                                                                                             
                                                                                                         ?>
