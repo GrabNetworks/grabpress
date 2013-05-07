@@ -127,8 +127,9 @@ var GrabPressCatalog = {
         }
         jQuery.post(ajaxurl, data, function(response) {
             jQuery(content).replaceWith(response);
-            if(page == undefined){
+            if(page == undefined){                
                 GrabPressCatalog.pagination(action);
+                jQuery("#pagination-bottom").children().remove();
                 jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
             }
         });        
@@ -157,14 +158,10 @@ var GrabPressCatalog = {
                 jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
             }
         }
-        /* don't show pagination buttons when there is just one page */
-        if (jQuery('#pagination').children().length < 4 && jQuery('#pagination-bottom').children().length < 4) {
-            jQuery("#pagination").html('');
-            jQuery("#pagination-bottom").html('');
-        }
+        
     },
     /* Pagination */
-    pagination : function(action) {        
+    pagination : function(action) {  
         jQuery("#pagination").pagination({
                             items: jQuery("#feed_count").val(),                            
                             itemsOnPage: 20,
@@ -175,7 +172,12 @@ var GrabPressCatalog = {
                                 jQuery("#pagination-bottom").children().remove();
                                 jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
                             }
-                        });        
+                        });  
+        /* don't show pagination buttons when there is just one page */
+        if (jQuery('#pagination').children().length < 4 ) {
+            jQuery("#pagination").children().remove();
+            jQuery("#pagination-bottom").children().remove();
+        }
     },
     /* Submiting clear search form */
     submitClear : function(action) {
@@ -190,6 +192,9 @@ var GrabPressCatalog = {
         };
         jQuery.post(ajaxurl, data, function(response) {
             jQuery("#gp-catalog-container").replaceWith(response);
+            GrabPressCatalog.pagination(action);
+            jQuery("#pagination-bottom").children().remove();
+            jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
         });
     },
     /* Binding clear search event */
@@ -211,6 +216,8 @@ var GrabPressCatalog = {
             jQuery("#created_before").val("");
             jQuery("#created_after").val("");
             GrabPressCatalog.submitClear(action);
+            jQuery("#pagination").children().remove();
+            jQuery("#pagination-bottom").children().remove();
         });
     },
     /* Insert in post ajax search form initializations and bindings */
