@@ -300,36 +300,28 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
                 Keywords(All):
                 <?php 
                     if(isset($url['keywords_and'])){
-                            $keywords_and_num = strlen($url['keywords_and']);
-                            $keywords_and = $url['keywords_and'];
-                            echo $keywords_and = ($keywords_and_num > 15) ? substr($keywords_and,0,15)."..." : $keywords_and;
+                        echo str_replace(',', ', ', $url['keywords_and']);
                     }
                 ?>
                 <br />
                 Excluded Keywords:
                 <?php 
                     if(isset($url['amp;keywords_not'])){
-                            $keywords_not_num = strlen($url['amp;keywords_not']);
-                            $keywords_not = $url['amp;keywords_not'];
-                            echo ($keywords_not_num > 15) ? substr($keywords_not,0,15)."..." : $keywords_not;
+                        echo str_replace(',', ', ', $url['amp;keywords_not']);
                     }
                 ?>
                 <br />
                 Keywords(Any):
                 <?php 
                     if(isset($url['amp;keywords'])){
-                            $keywords_or_num = strlen($url['amp;keywords']);
-                            $keywords = $url['amp;keywords'];
-                            echo $keywords_or = ($keywords_or_num > 15) ? substr($keywords,0,15)."..." : $keywords;
+                        echo str_replace(',', ', ', $url['amp;keywords']);
                     }
                 ?>
                 <br />
                 Keywords(Exact Phrase):
                 <?php 
                     if(isset($url['amp;keywords_phrase'])){
-                            $keywords_phrase_num = strlen($url['amp;keywords_phrase']);
-                            $keywords_phrase = $url['amp;keywords_phrase'];
-                            echo $keywords_phrase = ($keywords_phrase_num > 15) ? substr($keywords_phrase,0,15)."..." : $keywords_phrase;
+                        echo str_replace(',', ', ', $url['amp;keywords_phrase']);
                     }
                 ?>
                 <br />
