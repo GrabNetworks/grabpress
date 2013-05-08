@@ -269,8 +269,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$data = htmlentities(stripslashes($data), ENT_QUOTES);
 			}
 		}
-
-		static function fetch( $file = null, $data = array() ) {
+                
+                static function fetch( $file = null, $data = array() ) {
 			GrabPress::_escape_params_template($data);
 						
 			GrabPress::log();
