@@ -180,7 +180,7 @@
 												$schedule = $feed->update_frequency;
 												$schedule = $times[$schedule];
 												$rowColor = ($n % 2) == 1 ? "odd" : "even";
-										?>
+										?>                                                                            
 										<tr id="tr-<?php echo $feedId; ?>" class="<?php echo $rowColor; ?>">
 											<td>
 												<?php 
@@ -226,131 +226,8 @@
                                                                                             </a>
 												<i class="icon-pencil"></i>
 												
-											</td>
-                                                                                        <div id="FeedDetails_Modal_<?php echo $feedId; ?>" class="reveal-modal">
-                                                                                            <p>Feed Details</p>
-                                                                                            <div class="infoBox">
-                                                                                                <h2 style="text-align:center;"><?php echo urldecode($feed->name); ?></h2>	
-												<p style="text-align:center;">
-                                                                                                        Created at: <?php echo $feed->created_at; ?>
-                                                                                                </p>
-                                                                                                <p>
-                                                                                                        Search Criteria
-                                                                                                </p>
-                                                                                                <?php
-                                                                                                $url = array();
-                                                                                                parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
-                                                                                                GrabPress::_escape_params_template($url);
-                                                                                                ?>
-                                                                                                <p>
-                                                                                                        Grab Video Categories: 
-                                                                                                        <?php 
-                                                                                                        if($url['amp;categories'] == ""){
-                                                                                                            echo "All Video Categories";
-                                                                                                        }else {
-                                                                                                            echo str_replace(',', ', ', $url['amp;categories']);
-                                                                                                        }
-                                                                                                        ?>
-                                                                                                        <br />
-                                                                                                        Keywords(All):
-                                                                                                        <?php 
-                                                                                                            if(isset($url['keywords_and'])){
-                                                                                                                    $keywords_and_num = strlen($url['keywords_and']);
-                                                                                                                    $keywords_and = $url['keywords_and'];
-                                                                                                                    echo $keywords_and = ($keywords_and_num > 15) ? substr($keywords_and,0,15)."..." : $keywords_and;
-                                                                                                            }
-                                                                                                        ?>
-                                                                                                        <br />
-                                                                                                        Excluded Keywords:
-                                                                                                        <?php 
-                                                                                                            if(isset($url['amp;keywords_not'])){
-                                                                                                                    $keywords_not_num = strlen($url['amp;keywords_not']);
-                                                                                                                    $keywords_not = $url['amp;keywords_not'];
-                                                                                                                    echo ($keywords_not_num > 15) ? substr($keywords_not,0,15)."..." : $keywords_not;
-                                                                                                            }
-                                                                                                        ?>
-                                                                                                        <br />
-                                                                                                        Keywords(Any):
-                                                                                                        <?php 
-                                                                                                            if(isset($url['amp;keywords'])){
-                                                                                                                    $keywords_or_num = strlen($url['amp;keywords']);
-                                                                                                                    $keywords = $url['amp;keywords'];
-                                                                                                                    echo $keywords_or = ($keywords_or_num > 15) ? substr($keywords,0,15)."..." : $keywords;
-                                                                                                            }
-                                                                                                        ?>
-                                                                                                        <br />
-                                                                                                        Keywords(Exact Phrase):
-                                                                                                        <?php 
-                                                                                                            if(isset($url['amp;keywords_phrase'])){
-                                                                                                                    $keywords_phrase_num = strlen($url['amp;keywords_phrase']);
-                                                                                                                    $keywords_phrase = $url['amp;keywords_phrase'];
-                                                                                                                    echo $keywords_phrase = ($keywords_phrase_num > 15) ? substr($keywords_phrase,0,15)."..." : $keywords_phrase;
-                                                                                                            }
-                                                                                                        ?>
-                                                                                                        <br />
-                                                                                                        Content Providers: 
-                                                                                                            <?php                                                                                                            
-                                                                                                            $providers = explode( ',' , $url["amp;providers"] ); // providers chosen by the user
-                                                                                                            $providers_selected = count($providers);
-                                                                                                            if ($url["amp;providers"] == "") {
-                                                                                                                 echo "All providers";
-                                                                                                            }
-                                                                                                            else{	
-                                                                                                                    foreach ( $list_providers as $record_provider ) {
-                                                                                                                            $provider = $record_provider->provider;
-                                                                                                                            $provider_name = $provider->name;
-                                                                                                                            $provider_id = $provider->id;											
-                                                                                                                            if(in_array( $provider_id, $providers )) {											
-                                                                                                                                    echo $provider_name.', ';									
-                                                                                                                            }
-                                                                                                                    }
-                                                                                                            }  
-                                                                                                           ?>
-                                                                                                        <br />
-                                                                                                </p>
-                                                                                                
-                                                                                                <br/><br/>
-                                                                                                <p>
-                                                                                                        Publish Settings
-                                                                                                </p>
-                                                                                                <p>
-                                                                                                        Schedule: <?php echo $schedule?> (last update: <?php echo $feed->updated_at; ?>)<br />
-                                                                                                        Maximun Posts per update: <?php echo $feed->posts_per_update; ?><br />                                                                                                        
-                                                                                                        Post Categories:
-                                                                                                        <?php
-                                                                                                            $category_list_length = count( $feed->custom_options->category );
-                                                                                                            if($category_list_length == 0){
-                                                                                                                echo "Uncategorized";
-                                                                                                            }else{
-                                                                                                                foreach ( $feed->custom_options->category as $categ ) {
-                                                                                                                    echo $categ.', ';
-                                                                                                                }
-                                                                                                            }                                                                                                             
-                                                                                                        ?>
-                                                                                                        <br />
-                                                                                                        Author: <?php  the_author_meta( 'nickname' , $feed->custom_options->author_id ); ?>
-                                                                                                        <br />
-                                                                                                        Delivery Mode: <?php echo $publish = $feed->custom_options->publish ? "Publish Posts Automatically" : "Draft"; ?>
-                                                                                                </p>
-                                                                                            </div>
-                                                                                            <div class="btn-modal-box">
-                                                                                                <div class="accordion-left">&nbsp;</div>
-                                                                                                <div class="accordion-center"><a class="close-reveal-modal" href="#">Back to Dashboard</a></div>
-                                                                                                <div class="accordion-right">&nbsp;</div>
-                                                                                            </div>
-                                                                                            <?php if(GrabPress::check_permissions_for("gp-autopost")){?>
-                                                                                            <div class="btn-modal-box">
-                                                                                                <div class="accordion-left">&nbsp;</div>
-                                                                                                <div class="accordion-center">
-                                                                                                    <a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
-													edit
-                                                                                                    </a>
-                                                                                                </div>
-                                                                                                <div class="accordion-right">&nbsp;</div>
-                                                                                            </div>												
-                                                                                            <?php } ?>
-                                                                                        </div>
-										</tr>
+											</td>                                                                                        
+										</tr>                                                                                
 										<?php
 											}
 										?>
@@ -390,6 +267,135 @@
 </div>
 
 </form>
+<?php
+for ( $n = 0; $n < $num_feeds; $n++ ) {
+    $feed = $feeds[$n]->feed;
+    $feedId = $feed->id;
+?>
+<div id="FeedDetails_Modal_<?php echo $feedId; ?>" class="reveal-modal">
+    <p>Feed Details</p>
+    <div class="infoBox">
+        <h2 style="text-align:center;"><?php echo urldecode($feed->name); ?></h2>	
+        <p style="text-align:center;">
+                Created at: <?php echo $feed->created_at; ?>
+        </p>
+        <p>
+                Search Criteria
+        </p>
+        <?php
+        $url = array();
+        parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
+        GrabPress::_escape_params_template($url);
+        ?>
+        <p>
+                Grab Video Categories: 
+                <?php 
+                if($url['amp;categories'] == ""){
+                    echo "All Video Categories";
+                }else {
+                    echo str_replace(',', ', ', $url['amp;categories']);
+                }
+                ?>
+                <br />
+                Keywords(All):
+                <?php 
+                    if(isset($url['keywords_and'])){
+                            $keywords_and_num = strlen($url['keywords_and']);
+                            $keywords_and = $url['keywords_and'];
+                            echo $keywords_and = ($keywords_and_num > 15) ? substr($keywords_and,0,15)."..." : $keywords_and;
+                    }
+                ?>
+                <br />
+                Excluded Keywords:
+                <?php 
+                    if(isset($url['amp;keywords_not'])){
+                            $keywords_not_num = strlen($url['amp;keywords_not']);
+                            $keywords_not = $url['amp;keywords_not'];
+                            echo ($keywords_not_num > 15) ? substr($keywords_not,0,15)."..." : $keywords_not;
+                    }
+                ?>
+                <br />
+                Keywords(Any):
+                <?php 
+                    if(isset($url['amp;keywords'])){
+                            $keywords_or_num = strlen($url['amp;keywords']);
+                            $keywords = $url['amp;keywords'];
+                            echo $keywords_or = ($keywords_or_num > 15) ? substr($keywords,0,15)."..." : $keywords;
+                    }
+                ?>
+                <br />
+                Keywords(Exact Phrase):
+                <?php 
+                    if(isset($url['amp;keywords_phrase'])){
+                            $keywords_phrase_num = strlen($url['amp;keywords_phrase']);
+                            $keywords_phrase = $url['amp;keywords_phrase'];
+                            echo $keywords_phrase = ($keywords_phrase_num > 15) ? substr($keywords_phrase,0,15)."..." : $keywords_phrase;
+                    }
+                ?>
+                <br />
+                Content Providers: 
+                    <?php                                                                                                            
+                    $providers = explode( ',' , $url["amp;providers"] ); // providers chosen by the user
+                    $providers_selected = count($providers);
+                    if ($url["amp;providers"] == "") {
+                         echo "All providers";
+                    }
+                    else{	
+                            foreach ( $list_providers as $record_provider ) {
+                                    $provider = $record_provider->provider;
+                                    $provider_name = $provider->name;
+                                    $provider_id = $provider->id;											
+                                    if(in_array( $provider_id, $providers )) {											
+                                            echo $provider_name.', ';									
+                                    }
+                            }
+                    }  
+                   ?>
+                <br />
+        </p>
+
+        <br/><br/>
+        <p>
+                Publish Settings
+        </p>
+        <p>
+                Schedule: <?php echo $schedule?> (last update: <?php echo $feed->updated_at; ?>)<br />
+                Maximun Posts per update: <?php echo $feed->posts_per_update; ?><br />                                                                                                        
+                Post Categories:
+                <?php
+                    $category_list_length = count( $feed->custom_options->category );
+                    if($category_list_length == 0){
+                        echo "Uncategorized";
+                    }else{
+                        foreach ( $feed->custom_options->category as $categ ) {
+                            echo $categ.', ';
+                        }
+                    }                                                                                                             
+                ?>
+                <br />
+                Author: <?php  the_author_meta( 'nickname' , $feed->custom_options->author_id ); ?>
+                <br />
+                Delivery Mode: <?php echo $publish = $feed->custom_options->publish ? "Publish Posts Automatically" : "Draft"; ?>
+        </p>
+    </div>
+    <div class="btn-modal-box">
+        <div class="accordion-left">&nbsp;</div>
+        <div class="accordion-center"><a class="close-reveal-modal" href="#">Back to Dashboard</a></div>
+        <div class="accordion-right">&nbsp;</div>
+    </div>
+    <?php if(GrabPress::check_permissions_for("gp-autopost")){?>
+    <div class="btn-modal-box">
+        <div class="accordion-left">&nbsp;</div>
+        <div class="accordion-center">
+            <a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="btn-update-feed">						
+                edit
+            </a>
+        </div>
+        <div class="accordion-right">&nbsp;</div>
+    </div>												
+    <?php } ?>
+</div>
+<?php } ?>
 <div id="AccoutDetails_Modal" class="reveal-modal">
     <p>Account Details</p>
     <div class="infoBox">
