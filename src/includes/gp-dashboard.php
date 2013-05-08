@@ -298,7 +298,7 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
                 }
                 ?>
                 <br />
-                Keywords(All):
+                Keywords (All):
                 <?php 
                     if(isset($url['keywords_and'])){
                         echo str_replace(',', ', ', $url['keywords_and']);
@@ -312,14 +312,14 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
                     }
                 ?>
                 <br />
-                Keywords(Any):
+                Keywords (Any):
                 <?php 
                     if(isset($url['amp;keywords'])){
                         echo str_replace(',', ', ', $url['amp;keywords']);
                     }
                 ?>
                 <br />
-                Keywords(Exact Phrase):
+                Keywords (Exact Phrase):
                 <?php 
                     if(isset($url['amp;keywords_phrase'])){
                         echo str_replace(',', ', ', $url['amp;keywords_phrase']);
@@ -346,8 +346,7 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
                    ?>
                 <br />
         </p>
-
-        <br/><br/>
+        
         <p>
                 Publish Settings
         </p>
