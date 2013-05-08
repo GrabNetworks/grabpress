@@ -549,6 +549,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
 			wp_enqueue_script( 'gp-nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
 			wp_enqueue_script( 'jquery-simplePagination', $plugin_url.'/js/jquery.simplePagination.js' , array("jquery") );
+                        
                         wp_enqueue_script( 'jquery-reveal', $plugin_url.'/js/ui/jquery.reveal.js' , array("jquery") );
                         wp_enqueue_script( 'jquery-copy', $plugin_url.'/js/ZeroClipboard.js' , array("jquery") );
 

@@ -81,7 +81,7 @@
             text-decoration: none;
             line-height: 33px !important;
         }
-        .reveal-modal .btn-modal-box a:hover{
+        .reveal-modal .btn-modal-box .accordion-center a:hover{
             color: #FF0000 !important;
             cursor: default;
         }        
