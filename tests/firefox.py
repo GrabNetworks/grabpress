@@ -28,7 +28,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginAdminRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys(r"admin")
+        driver.find_element_by_id("user_login").send_keys("admin")
         driver.find_element_by_id("user_pass").send_keys("administrator")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Admin Role")
@@ -36,7 +36,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginAuthorRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys(r"author")
+        driver.find_element_by_id("user_login").send_keys("author")
         driver.find_element_by_id("user_pass").send_keys("author")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Author Role")
@@ -87,7 +87,7 @@ class CatalogTests(GrabPressAutomation):
         GrabPressAutomation.Login(self)
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
         driver.find_element_by_id("keywords").clear()
-        driver.find_element_by_id("keywords").send_keys("\"Spam Fries, Bacon Taco and Other Wacky Stadium Foods\"")
+        driver.find_element_by_id("keywords").send_keys("Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
         driver.find_element_by_id("update-search").click()
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Forget hot dogs, nachos, and normal ball park")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*$")
