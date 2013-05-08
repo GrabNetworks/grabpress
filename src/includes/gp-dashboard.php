@@ -1,5 +1,6 @@
 <form method="post" action="" id="form-dashboard">
-
+<input type="hidden" name="environment" value="<?php echo Grabpress::$environment;?>" id ="environment"/>
+<input type="hidden" name="embed_id" value="<?php echo $embed_id;?>" id ="embed_id"/>
 <div class="wrap" >
 		<img src="<?php echo plugin_dir_url( __FILE__ ).'images/logo.png' ?>"/>
 		<div id="t">
@@ -428,228 +429,11 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
         <div class="accordion-right">&nbsp;</div>
     </div>
 </div>
-<?php $plugin_url = GrabPress::grabpress_plugin_url(); ?>
+<!--javascript for copy to clipboard-->
 <script type="text/javascript">
-	jQuery(function($){
-		//fix for watchlist min-width and max-width for ie9 and ie10
-                if ($.browser.msie && $.browser.version > 8.0) {
-                    $("#t #b .watchlist").css('max-width','1392px');
-                    $("#t #b .watchlist").css('min-width','1072px');
-                    $("#t #b #btn-account-settings a").hover(function(){
-                            $(this).css('margin-left', '0');
-                    });
-                    $("#t #b #btn-account-settings .accordion-center").css('filter','none');                    
-                    $("#t #b #btn-account-settings a").css('width','auto');
-                    $("#t #b #btn-account-settings a").css('height','auto');
-                    $("#t #b #btn-account-settings .accordion-center").hover(function(){
-                            $(this).css('width','99px');
-                            $(this).css('padding-right','6px');
-                            $(this).css('margin-left','0');
-                            $(this).css('filter','none');
-                        },
-                        function(){                            
-                            $(this).css('padding-right','3px');                                                        
-                    });
-                    $("#t #b #btn-account-settings .accordion-left").css('top','0');
-                    $("#t #b #btn-account-settings .accordion-right").css('top','0');
-                                        
-                }            
-                var active_video = null;
-		function onload_openvideo(embed_id){
-			if($(".accordion-warning").length == 1){
-				return false;
-			}
-			var embed = "";
-			var anchor = $($(".accordion-toggle[href='#collapse1']")[0]);
-			embed = '<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>';
-			$("#collapse1").find(".accordion-inner").append(embed);
-			active_video = new com.grabnetworks.Player({
-				"id": embed_id,
-				"width": "100%",
-				"height": "100%",
-				"content": anchor.data("guid"),
-				"autoPlay": false
-			});
-			active_video.showEmbed();
-			$("#collapse1").toggleClass("collapse");
-		}
-		function watchlist_binding(embed_id){
-			$('.watchlist-check').bind('click', function(e){
-
-			var id = this.id.replace('watchlist-check-','');
-			var watchlist_check = $(this);
-
-			if(watchlist_check.val() == 1) {
-			  var watchlist = 1;
-			}else{
-			  var watchlist = 0;	    
-			}  
-
-				var data = {
-					action: 'gp_toggle_watchlist',
-					feed_id: id,
-					watchlist: watchlist		        
-				};	    
-
-			  $.post(ajaxurl, data, function(response) {	        
-					var parsedJson = $.parseJSON(response);
-					var accordion = '';
-					if (parsedJson.results != ''){				    	
-						for(var i in parsedJson.results) {
-						  if(!isNaN(i)) {
-						  	var style = "";
-						  	var embed = "";
-						  	var collapse = "collapse";
-						  	if(i != 0){
-						  		style = 'style="display:none;"';
-						  	}else{
-						  		embed = '<div id="gcontainer'+embed_id+'" style="height:100%;"><div id="grabDiv'+embed_id+'"></div></div>';
-						  		collapse = "";
-						  	}
-
-							accordion += '<div class="accordion-group">'
-									+'<div class="accordion-heading">'
-									+'	<div class="accordion-left"></div>'
-									+'	<div class="accordion-center">'
-									+'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
-									+ 		parsedJson.results[i].video.title
-									+'		</a>'
-									+'	</div>'
-									+'	<div class="accordion-right"></div>'
-									+'</div>'
-									+'<div id="collapse' + (i+1) + '" class="accordion-body '+collapse+' in" '+style+'>'
-									+'	<div class="accordion-inner">'
-									+ embed
-									+'	</div>'
-									+'</div>'
-									+'</div>';
-						  }
-						}
-					  		$('#accordion2').html(accordion);
-							active_video = new com.grabnetworks.Player({
-							
-								"id": embed_id,
-								"width": "100%",
-								"height": "100%",
-								"content": parsedJson.results[0].video.guid,
-								"autoPlay": false
-							});
-							$(window).resize();
-							$("#gcontainer"+embed_id+" object").css("visibility","visible");
-
-					}else{
-						accordion += '<div class="accordion-group">'
-										+'<div class="accordion-heading">'
-										+'	<div class="accordion-left"></div>'
-										+'	<div class="accordion-center">'										
-										+'			&nbsp;'
-										+'	</div>'
-										+'	<div class="accordion-right"></div>'
-										+'</div>'
-										+'<div id="collapse1" class="accordion-body" style="height:95px;">'
-										+'	<div class="accordion-inner">'
-										+'		<span class="accordion-warning">Add a feed to your watch list in the Feed Activity panel</span>'
-										+'	</div>'
-										+'</div>'
-										+'</div>';
-					$('#accordion2').html(accordion);
-					}
-					
-					
-
-				if(watchlist_check.val() == 1) {
-				  watchlist_check.val('0');
-				  watchlist_check.addClass('watch-on').removeClass('watch-off');
-				}else{
-				  watchlist_check.val('1');
-				  watchlist_check.addClass('watch-off').removeClass('watch-on');	    
-				} 
-			   });
-					
-		  }); 	
-
-		};
-
-		function accordion_binding(env, embed_id){
-			var accordion_lock = false;
-			$("#form-dashboard").parent().css("margin", "-10px 0 0 -18px");
-
-			$(".accordion-toggle").live("click", function(e){
-				if(accordion_lock){
-					e.preventDefault();
-					return false;
-				}
-				
-				var anchor = $(this);
-				var panel = $(anchor.attr("href"));
-				var openPanels = $(".accordion-group .accordion-body").not(".collapse");
-				// debugger;
-				if(panel.hasClass("collapse")){
-					accordion_lock = true;
-					var monitor = 0;
-					var slideDownCurrent = function(panel, onfinish){
-						var embed = $("#gcontainer"+embed_id).detach();
-						panel.slideDown(400,'linear', function(){
-							panel.find('.accordion-inner').append( embed );
-							panel.toggleClass("collapse");
-							monitor++;
-							onfinish(monitor);
-						});
-					};
-					if(openPanels.length > 0){
-						slideDownCurrent(panel, function(){
-							setTimeout(function(){
-								if(monitor == 2){
-									active_video.loadNewVideo(anchor.data("guid"));
-									accordion_lock = false;
-							}}, 100);
-						});
-						openPanels.slideUp(400,'linear', function(){
-							active_video.hideEmbed();
-							console.log("hide embed");
-							$(this).toggleClass("collapse");
-							monitor++;
-							
-						});
-					}else{
-						slideDownCurrent(panel, function(){accordion_lock=false;});
-					}
-
-				}
-				
-				e.preventDefault();
-				return false;
-			});
-
-		}
-
-		function resize_accordion(){
-			var width = jQuery(jQuery(".accordion-center")[0]).css("width");
-			width = width.replace("px","");
-			jQuery(".accordion-inner").css("height", width* 0.5625 )
-		}
-
-		function init(){
-			watchlist_binding(<?php echo $embed_id ?>);
-			accordion_binding('<?php echo GrabPress::$environment; ?>', <?php echo $embed_id ?>);
-			onload_openvideo(<?php echo $embed_id ?>);
-			$(".nano").nanoScroller({"alwaysVisible":true});
-
-			$(window).resize(resize_accordion).resize();
-			$("#message").hide();//hack
-			
-		}
-
-		$("#help").simpletip({
-		  	 content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
-		  	 fixed: true,
-		  	 position: [155, 40]
-		});
-                
-                $(".feed_title").ellipsis(0, true, "", "");
-                
+	jQuery(function($){               
                 var clip = new ZeroClipboard($("#d_clip_button"), {
-                    moviePath: "<?php echo $plugin_url; ?>/js/ZeroClipboard.swf"
+                    moviePath: "<?php echo GrabPress::grabpress_plugin_url(); ?>/js/ZeroClipboard.swf"
                 });
                 clip.on('complete', function (client, args) {
                   debugstr("Copied text to clipboard: " + args.text );
@@ -657,9 +441,5 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
                 function debugstr(text) {
                     alert(text);
                 }
-                  
-
-		init();
-
 	});
 </script>
