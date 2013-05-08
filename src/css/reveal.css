@@ -40,7 +40,7 @@
                     color: #000;
                     margin-bottom: 10px;
                     }
-         #t #b .reveal-modal .infoBox h2 {
+         .reveal-modal .infoBox h2 {
             border-bottom: 1px solid #999999;
             padding-bottom: 2px;
             margin-bottom:  5px;
