@@ -46,7 +46,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                     beforeOr = beforeOr.replace(/\s+OR/,'');//replace 'OR' with so that beforeOr containd only the keyword
                     //add the keyword in front of the or array of keywords
                     or.unshift(beforeOr);
-                }console.log(or);
+                }
             }
             //cut off the OR separated keywords from the kwrds string
             kwrds = jQuery.trim(kwrds.replace(regAfterOR, "")); 

@@ -21,7 +21,6 @@
 	$player_data = json_decode( $player_json, true );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
-<div id="pagination"></div>
 <form method="post" action="" id="form-catalog-page">
         <input type="hidden" id="environment" name="environment" value="<?php echo GrabPress::$environment; ?>" />
         <input type="hidden" id="" name="action" value="catalog-search" />

@@ -93,7 +93,7 @@ var GrabPressCatalog = {
        jQuery('#clear-search').bind('click', function(e){
            window.location = "admin.php?page=gp-catalog";		    
        });
-       
+       GrabPressCatalog.setupPagination('gp_get_catalog_tab');
        if(!window.grabModal){
            try{
                 var env = jQuery("#environment").val();
@@ -111,6 +111,11 @@ var GrabPressCatalog = {
     },
     /* Search submission from modal window */
     submitSearch : function(action, page) {
+        var display = '';
+        if (action == 'gp_get_catalog_tab') {
+            action = 'gp_get_catalog';
+            display = 'Tab';
+        }
         var data = {"action": action,
             "empty": false,
             "keywords": jQuery("#keywords").val(),
@@ -119,7 +124,8 @@ var GrabPressCatalog = {
             "sort_by": jQuery('.sort_by:checked').val(),
             "created_before": jQuery("#created_before").val(),
             "created_after": jQuery("#created_after").val(),
-            "page": page
+            "page": page,
+            "display": display
         };
         var content = "#gp-catalog-container";
         if (jQuery("#action-catalog").val() == 'catalog-search') {
@@ -130,8 +136,9 @@ var GrabPressCatalog = {
             if(page == undefined){                
                 GrabPressCatalog.pagination(action);
                 jQuery("#pagination-bottom").children().remove();
-                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
+                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");                
             }
+            if (display != '') { jQuery("#preview-feed #btn-create-feed").css('margin', '-10px 0 0 360px');}
         });        
     },
     /* Pagination initial setup */
@@ -142,9 +149,14 @@ var GrabPressCatalog = {
                 content = "#form-catalog-page";
             }
             jQuery("<div id='pagination'></div>").insertBefore(content);
+            var top = '260px';
+            if (jQuery.browser.msie) { top = '275px';} 
+            if (action == 'gp_get_catalog_tab') {
+                top = '490px';
+            }
             jQuery('#pagination').css('position','relative');
-            jQuery('#pagination').css('top','260px');
-            jQuery('#pagination').css('left','10px');
+            jQuery('#pagination').css('top', top);
+            jQuery('#pagination').css('left','10px');            
             GrabPressCatalog.pagination(action);
         
             if (jQuery("#pagination-bottom").length == 0) {
