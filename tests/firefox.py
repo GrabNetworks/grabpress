@@ -20,7 +20,7 @@ class GrabPressAutomation(unittest.TestCase):
     def Login(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("user")
+        driver.find_element_by_id("user_login").send_keys("\user")
         driver.find_element_by_id("user_pass").send_keys("bitnami")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Welcome to WordPress!")
@@ -28,7 +28,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginAdminRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("admin")
+        driver.find_element_by_id("user_login").send_keys(r"\admin")
         driver.find_element_by_id("user_pass").send_keys("administrator")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Admin Role")
@@ -36,7 +36,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginAuthorRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("author")
+        driver.find_element_by_id("user_login").send_keys(r"\author")
         driver.find_element_by_id("user_pass").send_keys("author")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Author Role")
@@ -44,7 +44,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginContributorRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("contributor")
+        driver.find_element_by_id("user_login").send_keys("\contributor")
         driver.find_element_by_id("user_pass").send_keys("contributor")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Contributor Role")
@@ -52,7 +52,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginEditorRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("editor")
+        driver.find_element_by_id("user_login").send_keys("\editor")
         driver.find_element_by_id("user_pass").send_keys("editor")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Editor Role")
@@ -60,7 +60,7 @@ class GrabPressAutomation(unittest.TestCase):
     def LoginSubscriberRole(self):
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
-        driver.find_element_by_id("user_login").send_keys("subscriber")
+        driver.find_element_by_id("user_login").send_keys("\subscriber")
         driver.find_element_by_id("user_pass").send_keys("subscriber")
         driver.find_element_by_id("wp-submit").click()
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Subscriber Role")
