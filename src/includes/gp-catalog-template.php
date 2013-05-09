@@ -21,7 +21,6 @@
 	$player_data = json_decode( $player_json, true );
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
-<div id="pagination"></div>
 <form method="post" action="" id="form-catalog-page">
         <input type="hidden" id="environment" name="environment" value="<?php echo GrabPress::$environment; ?>" />
         <input type="hidden" id="" name="action" value="catalog-search" />
@@ -128,7 +127,7 @@
                <?php } ?>
        </div>
         <div class="label-tile-one-column">            
-            <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>2000?2000:$list_feeds["total_count"]; ?>" name="feed_count"/>
+            <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>400?400:$list_feeds["total_count"]; ?>" name="feed_count"/>
         </div>
 	<?php
 			foreach ($list_feeds["results"] as $result) {

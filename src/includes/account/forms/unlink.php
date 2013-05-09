@@ -13,8 +13,7 @@
 	console = console || { log:function(){}};
 	(function($){
 		$('#confirm').click(function(){
-	    	console.log( 'valid?');
-			if ( $('#confirm').attr('checked')){
+                        if ( $('#confirm').attr('checked')){
 				$( '#submit_button' ).removeAttr('disabled');
 				$('#submit_button').click(function(){
 					$('#unlink').submit();
