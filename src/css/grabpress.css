@@ -721,6 +721,7 @@ line-height: 24px;
 #t #b .accordion-center {
      background: url("../images/accordion_center.png") repeat scroll 0 0 #000000;    
      margin-right:3px\9;
+     height:33px\9;
      *margin-right: 0;
 }
 #t #b:last-child .accordion-center{
