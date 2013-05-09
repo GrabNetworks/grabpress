@@ -5,7 +5,7 @@
 
 ?>
 <fieldset id="manage-table" class="fieldset-manage">
-	<legend><?php echo isset($form['action'])=='edit-feed' ? 'Current':'Manage'?> Feeds</legend>
+	<legend><?php echo isset($form['action'])=='modify' ? 'Current':'Manage'?> Feeds</legend>
 
 <div>
 	<table class="grabpress-table manage-table" cellspacing="0">
@@ -47,7 +47,7 @@
 			<input type="hidden" name="referer" value="edit" />
 			<input type="hidden" name="channels_total" value="<?php echo $channels_total; ?>" id="channels_total" />	
 			<?php 
-				if(isset($form['action']) && ($form['action']=='edit-feed') && ($form['feed_id']==$feedId)){
+				if(isset($form['action']) && ($form['action']=='modify') && isset($_GET['feed_id']) && ($_GET['feed_id']==$feedId)){
 					$row_class = "editing-feed";
 				}elseif(!$feed->active){
 					$row_class = "inactive-row";
@@ -59,7 +59,7 @@
 				<td>
 					<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />
 					<?php 
-						if(isset($form['action'])=='edit-feed'){
+						if(isset($form['action'])=='modify'){
 							echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
 					 	}else{ 
 							$checked = ( $feed->active  ) ? 'checked = "checked"' : '';
@@ -206,13 +206,13 @@
 				<td>
 					<?php echo $publish = $feed->custom_options->publish ? "Publish" : "Draft"; ?>
 				</td>			
-				<?php				
-					if(isset($form['action']) && ($form['action']=='edit-feed') && ($form['feed_id']==$feedId)){
+				<?php		
+					if(isset($form['action']) && ($form['action']=='modify') && isset($_GET['feed_id'])  && ($_GET['feed_id']==$feedId)){
 						$class_preview_button = "hide-button";
 						$text_edit_button = "editing";
 						$class_edit_button = "display-element";
 						$class_delete_button = "display-element";
-					}elseif(isset($form['action']) && ($form['action']=='edit-feed')){
+					}elseif(isset($form['action']) && ($form['action']=='modify')){
 						$class_preview_button = "hide-button";
 						$text_edit_button = "edit";
 						$class_edit_button = "hide-button";
@@ -228,7 +228,7 @@
 					<a href="#"  data-id="<?php echo $feedId; ?>" class="<?php echo $class_preview_button; ?> btn-preview-feed" >preview</a>
 				</td>
 				<td>
-					<?php if(isset($form['action']) && ($form['action']=='edit-feed') && ($form['feed_id']==$feedId)){ 
+					<?php if(isset($form['action']) && ($form['action']=='modify') && isset($_GET['feed_id']) && ($_GET['feed_id']==$feedId)){ 
 						echo $text_edit_button;
 					 }else{ ?>				
 					<a href="admin.php?page=gp-autoposter&action=edit-feed&feed_id=<?php echo $feedId; ?>" id="btn-update-<?php echo $feedId; ?>" class="<?php echo $class_edit_button; ?> btn-update-feed">
@@ -237,7 +237,7 @@
 					<?php } ?>
 				</td>
 				<td>
-					<input type="button" class="btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'x' ) ?>" onclick="deleteFeed(<?php echo $feedId; ?>);" />
+					<input type="button" class="btn-delete <?php echo $class_delete_button; ?>" value="<?php _e( 'x' ) ?>" onclick="GrabPressAutoposter.deleteFeed(<?php echo $feedId; ?>);" />
 				</td>
 			</tr>
 		</form>

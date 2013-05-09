@@ -580,7 +580,7 @@ line-height: 24px;
     height: auto;
     width: 100%;
 }
-
+#form-dashboard #t #b input{-webkit-transform-style:flat !important;}
 #t #b {
     background: none;
     font: 12px 'Calibri W01 Regular 904604', Verdana;
@@ -594,7 +594,7 @@ line-height: 24px;
 }
 #form-dashboard .tab-content{
     background: #FFF url( '../images/inset.png' ) repeat-x left bottom;
-    box-shadow: 0 0 5px 2px rgb(0,0,0) inset, 0 1px 0 0 rgba(255, 255,255,0.25);
+    box-shadow: 0 0 5px 2px rgb(0,0,0) inset, 0 0px 0 0 rgba(255, 255,255,0.25);
 }
 #form-dashboard .faq .tab-content{
     padding: 10px 10px 20px 10px;
@@ -612,13 +612,32 @@ line-height: 24px;
 }
 #t #b .accordion-group {
     border: 1px solid #2B2B2B;
+    border-top:none\9;
+    *border-bottom: none;
 }
-
-#t #b a.accordion-toggle{
-    background-color: #2B2B2B;
+#t #b:last-child .accordion-group {
+    border: 1px solid #2B2B2B;
+}
+#t #b a.accordion-toggle{    
     color: #FFFFFF;
     font: 18px 'Gill Sans W01 Light';
     text-decoration: none;
+    outline: none;    
+    display:block;
+   /* width:inherit\9;   */
+}
+#t #b a.accordion-toggle:hover{
+    color: #FF0000;
+    -webkit-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    border-radius: 3px;   
+}
+#t #b .feed_title{
+    overflow: hidden;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #t #b .feed_title{white-space: nowrap;}
 }
 #t #b .accordion-inner {
      padding: 0;
@@ -689,18 +708,67 @@ line-height: 24px;
 #t #b tr.odd { background: #C0C0C0} 
 #t #b .accordion-left {
     background: url("../images/accordion_left.png") repeat scroll 0 0 #000000;
-    *background: none;
+   /*background: none;*/
     width: 3px;
-    *display: none;
+    /*display: none;*/
+    height:33px\9;
+    float:left\9;
+}
+#t #b:last-child .accordion-left {
+    height:auto;
+    float:none;
 }
 #t #b .accordion-center {
-    background: url("../images/accordion_center.png") repeat scroll 0 0 #000000;
+     background: url("../images/accordion_center.png") repeat scroll 0 0 #000000;    
+     margin-right:3px\9;
+     height:33px\9;
+     *margin-right: 0;
+}
+#t #b:last-child .accordion-center{
+    margin-right:0;
+}
+#t #b .accordion-heading {   
+   height:33px\9;
+   /*height:auto;*/
+   margin-left:-2px\9; 
+   margin-top:-1px\9;
+   margin-right:0px\9;
+   *margin-right:-1px;
+   *margin-bottom: 0px;
+   filter: 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=0,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=90,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=180,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=270,strength=1);   
+}
+#t #b:last-child .accordion-heading {
+   height:auto;
+   margin:auto;
+   filter:none;
+}   
+#t #b .accordion-heading:hover {   
+    filter: 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=0,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=90,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=180,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=270,strength=1);
+}
+#t #b:last-child .accordion-heading:hover { 
+    filter:none;
 }
 #t #b .accordion-right {
     background: url("../images/accordion_right.png") repeat scroll 0 0 #000000;
-    *background: none;
-    width: 3px;
-    *display: none;
+    /*background: none;*/
+    width: 3px;    
+    height:33px\9;
+    float:right\9;
+    position:relative;
+    top:-32px;    
+    /*right:-1px;    */
+}
+#t #b:last-child .accordion-right {
+    float:none;
+    height:auto;
 }
 #t #b h3 {
     padding: 5px 10px;
@@ -714,24 +782,22 @@ line-height: 24px;
 }
 #t #b .accordion-group {
     border-radius: 4px 4px 4px 4px;
-    margin-bottom: 2px;
+    margin-bottom: 2px;    
 }
 #t #b .accordion-heading {
     border-bottom: 0 none;
     background-color: #EEE;
 }
 #t #b .accordion-toggle {
-    cursor: pointer;
+    cursor: default;
 }
-#t #b .accordion-heading .accordion-toggle {
-    display: block;
-    padding: 8px 15px;
+#t #b .accordion-heading a.accordion-toggle {    
+    padding: 4px 15px;
+    height: 25px;  
 }
 #t #b .collapse {
-    height: 0;
     overflow: hidden;
     position: relative;
-    transition: height 0.35s ease 0s;
 }
 #t #b .collapse.in {
     height: auto;
@@ -744,12 +810,15 @@ line-height: 24px;
 #t #b table .rowspan2{height:60px;}
 #t #b table .rowspan3{height:100px;}
 
-
+.noscroll .content{
+    padding:3px 10px 10px 10px;
+    right: -27px !important;
+}
 .nano{
     height:198px;
 }
 .nano .content{
-    margin:10px;
+    margin:3px 10px 10px 10px;
     right: -27px !important;
 }
 .nano .pane{
@@ -768,6 +837,8 @@ line-height: 24px;
     background: url("../images/accordion_left.png") repeat-y scroll 0 0 #000000;
     height: 33px;
     left: 0;
+    top:0;
+    top:1px\9;
     position: absolute;
     width: 3px;
 }
@@ -776,19 +847,51 @@ line-height: 24px;
     height: 33px;
     padding: 0 3px;
     width: 99px;
+    filter: 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=0,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=90,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=180,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=270,strength=1);
 }
 #t #b #btn-account-settings .accordion-right {
     background: url("../images/accordion_right.png") repeat-y scroll 0 0 #000000;
     height: 33px;
     position: absolute;
-    right: -92px;
+    right: -91px;
     top: 0;
+    top:1px\9;
     width: 3px;
 }
-#t #b #btn-account-settings a{
+#t #b #btn-account-settings a{ 
     color: #FFF;
     display: block;
     padding: 8px 0px 0px 5px;
+    width:99px\9;
+    height:33px\9;
+}
+#t #b #btn-account-settings a:hover{
+    color: #FF0000;
+    cursor: auto;
+    margin-left:2px\9;
+}
+#t #b #btn-account-settings .accordion-center:hover{
+    color: #FF0000;
+    -webkit-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);
+    border-radius: 3px;
+    padding-right: 6px;
+    padding-right: 2px\9;    
+    width:101px\9;
+    margin-left:-1px\9;
+    filter: 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=0,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=90,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=180,strength=1), 
+        progid:DXImageTransform.Microsoft.Shadow(color=#FF0000,direction=270,strength=1); 
+}
+#t #b #btn-account-settings .accordion-center:hover a{
+    color: #FF0000;
 }
 #t #b td.watch{
     width: 70px;
@@ -945,18 +1048,18 @@ line-height: 24px;
 }
 
 #t #b .right-pane{
-    width:752px !important;
-    float:right !important;
-    position: absolute !important;
-    right:0 !important;
-    top:0 !important;
-    margin: 0 !important;
+    width:752px !important;   
+    margin-left: -752px !important;
 }
 
 #t #b .watchlist{
-    width:100% !important;
-    width:auto\9 !important;
+    width:100% !important;    
     padding-right:752px !important;
+    max-width:1392px;
+    min-width:1072px;
+    width:auto\9 !important; 
+    min-width:360px\9;
+    max-width:640px\9;
 }
 #t #b .accordion-inner .accordion-warning {
     color: #999;

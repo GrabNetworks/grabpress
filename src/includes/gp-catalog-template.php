@@ -22,6 +22,8 @@
 	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
 ?>
 <form method="post" action="" id="form-catalog-page">
+        <input type="hidden" id="environment" name="environment" value="<?php echo GrabPress::$environment; ?>" />
+        <input type="hidden" id="" name="action" value="catalog-search" />
 	<input type="hidden" id="action-catalog" name="action" value="catalog-search" />
 	<input type="hidden" id="list_provider" name="list_provider" value="<?php echo (string)$list_providers; ?>" />
 	<input type="hidden" name="pre_content" value="<?php echo 'Content'; ?>"  id="pre_content" />
@@ -55,7 +57,7 @@
 				</span>
 			</div>
 			<div class="tile-right">
-				<select name="channel[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" >
+				<select name="channels[]" id="channel-select" class="channel-select multiselect" multiple="multiple" style="width:500px" onchange="GrabPressCatalog.doValidation()">
 					<?php
 						foreach ( $list_channels as $record ) {
 							$channel = $record -> category;
@@ -75,7 +77,7 @@
 				<span class="preview-text-catalog"><b>Providers: </b></span>
 			</div>
 			<div class="tile-right">
-				<select name="provider[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="doValidation()" >
+				<select name="providers[]" id="provider-select" class="multiselect" multiple="multiple" style="<?php GrabPress::outline_invalid() ?>" onchange="GrabPressCatalog.doValidation()" >
 				<?php			
 					foreach ( $list_providers as $record_provider ) {
 						$provider = $record_provider->provider;
@@ -120,10 +122,13 @@
                ?>
                <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
                <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance
-               <?php if(!empty($list_feeds["results"])){ ?>
-               <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
+               <?php if(!empty($list_feeds["results"]) && GrabPress::check_permissions_for("gp-autopost")){ ?>
+                    <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                <?php } ?>
        </div>
+        <div class="label-tile-one-column">            
+            <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>400?400:$list_feeds["total_count"]; ?>" name="feed_count"/>
+        </div>
 	<?php
 			foreach ($list_feeds["results"] as $result) {
 	?>
@@ -142,7 +147,10 @@
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
 			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" /><input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
+			<?php if(GrabPress::check_permissions_for("single-post")){ ?>
+			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+			<?php } ?>
+			<input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
 			
 		</div>
 	</div>
@@ -150,182 +158,19 @@
 			} // end foreach
 		} // end if	
 	?>
+	
 	</fieldset>
 </div>
 </form>
-<script type="text/javascript">
-<?php $qa = GrabPress::$environment == 'grabqa'; ?>
-	( function ( global, $ ) {
-		global.hasValidationErrors = function () {
-			if(($("#channel-select :selected").length == 0) || ($("#provider-select :selected").length == 0)){
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		global.doValidation = function(){
-	    	var errors = hasValidationErrors();
-			if ( !errors ){
-				$('#btn-create-feed').removeAttr('disabled');
-				$('#update-search').removeAttr('disabled');
-
-				if( $( '#update-search' ).off ){
-					$( '#update-search' ).off('click');
-				}else{
-					$( '#update-search' ).unbind('click');
-				}
-				$('.hide').show();					
-			}else{
-				$( '#btn-create-feed' ).attr('disabled', 'disabled');
-				$( '#update-search' ).attr('disabled', 'disabled');
-			
-				if( $( '#update-search' ).off ){
-					$( '#update-search' ).off('click');
-				}else{
-					$( '#update-search' ).unbind('click');
-				}
-
-				$('.hide').hide();
-			}
-			
-		}
-
-	} )( window, jQuery );	
-
-	if(!window.grabModal){
-      try{
-        window.grabModal = new com.grabnetworks.Modal( { id : <?php echo $qa ? '1000014775' : '1720202'; ?>, tgt: '<?php echo GrabPress::$environment; ?>', width: 800, height: 450 } );
-        window.grabModal.hide();
-      }catch(err){
-        
-      }
-    }
-
-	var multiSelectOptionsChannels = {
-	  	 noneSelectedText:"Select Video Categories",
-	  	 selectedText:function(selectedCount, totalCount){
-			if (totalCount==selectedCount){
-	  	 		return "All Video Categories";
-	  	 	}else{
-	  	 		return selectedCount + " of " + totalCount + " Video Categories";
-	  	 	}
-	  	 }
-	};
-	var multiSelectOptions = {
-  	 noneSelectedText:"Select providers",
-  	 selectedText:function(selectedCount, totalCount){
-		if (totalCount==selectedCount){
-  	 		return "All providers selected";
-  	 	}else{
-  	 		return selectedCount + " providers selected of " + totalCount;
-  	 	}
-  	 }
-    };
-
-	jQuery(function($){	
-		var feed_action = '<?php echo $action = isset($_GET["action"]) ? $_GET["action"] : "default"; ?>';
-		if(feed_action == "preview-feed"){
-		  	$(".close-preview").click(function() {		  
-		  		window.location = "admin.php?page=gp-autoposter";
-	  		});
-		}else{
-			$(".close-preview").click(function() {		  
-			  var form = $('#preview-feed');	
-			  var action = $('#action-preview-feed');
-			  action.val(feed_action);
-			  form.submit();	
-		  	});
-		}			
-
-	  	$("#how-it-works").simpletip({
-		  	 content: 'The Grabpress plugin gives your editors the power of our constantly updating video catalog from the dashboard of your Wordpress CMS. Leveraging automated delivery, along with keyword feed curation, the Grabpress plugin delivers article templates featuring video articles that compliment the organic content creation your site offers.<br /><br /> As an administrator, you may use Grabpress to set up as many feeds as you desire, delivering content based on intervals you specify. You may also assign these feeds to various owners, if your site has multiple editors, and the articles will wait in your drafts folder until you see a need to publish. Additionally, for smaller sites, you can automate the entire process, publishing automatically and extending the reach of your site without adding work to your busy day. <br /><br /> To get started, select a channel from our catalog, hone your feed by adding keywords, set your posting interval, and check the posting options (post interval, player style, save as draft or publish) for that feed to make sure the specifications meet your needs. Click the preview feed button to see make sure your feed will generate enough content and that the content is what you are looking for. If the feed seems to be right for you, save the feed and you will start getting new articles delivered to your site at the interval you specified. <br /><br />', 
-		  	 fixed: true, 
-		  	 position: 'bottom'
-		});
-
-	  	$("#help").simpletip({
-		  	 content: "This search input supports Google syntax for advanced search:<br/><b>Every</b> term separated only by a space will be required in your results.<br/>At least one of any terms separated by an ' OR ' will be included in your results.<br/>Add a '-' before any term that must be <b>excluded</b>.<br/> Add quotes around any \"exact phrase\" to look for.<br /><br />", 
-		  	 fixed: true,
-		  	 position: 'bottom'
-		});
-
-		if($('#provider-select option:selected').length == 0){
-			$('#provider-select option').attr('selected', 'selected');
-		}
-
-		if($('#channel-select option:selected').length == 0){
-			$('#channel-select option').attr('selected', 'selected');
-		}
-		$("#channel-select").multiselect(multiSelectOptionsChannels, {
-		  	 uncheckAll: function(e, ui){
-		  	 	doValidation();	 	 	
-			 },
-			 checkAll: function(e, ui){
-			 	doValidation();	  	 	
-			 }
-	   });
-	   $("#provider-select").multiselect(multiSelectOptions, {
-	  	 uncheckAll: function(e, ui){
-	  	 	doValidation();
-		 },
-		 checkAll: function(e, ui){
-		 	doValidation();
-		 }
-	   }).multiselectfilter();
-
-	   $(".datepicker").datepicker({
-		   showOn: 'both',
-		   buttonImage: '<?php echo plugin_dir_url( __FILE__ ); ?>images/icon-calendar.gif',
-		   buttonImageOnly: true,
-		   changeMonth: true,
-		   changeYear: true,
-		   showAnim: 'slideDown',
-		   duration: 'fast'
-		});
-
-	   $("#form-catalog-page").change(doValidation);
-	   
-	   $('#btn-create-feed').bind('click', function(e){
-		    var form = jQuery('#form-catalog-page');
-		    var action = jQuery('#action-catalog');
-		    
-		    action.val("prefill");
-		    form.attr("action", "admin.php?page=gp-autoposter");
-		    form.submit();
-		});
-		$(".sort_by").change(function(e){
-			var form = jQuery('#form-catalog-page');
-			form.submit();
-		});
-
-
-	   	$('.btn-create-feed-single').bind('click', function(e){
-		    var v_id = this.id.replace('btn-create-feed-single-','');
-
-		    var data = {
-				action: 'gp_insert_video',
-				format : 'post',
-				video_id: v_id
-			};
-			
-			$.post(ajaxurl, data, function(response) {
-				if(response.status == "redirect"){
-					window.location = response.url;
-				}
-			}, "json");	
-		});	
-
-	   	$('#clear-search').bind('click', function(e){
-	   		window.location = "admin.php?page=gp-catalog";		    
-		});
-		$(".video_summary").ellipsis(2, true, "more", "less");
-
-	});
-
-	jQuery(window).load(function () {
-	    doValidation();
+<script>
+    jQuery(window).load(function () {
+	    GrabPressCatalog.doValidation();
 	    var action = jQuery('#action-catalog');	    
-	    action.val("catalog-search");
-	});
+	    action.val("catalog-search");            
+	});    
+    jQuery(document).ready(function(){
+        GrabPressCatalog.initSearchForm(); 
+        GrabPressCatalog.tabSearchForm();    
+    }
+);
 </script>

@@ -188,7 +188,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		static function create_feed($params) {
 			GrabPress::log();
 			if ( GrabPressAPI::validate_key() ) {
-				$channels = $params[ 'channel' ];
+				$channels = $params[ 'channels' ];
 				$channelsList = implode( ',', $channels );
 				$channelsListTotal = count( $channels ); // Total providers chosen by the user
 				$channels_total = $params['channels_total']; // Total providers from the catalog list
@@ -198,7 +198,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 
 				$name = rawurlencode( $params[ 'name' ] );
 
-				$providers = $params['provider'];
+				$providers = $params['providers'];
 				$providersList = implode( ',', $providers );
 				$providersListTotal = count( $providers ); // Total providers chosen by the user
 				$providers_total = $params['providers_total']; // Total providers from the catalog list
@@ -350,7 +350,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$feed_id = $request['feed_id'];
 			$name = htmlspecialchars( $request['name'] );
 				
-			$channels = $request[ 'channel' ];
+			$channels = $request[ 'channels' ];
 			$channelsList = implode( ',', $channels );
 			$channelsListTotal = count( $channels ); // Total providers chosen by the user
 			$channels_total = $request['channels_total']; // Total providers from the catalog list
@@ -359,7 +359,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			}
 
 
-			$providers = $request['provider'];
+			$providers = $request['providers'];
 			$providersList = implode( ',', $providers );
 			$providersListTotal = count( $providers ); // Total providers chosen by the user
 			$providers_total = $request['providers_total']; // Total providers from the catalog list
@@ -590,5 +590,15 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$xmlString = str_replace( $search, $replace, $xml);
 			return  simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
 		}
+		static function get_preview_url($mrss){
+                        GrabPress::log();
+                        if(intval($mrss->channel->item->mediagroup->mediathumbnail[0]->attributes()->width) > intval($mrss->channel->item->mediagroup->mediathumbnail[1]->attributes()->width)){
+                                return $mrss->channel->item->mediagroup->mediathumbnail[0]->attributes()->url;
+                        }
+                        else{
+                                return $mrss->channel->item->mediagroup->mediathumbnail[1]->attributes()->url;
+                        }
+
+                }
 	}
 }
