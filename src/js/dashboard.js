@@ -59,7 +59,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                                           +'<div class="accordion-heading">'
                                           +'	<div class="accordion-left"></div>'
                                           +'	<div class="accordion-center">'
-                                          +'		<a class="accordion-toggle" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
+                                          +'		<a class="accordion-toggle feed_title" data-guid="v'+parsedJson.results[i].video.guid+'" data-toggle="collapse" data-parent="#accordion2" href="#collapse' + (i+1) + '">'
                                           + 		parsedJson.results[i].video.title
                                           +'		</a>'
                                           +'	</div>'
@@ -74,6 +74,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                         }
                   }
                   jQuery('#accordion2').html(accordion);
+                  jQuery(".feed_title").ellipsis(0, true, "", "");
                   active_video = new com.grabnetworks.Player({
                       "id": embed_id,
                       "width": "100%",
