@@ -102,7 +102,6 @@
 			</div>
 			<br/><br/>
 		
-		<hr class="results-divider">	
 		<div class="label-tile-one-column">
 			Sort by: 
 			<?php  $created_checked = ($form["sort_by"]!="relevance")?'checked="checked"':"";
@@ -120,7 +119,7 @@
 		 	<?php if($empty == "false"){ ?>
 		 	<div class="label-tile-one-column">
 				
-				<input type="hidden" id="feed_count" value="<?php echo ($list_feeds["total_count"]>2000)?'2000':$list_feeds["total_count"]; ?>" name="feed_count"/>
+				<input type="hidden" id="feed_count" value="<?php echo ($list_feeds["total_count"]>400)?'400':$list_feeds["total_count"]; ?>" name="feed_count"/>
                                 <input type="hidden" id="page" value="0" name="page"/>
 			</div>
 			<?php }?>
@@ -198,9 +197,10 @@
                   });
         <?php } ?>
             jQuery(window).load(function () {		                        
-                GrabPressCatalog.doValidation(1);
+                
             });
             jQuery(document).ready(function(){                    
+                GrabPressCatalog.doValidation(1);
                 GrabPressCatalog.initSearchForm();
             });
 	</script>

@@ -76,19 +76,19 @@ var GrabPressCatalog = {
           form.attr("action", "admin.php?page=gp-autoposter");
           form.submit();
         });
-         jQuery('.btn-create-feed-single').bind('click', function(e){
-          var v_id = this.id.replace('btn-create-feed-single-','');
+        jQuery('.btn-create-feed-single').bind('click', function(e){
+            var v_id = this.id.replace('btn-create-feed-single-','');
 
-          var data = {
-               action: 'gp_insert_video', 
-               format : 'post',
-               video_id: v_id
-          };
-          jQuery.post(ajaxurl, data, function(response) {
-              if(response.status == "redirect"){
-                  window.location = response.url;
-              }
-          }, "json");	
+            var data = {
+                 action: 'gp_insert_video', 
+                 format : 'post',
+                 video_id: v_id
+            };
+            jQuery.post(ajaxurl, data, function(response) {
+                if(response.status == "redirect"){
+                    window.location = response.url;
+                }
+            }, "json");	
        });
        jQuery('#clear-search').bind('click', function(e){
            window.location = "admin.php?page=gp-catalog";		    
@@ -138,12 +138,18 @@ var GrabPressCatalog = {
                 jQuery("#pagination-bottom").children().remove();
                 jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");                
             }
-            if (display != '') { jQuery("#preview-feed #btn-create-feed").css('margin', '-10px 0 0 360px');}
+            if (display != '') { 
+                jQuery("#preview-feed #btn-create-feed").css('position', 'relative');
+                jQuery("#preview-feed #btn-create-feed").css('top', '0px');
+                jQuery("#preview-feed #btn-create-feed").css('left', '170px');
+                jQuery("#pagination").css('top', '505px');
+            }
         });        
     },
     /* Pagination initial setup */
     setupPagination : function(action) {
-        if (jQuery("#pagination").length == 0) {
+        var pag = jQuery("#pagination");
+        if (pag.length == 0) {
             var content = "#gp-catalog-container";
             if (jQuery("#action-catalog").val() == 'catalog-search') {
                 content = "#form-catalog-page";
@@ -154,20 +160,19 @@ var GrabPressCatalog = {
             if (action == 'gp_get_catalog_tab') {
                 top = '490px';
             }
-            jQuery('#pagination').css('position','relative');
+            jQuery('#pagination').css('position', 'relative');
             jQuery('#pagination').css('top', top);
-            jQuery('#pagination').css('left','10px');            
+            jQuery('#pagination').css('left', '10px');            
             GrabPressCatalog.pagination(action);
-        
-            if (jQuery("#pagination-bottom").length == 0) {
-                var content = "#gp-catalog-container";
-                if (jQuery("#action-catalog").val() == 'catalog-search') {
-                    content = "#form-catalog-page";
+            var pagb = jQuery("#pagination-bottom");
+            if (pagb.length == 0) {                
+                var results = jQuery(content).parent();
+                if (results.length) {
+                    results.append("<div id='pagination-bottom'></div>");                                           
+                    jQuery('#pagination-bottom').css('margin-top','10px');
+                    jQuery("#pagination-bottom").addClass('light-theme');            
+                    jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
                 }
-                jQuery("<div id='pagination-bottom'></div>").insertAfter(content);            
-                jQuery('#pagination-bottom').css('margin-top','10px');
-                jQuery("#pagination-bottom").addClass('light-theme');            
-                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
             }
         }
         
@@ -181,12 +186,16 @@ var GrabPressCatalog = {
                             displayedPages:10,
                             onPageClick: function(pagenumber , event){                                                                                       
                                 GrabPressCatalog.submitSearch(action, pagenumber);
-                                jQuery("#pagination-bottom").children().remove();
+                                var bottomChildren = jQuery("#pagination-bottom").children();
+                                if (bottomChildren.length) {
+                                    bottomChildren.remove();
+                                }                                
                                 jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
                             }
                         });  
         /* don't show pagination buttons when there is just one page */
-        if (jQuery('#pagination').children().length < 4 ) {
+        var pagChildren = jQuery('#pagination').children();
+        if (pagChildren.length < 4 ) {
             jQuery("#pagination").children().remove();
             jQuery("#pagination-bottom").children().remove();
         }
@@ -234,14 +243,19 @@ var GrabPressCatalog = {
     },
     /* Insert in post ajax search form initializations and bindings */
     postSearchForm : function(){
+        var multiselect = jQuery('.ui-multiselect');
         jQuery(window).scroll(function () {
-            var channelHeight = jQuery('.ui-multiselect').position().top;
+            if (multiselect.length) {
+                var channelHeight = jQuery('.ui-multiselect').position().top;
+            }                        
             jQuery('.ui-multiselect-menu').css('top', channelHeight + 61);
             jQuery('.ui-multiselect-menu').css('position', 'fixed');
         });
 
         jQuery('#TB_ajaxContent').scroll(function () {
-            var channelHeight = jQuery('.ui-multiselect').position().top;
+            if (multiselect.length) {
+                var channelHeight = jQuery('.ui-multiselect').position().top;
+            }
             jQuery('.ui-multiselect-menu').css('z-index', 103);
             jQuery('.ui-multiselect-menu').css('overflow', 'auto');
             jQuery('.ui-multiselect-menu').css('top', channelHeight + 61);		
