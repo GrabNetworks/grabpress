@@ -127,7 +127,7 @@
                <?php } ?>
        </div>
         <div class="label-tile-one-column">            
-            <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>2000?2000:$list_feeds["total_count"]; ?>" name="feed_count"/>
+            <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>400?400:$list_feeds["total_count"]; ?>" name="feed_count"/>
         </div>
 	<?php
 			foreach ($list_feeds["results"] as $result) {

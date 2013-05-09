@@ -191,6 +191,7 @@ var GrabPressDashboard = GrabPressDashboard || {
 
         } else if ( jQuery.browser.version != 7.0) {
             jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
+            jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
         } 
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
