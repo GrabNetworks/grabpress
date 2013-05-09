@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.3.0.2-04222013
+Version: 2.3.0.2-05082013
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.3.0.2-04222013';
+		static $version = '2.3.0.2-05082013';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -269,8 +269,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$data = htmlentities(stripslashes($data), ENT_QUOTES);
 			}
 		}
-
-		static function fetch( $file = null, $data = array() ) {
+                
+                static function fetch( $file = null, $data = array() ) {
 			GrabPress::_escape_params_template($data);
 						
 			GrabPress::log();
@@ -519,7 +519,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function grabpress_plugin_url(){
-			return plugin_dir_url( __FILE__ ) ;     
+			return plugin_dir_url( __FILE__ ) ;                        
 		}
 
 		static function enqueue_scripts($page) {
@@ -548,10 +548,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' , array("jquery"));
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
 			wp_enqueue_script( 'gp-nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
-			wp_enqueue_script( 'jquery-reveal', $plugin_url.'/js/ui/jquery.reveal.js' , array("jquery") );
-                        wp_enqueue_script( 'jquery-copy', $plugin_url.'/js/ZeroClipboard.js' , array("jquery") ); 
-                        wp_enqueue_script( 'jquery-simplePagination', $plugin_url.'/js/jquery.simplePagination.js' , array("jquery") );
+			wp_enqueue_script( 'jquery-simplePagination', $plugin_url.'/js/jquery.simplePagination.js' , array("jquery") );
                         
+                        wp_enqueue_script( 'jquery-reveal', $plugin_url.'/js/ui/jquery.reveal.js' , array("jquery") );
+                        wp_enqueue_script( 'jquery-copy', $plugin_url.'/js/ZeroClipboard.js' , array("jquery") );
+
 			wp_enqueue_script( 'grab-player', 'http://player.'.GrabPress::$environment.'.com/js/Player.js' );
 
 			$wpversion = floatval(get_bloginfo('version'));
@@ -568,7 +569,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_style( 'gp-nanoscroller', $plugin_url.'/css/nanoscroller.css');		
 			wp_enqueue_style( 'gp-css', $plugin_url.'/css/grabpress.css' , array("jquery-ui-theme", "gp-bootstrap", "gp-nanoscroller"));			
 			wp_enqueue_style( 'jquery-simplePagination', $plugin_url.'/css/simplePagination.css');
-			wp_enqueue_style( 'jquery-reveal', $plugin_url.'/css/reveal.css');
+                        wp_enqueue_style( 'jquery-reveal', $plugin_url.'/css/reveal.css');
+			
 			wp_enqueue_style( 'gp-fonts', "http://static.grab-media.com/fonts/font-face.css");
 			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
 		}

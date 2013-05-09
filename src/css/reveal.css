@@ -40,13 +40,23 @@
                     color: #000;
                     margin-bottom: 10px;
                     }
+         .reveal-modal .infoBox h2 {
+            border-bottom: 1px solid #999999;
+            padding-bottom: 2px;
+            margin-bottom:  5px;
+            font-weight: normal;
+         }
                 
          .reveal-modal .btn-modal-box{
             border: 0 none;
-            height: 33px;
             padding: 0; 
             float: right;
-            margin-left: 10px;            
+            margin-left: 10px;  
+            filter: 
+                progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=0,strength=2), 
+                progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=90,strength=2), 
+                progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=180,strength=2), 
+                progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=270,strength=2);
         }
         .reveal-modal .btn-modal-box .accordion-left {
             background: url("../images/accordion_left.png") repeat-y scroll 0 0 #000000;
@@ -56,15 +66,8 @@
         }
         .reveal-modal .btn-modal-box .accordion-center {
             background: url("../images/accordion_center.png") repeat-x scroll 0 0 #000000;
-            height: 33px;
-            padding: 0 3px;
-            filter: 
-                progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=0,strength=2), 
-                progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=90,strength=2), 
-                progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=180,strength=2), 
-                progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=270,strength=2);
+            height: 33px;            
             float: left;
-            line-hight:33px;
         }
         .reveal-modal .btn-modal-box .accordion-right {
             background: url("../images/accordion_right.png") repeat-y scroll 0 0 #000000;
@@ -73,15 +76,15 @@
             float: left;
         }
         .reveal-modal .btn-modal-box a{ 
-            color: #FFF;
+            color: #FFF !important;
             display: block;            
             text-decoration: none;
-            line-height: 33px;
+            line-height: 33px !important;
         }
-        .reveal-modal .btn-modal-box a:hover{
-            color: #FF0000;
+        .reveal-modal .btn-modal-box .accordion-center a:hover{
+            color: #FF0000 !important;
             cursor: default;
-        }
+        }        
         .reveal-modal .btn-modal-box:hover, .global-zeroclipboard-container:hover{
             color: #FF0000;
             -webkit-box-shadow: 0px 0px 5px rgba(255, 0 , 0, 0.75);

@@ -8,9 +8,9 @@ class GrabPressAutomation(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(10)
-#        self.base_url = sys.argv[1]
-	self.base_url = "http://grabpress-ci.grab-media.com/"
-	self.verificationErrors = []
+        # self.base_url = sys.argv[1]
+        self.base_url = "http://grabpress-ci.grab-media.com/"
+        self.verificationErrors = []
         self.accept_next_alert = True
 
     def tearDown(self):
@@ -18,12 +18,12 @@ class GrabPressAutomation(unittest.TestCase):
         self.assertEqual([], self.verificationErrors)
 
     def Login(self):
-	driver = self.driver
+        driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys("\user")
         driver.find_element_by_id("user_pass").send_keys("bitnami")
         driver.find_element_by_id("wp-submit").click()
-	self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Welcome to WordPress!")
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Welcome to WordPress!")
 
     def LoginAdminRole(self):
         driver = self.driver
@@ -85,30 +85,30 @@ class CatalogTests(GrabPressAutomation):
     def test_CTLG_1_ExactPhraseSearch(self):
         driver = self.driver
         GrabPressAutomation.Login(self)
-	driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
         driver.find_element_by_id("keywords").clear()
-        driver.find_element_by_id("keywords").send_keys("\"Spam Fries, Bacon Taco and Other Wacky Stadium Foods\"")
+        driver.find_element_by_id("keywords").send_keys("Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
         driver.find_element_by_id("update-search").click()
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Forget hot dogs, nachos, and normal ball park")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*$")
 
     def test_CTLG_2_CreatePostFromCatalogSearch(self):
-	driver = self.driver
+        driver = self.driver
         CatalogTests.test_CTLG_1_ExactPhraseSearch(self)
-	driver.find_element_by_id("btn-create-feed-single-4400635").click()
-	self.assertRegexpMatches(driver.find_element_by_id("content").text, r"grabpress_video guid=\"d811f4d7f6bd7de097b0e6dd09930411b44c0ab1\"")
+        driver.find_element_by_id("btn-create-feed-single-4400635").click()
+        self.assertRegexpMatches(driver.find_element_by_id("content").text, r"grabpress_video guid=\"d811f4d7f6bd7de097b0e6dd09930411b44c0ab1\"")
 
     def test_CTLG_2a_DeleteCreatedPost(self):
-	driver = self.driver
-	GrabPressAutomation.Login(self)
-	driver.get(self.base_url + "wordpress/wp-admin/edit.php")
-	driver.find_element_by_id("post-search-input").send_keys("VIDEO: Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
-	driver.find_element_by_id("search-submit").click()
-	driver.find_element_by_id("cb-select-all-1").click()
-	Select(driver.find_element_by_name("action")).select_by_visible_text("Move to Trash")
+        driver = self.driver
+        GrabPressAutomation.Login(self)
+        driver.get(self.base_url + "wordpress/wp-admin/edit.php")
+        driver.find_element_by_id("post-search-input").send_keys("VIDEO: Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
+        driver.find_element_by_id("search-submit").click()
+        driver.find_element_by_id("cb-select-all-1").click()
+        Select(driver.find_element_by_name("action")).select_by_visible_text("Move to Trash")
         driver.find_element_by_id("doaction").click()
-	driver.get(self.base_url + "wordpress/wp-admin/edit.php?post_status=trash&post_type=post")
-	self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"VIDEO: Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
+        driver.get(self.base_url + "wordpress/wp-admin/edit.php?post_status=trash&post_type=post")
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"VIDEO: Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
 
 class AccountTests(GrabPressAutomation):
     def UnlinkAccountNoLogin(self):
@@ -180,10 +180,10 @@ class AccountTests(GrabPressAutomation):
         AccountTests.UnlinkAccountNoLogin(self)
 
     def test_ACNT_4_LinkNonExistingAccount(self):
-	driver = self.driver
+        driver = self.driver
         GrabPressAutomation.Login(self)
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
-	driver.find_element_by_id("email").clear()
+        driver.find_element_by_id("email").clear()
         driver.find_element_by_id("email").send_keys("no_way_this_user_exists@limbo.com")
         driver.find_element_by_id("password").clear()
         driver.find_element_by_id("password").send_keys("test")
@@ -224,68 +224,68 @@ class AccountTests(GrabPressAutomation):
         driver.find_element_by_id("submit-button").click()
         self.assertRegexpMatches(driver.find_element_by_id("message").text, r"We already have a registered user with the email address jpduquette00@gmail.com. If you would like to update your account information, please login to the")
 
-#class InsertIntoPostTests(GrabPressAutomation):
-#    def test_INPT_1_SearchCatalog(self):
-#    def test_INPT_2_SortResults(self):
+        #class InsertIntoPostTests(GrabPressAutomation):
+        #    def test_INPT_1_SearchCatalog(self):
+        #    def test_INPT_2_SortResults(self):
 
-#class TemplateTests(GrabPressAutomation):
-#    def test_TMPT_1_SetTemplateSize(self):
-#    def test_TMPT_2_SetWideScreen(self):
-#    def test_TMPT_3_SetStandardScreen(self):
+        #class TemplateTests(GrabPressAutomation):
+        #    def test_TMPT_1_SetTemplateSize(self):
+        #    def test_TMPT_2_SetWideScreen(self):
+        #    def test_TMPT_3_SetStandardScreen(self):
 
-#class DashboardTests(GrabPressAutomation):
-#    def test_DASH_1_NoAccountLinked(self):
-#    def test_DASH_2_LinkToCreateAccount(self):
-#    def test_DASH_3_LinkToExistingAccount(self):
+        #class DashboardTests(GrabPressAutomation):
+        #    def test_DASH_1_NoAccountLinked(self):
+        #    def test_DASH_2_LinkToCreateAccount(self):
+        #    def test_DASH_3_LinkToExistingAccount(self):
 
-#class AutoposterTest(GrabPressAutomation):
-#    def test_FEED_1_CreateFeed(self):
-#    def test_FEED_2_PreviewFeed(self):
-#    def test_FEED_3_PreviewFeedKeywords(self):
-#    def test_FEED_4_ManageFeeds(self):
-#    def test_FEED_5_DeleteFeed(self):
-#    def test_FEED_6_EditFeed(self):
-#    def test_FEED_7_NameFeed(self):
-#    def test_FEED_8_WatchVideoFromPreview(self):
-#    def test_FEED_9_FeedActiveToggle(self):
+        #class AutoposterTest(GrabPressAutomation):
+        #    def test_FEED_1_CreateFeed(self):
+        #    def test_FEED_2_PreviewFeed(self):
+        #    def test_FEED_3_PreviewFeedKeywords(self):
+        #    def test_FEED_4_ManageFeeds(self):
+        #    def test_FEED_5_DeleteFeed(self):
+        #    def test_FEED_6_EditFeed(self):
+        #    def test_FEED_7_NameFeed(self):
+        #    def test_FEED_8_WatchVideoFromPreview(self):
+        #    def test_FEED_9_FeedActiveToggle(self):
 
-#class MiscTests(GrabPressAutomation):
-#    def test_MISC_1_WordpressGrabpressVersion(self):
-#    def test_MISC_2_MediaLibraryUploadImage(self):
-#    def test_MISC_3_MediaLibraryUploadVideo(self):
-#    def test_MISC_4_InsertImageIntoPost(self):
-#    def test_MISC_5_InsertVideoIntoPost(self):
-#    def test_MISC_6_AddCommentsToPost(self):
+        #class MiscTests(GrabPressAutomation):
+        #    def test_MISC_1_WordpressGrabpressVersion(self):
+        #    def test_MISC_2_MediaLibraryUploadImage(self):
+        #    def test_MISC_3_MediaLibraryUploadVideo(self):
+        #    def test_MISC_4_InsertImageIntoPost(self):
+        #    def test_MISC_5_InsertVideoIntoPost(self):
+        #    def test_MISC_6_AddCommentsToPost(self):
 
 class PermissionsTests(GrabPressAutomation):
     def test_PERM_01_SubscriberRoleCannotAccessGrabPressTabs(self):
-	driver = self.driver
-	GrabPressAutomation.LoginSubscriberRole(self)
-	# Account Tab
-	driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
-	self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
-        # Dashboard Tab
-	driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
+        driver = self.driver
+        GrabPressAutomation.LoginSubscriberRole(self)
+        # Account Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
         self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
-	# Autoposter Tab
+        # Dashboard Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
+        self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
+        # Autoposter Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
         self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
-	# Catalog Tab
+        # Catalog Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
         self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
-	# Template Tab
+        # Template Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-template")
         self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
-
+    
     @unittest.expectedFailure
     def test_PERM_02_SubscriberRoleNoLinkToGrabPressTabs(self):
         driver = self.driver
         GrabPressAutomation.LoginSubscriberRole(self)
         self.assertRegexpMatches(driver.find_element_by_link_text("Account").text, r"")
-	self.assertRegexpMatches(driver.find_element_by_link_text("Template").text, r"")
-	self.assertRegexpMatches(driver.find_element_by_link_text("AutoPoster").text, r"")
-	self.assertRegexpMatches(driver.find_element_by_link_text("Catalog").text, r"")
-	self.assertRegexpMatches(driver.find_element_by_class_name("wp-first-item").text, r"Dashboard")
+        self.assertRegexpMatches(driver.find_element_by_link_text("Template").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_link_text("AutoPoster").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_link_text("Catalog").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_class_name("wp-first-item").text, r"Dashboard")
 
     def test_PERM_03_ContributorRoleCannotAccessGrabPressTabs(self):
         driver = self.driver
@@ -317,12 +317,12 @@ class PermissionsTests(GrabPressAutomation):
         self.assertRegexpMatches(driver.find_element_by_class_name("wp-first-item").text, r"Dashboard")
 
     def test_PERM_05_AdministratorRoleCanAccessGrabPressTabs(self):
-	driver = self.driver
+        driver = self.driver
         GrabPressAutomation.LoginAdminRole(self)
         # Account Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"GrabPress: Earn money with a Grab Publisher Account")
-	# Dashboard Tab
+    # Dashboard Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Watchlist")
         # Autoposter Tab
@@ -333,11 +333,11 @@ class PermissionsTests(GrabPressAutomation):
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"GrabPress: Find a Video in our Catalog")
         # Template Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-template")
-        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"GrabPress: Edit the player template for video posts")	
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"GrabPress: Edit the player template for video posts")    
 
     def test_PERM_06_AdministratorRoleCanLinkToGrabPressTabs(self):
-	driver = self.driver
-	GrabPressAutomation.LoginAdminRole(self)
+        driver = self.driver
+        GrabPressAutomation.LoginAdminRole(self)
         self.assertRegexpMatches(driver.find_element_by_link_text("Account").text, r"")
         self.assertRegexpMatches(driver.find_element_by_link_text("Template").text, r"")
         self.assertRegexpMatches(driver.find_element_by_link_text("AutoPoster").text, r"")
@@ -345,8 +345,8 @@ class PermissionsTests(GrabPressAutomation):
         self.assertRegexpMatches(driver.find_element_by_class_name("wp-first-item").text, r"Dashboard")
 
     def test_PERM_07_EditorRoleCanAccessGrabPressTabs(self):
-	driver = self.driver
-	GrabPressAutomation.LoginEditorRole(self)
+        driver = self.driver
+        GrabPressAutomation.LoginEditorRole(self)
         # Dashboard Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Watchlist")
@@ -369,7 +369,7 @@ class PermissionsTests(GrabPressAutomation):
         self.assertRegexpMatches(driver.find_element_by_class_name("wp-first-item").text, r"Dashboard")
 
     def test_PERM_09_EditorRoleCanNotAccessAccountTab(self):
-	driver = self.driver
+        driver = self.driver
         GrabPressAutomation.LoginEditorRole(self)
         # Account Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
@@ -379,23 +379,23 @@ class PermissionsTests(GrabPressAutomation):
     def test_PERM_10_EditorRoleCanNotLinkToAccountTab(self):
         driver = self.driver
         GrabPressAutomation.LoginEditorRole(self)
-	self.assertRegexpMatches(driver.find_element_by_link_text("Account").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_link_text("Account").text, r"")
 
     def test_PERM_11_AuthorRoleCanAccessGrabPressTabs(self):
-	driver = self.driver
-	GrabPressAutomation.LoginAuthorRole(self)
-	driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
+        driver = self.driver
+        GrabPressAutomation.LoginAuthorRole(self)
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Watchlist")
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"GrabPress: Find a Video in our Catalog")
 
     def test_PERM_12_AuthorRoleCanNotAccessGrabPressTabs(self):
         driver = self.driver
-	GrabPressAutomation.LoginAuthorRole(self)
-	# AutoPoster Tab
-	driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
+        GrabPressAutomation.LoginAuthorRole(self)
+        # AutoPoster Tab
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
         self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
-	# Account Tab
+        # Account Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
         self.assertRegexpMatches(driver.find_element_by_id("error-page").text, r"You do not have sufficient permissions to access this page.")
         # Template Tab
@@ -407,22 +407,20 @@ class PermissionsTests(GrabPressAutomation):
         driver = self.driver
         GrabPressAutomation.LoginAuthorRole(self)
         self.assertRegexpMatches(driver.find_element_by_link_text("Account").text, r"")
-	self.assertRegexpMatches(driver.find_element_by_link_text("AutoPoster").text, r"")
-	self.assertRegexpMatches(driver.find_element_by_link_text("Template").text, r"")	
-#    def test_PERM_1_AdminPermissions(self):
-#    def test_PERM_2_EditorPermissions(self):
-#    def test_PERM_3_AuthorPermissions(self):
-#    def test_PERM_4_ContributorPermissions(self):
-#    def test_PERM_5_SubscriberPermissions(self):  
+        self.assertRegexpMatches(driver.find_element_by_link_text("AutoPoster").text, r"")
+        self.assertRegexpMatches(driver.find_element_by_link_text("Template").text, r"")    
+        #    def test_PERM_1_AdminPermissions(self):
+        #    def test_PERM_2_EditorPermissions(self):
+        #    def test_PERM_3_AuthorPermissions(self):
+        #    def test_PERM_4_ContributorPermissions(self):
+        #    def test_PERM_5_SubscriberPermissions(self):  
 
-
-
-#searchTestSuite =  unittest.TestSuite()
-#searchTestSuite.addTest(CatalogTests('test_CTLG_1_ExactPhraseSearch'))
-#searchTestSuite.addTest(CatalogTests('test_CTLG_2_CreatePostFromCatalogSearch'))
-#searchTestSuite.addTest(PermissionsTests('test_PERM_3_ContributorRoleCannotAccessGrabPressTabs'))
-#searchTestSuite.addTest(PermissionsTests('test_PERM_4_ContributorRoleNoLinkToGrabPressTabs'))
-#suite = unittest.TestSuite(searchTestSuite)
-#unittest.TextTestRunner(verbosity=2).run(suite)
+        #searchTestSuite =  unittest.TestSuite()
+        #searchTestSuite.addTest(CatalogTests('test_CTLG_1_ExactPhraseSearch'))
+        #searchTestSuite.addTest(CatalogTests('test_CTLG_2_CreatePostFromCatalogSearch'))
+        #searchTestSuite.addTest(PermissionsTests('test_PERM_3_ContributorRoleCannotAccessGrabPressTabs'))
+        #searchTestSuite.addTest(PermissionsTests('test_PERM_4_ContributorRoleNoLinkToGrabPressTabs'))
+        #suite = unittest.TestSuite(searchTestSuite)
+        #unittest.TextTestRunner(verbosity=2).run(suite)
 if __name__ == "__main__":
     unittest.main(verbosity=2)
