@@ -79,7 +79,7 @@ www.grab-media.com
 Grab can provide you automated, daily data exports that enable you to perform your own performance analyses.  Contact us and we can provide you the data that you need. 
 
 
-**Creating Auto Posting Feeds...**
+**Creating Auto Posting Feeds**
 
 = I have installed the plug-in and set up my account.  Now what? =
 
@@ -108,7 +108,7 @@ Grab can provide you automated, daily data exports that enable you to perform yo
 = How many feeds can I create? =
  There is no limit on the number of feeds you can create.
 
-**General Questions...**
+**General Questions**
 
 = Why is there a tabbed index for GrabPress in my site dashboard? =
  GrabPress is built to scale. That means we have many more features and ways of delivering monetized video intended for the future. This includes, but is not limited to, single video embed insertion via your post editor, post promotion, and layout editing. As features such as these become available through GrabPress updates, they will appear as additional tabs within GrabPress.
@@ -140,6 +140,30 @@ We hope to allow users to edit the layout / posting template in future updates o
  
  GrabPress automates delivery of topical content to your site. This cuts down the footwork needed to optimize revenue potential for individual posts on your site, as well as keeping your site up to date with hot topics being talked about now.  Not only does GrabPress deliver monetized multimedia posts based on your criteria, but it is built to be leveraged by teams large and small as a tool for editors to stay in touch with news, gossip, and highlights that are happening now.
 
+**Permissions** 
+
+= Do all users see the same information in my GrabPress installation? =
+
+ No. GrabPress leverages the user roles already in place within WordPress. In order to make sure you have all necessary functions available to you through GrabPress please set your user roles in your dashboard as needed. 
+
+= What does each user role enable me to do through GrabPress? =
+
+ All user roles are able to search our catalog for a video and create a post including that video and associated metadata, as well as insert single video embeds into previously created posts. 
+ Additionally, editors have the ability to create content feeds from the Autoposter tab, edit feeds, and adjust templating options for the size of the embed. Editors have access to all functions and tabs, excluding the Account tab and account settings.
+ Finally, as an admin all functions and tabs, including the Account tab, are available at all times. Once GrabPress is installed, the admin should link the install to their Grab Media account through the account tab, as no other user is able to link accounts.
+
+= Can I set authors to be able to edit feeds or edit my account information? =
+
+ To adjust what a user is able to do in GrabPress you must change their WordPress user role to enable the required functions. 
+
+= As an editor, am I safe to link on a website with multiple editors? =
+ Yes. Leveraging user role permissions will keep your install brand safe, allowing you to link your account and manage feeds without concern that these settings will be changed by someone with a less powerful user role, such as author, accidentally. 
+
+= Can all users still view and post articles delivered through GrabPress? =
+ Yes. All users can view the GrabPress dashboard to stay aware of editorial changes, and edit any post they have access to through the WordPress dashboard. 
+
+= Can authors see my account information? =
+ No. All users are provided pertinent information for debugging and support purposes, such as user email and API key. However, these users are not given access to personal information located in your account.
 
 == Screenshots ==  
 
@@ -150,6 +174,24 @@ We hope to allow users to edit the layout / posting template in future updates o
 5. Video results are automatically posted to your Blog.
 
 == Changelog ==  
+
+= 2.3.0 =
+*Features:*
+
+* AUTO-665: As a WordPress Publisher, I want to page through the search results from a search when inserting into a post, so that I have more results to view.
+* AUTO-654: As a WordPress Publisher, I want to click on a link in the Feed Activity section of the Dashboard, so that I may see each feeds settings and configuration information.
+* AUTO-652: As a WordPress Administrator, I want to limit access to creating feeds in the Catalog tab to WP users/roles with 'edit_others_posts' AND 'publish_posts' capabilities, so that only editors may create feeds.
+* AUTO-651: As a WordPress Administrator, I want to limit access to the Template tab to users/roles with the 'edit_others_posts' capability, so others cannot change my template settings.
+* AUTO-650: As a WordPress Administrator, I want to limit access to the Autoposter tab to WP users/roles with 'edit_others_posts' AND 'publish_posts' capabilities, so that only editors may create/edit feeds.
+* AUTO-649: As a WordPress Administrator, I want to limit access to the Account tab to WP users/roles with 'edit_plugins' capabilities, so that only administrators may link my grabpress instance to a GrabMedia account.
+* AUTO-641: As a WordPress Publisher, I want to page through the search results from a search on the catalog tab, so that I have more results to view.
+* AUTO-607: As a WordPress Editor, I want to see a rollover treatment on the Title in the watchlist, so I know I can click on it.
+
+*Bug Fixes:*
+
+* AUTO-685: Posts created from the catalog tab are using the thumbnail image as the featured image, and in the posting, instead of the preview image.
+* AUTO-684: Selected categories and providers are reset to "ALL" after running a search on the catalog tab.
+* AUTO-648: Shortcode is using the click-to-play embed_id value for posts made from a feed that are set to use the autoplay embed_id.
 
 = 2.2.2 =
  * Various bux fixes.
@@ -209,7 +251,6 @@ We hope to allow users to edit the layout / posting template in future updates o
  * AUTO-250: As a WordPress publisher, I want to post a single video to my blog from the Video Catalog search results page.
  * AUTO-252: As an editor, I want to save my search results as a new feed using a 'Save as Feed' button on the Video Catalog page.
  
-
 *Bug Fixes:*
 
  * AUTO-408: When I create a feed using a category with spaces, I do not reveieve any posts.
