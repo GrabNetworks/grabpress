@@ -101,13 +101,26 @@ var GrabPressDashboard = GrabPressDashboard || {
                               +'</div>';
                   jQuery('#accordion2').html(accordion);
               }
+              if ( jQuery.browser.version != 7.0) {
+                 jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
+                 jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
+               } 
               if(watchlist_check.val() == 1) {
                 watchlist_check.val('0');
                 watchlist_check.addClass('watch-on').removeClass('watch-off');
               }else{
                 watchlist_check.val('1');
                 watchlist_check.addClass('watch-off').removeClass('watch-on');	    
-              } 
+              }
+              /* fix for all browsers except */
+              if ( jQuery.browser.version != 7.0) {
+                 jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
+                 if ( jQuery.browser.version != 8.0) {
+                    jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
+                 } else {
+                    jQuery("#t #b .watchlist .accordion-center").css("height", "33px");
+                 }
+              }
           });
       }); 	
     },
@@ -192,7 +205,9 @@ var GrabPressDashboard = GrabPressDashboard || {
 
         } else if ( jQuery.browser.version != 7.0) {
             jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
-            jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
+            if ( jQuery.browser.version != 8.0) {
+                jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
+            } 
         } 
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
@@ -207,9 +222,9 @@ var GrabPressDashboard = GrabPressDashboard || {
             fixed: true,
             position: [155, 40]
         });
-                
+                        
         jQuery(".feed_title").ellipsis(0, true, "", "");
-         
+        jQuery(window).resize(function(){jQuery(".feed_title").ellipsis(0, true, "", "")}); 
     }
 }
 

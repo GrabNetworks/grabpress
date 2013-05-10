@@ -454,7 +454,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
 }
 //do form validation	
 jQuery(window).load(function () {
-    GrabPressAutoposter.doValidation();
+    //GrabPressAutoposter.doValidation();
 });
 //initialize form
 jQuery(document).ready(
