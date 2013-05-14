@@ -56,9 +56,9 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                 if(words[i][0] == "-"){
                     not.push(words[i].slice(1,words[i].length));
                 }else{
-                    if (jQuery("#form-create-feed input[name=keywords_and]").val() != '') {
+                    //if (jQuery("#form-create-feed input[name=keywords_and]").val() != '') {
                         and.push(words[i]);
-                    }                                                          								
+                    //}                                                          								
                 }
             }
             jQuery("#form-create-feed input[name=keywords_and]").val(and.join(" "));
