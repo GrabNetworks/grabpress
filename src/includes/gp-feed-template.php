@@ -46,6 +46,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
+                <input type="hidden"  name="feed_id" value="<?php echo (isset($_GET['feed_id']))?$_GET['feed_id']: ''; ?>" />
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
 	                <tr valign="bottom">

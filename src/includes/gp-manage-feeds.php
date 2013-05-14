@@ -56,8 +56,7 @@
 				}
 			?>
 			<tr id="tr-<?php echo $feedId; ?>" class="<?php echo $row_class; ?>">
-				<td>
-					<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />
+				<td>					
 					<?php 
 						if(isset($form['action'])=='modify'){
 							echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
