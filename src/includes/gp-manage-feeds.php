@@ -36,7 +36,7 @@
 
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
 				$feed = $feeds[$n]->feed;
-                                $keywords[$feed->name] = $phrase[$feed->name] = '';
+                                $keywords[html_entity_decode($feed->name)] = $phrase[html_entity_decode($feed->name)] = '';
 				$url = array();
 				parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
 				GrabPress::_escape_params_template($url);
@@ -97,7 +97,7 @@
 							$keywords_and_num = strlen($url['keywords_and']);
 							$keywords_and = $url['keywords_and'];
                                                         if (!empty($keywords_and) && $display_keywords) {
-                                                            $keywords[$feed->name] .= ' '.$keywords_and;
+                                                            $keywords[html_entity_decode($feed->name)] .= ' '.$keywords_and;
                                                         }                                                        
 							echo ($keywords_and_num > 15) ? substr($keywords_and,0,15)."..." : $keywords_and;
 						}
@@ -118,7 +118,7 @@
 							$keywords_phrase_num = strlen($url['keywords_phrase']);
 							$keywords_phrase = $url['keywords_phrase'];
                                                         if(!empty($keywords_phrase) && $display_keywords) {
-                                                            $phrase[$feed->name] .= "_".trim($keywords_phrase)."";
+                                                            $phrase[html_entity_decode($feed->name)] .= "_".trim($keywords_phrase)."";
                                                         }
 							echo ($keywords_phrase_num > 15) ? substr($keywords_phrase,0,15)."..." : $keywords_phrase;
 						}
