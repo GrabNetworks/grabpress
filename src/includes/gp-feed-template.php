@@ -106,7 +106,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	        	<tr valign="bottom">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form['keywords_and']; ?>" maxlength="255" />
+						<input type="text" name="keywords_and" id="keywords_and" class="ui-autocomplete-input" value="<?php echo $form['keywords_and']; ?>" maxlength="255" />
 						<span class="description">Default search setting is 'all of these words'</span>
 					</td>
         		</tr>
@@ -120,14 +120,14 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
         		<tr valign="bottom">
 					<th scope="row">Any of the keywords</th>
         		           	<td >
-						<input type="text" name="keywords_or" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_or"];?>" maxlength="255" />
+						<input type="text" name="keywords_or" id="keywords_or" class="ui-autocomplete-input" value="<?php echo $form["keywords_or"];?>" maxlength="255" />
 						<span class="description">Any of these keywords</span>
 					</td>
         		</tr>
         		<tr valign="bottom">
 					<th scope="row">Exact phrase</th>
         		        <td >
-						<input type="text" name="keywords_phrase" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_phrase"];?>" maxlength="255" />
+						<input type="text" name="keywords_phrase" id="keywords_phrase" class="ui-autocomplete-input" value="<?php echo $form["keywords_phrase"];?>" maxlength="255" />
 						<span class="description">Exact phrase</span>
 					</td>
         		</tr>
@@ -277,7 +277,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<?php $click = ( $is_edit ) ? 'onclick="GrabPressAutoposter.validateFeedName(\'update\')"' : 'onclick="GrabPressAutoposter.validateFeedName()"' ?>
+						<?php $click = ( $is_edit ) ? 'onclick="GrabPressAutoposter.validateKeywords(\'update\');"' : 'onclick="GrabPressAutoposter.validateKeywords();"' ?>
 						<input type="button" class="button-primary" disabled="disabled" value="<?php ( $is_edit ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
 						<a id="reset-form" href="#">reset form</a>
 						<?php if($is_edit){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>	
@@ -315,3 +315,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 ?>
 </div>
 <!--</form>-->
+<div id="keywords_dialog" title="Duplicated keyword">	
+<input type="hidden" value="" id="edit_feed" />	
+<p></p>	
+</div>
