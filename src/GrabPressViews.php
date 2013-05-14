@@ -60,7 +60,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					print GrabPress::fetch( "includes/gp-feed-template.php", 
 						array("form" => array( "referer" => "edit",
 											   "action" => "modify",
-											   "feed_id" => $feed_id,
+											   "feed_id" => $feed->feed->id,
 											   "name" => $feed->feed->name,
 											   //"channel" => $feed->feed->name,
 											   "channels" => $url['categories'],
