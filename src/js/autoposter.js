@@ -155,24 +155,6 @@ var GrabPressAutoposter = GrabPressAutoposter || {
     },
     /* Get the existing feeds keywords */
     getKeywords : function() {        
-        /*var andKwrds = new Object(), 
-            orKwrds = new Array(), 
-            exactKwrds = new Array(),
-            kwrds = new Array();
-            
-        andKwrds = jQuery.trim(jQuery("#existing_keywords").t());
-        if (andKwrds.length != 0) {
-            andKwrds = andKwrds.split(" ");console.log(andKwrds);
-            jQuery.merge(kwrds, andKwrds);
-        }        
-        exactKwrds = jQuery.trim(jQuery("#exact_keywords").text());
-        if (exactKwrds.length != 0) {
-            exactKwrds = exactKwrds.split("_");
-            if (exactKwrds[0] === '') {             
-                exactKwrds.splice(0, 1);
-            }console.log(exactKwrds);
-            jQuery.merge(kwrds, exactKwrds);
-        }*/
         var inpts = jQuery("#existing_keywords input");
         var kwrds =  new Object(),
             phkwrds = new Object();
@@ -185,7 +167,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
            if (phkwrds[this.name][0].length == 0) {
                phkwrds[this.name].splice(0, 1);
            }
-        });//console.log(phkwrds);
+        });
         for (k in kwrds) {
             if (phkwrds[k].length != 0) {               
                 jQuery.merge(kwrds[k], phkwrds[k]);
@@ -194,14 +176,14 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                kwrds[k].splice(0, 1);
             }
         }
-        console.log(kwrds);
+        
         return kwrds;
     },
     /* Check for matching keyword and alert user */
     findMatchingKeyword : function(keyword) {
         var kwrds = GrabPressAutoposter.getKeywords();
         for (feed in kwrds) {
-            if (jQuery.inArray(keyword, kwrds[feed]) != -1) {console.log(feed);
+            if (jQuery.inArray(keyword, kwrds[feed]) != -1) {
                 return feed;
             }
         }  
@@ -227,27 +209,27 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         if (exactKwrds.length != 0) {                        
             var feed = GrabPressAutoposter.findMatchingKeyword(exactKwrds);
             if (feed) {
-                textKwrds += ' <strong>"' + exactKwrds + '"</strong>(exact phrase) already used in feed: ' + feed + ',<br/>';                
+                textKwrds += ' <strong>"' + exactKwrds + '"</strong>(exact phrase), ';// already used in feed: ' + feed + ',<br/>';                
                 keys++;
             }
-        };console.log(kwrds);        
+        };
         jQuery.each(kwrds, function(index, value){            
             feed = GrabPressAutoposter.findMatchingKeyword(value);
             if (feed) {
-                textKwrds += '<strong>' + value + '</strong> already used in feed: ' + feed + ',<br/>';
+                textKwrds += '<strong>' + value + '</strong>, ';// already used in feed: ' + feed + ',<br/>';
                 keys++;
             }            
         });        
         if (keys === 0) {
             GrabPressAutoposter.validateFeedName(edit);
         } else {
-            textKwrds = textKwrds.slice(0, -6);
+            textKwrds = textKwrds.slice(0, -2);
             if (keys === 1) {
-                text = "The keyword: <br/>" + textKwrds;
+                text = "The keyword: <br/>" + textKwrds + " is ";
             } else { 
-                text = "The keywords: <br/>" + textKwrds;
+                text = "The keywords: <br/>" + textKwrds + " are "; 
             }
-            text += "<br/>The videos matching a keyword will show only in the first created feed."
+            text += "already used by previously created feeds.<br/>The videos matching a keyword will show only in the first created feed."
             jQuery("#keywords_dialog p").html(text);
             jQuery("#keywords_dialog #edit_feed").val(edit);               
             jQuery("#keywords_dialog").dialog('open');
