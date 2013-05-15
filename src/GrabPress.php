@@ -513,7 +513,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
                                         wp_enqueue_script( 'gp-dashboard', $plugin_url.'/js/dashboard.js' , array("jquery") );
 					GrabPressViews::dashboard_management($params);
 					break;
-				case 'gp-template':
+				case 'gp-template':    
 					GrabPressViews::template_management($params);
 					break;
 				}
