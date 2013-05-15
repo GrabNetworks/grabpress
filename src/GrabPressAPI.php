@@ -23,10 +23,18 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
 			curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-type: application/json\r\n' ) );
-			$response = curl_exec( $ch );
+			try {
+                            $response = curl_exec( $ch );
+                        } catch (Exception $e) {
+                            Grabpress::abort('API get_json error: '.$e->getMessage());
+                        }
+                        $status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 			curl_close( $ch );
-
-			return $response;
+                        if ($response) {   
+                            return $response;
+                        } else {
+                            throw new Exception('API get_json error with status = '. $status .' and response =' . $response);
+                        }
 		}
 
 		static function call( $method, $resource, $data=array(), $auth=false ){
@@ -46,12 +54,12 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			) );
 			
 			if( isset($auth) && isset($data['user']) && isset($data['pass'])){
-				curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
+                            curl_setopt($ch, CURLOPT_USERPWD, $data['user'] . ":" . $data['pass']);
 			}
 
 			switch($method){
 				case 'GET':		
-					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 60 );
+					curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 10 );
 					$params = '';
 					$location.=$params;
 					$params = strstr($resource, '?') ? '&' : '?';
@@ -70,11 +78,20 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 					curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
 					break;
 			}
-			$response = curl_exec( $ch );
+                        try {
+                            $response = curl_exec( $ch );                            
+                        } catch (Exception $e) {
+                            GrabPress::abort( 'API call error: '.$e->getMessage());
+                        }
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-			curl_close( $ch );
-			GrabPress::log( 'status = ' . $status . ', response =' . $response );
-			return $response;
+                        curl_close( $ch );                        
+                        if ($response) {
+                            GrabPress::log( 'status = ' . $status . ', response =' . $response );
+                            return $response;
+                        } else {
+                            throw new Exception('API call error with status = ' . $status . ' and response =' . $response);
+                            //GrabPress::abort('API call error with status = ' . $status . ' and response =' . $response);
+                        }			
 		}
 
 		static function get_user() {
@@ -286,6 +303,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			GrabPress::log();
 			$api_key = get_option( 'grabpress_key' );
 			if ( $api_key != '' ) {
+                            try {
 				$validate_json = GrabPressAPI::call( 'GET', '/user/validate?api_key='.$api_key );
 				$validate_data = json_decode( $validate_json );
 				if (  isset( $validate_data -> error ) ) {
@@ -294,6 +312,9 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 					GrabPress::$api_key = $api_key;
 					return true;
 				}
+                            } catch (Exception $e) {
+                                GrabPress::log('API call exception: '.$e->getMessage());
+                            }
 			}else {
 				return GrabPressAPI::create_connection();
 			}
@@ -580,15 +601,22 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_HEADER, false);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$xml = curl_exec($ch);
-			
+                        try {
+                            $xml = curl_exec($ch);
+                        } catch (Exception $e) {
+                            Grabpress::abort("Catalog API exception: ".$e->getMessage());
+                        }
+			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 			curl_close($ch);
+                        if ($xml) {
+                            $search = array('grab:', 'media:', 'type="flash"');
+                            $replace = array('grab', 'media', '');
 
-			$search = array('grab:', 'media:', 'type="flash"');
-			$replace = array('grab', 'media', '');
-
-			$xmlString = str_replace( $search, $replace, $xml);
-			return  simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
+                            $xmlString = str_replace( $search, $replace, $xml);
+                            return  simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
+                        } else {
+                            throw new Exception('Catalog API error with status = '. $status .' and response:'.$response);                            
+                        }
 		}
 		static function get_preview_url($mrss){
                         GrabPress::log();

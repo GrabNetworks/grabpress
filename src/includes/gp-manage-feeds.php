@@ -1,7 +1,12 @@
 <?php
-	$feeds = GrabPressAPI::get_feeds();
+        try {
+            $feeds = GrabPressAPI::get_feeds();
+        } catch (Exception $e) {
+            $feeds = array();
+            GrabPress::log('API call exception: '.$e->getMessage());
+        }
 	$num_feeds = count( $feeds ); 
-	$active_feeds = 0;
+	$active_feeds = 0;        
 
 ?>
 <fieldset id="manage-table" class="fieldset-manage">
@@ -29,10 +34,6 @@
 			<th></th>
 		</tr>
 		<?php
-			$feeds = GrabPressAPI::get_feeds();
-			$num_feeds = count( $feeds );
-			
-
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
 				$feed = $feeds[$n]->feed;
 				$url = array();

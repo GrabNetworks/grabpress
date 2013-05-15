@@ -64,7 +64,11 @@
 			$('#cancel_button').click(function(e){
 				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
-					$user = GrabPressAPI::get_user();
+                                        try {    
+                                            $user = GrabPressAPI::get_user();
+                                        } catch(Exception $e) {
+                                            GrabPress::log('API call exception: '.$e->getMessage());
+                                        }
 					$linked = isset( $user->email );
 					if( $linked ){?>
 						'Money earned with this installation will continue to be credited to the account associated with the email address <?php echo $user->email; ?>.'
@@ -78,6 +82,6 @@
 					$('#action-link-user').val('default');
 					$('#link-existing').submit();
 				}
-			})
+			});
 		})( jQuery )
 </script>

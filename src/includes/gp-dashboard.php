@@ -393,7 +393,11 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
     <div class="infoBox">
     <p>Linked Account Email Adrress: <br />
     <?php
-        $user = GrabPressAPI::get_user();
+        try {
+            $user = GrabPressAPI::get_user();            
+        } catch (Exception $e) {
+            GrabPress::log('API call exception: '.$e->getMessage());
+        }
         $linked = isset( $user->email);
         if( $linked ){?>
         <?php echo $user->email;			
