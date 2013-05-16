@@ -46,6 +46,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
+                <input type="hidden"  name="feed_id" value="<?php echo (isset($_GET['feed_id']))?$_GET['feed_id']: ''; ?>" />
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
 	                <tr valign="bottom">
@@ -217,7 +218,8 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 						<th scope="row">Post Categories</th>
 						<td>
 							<?php
-								$select_cats = wp_dropdown_categories  ( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 ) );
+								$selected = isset($form['category'][0])?$form['category'][0]:'';
+								$select_cats = wp_dropdown_categories  ( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 , 'selected' => $selected) );
 								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
 								echo $select_cats;
 							?>
