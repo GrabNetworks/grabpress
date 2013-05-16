@@ -207,17 +207,23 @@ var GrabPressDashboard = GrabPressDashboard || {
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
         jQuery(".nano").nanoScroller({"alwaysVisible":true});
-
+        
         jQuery(window).resize(function(){
             GrabPressDashboard.resize_accordion();         
-            if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
+            if ( jQuery(window).width() < 370 ) {
+                jQuery("#t #b .watchlist").hide();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+            } else if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
+                jQuery("#t #b .watchlist").show();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
                 var wTop = -jQuery("#t #b .watchlist").height();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
             } else {
+                jQuery("#t #b .watchlist").show();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
-            }
+            }              
         }).resize();
         jQuery("#message").hide();//hack
         
@@ -226,7 +232,11 @@ var GrabPressDashboard = GrabPressDashboard || {
             fixed: true,
             position: [155, 40]
         });
-                
+        if ( jQuery(window).width() < 370 ) {
+            jQuery("#t #b .watchlist").hide();
+            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
+            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+        }       
         jQuery(".feed_title").ellipsis(0, true, "", "");
          
     }
