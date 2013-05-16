@@ -592,9 +592,13 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$linked = isset($user->email);
                         $publisher_status = $linked ? "account-linked" : "account-unlinked";  
                         
+                        $embed_id = GrabPressAPI::get_connector()->ctp_embed_id;
+                        
                         $list_providers = GrabPressAPI::get_providers();
                     } catch (Exception $e) {
                         $messages = $pills = $resources = $feeds = $watchlist = $list_providers = array();
+                        $publisher_status = "account-unlinked";
+                        $embed_id = "";
                         GrabPress::log('API call exception: '.$e->getMessage());
                     }
                     print GrabPress::fetch( 'includes/gp-dashboard.php' , array(
@@ -603,7 +607,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                             "resources" => $resources,
                             "feeds" => $feeds,
                             "watchlist" => array_splice($watchlist,0,10),
-                            "embed_id" => GrabPressAPI::get_connector()->ctp_embed_id,
+                            "embed_id" => $embed_id,
                             "publisher_status" => $publisher_status,
                             "list_providers" => $list_providers                            
                             ));
