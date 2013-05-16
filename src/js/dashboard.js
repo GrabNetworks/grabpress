@@ -170,7 +170,7 @@ var GrabPressDashboard = GrabPressDashboard || {
     init : function(){
          //fix for watchlist min-width and max-width for ie9 and ie10
         if (jQuery.browser.msie && jQuery.browser.version > 8.0) {
-            if ( jQuery(window).width() < 1200 ) {alert('aa');
+            if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0 ) {
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '320px');
                 var wTop = -jQuery("#t #b .watchlist").height();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
@@ -210,7 +210,7 @@ var GrabPressDashboard = GrabPressDashboard || {
 
         jQuery(window).resize(function(){
             GrabPressDashboard.resize_accordion();         
-            if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1200 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
+            if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
                 var wTop = -jQuery("#t #b .watchlist").height();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
