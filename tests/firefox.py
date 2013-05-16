@@ -95,7 +95,7 @@ class CatalogTests(GrabPressAutomation):
     def test_CTLG_2_CreatePostFromCatalogSearch(self):
         driver = self.driver
         CatalogTests.test_CTLG_1_ExactPhraseSearch(self)
-        driver.find_element_by_id("btn-create-feed-single-4400635").click()
+        driver.find_element_by_id("btn-create-feed-single-4430298").click()
         self.assertRegexpMatches(driver.find_element_by_id("content").text, r"grabpress_video guid=\"d811f4d7f6bd7de097b0e6dd09930411b44c0ab1\"")
 
     def test_CTLG_2a_DeleteCreatedPost(self):
