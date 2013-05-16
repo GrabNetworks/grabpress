@@ -225,9 +225,9 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         } else {
             textKwrds = textKwrds.slice(0, -2);
             if (keys === 1) {
-                text = "The keyword: <br/>" + textKwrds + " is ";
+                text = "The keyword " + textKwrds + " is ";
             } else { 
-                text = "The keywords: <br/>" + textKwrds + " are "; 
+                text = "The keywords " + textKwrds + " are "; 
             }
             text += "already used by previously created feeds.<br/>The videos matching a keyword will show only in the first created feed."
             jQuery("#keywords_dialog p").html(text);
