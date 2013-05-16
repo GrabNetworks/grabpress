@@ -131,10 +131,10 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 
 		static function get_connector() {
 			GrabPress::log();
-			if(GrabPress::$connector){
+			if(GrabPress::$connector){                          
 				return GrabPress::$connector;
-			}
-			if ( GrabPressAPI::validate_key() ) {
+			}       
+			if ( GrabPressAPI::validate_key() ) {                                
 				$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
 				$connectors_json =  GrabPressAPI::call( 'GET',  '/connectors?api_key='.GrabPress::$api_key );
 				$connectors_data = json_decode( $connectors_json );
@@ -185,7 +185,14 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			}
 		}
 		static function get_connector_id(){
+                    $conector = GrabPressAPI::get_connector();
+                    if ($conector) {
 			return GrabPressAPI::get_connector()->id;
+                    }
+                    else {
+                        $conector;
+                    }
+                    
 		}
 		static function get_shortcode_template_id(){
 		  GrabPress::log();
