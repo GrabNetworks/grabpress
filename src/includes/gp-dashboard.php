@@ -7,7 +7,7 @@
 		  <div id="b">		    
 			<!--************************************************************-->
 			<div class="container-fluid">
-				<div class="row-fluid">
+				<div class="row-fluid watchlist-wrap">
 					<div class="span4 watchlist">
 						<div class="tabbable panel">
 							<ul class="nav nav-tabs">

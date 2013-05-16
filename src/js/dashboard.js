@@ -170,6 +170,11 @@ var GrabPressDashboard = GrabPressDashboard || {
     init : function(){
          //fix for watchlist min-width and max-width for ie9 and ie10
         if (jQuery.browser.msie && jQuery.browser.version > 8.0) {
+            if ( jQuery(window).width() < 1200 ) {alert('aa');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '320px');
+                var wTop = -jQuery("#t #b .watchlist").height();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+            }
             jQuery("#t #b .watchlist").css('max-width','1392px');
             jQuery("#t #b .watchlist").css('min-width','1072px');
             jQuery("#t #b #btn-account-settings a").hover(function(){
@@ -193,13 +198,27 @@ var GrabPressDashboard = GrabPressDashboard || {
         } else if ( jQuery.browser.version != 7.0) {
             jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
             jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
-        } 
+        } else if ( jQuery(window).width() < 1200 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
+            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '320px');
+            var wTop = -jQuery("#t #b .watchlist").height();
+            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+        }
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
         jQuery(".nano").nanoScroller({"alwaysVisible":true});
 
-        jQuery(window).resize(GrabPressDashboard.resize_accordion).resize();
+        jQuery(window).resize(function(){
+            GrabPressDashboard.resize_accordion();         
+            if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1200 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                var wTop = -jQuery("#t #b .watchlist").height();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+            } else {
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+            }
+        }).resize();
         jQuery("#message").hide();//hack
         
         jQuery("#help").simpletip({

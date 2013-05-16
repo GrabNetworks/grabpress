@@ -794,6 +794,7 @@ line-height: 24px;
 #t #b .accordion-heading a.accordion-toggle {    
     padding: 4px 15px;
     height: 25px;  
+    line-height: 24px;
 }
 #t #b .collapse {
     overflow: hidden;
@@ -1049,7 +1050,7 @@ line-height: 24px;
 
 #t #b .right-pane{
     width:752px !important;   
-    margin-left: -752px !important;
+    margin-left: -752px;
 }
 
 #t #b .watchlist{
@@ -1103,3 +1104,7 @@ line-height: 24px;
     padding: 15px;
     text-decoration: underline !important;
 }
+/* Dashboard right-pane fixed position */
+#t #b .right-pane .span4 { width:auto }
+/* chrome fix */
+/*#t #b .watchlist-wrap {display: inline-table;width:auto !important}*/
