@@ -326,7 +326,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                             try {
 				return GrabPressAPI::create_connection();
                             } catch (Exception $e) {
-                                exit('API error! Please try again later!');
+                                exit('API connection error! Please try again later!');
                             }
 			}
 			return false;
