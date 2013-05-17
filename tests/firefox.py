@@ -18,6 +18,7 @@ class GrabPressAutomation(unittest.TestCase):
         self.assertEqual([], self.verificationErrors)
 
     def Login(self):
+        time.sleep(1)
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys("\user")
@@ -26,6 +27,7 @@ class GrabPressAutomation(unittest.TestCase):
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Welcome to WordPress!")
 
     def LoginAdminRole(self):
+        time.sleep(1)
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys(r"\admin")
@@ -34,6 +36,7 @@ class GrabPressAutomation(unittest.TestCase):
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Admin Role")
 
     def LoginAuthorRole(self):
+        time.sleep(1)
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys(r"\author")
@@ -42,6 +45,7 @@ class GrabPressAutomation(unittest.TestCase):
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Author Role")
 
     def LoginContributorRole(self):
+        time.sleep(1)
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys("\contributor")
@@ -50,6 +54,7 @@ class GrabPressAutomation(unittest.TestCase):
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Contributor Role")
 
     def LoginEditorRole(self):
+        time.sleep(1)
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys("\editor")
@@ -58,6 +63,7 @@ class GrabPressAutomation(unittest.TestCase):
         self.assertRegexpMatches(driver.find_element_by_id("wp-admin-bar-my-account").text, r"Howdy, Editor Role")
 
     def LoginSubscriberRole(self):
+        time.sleep(1)
         driver = self.driver
         driver.get(self.base_url + "wordpress/wp-login.php")
         driver.find_element_by_id("user_login").send_keys("\subscriber")
