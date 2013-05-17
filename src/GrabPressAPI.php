@@ -322,8 +322,12 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                             } catch (Exception $e) {
                                 GrabPress::log('API call exception: '.$e->getMessage());
                             }
-			}else {
+			} else {
+                            try {
 				return GrabPressAPI::create_connection();
+                            } catch (Exception $e) {
+                                exit('API error! Please try again later!');
+                            }
 			}
 			return false;
 		}
