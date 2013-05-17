@@ -33,7 +33,7 @@ var GrabPressTemplate = GrabPressTemplate || {
         var player_width = jQuery("form input[name=width]").val();
         if(isNaN(player_width))
         {         
-            alert("Number cant be alphabet");
+            alert("Please enter a numeric value !");
             document.getElementById("player_width").value = jQuery("form input[name=width_orig]").val();
             GrabPressTemplate.updateHeightValue();
             return false;

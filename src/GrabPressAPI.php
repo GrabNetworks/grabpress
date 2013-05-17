@@ -190,7 +190,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			return GrabPressAPI::get_connector()->id;
                     }
                     else {
-                        $conector;
+                        return $conector;
                     }
                     
 		}
