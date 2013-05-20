@@ -102,7 +102,6 @@ var GrabPressDashboard = GrabPressDashboard || {
                   jQuery('#accordion2').html(accordion);
               }
               setTimeout(function(){
-                  console.log(jQuery("#t #b .watchlist").height());       
                   jQuery("#t #b .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
                   jQuery("#t #b .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
               },300);
@@ -155,7 +154,6 @@ var GrabPressDashboard = GrabPressDashboard || {
                     });
                     openPanels.slideUp(400,'linear', function(){
                         active_video.hideEmbed();
-                        //console.log("hide embed");
                         jQuery(this).toggleClass("collapse");
                         monitor++;
                     });
@@ -209,9 +207,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
                 }
-            }, 300); 
-        
-            
+            }, 300);            
         }
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
@@ -231,7 +227,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                 jQuery("#t #b .watchlist").hide();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
-            } else //unifrom browser bevahior when resizing the browser width under 1283px
+            } else //consistent browser bevahior when resizing the browser width under 1283px
                 if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome 
                        || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
                        && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
@@ -253,8 +249,7 @@ var GrabPressDashboard = GrabPressDashboard || {
             position: [155, 40]
         });
         
-        if ( jQuery("#adminmenuwrap").width() < 34 ) {
-            jQuery(".folded #wpcontent").css('margin-left', '33px');
+        if ( jQuery("#adminmenuwrap").width() < 34 ) {           
             smallWidth = 370;
         } 
         if ( jQuery(window).width() < smallWidth ) {
