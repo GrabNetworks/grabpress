@@ -547,7 +547,12 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             id = this.id.replace('btn-update-','');
             GrabPressAutoposter.editFeed(id);
             return false;
-        });        
+        });   
+        
+        //if we have an API connection error disable all inputs
+        if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+            jQuery(":input").attr('disabled', 'disabled');
+        };
     }
 }
 //do form validation	

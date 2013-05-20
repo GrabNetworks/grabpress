@@ -98,6 +98,7 @@
 				var valid = email_valid && pass_valid && pass_match &&first_valid &&last_valid && address_valid && city_valid && state_valid &&zip_valid && agree_valid && url_valid;
                                 if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
                                     valid = false;
+                                    jQuery(":input").attr('disabled', 'disabled');
                                 }
 				return valid
 			}
@@ -135,6 +136,12 @@
 		    $("#clear-form").click(function() {
 				$('#register')[0].reset();
 		    	doValidation();
-		    })
+		    });
+                    $(document).ready(function(){
+                        //if we have an API connection error disable all inputs
+                        if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+                            jQuery(":input").attr('disabled', 'disabled');
+                        }
+                    });		
 		   })(jQuery)
 	</script>

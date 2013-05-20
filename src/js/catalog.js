@@ -381,6 +381,11 @@ var GrabPressCatalog = {
            form.submit();
       });
      
+      //if we have an API connection error disable all inputs
+      if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+          jQuery(":input").attr('disabled', 'disabled');
+      };
+      
       jQuery(".video_summary").ellipsis(2, true, "more", "less");
       if(!window.grabModal){
             try{

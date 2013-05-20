@@ -38,6 +38,7 @@
 				//console.log( 'pass:' + pass_valid );
 				var valid = email_valid && pass_valid;
                                 if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+                                    jQuery(":input").attr('disabled', 'disabled');
                                     valid = false;
                                 }
 				//console.log('valid:'+ valid )
@@ -63,7 +64,12 @@
 		    $("input").keyup(doValidation);
 		    $("input").click(doValidation);
 		    $("select").change(doValidation);
-			
+                    $(document).ready(function(){
+                        //if we have an API connection error disable all inputs
+                        if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+                            jQuery(":input").attr('disabled', 'disabled');
+                        }
+                    });
 			$('#cancel_button').click(function(e){
 				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
 					<?php 
@@ -87,4 +93,5 @@
 				}
 			});
 		})( jQuery )
+                
 </script>
