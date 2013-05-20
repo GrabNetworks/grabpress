@@ -202,7 +202,7 @@ var GrabPressDashboard = GrabPressDashboard || {
         } else if ( jQuery.browser.version != 7.0) {
             jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
             jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
-            setTimeout(function() {
+           setTimeout(function() {
                 if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
@@ -232,9 +232,11 @@ var GrabPressDashboard = GrabPressDashboard || {
                        || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
                        && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
                 jQuery("#t #b .watchlist").show();
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
-                var wTop = -jQuery("#t #b .watchlist").height();
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+                setTimeout(function(){
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                    var wTop = -jQuery("#t #b .watchlist").height();
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+                }, 150);                
             } else {
                 jQuery("#t #b .watchlist").show();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
@@ -257,7 +259,15 @@ var GrabPressDashboard = GrabPressDashboard || {
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
             }  
-        jQuery(".feed_title").ellipsis(0, true, "", "");     
+        jQuery(".feed_title").ellipsis(0, true, "", ""); 
+        if (jQuery.browser.safari) {
+            jQuery("#collapse-menu").click(function(){
+                setTimeout(function() {
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
+                }, 150);
+            });
+        }
     }
 }
 
