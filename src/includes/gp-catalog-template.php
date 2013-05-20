@@ -15,11 +15,14 @@
 	}else{
 		$channel_text = count($channels)." of ".$channels_total." selected";
 	}
-
-	$id = GrabPressAPI::get_connector_id();
-	$player_json = GrabPressAPI::call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
-	$player_data = json_decode( $player_json, true );
-	$player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
+        try {
+            $id = GrabPressAPI::get_connector_id();
+            $player_json = GrabPressAPI::call( 'GET',  '/connectors/'.$id.'/?api_key='.GrabPress::$api_key );
+            $player_data = json_decode( $player_json, true );
+            $player_id = isset($player_data["connector"]["ctp_embed_id"]) ? $player_data["connector"]["ctp_embed_id"] : '';	
+        } catch (Exception $e) {
+            GrabPress::log('API call exception: '.$e->getMessage());
+        }
 ?>
 <form method="post" action="" id="form-catalog-page">
         <input type="hidden" id="environment" name="environment" value="<?php echo GrabPress::$environment; ?>" />
