@@ -547,10 +547,16 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				 	}
 				 	
 				 	$settings["height"] = $player_height;				 	
-					$settings["action"] = "edit";
+					$settings["action"] = "edit";                                        
 				}
+                                if (!isset($settings["widescreen_selected"]) && !isset($settings["standard_selected"]) ) {
+                                    $settings["widescreen_selected"] = true;
+                                    $settings["standard_selected"] = false;
+                                }
                             } catch (Exception $e) {
                                 GrabPress::log('API call exception: '.$e->getMessage());
+                                $settings["widescreen_selected"] = true;
+                                $settings["standard_selected"] = false;
                             }
 				/*
 				if($settings["playback"] == "auto"){
@@ -561,9 +567,6 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 					$settings["click_selected"] = true;
 				}
 				*/
-
-				
-
                             print GrabPress::fetch("includes/gp-template.php", array(
 				"form" => $settings
 				));
