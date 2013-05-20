@@ -2,7 +2,11 @@
 			<img src="http://grab-media.com/corpsite-static/images/grab_logo.jpg"/>
 			<h2>GrabPress: Earn money with a Grab Publisher Account</h2>
 			<?php
-				$user = GrabPressAPI::get_user();
+				try {
+                                    $user = GrabPressAPI::get_user();
+                                } catch(Exception $e) {
+                                    GrabPress::log('API call exception: '.$e->getMessage());
+                                }
 				$linked = isset( $user->email);
 				if( $linked ){?>
 			<p class="account-help">This installation is linked to <?php echo $user->email; ?></p>					
@@ -15,10 +19,10 @@
 				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php', array("request" =>$request)) : GrabPress::fetch('includes/account/chooser/unlinked.php', array("request" =>$request));
 			?>
 			<script>
-				(function( $ ){
+				(function( $ ){                                    
 					$( '#account-chooser input' ).click( function(){
 						$( '#account-chooser').submit();
-					})
+					});                                        
 				})( jQuery )
 			</script>
 			<?php switch( $request[ 'action' ] ){

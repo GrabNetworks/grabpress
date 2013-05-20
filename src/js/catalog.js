@@ -1,6 +1,9 @@
 var GrabPressCatalog = {
     /* Checks for channels and providers selection */
     hasValidationErrors : function (preview) {                           
+                            if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+                                return true; 
+                            }
                             var channels_multiselect = "#channel-select :selected";
                             var providers_multiselect = "#provider-select :selected";
                             if (preview) {
@@ -9,9 +12,8 @@ var GrabPressCatalog = {
                             }
                             if((jQuery(channels_multiselect).length == 0) || (jQuery(providers_multiselect).length == 0)){
 				return true;
-                            } else {
-				return false;
                             }
+                            return false;                            
                         },
     /* Validation for search form inputs */                    
     doValidation : function (preview) {
@@ -379,6 +381,11 @@ var GrabPressCatalog = {
            form.submit();
       });
      
+      //if we have an API connection error disable all inputs
+      if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+          jQuery(":input").attr('disabled', 'disabled');
+      };
+      
       jQuery(".video_summary").ellipsis(2, true, "more", "less");
       if(!window.grabModal){
             try{

@@ -13,7 +13,7 @@
 	console = console || { log:function(){}};
 	(function($){
 		$('#confirm').click(function(){
-                        if ( $('#confirm').attr('checked')){
+                        if ( $('#confirm').attr('checked') && jQuery("#message p").text() != "There was an error connecting to the API! Please try again later!"){
 				$( '#submit_button' ).removeAttr('disabled');
 				$('#submit_button').click(function(){
 					$('#unlink').submit();
