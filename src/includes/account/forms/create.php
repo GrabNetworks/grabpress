@@ -96,6 +96,9 @@
 				//console.log( 'url:' + url_valid );
 				//var valid = email_valid && pass_valid && pass_match &&first_valid &&last_valid && address_valid && city_valid && state_valid &&zip_valid && agree_valid && phone_valid && url_valid;
 				var valid = email_valid && pass_valid && pass_match &&first_valid &&last_valid && address_valid && city_valid && state_valid &&zip_valid && agree_valid && url_valid;
+                                if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+                                    valid = false;
+                                }
 				return valid
 			}
 			//$('#submit-button').bind('click', function(e){

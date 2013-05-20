@@ -5,12 +5,13 @@
 var GrabPressAutoposter = GrabPressAutoposter || {
     /* Checks if channels and providers are selected */
     hasValidationErrors : function () {
+        if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+           return true; 
+        }
         if((jQuery("#channel-select :selected").length == 0) || (jQuery("#provider-select :selected").length == 0)){
             return true;
-        }
-        else {
-            return false;
-        }
+        }       
+        return false;        
     },
     /* Modal preview window definition and its closing behavior  */
     previewdialogConf : {

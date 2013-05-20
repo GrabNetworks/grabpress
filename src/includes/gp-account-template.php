@@ -19,10 +19,10 @@
 				echo $linked ? GrabPress::fetch('includes/account/chooser/linked.php', array("request" =>$request)) : GrabPress::fetch('includes/account/chooser/unlinked.php', array("request" =>$request));
 			?>
 			<script>
-				(function( $ ){
+				(function( $ ){                                    
 					$( '#account-chooser input' ).click( function(){
 						$( '#account-chooser').submit();
-					})
+					});                                        
 				})( jQuery )
 			</script>
 			<?php switch( $request[ 'action' ] ){

@@ -1,5 +1,4 @@
 <?php 
-
 $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 ?>

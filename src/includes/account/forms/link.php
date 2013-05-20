@@ -37,6 +37,9 @@
 				var pass_valid = ( $('#password').val().length > 0 ) ;
 				//console.log( 'pass:' + pass_valid );
 				var valid = email_valid && pass_valid;
+                                if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+                                    valid = false;
+                                }
 				//console.log('valid:'+ valid )
 				return valid
 			}

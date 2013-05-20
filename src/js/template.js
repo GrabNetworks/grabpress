@@ -62,6 +62,9 @@ var GrabPressTemplate = GrabPressTemplate || {
     },
     /* initialization */
     init : function() {
+        if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+            jQuery(":input").attr('disabled', 'disabled');
+        }
         jQuery('#dialog_300').dialog({
             autoOpen: false,
             width: 400,
