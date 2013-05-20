@@ -260,7 +260,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
             }  
         jQuery(".feed_title").ellipsis(0, true, "", ""); 
-        if (jQuery.browser.safari) {
+        if (jQuery.browser.safari || jQuery.browser.chrome) {
             jQuery("#collapse-menu").click(function(){
                 setTimeout(function() {
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
