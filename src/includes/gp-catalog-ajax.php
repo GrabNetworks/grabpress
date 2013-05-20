@@ -99,7 +99,8 @@
 			</div>	
 			<div class="label-tile">				
 				<div class="tile-right">					
-					<a href="#" id="clear-search" onclick="return false;" >clear search</a>
+					<a href="#" id="clearDates" >clear dates</a> &nbsp; 
+                                        &nbsp; <a href="#" id="clear-search" onclick="return false;" >clear search</a>
 					<input type="submit" value="Search " class="update-search" id="update-search" >
 				</div>
 			</div>
