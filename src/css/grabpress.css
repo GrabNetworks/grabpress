@@ -574,8 +574,8 @@ line-height: 24px;
 /* Custom =======================================================*/
 #form-dashboard{
     background: #000 url("../images/background.png") repeat;
-    margin: 0;
-    padding: 0 0 160px 0 !important;
+    margin: -5px 0 0 -19px;
+    padding: 0 19px 160px 0 !important;
     box-shadow: 0 0 5px 2px rgb(0,0,0) inset;
     height: auto;
     width: 100%;
@@ -1108,6 +1108,5 @@ line-height: 24px;
 /* Dashboard right-pane fixed position */
 #t #b .right-pane .span4 { width:auto }
 /* white margins fix */
-#wpcontent {margin-left: 146px}
+/*#wpcontent {margin-left: 146px}*/
 .wrap{margin:0}
-
