@@ -33,7 +33,7 @@ var GrabPressTemplate = GrabPressTemplate || {
         var player_width = jQuery("form input[name=width]").val();
         if(isNaN(player_width))
         {         
-            alert("Number cant be alphabet");
+            alert("Please enter a numeric value !");
             document.getElementById("player_width").value = jQuery("form input[name=width_orig]").val();
             GrabPressTemplate.updateHeightValue();
             return false;
@@ -62,6 +62,9 @@ var GrabPressTemplate = GrabPressTemplate || {
     },
     /* initialization */
     init : function() {
+        if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+            jQuery(":input").attr('disabled', 'disabled');
+        }
         jQuery('#dialog_300').dialog({
             autoOpen: false,
             width: 400,

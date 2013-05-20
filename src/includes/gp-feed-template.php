@@ -1,5 +1,4 @@
 <?php 
-
 $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 ?>
@@ -12,7 +11,11 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 		<legend><?php echo $is_edit ? 'Edit':'Create'?> Feed</legend>	
 	<?php
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
-		$connector_id = GrabPressAPI::get_connector_id();
+                try {
+                    $connector_id = GrabPressAPI::get_connector_id();
+                } catch(Exception $e) {
+                    GrabPress::log('API call exception: '.$e->getMessage());
+                }
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
@@ -301,7 +304,12 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 </div>
 
 <?php
-	$feeds = GrabPressAPI::get_feeds();
+	try {
+            $feeds = GrabPressAPI::get_feeds();
+        } catch(Exception $e) {
+            $feeds = array();
+            GrabPress::log('API call exception: '.$e->getMessage());
+        }
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
