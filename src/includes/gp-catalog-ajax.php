@@ -130,7 +130,7 @@
 			</div>
 			<?php }?>
 		<?php
-                    if (count($list_feeds["results"])) {
+                    if(!empty($list_feeds["results"])){
 			foreach ($list_feeds["results"] as $result) {
 		?>
 		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		

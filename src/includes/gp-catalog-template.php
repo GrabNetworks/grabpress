@@ -136,6 +136,7 @@
             <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>400?400:$list_feeds["total_count"]; ?>" name="feed_count"/>
         </div>
 	<?php
+            if(!empty($list_feeds["results"])){
 			foreach ($list_feeds["results"] as $result) {
 	?>
 	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile" id="video-<?php echo $result['video']['id']; ?>">		
@@ -162,7 +163,8 @@
 	</div>
 	<?php
 			} // end foreach
-		} // end if	
+            }//end if !empty
+	} // end if	
 	?>
 	
 	</fieldset>
