@@ -248,7 +248,7 @@ var GrabPressDashboard = GrabPressDashboard || {
         jQuery("#help").simpletip({
             content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
             position: 'left',
-            offset: [-135, 0]
+            offset: [-135, -124]
         });
         
         if ( jQuery("#adminmenuwrap").width() < 34 ) {           
