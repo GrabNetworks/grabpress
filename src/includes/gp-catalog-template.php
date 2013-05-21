@@ -105,10 +105,12 @@
 				To<input type="text" readonly="true" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
                         </div>
 		</div>	
-		<div class="label-tile">	
+		<div class="label-tile">
+                        <div class="tile-left">
+                            <input type="button" value="clear dates " id="clearDates" style="float:left" >
+                        </div>
 			<div class="tile-right">
-                                <a href="#" id="clearDates" >clear dates</a> &nbsp; 
-				 &nbsp; <a href="#" id="clear-search" onclick="return false;" >clear search</a>				
+                                <a href="#" id="clear-search" onclick="return false;" >clear search</a>				
 				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
