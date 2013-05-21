@@ -373,6 +373,11 @@ var GrabPressCatalog = {
           showAnim: 'slideDown',
           duration: 'fast'
       });
+      //#clearDates is a button to clear the datepickers
+      jQuery('#clearDates').on('click', function(){
+          jQuery("#created_after").val(''); 
+          jQuery("#created_before").val(''); 
+      });
       if(jQuery("#channel-select-preview")) { preview = 1; };      
       jQuery("#form-catalog-page").change(GrabPressCatalog.doValidation(preview));      
       
