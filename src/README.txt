@@ -3,7 +3,7 @@ Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.4   
 Tested up to: 3.5  
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,23 +175,29 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Changelog ==  
 
+= 2.3.1 =
+*Features:*
+
+ * AUTO-571: As a WordPress Publisher, I want to be warned when I create a feed that uses a keyword that has already been used in an existing feed.
+ * Various bug fixes
+
 = 2.3.0 =
 *Features:*
 
-* AUTO-665: As a WordPress Publisher, I want to page through the search results from a search when inserting into a post, so that I have more results to view.
-* AUTO-654: As a WordPress Publisher, I want to click on a link in the Feed Activity section of the Dashboard, so that I may see each feeds settings and configuration information.
-* AUTO-652: As a WordPress Administrator, I want to limit access to creating feeds in the Catalog tab to WP users/roles with 'edit_others_posts' AND 'publish_posts' capabilities, so that only editors may create feeds.
-* AUTO-651: As a WordPress Administrator, I want to limit access to the Template tab to users/roles with the 'edit_others_posts' capability, so others cannot change my template settings.
-* AUTO-650: As a WordPress Administrator, I want to limit access to the Autoposter tab to WP users/roles with 'edit_others_posts' AND 'publish_posts' capabilities, so that only editors may create/edit feeds.
-* AUTO-649: As a WordPress Administrator, I want to limit access to the Account tab to WP users/roles with 'edit_plugins' capabilities, so that only administrators may link my grabpress instance to a GrabMedia account.
-* AUTO-641: As a WordPress Publisher, I want to page through the search results from a search on the catalog tab, so that I have more results to view.
-* AUTO-607: As a WordPress Editor, I want to see a rollover treatment on the Title in the watchlist, so I know I can click on it.
+ * AUTO-665: As a WordPress Publisher, I want to page through the search results from a search when inserting into a post, so that I have more results to view.
+ * AUTO-654: As a WordPress Publisher, I want to click on a link in the Feed Activity section of the Dashboard, so that I may see each feeds settings and configuration information.
+ * AUTO-652: As a WordPress Administrator, I want to limit access to creating feeds in the Catalog tab to WP users/roles with 'edit_others_posts' AND 'publish_posts' capabilities, so that only editors may create feeds.
+ * AUTO-651: As a WordPress Administrator, I want to limit access to the Template tab to users/roles with the 'edit_others_posts' capability, so others cannot change my template settings.
+ * AUTO-650: As a WordPress Administrator, I want to limit access to the Autoposter tab to WP users/roles with 'edit_others_posts' AND 'publish_posts' capabilities, so that only editors may create/edit feeds.
+ * AUTO-649: As a WordPress Administrator, I want to limit access to the Account tab to WP users/roles with 'edit_plugins' capabilities, so that only administrators may link my grabpress instance to a GrabMedia account.
+ * AUTO-641: As a WordPress Publisher, I want to page through the search results from a search on the catalog tab, so that I have more results to view.
+ * AUTO-607: As a WordPress Editor, I want to see a rollover treatment on the Title in the watchlist, so I know I can click on it.
 
 *Bug Fixes:*
 
-* AUTO-685: Posts created from the catalog tab are using the thumbnail image as the featured image, and in the posting, instead of the preview image.
-* AUTO-684: Selected categories and providers are reset to "ALL" after running a search on the catalog tab.
-* AUTO-648: Shortcode is using the click-to-play embed_id value for posts made from a feed that are set to use the autoplay embed_id.
+ * AUTO-685: Posts created from the catalog tab are using the thumbnail image as the featured image, and in the posting, instead of the preview image.
+ * AUTO-684: Selected categories and providers are reset to "ALL" after running a search on the catalog tab.
+ * AUTO-648: Shortcode is using the click-to-play embed_id value for posts made from a feed that are set to use the autoplay embed_id.
 
 = 2.2.2 =
  * Various bux fixes.
