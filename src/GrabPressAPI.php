@@ -85,12 +85,11 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                         }
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
                         curl_close( $ch );                        
-                        if ($response) {
+                        if ($response && $status < 400) {
                             GrabPress::log( 'status = ' . $status . ', response =' . $response );
                             return $response;
                         } else {
                             throw new Exception('API call error with status = ' . $status . ' and response =' . $response);
-                            //GrabPress::abort('API call error with status = ' . $status . ' and response =' . $response);
                         }			
 		}
 
@@ -477,7 +476,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$user_json = GrabPressAPI::call( "POST", '/user', $post_data );
 			$user_data = json_decode( $user_json );
 
-			$api_key = $user_data -> user -> access_key;
+                        $api_key = $user_data -> user -> access_key;
 			if ( $api_key ) {
 				update_option( 'grabpress_key', $api_key );//store api key
 			}
@@ -598,9 +597,8 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 					$last_submission = new DateTime($submissions[0]->submission->created_at);
 					if(
 						new DateTime($sub->submission->created_at) > 
-						$last_submission->sub(date_interval_create_from_date_string($feed->feed->update_frequency." seconds"))
+                                                $last_submission->modify("+ ".$feed->feed->update_frequency." seconds")
 					){
-
 						$count++;
 					}
 				}
