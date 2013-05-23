@@ -5,12 +5,13 @@
 var GrabPressAutoposter = GrabPressAutoposter || {
     /* Checks if channels and providers are selected */
     hasValidationErrors : function () {
+        if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+           return true; 
+        }
         if((jQuery("#channel-select :selected").length == 0) || (jQuery("#provider-select :selected").length == 0)){
             return true;
-        }
-        else {
-            return false;
-        }
+        }       
+        return false;        
     },
     /* Modal preview window definition and its closing behavior  */
     previewdialogConf : {
@@ -56,9 +57,9 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                 if(words[i][0] == "-"){
                     not.push(words[i].slice(1,words[i].length));
                 }else{
-                    if (jQuery("#form-create-feed input[name=keywords_and]").val() != '') {
+                    //if (jQuery("#form-create-feed input[name=keywords_and]").val() != '') {
                         and.push(words[i]);
-                    }                                                          								
+                    //}                                                          								
                 }
             }
             jQuery("#form-create-feed input[name=keywords_and]").val(and.join(" "));
@@ -153,6 +154,88 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             jQuery('.hide').hide();
         }
     },
+    /* Get the existing feeds keywords */
+    getKeywords : function() {        
+        var inpts = jQuery("#existing_keywords input");
+        var kwrds =  new Object(),
+            phkwrds = new Object();
+        inpts.each(function(index){
+           kwrds[this.name] = jQuery.trim(this.value).split(" ");
+        });
+        var phInpts = jQuery("#exact_keywords input");
+        phInpts.each(function(index){
+           phkwrds[this.name] = jQuery.trim(this.value).split("_");
+           if (phkwrds[this.name][0].length == 0) {
+               phkwrds[this.name].splice(0, 1);
+           }
+        });
+        for (k in kwrds) {
+            if (phkwrds[k].length != 0) {               
+                jQuery.merge(kwrds[k], phkwrds[k]);
+            };            
+            if (kwrds[k][0].length == 0) {
+               kwrds[k].splice(0, 1);
+            }
+        }
+        
+        return kwrds;
+    },
+    /* Check for matching keyword and alert user */
+    findMatchingKeyword : function(keyword) {
+        var kwrds = GrabPressAutoposter.getKeywords();
+        for (feed in kwrds) {
+            if (jQuery.inArray(keyword, kwrds[feed]) != -1) {
+                return feed;
+            }
+        }  
+        return false;
+    },
+    /* Checks if any of the keywords has already been saved in a previously created feed */
+    validateKeywords : function(edit) {
+        var kwrds = new Array(),
+            keys = 0,
+            textKwrds = "",
+            text = "";            
+        var andKwrds = jQuery.trim(jQuery("#keywords_and").val());
+        if (andKwrds.length != 0) {
+            andKwrds = andKwrds.split(" ");
+            jQuery.merge(kwrds, andKwrds);
+        };
+        var orKwrds = jQuery.trim(jQuery("#keywords_or").val());
+        if (orKwrds.length != 0) {
+            orKwrds = orKwrds.split(" ");
+            jQuery.merge(kwrds, orKwrds);
+        };
+        var exactKwrds = jQuery.trim(jQuery("#keywords_phrase").val());
+        if (exactKwrds.length != 0) {                        
+            var feed = GrabPressAutoposter.findMatchingKeyword(exactKwrds);
+            if (feed) {
+                textKwrds += ' <strong>"' + exactKwrds + '"</strong>(exact phrase), ';// already used in feed: ' + feed + ',<br/>';                
+                keys++;
+            }
+        };
+        jQuery.each(kwrds, function(index, value){            
+            feed = GrabPressAutoposter.findMatchingKeyword(value);
+            if (feed) {
+                textKwrds += '<strong>' + value + '</strong>, ';// already used in feed: ' + feed + ',<br/>';
+                keys++;
+            }            
+        });        
+        if (keys === 0) {
+            GrabPressAutoposter.validateFeedName(edit);
+        } else {
+            textKwrds = textKwrds.slice(0, -2);
+            if (keys === 1) {
+                text = "The keyword " + textKwrds + " is ";
+            } else { 
+                text = "The keywords " + textKwrds + " are "; 
+            }
+            text += "already used by previously created feeds.<br/>The videos matching a keyword will show only in the first created feed."
+            jQuery("#keywords_dialog p").html(text);
+            jQuery("#keywords_dialog #edit_feed").val(edit);               
+            jQuery("#keywords_dialog").dialog('open');
+        }        
+    },
     /* Feed name validation */
     validateFeedName : function(edit){
         var feed_date = jQuery('#feed_date').val();
@@ -183,7 +266,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         }else{  // Create feed
             jQuery.post(ajaxurl, data, function(response) {                
                 if(response != "true"){
-                    if((feed_date == name) && ((typeof edit === "undefined") || (edit===null))){
+                    if((feed_date == name) && ((typeof edit === "undefined") || (edit===null) || (edit === ''))){
                         jQuery('#dialog-name').val(name);
                         jQuery('#dialog').dialog('open');
                     }else{
@@ -429,7 +512,23 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                   GrabPressAutoposter.validateFeedName("edit");
                 }
             }
-          }); 
+         });
+         jQuery('#keywords_dialog').dialog({
+            autoOpen: false,
+            width: 400,
+            modal: true,
+            resizable: false,
+            buttons: {
+                "Cancel": function() {
+                    jQuery(this).dialog("close");                    
+                },
+                "Create Feed": function() {                                                                                                        
+                    var edit = jQuery("#keywords_dialog #edit_feed").val();                                        
+                    GrabPressAutoposter.validateFeedName(edit);
+                    jQuery(this).dialog("close");
+                }
+            }
+          });
 
         jQuery(".btn-update-feed").mousedown(function(event) {
              if( event.which == 2 ) {
@@ -448,8 +547,12 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             id = this.id.replace('btn-update-','');
             GrabPressAutoposter.editFeed(id);
             return false;
-        });
-
+        });   
+        
+        //if we have an API connection error disable all inputs
+        if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+            jQuery(":input").attr('disabled', 'disabled');
+        };
     }
 }
 //do form validation	

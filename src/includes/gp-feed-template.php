@@ -1,5 +1,4 @@
 <?php 
-
 $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 ?>
@@ -12,7 +11,11 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 		<legend><?php echo $is_edit ? 'Edit':'Create'?> Feed</legend>	
 	<?php
 		$rpc_url = get_bloginfo( 'url' ).'/xmlrpc.php';
-		$connector_id = GrabPressAPI::get_connector_id();
+                try {
+                    $connector_id = GrabPressAPI::get_connector_id();
+                } catch(Exception $e) {
+                    GrabPress::log('API call exception: '.$e->getMessage());
+                }
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
@@ -46,6 +49,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 
 		<input type="hidden"  name="referer" value="<?php echo $referer; ?>" />
 		<input type="hidden"  name="action" value="<?php echo $value; ?>" />
+                <input type="hidden"  name="feed_id" value="<?php echo (isset($_GET['feed_id']))?$_GET['feed_id']: ''; ?>" />
         	<table class="form-table grabpress-table">
 	            <?php if (GrabPress::$environment == 'grabqa'){ ?>
 	                <tr valign="bottom">
@@ -106,7 +110,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 	        	<tr valign="bottom">
 					<th scope="row">Keywords</th>
         		           	<td >
-						<input type="text" name="keywords_and" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form['keywords_and']; ?>" maxlength="255" />
+						<input type="text" name="keywords_and" id="keywords_and" class="ui-autocomplete-input" value="<?php echo $form['keywords_and']; ?>" maxlength="255" />
 						<span class="description">Default search setting is 'all of these words'</span>
 					</td>
         		</tr>
@@ -120,14 +124,14 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
         		<tr valign="bottom">
 					<th scope="row">Any of the keywords</th>
         		           	<td >
-						<input type="text" name="keywords_or" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_or"];?>" maxlength="255" />
+						<input type="text" name="keywords_or" id="keywords_or" class="ui-autocomplete-input" value="<?php echo $form["keywords_or"];?>" maxlength="255" />
 						<span class="description">Any of these keywords</span>
 					</td>
         		</tr>
         		<tr valign="bottom">
 					<th scope="row">Exact phrase</th>
         		        <td >
-						<input type="text" name="keywords_phrase" id="keyword-input" class="ui-autocomplete-input" value="<?php echo $form["keywords_phrase"];?>" maxlength="255" />
+						<input type="text" name="keywords_phrase" id="keywords_phrase" class="ui-autocomplete-input" value="<?php echo $form["keywords_phrase"];?>" maxlength="255" />
 						<span class="description">Exact phrase</span>
 					</td>
         		</tr>
@@ -217,7 +221,8 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 						<th scope="row">Post Categories</th>
 						<td>
 							<?php
-								$select_cats = wp_dropdown_categories  ( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 ) );
+								$selected = isset($form['category'][0])?$form['category'][0]:'';
+								$select_cats = wp_dropdown_categories  ( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 , 'selected' => $selected) );
 								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
 								echo $select_cats;
 							?>
@@ -277,7 +282,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 				</tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
-						<?php $click = ( $is_edit ) ? 'onclick="GrabPressAutoposter.validateFeedName(\'update\')"' : 'onclick="GrabPressAutoposter.validateFeedName()"' ?>
+						<?php $click = ( $is_edit ) ? 'onclick="GrabPressAutoposter.validateKeywords(\'update\');"' : 'onclick="GrabPressAutoposter.validateKeywords();"' ?>
 						<input type="button" class="button-primary" disabled="disabled" value="<?php ( $is_edit ) ? _e( 'Save Changes' ) : _e( 'Create Feed' ) ?>" id="btn-create-feed" <?php echo $click; ?>  />
 						<a id="reset-form" href="#">reset form</a>
 						<?php if($is_edit){ ?><a href="#" id="cancel-editing" >cancel editing</a><?php } ?>	
@@ -299,7 +304,12 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 </div>
 
 <?php
-	$feeds = GrabPressAPI::get_feeds();
+	try {
+            $feeds = GrabPressAPI::get_feeds();
+        } catch(Exception $e) {
+            $feeds = array();
+            GrabPress::log('API call exception: '.$e->getMessage());
+        }
 	$num_feeds = count( $feeds );
 	if($num_feeds > 0 ){
 		echo GrabPress::fetch('includes/gp-manage-feeds.php',
@@ -315,3 +325,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 ?>
 </div>
 <!--</form>-->
+<div id="keywords_dialog" title="Duplicated keyword">	
+<input type="hidden" value="" id="edit_feed" />	
+<p></p>	
+</div>

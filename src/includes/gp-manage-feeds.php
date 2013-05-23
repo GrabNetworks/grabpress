@@ -1,7 +1,12 @@
 <?php
-	$feeds = GrabPressAPI::get_feeds();
+        try {
+            $feeds = GrabPressAPI::get_feeds();
+        } catch (Exception $e) {
+            $feeds = array();
+            GrabPress::log('API call exception: '.$e->getMessage());
+        }
 	$num_feeds = count( $feeds ); 
-	$active_feeds = 0;
+	$active_feeds = 0;        
 
 ?>
 <fieldset id="manage-table" class="fieldset-manage">
@@ -29,12 +34,9 @@
 			<th></th>
 		</tr>
 		<?php
-			$feeds = GrabPressAPI::get_feeds();
-			$num_feeds = count( $feeds );
-			
-
 			for ( $n = 0; $n < $num_feeds; $n++ ) {
 				$feed = $feeds[$n]->feed;
+                                $keywords[html_entity_decode($feed->name)] = $phrase[html_entity_decode($feed->name)] = '';
 				$url = array();
 				parse_str( parse_url( $feed->url, PHP_URL_QUERY ), $url );
 				GrabPress::_escape_params_template($url);
@@ -54,10 +56,13 @@
 				}else{
 					$row_class = "row-feed";
 				}
+                                $display_keywords = true;
+                                if (isset($_GET['feed_id']) && $feed->id == $_GET['feed_id']) {
+                                    $display_keywords = false;
+                                }
 			?>
 			<tr id="tr-<?php echo $feedId; ?>" class="<?php echo $row_class; ?>">
-				<td>
-					<input type="hidden" name="feed_id" value="<?php echo $feedId; ?>" />
+				<td>					
 					<?php 
 						if(isset($form['action'])=='modify'){
 							echo $checked = ( $feed->active  ) ? 'Yes' : 'No'; 
@@ -90,7 +95,10 @@
 						if(isset($url['keywords_and'])){
 							$keywords_and_num = strlen($url['keywords_and']);
 							$keywords_and = $url['keywords_and'];
-							echo $keywords_and = ($keywords_and_num > 15) ? substr($keywords_and,0,15)."..." : $keywords_and;
+                                                        if (!empty($keywords_and) && $display_keywords) {
+                                                            $keywords[html_entity_decode($feed->name)] .= ' '.$keywords_and;
+                                                        }                                                        
+							echo ($keywords_and_num > 15) ? substr($keywords_and,0,15)."..." : $keywords_and;
 						}
 					?>							
 				</td>
@@ -108,7 +116,10 @@
 						if(isset($url['keywords_phrase'])){
 							$keywords_phrase_num = strlen($url['keywords_phrase']);
 							$keywords_phrase = $url['keywords_phrase'];
-							echo $keywords_phrase = ($keywords_phrase_num > 15) ? substr($keywords_phrase,0,15)."..." : $keywords_phrase;
+                                                        if(!empty($keywords_phrase) && $display_keywords) {
+                                                            $phrase[html_entity_decode($feed->name)] .= "_".trim($keywords_phrase)."";
+                                                        }
+							echo ($keywords_phrase_num > 15) ? substr($keywords_phrase,0,15)."..." : $keywords_phrase;
 						}
 					?>							
 				</td>
@@ -116,8 +127,11 @@
 					<?php 
 						if(isset($url['keywords'])){
 							$keywords_or_num = strlen($url['keywords']);
-							$keywords = $url['keywords'];
-							echo $keywords_or = ($keywords_or_num > 15) ? substr($keywords,0,15)."..." : $keywords;
+							$keywords_or = $url['keywords'];
+                                                        if (!empty($keywords_or) && $display_keywords) {
+                                                            $keywords[$feed->name] .= ' '.trim($keywords_or);
+                                                        }                                                        
+							echo ($keywords_or_num > 15) ? substr($keywords_or,0,15)."..." : $keywords_or;
 						}
 					?>							
 				</td>
@@ -245,4 +259,14 @@
 	</table>
 </div>
 <div class="result"> </div>
+<p style="display:none" id="existing_keywords">
+    <?php foreach ($keywords as $key => $value) { ?>
+        <input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value;?>"/>        
+    <?php } ?>
+</p>
+<p style="display:none" id="exact_keywords">
+    <?php foreach ($phrase as $key => $value) { ?>
+        <input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value;?>"/>        
+    <?php }?>
+</p>
 </fieldset>

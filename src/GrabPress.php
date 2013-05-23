@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.3.0
+Version: 2.3.1
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.3.0';
+		static $version = '2.3.1';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabnetworks';
@@ -150,9 +150,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function delete_connector() {
-			GrabPress::log();
+                    GrabPress::log();
+                    try {    
 			$connector_id = GrabPressAPI::get_connector_id();
-
 
 			$response = GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/deactivate?api_key='.GrabPress::$api_key );
 			$response_delete = GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '?api_key=' . GrabPress::$api_key );
@@ -162,6 +162,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$current_user = wp_get_current_user();
 			wp_delete_user( $grab_user->ID, $current_user->ID );
 			GrabPress::$message = 'GrabPress has been deactivated. Any posts that used to be credited to the "grabpress" user are now assigned to you. XML-RPC is still enabled, unless you are using it for anything else, we recommend you turn it off.';
+                    } catch (Exception $e) {
+                        GrabPress::log('API call exception: '.$e->getMessage());
+                    }
 		}
 
 		static function outline_invalid() {
@@ -172,7 +175,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		}
 
 		static function plugin_messages() {
-			$feeds = GrabPressAPI::get_feeds();
+                    try {
+                        $feeds = GrabPressAPI::get_feeds();
 			$num_feeds = count( $feeds );
 			$admin = get_admin_url();
 			$current_page = 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
@@ -220,6 +224,9 @@ if ( ! class_exists( 'GrabPress' ) ) {
                                         GrabPress::$message .= $environment;	
 				}
 			}
+                    } catch (Exception $e) {
+                        Grabpress::log('API call exception: '.$e->getMessage());
+                    }
 		}
 		static function check_permissions_for($page = "default", $action = "defaut"){
 			switch ($page) {
@@ -323,7 +330,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			if($unlimited){
 				$url .= "&limit=-1";
 			}else{                            
-                                $options['page'] = ($options['page'] > 0)?$options['page']-1:$options['page'];
+                                $options['page'] = (isset($options['page']) && $options['page'] > 0)?$options['page']-1:0;
 				$url .= "&offset=".(($options['page'])*20)."&limit=20";	
 			}
 			return $url;
@@ -440,7 +447,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			$page = $_GET["page"];
 			$params = GrabPress::_escape_request($_REQUEST);
 			if(!GrabPress::check_permissions_for($page, $action)){
-				GrabPress::abort("Insufficient permissions");
+                            GrabPress::abort("Insufficient permissions");
 			}
                         $plugin_url = GrabPress::grabpress_plugin_url();
 			switch ( $page ) {
@@ -510,10 +517,11 @@ if ( ! class_exists( 'GrabPress' ) ) {
                                                 wp_enqueue_script('gp-catalog', $plugin_url.'/js/catalog.js', array('jquery'));
 					break;
 				case 'gp-dashboard':
-                                        wp_enqueue_script( 'gp-dashboard', $plugin_url.'/js/dashboard.js' , array("jquery") );
+                                        wp_enqueue_script( 'gp-dashboard', $plugin_url.'/js/dashboard.js' , array("jquery") );                                        
 					GrabPressViews::dashboard_management($params);
 					break;
 				case 'gp-template':
+-                                       wp_enqueue_script( 'gp-template', $plugin_url.'/js/template.js' , array("jquery") );
 					GrabPressViews::template_management($params);
 					break;
 				}
@@ -627,29 +635,30 @@ if ( ! class_exists( 'GrabPress' ) ) {
 	
 
 		static function gp_shortcode( $atts ) {
-
+                    try {
 			extract( shortcode_atts( array(
 				'guid' => 'default',
 				'embed_id' => GrabPressAPI::get_connector()->ctp_embed_id,
 			), $atts, EXTR_SKIP ) );
 			
 			$settings = GrabPressAPI::get_player_settings_for_embed();
-			
-			$player_script = '<div id="grabDiv'.$embed_id.'">
-					          <script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$embed_id.'&content=v'.$guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">
-							  </script>
-							  <div id="overlay-adzone" style="overflow:hidden; position:relative">
-							  </div>
-							  </div>
-							  <script type="text/javascript">
-							  var _gaq = _gaq || [];
-							  _gaq.push([\'_setAccount\', \'UA-31934587-1\']);
-							  _gaq.push([\'_trackPageview\']);
-							  (function() { var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true; ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\'; var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s); })();
-							  </script>';	
+                    } catch (Exception $e) {
+                        GrabPress::log('API call exception: '.$e->getMessage());
+                    }
+                    $player_script = '<div id="grabDiv'.$embed_id.'">
+                                              <script type="text/javascript" src="http://player.'.GrabPress::$environment.'.com/js/Player.js?id='.$embed_id.'&content=v'.$guid.'&width='.$settings["width"]."&height=".$settings["height"].'&tgt='.GrabPress::$environment.'">
+                                                      </script>
+                                                      <div id="overlay-adzone" style="overflow:hidden; position:relative">
+                                                      </div>
+                                                      </div>
+                                                      <script type="text/javascript">
+                                                      var _gaq = _gaq || [];
+                                                      _gaq.push([\'_setAccount\', \'UA-31934587-1\']);
+                                                      _gaq.push([\'_trackPageview\']);
+                                                      (function() { var ga = document.createElement(\'script\'); ga.type = \'text/javascript\'; ga.async = true; ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\'; var s = document.getElementsByTagName(\'script\')[0]; s.parentNode.insertBefore(ga, s); })();
+                                                      </script>';	
 
-		  	return $player_script;		
-					 			
+                    return $player_script;		
 		}		
 
 	}//class

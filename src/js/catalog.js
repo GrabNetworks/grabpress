@@ -1,6 +1,9 @@
 var GrabPressCatalog = {
     /* Checks for channels and providers selection */
     hasValidationErrors : function (preview) {                           
+                            if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+                                return true; 
+                            }
                             var channels_multiselect = "#channel-select :selected";
                             var providers_multiselect = "#provider-select :selected";
                             if (preview) {
@@ -9,9 +12,8 @@ var GrabPressCatalog = {
                             }
                             if((jQuery(channels_multiselect).length == 0) || (jQuery(providers_multiselect).length == 0)){
 				return true;
-                            } else {
-				return false;
                             }
+                            return false;                            
                         },
     /* Validation for search form inputs */                    
     doValidation : function (preview) {
@@ -119,8 +121,8 @@ var GrabPressCatalog = {
         var data = {"action": action,
             "empty": false,
             "keywords": jQuery("#keywords").val(),
-            "providers": jQuery("#provider-select").val(),
-            "channels": jQuery("#channel-select").val(),
+            "providers": jQuery("#provider-select-preview").val(),
+            "channels": jQuery("#channel-select-preview").val(),
             "sort_by": jQuery('.sort_by:checked').val(),
             "created_before": jQuery("#created_before").val(),
             "created_after": jQuery("#created_after").val(),
@@ -371,6 +373,11 @@ var GrabPressCatalog = {
           showAnim: 'slideDown',
           duration: 'fast'
       });
+      //#clearDates is a button to clear the datepickers
+      jQuery('#clearDates').on('click', function(){
+          jQuery("#created_after").val(''); 
+          jQuery("#created_before").val(''); 
+      });
       if(jQuery("#channel-select-preview")) { preview = 1; };      
       jQuery("#form-catalog-page").change(GrabPressCatalog.doValidation(preview));      
       
@@ -379,6 +386,11 @@ var GrabPressCatalog = {
            form.submit();
       });
      
+      //if we have an API connection error disable all inputs
+      if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
+          jQuery(":input").attr('disabled', 'disabled');
+      };
+      
       jQuery(".video_summary").ellipsis(2, true, "more", "less");
       if(!window.grabModal){
             try{

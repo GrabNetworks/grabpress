@@ -7,7 +7,7 @@
 		  <div id="b">		    
 			<!--************************************************************-->
 			<div class="container-fluid">
-				<div class="row-fluid">
+				<div class="row-fluid watchlist-wrap">
 					<div class="span4 watchlist">
 						<div class="tabbable panel">
 							<ul class="nav nav-tabs">
@@ -367,7 +367,10 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
                 <br />
                 Author: <?php  the_author_meta( 'nickname' , $feed->custom_options->author_id ); ?>
                 <br />
+                Player Mode: <?php echo $auto_play = $feed->auto_play ? "Auto-Play" : "Click-to-Play"; ?>
+                <br />
                 Delivery Mode: <?php echo $publish = $feed->custom_options->publish ? "Publish Posts Automatically" : "Draft"; ?>
+                
         </p>
     </div>
     <div class="btn-modal-box">
@@ -393,7 +396,11 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
     <div class="infoBox">
     <p>Linked Account Email Adrress: <br />
     <?php
-        $user = GrabPressAPI::get_user();
+        try {
+            $user = GrabPressAPI::get_user();            
+        } catch (Exception $e) {
+            GrabPress::log('API call exception: '.$e->getMessage());
+        }
         $linked = isset( $user->email);
         if( $linked ){?>
         <?php echo $user->email;			

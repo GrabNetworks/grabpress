@@ -82,9 +82,9 @@ var GrabPressDashboard = GrabPressDashboard || {
                       "content": parsedJson.results[0].video.guid,
                       "autoPlay": false
                   });
-                  jQuery(window).resize();
+                  jQuery(window).resize();                  
                   jQuery("#gcontainer"+embed_id+" object").css("visibility","visible");
-              }else{
+              } else {
                   accordion += '<div class="accordion-group">'
                               +'<div class="accordion-heading">'
                               +'	<div class="accordion-left"></div>'
@@ -101,6 +101,12 @@ var GrabPressDashboard = GrabPressDashboard || {
                               +'</div>';
                   jQuery('#accordion2').html(accordion);
               }
+              setTimeout(function(){
+                  jQuery("#t #b .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                  jQuery("#t #b .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
+              },300);
+              
+              
               if(watchlist_check.val() == 1) {
                 watchlist_check.val('0');
                 watchlist_check.addClass('watch-on').removeClass('watch-off');
@@ -114,7 +120,7 @@ var GrabPressDashboard = GrabPressDashboard || {
     /* Watchlist accordion-like behavior */
     accordion_binding : function(env, embed_id){
         var accordion_lock = false;
-        jQuery("#form-dashboard").parent().css("margin", "-10px 0 0 -18px");
+      //  jQuery("#form-dashboard").parent().css("margin", "-10px 0 0 -18px");
 
         jQuery(".accordion-toggle").live("click", function(e){
             if(accordion_lock){
@@ -148,7 +154,6 @@ var GrabPressDashboard = GrabPressDashboard || {
                     });
                     openPanels.slideUp(400,'linear', function(){
                         active_video.hideEmbed();
-                        //console.log("hide embed");
                         jQuery(this).toggleClass("collapse");
                         monitor++;
                     });
@@ -170,6 +175,11 @@ var GrabPressDashboard = GrabPressDashboard || {
     init : function(){
          //fix for watchlist min-width and max-width for ie9 and ie10
         if (jQuery.browser.msie && jQuery.browser.version > 8.0) {
+            if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0 ) {
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '320px');
+                var wTop = -jQuery("#t #b .watchlist").height();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+            }
             jQuery("#t #b .watchlist").css('max-width','1392px');
             jQuery("#t #b .watchlist").css('min-width','1072px');
             jQuery("#t #b #btn-account-settings a").hover(function(){
@@ -189,27 +199,75 @@ var GrabPressDashboard = GrabPressDashboard || {
             });
             jQuery("#t #b #btn-account-settings .accordion-left").css('top','0');
             jQuery("#t #b #btn-account-settings .accordion-right").css('top','0');
-
         } else if ( jQuery.browser.version != 7.0) {
             jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
             jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
-        } 
+           setTimeout(function() {
+                if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
+                }
+            }, 300);            
+        }
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
-        jQuery(".nano").nanoScroller({"alwaysVisible":true});
-
-        jQuery(window).resize(GrabPressDashboard.resize_accordion).resize();
+        jQuery(".nano").nanoScroller({"alwaysVisible":true});                
+        var smallWidth = 478;      
+        jQuery(window).resize(function(){
+            //timeout for IE and Firefox to respond to jQuery resize
+            setTimeout(function() {
+                    GrabPressDashboard.resize_accordion();         
+             }, 150);
+            if ( jQuery("#adminmenuwrap").width() < 34 ) {                
+                smallWidth = 370;
+            } 
+            //hide watchlist if browser is resized under certain width
+            if ( jQuery(window).width() < smallWidth ) {                
+                jQuery("#t #b .watchlist").hide();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+            } else //consistent browser bevahior when resizing the browser width under 1283px
+                if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome 
+                       || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
+                       && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
+                jQuery("#t #b .watchlist").show();
+                setTimeout(function(){
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                    var wTop = -jQuery("#t #b .watchlist").height();
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+                }, 150);                
+            } else {
+                jQuery("#t #b .watchlist").show();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+            }              
+        }).resize();
         jQuery("#message").hide();//hack
-        
+        smallWidth = 478;
         jQuery("#help").simpletip({
             content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
-            fixed: true,
-            position: [155, 40]
+            position: 'left',
+            offset: [-135, -124]
         });
-                
-        jQuery(".feed_title").ellipsis(0, true, "", "");
-         
+        
+        if ( jQuery("#adminmenuwrap").width() < 34 ) {           
+            smallWidth = 370;
+        } 
+        if ( jQuery(window).width() < smallWidth ) {
+                jQuery("#t #b .watchlist").hide();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+            }  
+        jQuery(".feed_title").ellipsis(0, true, "", ""); 
+        if (jQuery.browser.safari || jQuery.browser.chrome) {
+            jQuery("#collapse-menu").click(function(){
+                setTimeout(function() {
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
+                }, 150);
+            });
+        }
     }
 }
 
