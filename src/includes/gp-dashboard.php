@@ -367,7 +367,10 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
                 <br />
                 Author: <?php  the_author_meta( 'nickname' , $feed->custom_options->author_id ); ?>
                 <br />
+                Player Mode: <?php echo $auto_play = $feed->auto_play ? "Auto-Play" : "Click-to-Play"; ?>
+                <br />
                 Delivery Mode: <?php echo $publish = $feed->custom_options->publish ? "Publish Posts Automatically" : "Draft"; ?>
+                
         </p>
     </div>
     <div class="btn-modal-box">
