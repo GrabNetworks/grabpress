@@ -171,12 +171,78 @@ var GrabPressDashboard = GrabPressDashboard || {
         width = width.replace("px","");
         jQuery(".accordion-inner").css("height", width* 0.5625 )
     },
+    /* Wordpress menu collapse event*/
+    collapse_menu : function() {
+        //some special margins settings for webkit browsers
+        if (jQuery.browser.safari || jQuery.browser.chrome) {
+            jQuery("#collapse-menu").click(function(){
+                setTimeout(function() {
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
+                }, 150);
+            });            
+        };        
+        //show or hide the watchlist if it's the case when collapsing or expanding the wordpress menu
+        jQuery("#collapse-menu").click(function(){
+                var smallWidth = 1267;
+                setTimeout(function() {
+                    if ( jQuery("#adminmenuwrap").width() < 34 ) {                
+                        smallWidth = 1149;
+                    }
+                    if ( jQuery(window).width() < smallWidth ) {                
+                        jQuery("#t #b .watchlist").hide();
+                        jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '16px');
+                        jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '16px');
+                    } else {                        
+                        jQuery("#t #b .watchlist").show();
+                        jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
+                        jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+                        GrabPressDashboard.resize_accordion();
+                    }
+                }, 300);
+        });
+    },
+    /*Browser resizing events*/
+    resize_browser_init : function() {
+        var smallWidth = 1267;           
+       //events on browser window resizing
+        jQuery(window).resize(function(){
+            //timeout for IE and Firefox to respond to jQuery resize
+            setTimeout(function() {
+                    GrabPressDashboard.resize_accordion();         
+            }, 150);
+            //checking if the wordpress menu is collapsed or not
+            if ( jQuery("#adminmenuwrap").width() < 34 ) {                
+                smallWidth = 1149;
+            } 
+            //hide watchlist if browser is resized under certain width
+            if ( jQuery(window).width() < smallWidth ) {                
+                jQuery("#t #b .watchlist").hide();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '16px');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '16px');
+            } else //consistent browser bevahior when resizing the browser width under 1283px
+                if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome 
+                       || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
+                       && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
+                jQuery("#t #b .watchlist").show();
+                //setTimeout(function(){
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                    var wTop = -jQuery("#t #b .watchlist").height();
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+                //}, 150);                
+            } else {
+                jQuery("#t #b .watchlist").show();
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+            }              
+        }).resize();
+    },
     /* Dashboard initializiations */
     init : function(){
          //fix for watchlist min-width and max-width for ie9 and ie10
         if (jQuery.browser.msie && jQuery.browser.version > 8.0) {
             if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0 ) {
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '320px');
+                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
                 var wTop = -jQuery("#t #b .watchlist").height();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
             }
@@ -202,7 +268,8 @@ var GrabPressDashboard = GrabPressDashboard || {
         } else if ( jQuery.browser.version != 7.0) {
             jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
             jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
-           setTimeout(function() {
+            
+            setTimeout(function() {
                 if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
@@ -212,62 +279,27 @@ var GrabPressDashboard = GrabPressDashboard || {
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
-        jQuery(".nano").nanoScroller({"alwaysVisible":true});                
-        var smallWidth = 478;      
-        jQuery(window).resize(function(){
-            //timeout for IE and Firefox to respond to jQuery resize
-            setTimeout(function() {
-                    GrabPressDashboard.resize_accordion();         
-             }, 150);
-            if ( jQuery("#adminmenuwrap").width() < 34 ) {                
-                smallWidth = 370;
-            } 
-            //hide watchlist if browser is resized under certain width
-            if ( jQuery(window).width() < smallWidth ) {                
-                jQuery("#t #b .watchlist").hide();
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
-            } else //consistent browser bevahior when resizing the browser width under 1283px
-                if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome 
-                       || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
-                       && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
-                jQuery("#t #b .watchlist").show();
-                setTimeout(function(){
-                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
-                    var wTop = -jQuery("#t #b .watchlist").height();
-                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
-                }, 150);                
-            } else {
-                jQuery("#t #b .watchlist").show();
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
-            }              
-        }).resize();
-        jQuery("#message").hide();//hack
-        smallWidth = 478;
+        jQuery(".nano").nanoScroller({"alwaysVisible":true});                        
+       
+        jQuery("#message").hide();//hack        
+        
         jQuery("#help").simpletip({
             content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
             position: 'left',
             offset: [-135, -124]
         });
         
-        if ( jQuery("#adminmenuwrap").width() < 34 ) {           
-            smallWidth = 370;
+      /*  if ( jQuery("#adminmenuwrap").width() < 34 ) {           
+            smallWidth = 1149;
         } 
         if ( jQuery(window).width() < smallWidth ) {
                 jQuery("#t #b .watchlist").hide();
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
                 jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
             }  
-        jQuery(".feed_title").ellipsis(0, true, "", ""); 
-        if (jQuery.browser.safari || jQuery.browser.chrome) {
-            jQuery("#collapse-menu").click(function(){
-                setTimeout(function() {
-                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
-                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
-                }, 150);
-            });
-        }
+        jQuery(".feed_title").ellipsis(0, true, "", ""); */
+        GrabPressDashboard.resize_browser_init();
+        GrabPressDashboard.collapse_menu();
     }
 }
 
