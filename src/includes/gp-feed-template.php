@@ -117,7 +117,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
         		<tr valign="bottom">
 					<th scope="row">Exclude these keywords</th>
         		           	<td >
-						<input type="text" name="keywords_not" id="keywords_not" value="<?php echo $form["keywords_not"];?>" />						
+						<input type="text" name="keywords_not" id="keywords_not" value="<?php echo $form["keywords_not"];?>" maxlength="255" />						
 						<span class="description">Exclude these keywords</span>
 					</td>
         		</tr>
