@@ -203,10 +203,10 @@ var GrabPressDashboard = GrabPressDashboard || {
         });
     },
     /*Browser resizing events*/
-    resize_browser_init : function() {
-        var smallWidth = 1267;           
+    resize_browser_init : function() {                  
        //events on browser window resizing
         jQuery(window).resize(function(){
+            var smallWidth = 1267; 
             //timeout for IE and Firefox to respond to jQuery resize
             setTimeout(function() {
                     GrabPressDashboard.resize_accordion();         
