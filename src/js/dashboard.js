@@ -184,56 +184,64 @@ var GrabPressDashboard = GrabPressDashboard || {
         };        
         //show or hide the watchlist if it's the case when collapsing or expanding the wordpress menu
         jQuery("#collapse-menu").click(function(){
-                var smallWidth = 1267;
+                var smallWidth = 1265;
                 setTimeout(function() {
                     if ( jQuery("#adminmenuwrap").width() < 34 ) {                
-                        smallWidth = 1149;
+                        smallWidth = 1147;
                     }
                     if ( jQuery(window).width() < smallWidth ) {                
-                        jQuery("#t #b .watchlist").hide();
-                        jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '16px');
-                        jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '16px');
+                        jQuery("#t #b .watchlist .panel:first").hide();
+                        setTimeout(function(){
+                            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '8px');
+                            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '-122px');
+                        }, 150);
                     } else {                        
-                        jQuery("#t #b .watchlist").show();
-                        jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
-                        jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
-                        GrabPressDashboard.resize_accordion();
+                        jQuery("#t #b .watchlist .panel:first").show();
+                        setTimeout(function(){                            
+                            GrabPressDashboard.resize_accordion();
+                            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width() + 8);
+                            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
+                        }, 150);
                     }
                 }, 300);
         });
     },
     /*Browser resizing events*/
-    resize_browser_init : function() {
-        var smallWidth = 1267;           
+    resize_browser_init : function() {                   
        //events on browser window resizing
         jQuery(window).resize(function(){
+            var smallWidth = 1265;
             //timeout for IE and Firefox to respond to jQuery resize
             setTimeout(function() {
                     GrabPressDashboard.resize_accordion();         
             }, 150);
             //checking if the wordpress menu is collapsed or not
             if ( jQuery("#adminmenuwrap").width() < 34 ) {                
-                smallWidth = 1149;
+                smallWidth = 1147;
             } 
             //hide watchlist if browser is resized under certain width
-            if ( jQuery(window).width() < smallWidth ) {                
-                jQuery("#t #b .watchlist").hide();
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '16px');
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '16px');
+            if ( jQuery(window).width() < smallWidth ) {        console.log(smallWidth);
+                jQuery("#t #b .watchlist .panel:first").hide();
+                setTimeout(function(){
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '8px');
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '-122px');
+                }, 150);
             } else //consistent browser bevahior when resizing the browser width under 1283px
                 if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome 
                        || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
                        && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
-                jQuery("#t #b .watchlist").show();
-                //setTimeout(function(){
-                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                jQuery("#t #b .watchlist .panel:first").show();
+                setTimeout(function(){
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width() + 8 );
                     var wTop = -jQuery("#t #b .watchlist").height();
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
-                //}, 150);                
-            } else {
-                jQuery("#t #b .watchlist").show();
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '-752px');
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
+                }, 150);                
+            } else {                
+                jQuery("#t #b .watchlist .panel:first").show();
+                setTimeout(function(){
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width()+8);
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
+                },150);
             }              
         }).resize();
     },
@@ -269,12 +277,12 @@ var GrabPressDashboard = GrabPressDashboard || {
             jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
             jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
             
-            setTimeout(function() {
+            /*setTimeout(function() {
                 if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
                 }
-            }, 300);            
+            }, 300);        */    
         }
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
