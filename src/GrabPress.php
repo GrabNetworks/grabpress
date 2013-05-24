@@ -31,7 +31,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabnetworks';
-		static $debug = true;
+		static $debug = false;
 		static $message = false;
 		static $error = false;
 		static $grabpress_user = "grabpress";
