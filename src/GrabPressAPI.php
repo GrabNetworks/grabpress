@@ -320,8 +320,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				}
                             } catch (Exception $e) {
                                 GrabPress::$error = "There was an error connecting to the API! Please try again later!";
-                                GrabPress::log('API call exception: '.$e->getMessage());
-                                die();
+                                GrabPress::log('API call exception: '.$e->getMessage());                                
                             }
 			} else {
                             try {
