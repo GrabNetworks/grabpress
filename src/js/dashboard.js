@@ -220,7 +220,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                 smallWidth = 1147;
             } 
             //hide watchlist if browser is resized under certain width
-            if ( jQuery(window).width() < smallWidth ) {        console.log(smallWidth);
+            if ( jQuery(window).width() < smallWidth ) {        
                 jQuery("#t #b .watchlist .panel:first").hide();
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '8px');
@@ -250,9 +250,11 @@ var GrabPressDashboard = GrabPressDashboard || {
          //fix for watchlist min-width and max-width for ie9 and ie10
         if (jQuery.browser.msie && jQuery.browser.version > 8.0) {
             if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0 ) {
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
-                var wTop = -jQuery("#t #b .watchlist").height();
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+                setTimeout(function(){
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
+                    var wTop = -jQuery("#t #b .watchlist").height();
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
+                }, 150);
             }
             jQuery("#t #b .watchlist").css('max-width','1392px');
             jQuery("#t #b .watchlist").css('min-width','1072px');
