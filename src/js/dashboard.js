@@ -189,11 +189,15 @@ var GrabPressDashboard = GrabPressDashboard || {
                     if ( jQuery("#adminmenuwrap").width() < 34 ) {                
                         smallWidth = 1147;
                     }
+                    var topRight = '-122px';
+                    if (jQuery.browser.msie && jQuery.browser.version == 8.0) {                    
+                        topRight = '16px';
+                    }  
                     if ( jQuery(window).width() < smallWidth ) {                
                         jQuery("#t #b .watchlist .panel:first").hide();
                         setTimeout(function(){
                             jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '8px');
-                            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '-122px');
+                            jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', topRight);
                         }, 150);
                     } else {                        
                         jQuery("#t #b .watchlist .panel:first").show();
@@ -219,25 +223,31 @@ var GrabPressDashboard = GrabPressDashboard || {
             if ( jQuery("#adminmenuwrap").width() < 34 ) {                
                 smallWidth = 1147;
             } 
+            var left = "#t #b .watchlist .panel:first";
+            var topRight = '-122px';
+            if (jQuery.browser.msie && jQuery.browser.version == 8.0) {
+                left = "#t #b .watchlist";
+                topRight = '16px';
+            }            
             //hide watchlist if browser is resized under certain width
             if ( jQuery(window).width() < smallWidth ) {        
-                jQuery("#t #b .watchlist .panel:first").hide();
+                jQuery(left).hide();
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '8px');
-                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '-122px');
+                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', topRight);
                 }, 150);
             } else //consistent browser bevahior when resizing the browser width under 1283px
                 if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome 
                        || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
                        && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
-                jQuery("#t #b .watchlist .panel:first").show();
+                jQuery(left).show();
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width() + 8 );
                     var wTop = -jQuery("#t #b .watchlist").height();
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
                 }, 150);                
             } else {                
-                jQuery("#t #b .watchlist .panel:first").show();
+                jQuery(left).show();
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width()+8);
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
@@ -296,7 +306,7 @@ var GrabPressDashboard = GrabPressDashboard || {
         jQuery("#help").simpletip({
             content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
             position: 'left',
-            offset: [-135, -124]
+            offset: [-25, 0]
         });
         
       /*  if ( jQuery("#adminmenuwrap").width() < 34 ) {           
