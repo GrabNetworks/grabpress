@@ -107,7 +107,7 @@
 		</div>	
 		<div class="label-tile">
                         <div class="tile-left">
-                            <input type="button" value="clear dates " id="clearDates" style="float:left" >
+                            <input type="button" value="Clear Dates " id="clearDates" style="float:left" >
                         </div>
 			<div class="tile-right">
                                 <a href="#" id="clear-search" onclick="return false;" >clear search</a>				

@@ -414,13 +414,21 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			return $string;
 		}
 
-		static function _escape_request($request){
-			if(function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()){
-				return json_decode(stripslashes(json_encode($request, JSON_HEX_APOS)), true);
-			}
+		static function strip_deep(&$d)
+                {
+                    $d = is_array($d) ? array_map(array('GrabPress', 'strip_deep'), $d) : stripslashes($d);
+                    return $d;
+                }
 
-			return $request;
-		}
+                static function _escape_request($request){
+                        if(function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()){
+                        //      return json_decode(stripslashes(json_encode($request, JSON_HEX_APOS)), true);
+                        return self::strip_deep($request);
+                        }
+
+                        return $request;
+                }
+
 
 		static function _account_form_default_values($request){
 			$defaults = array( "publish" => true,
@@ -441,7 +449,6 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 		static function dispatcher() {
 			GrabPress::log();
-
 			$_REQUEST["action"] = array_key_exists("action", $_REQUEST)?$_REQUEST["action"]:"default";
 			$action = $_REQUEST[ 'action' ];
 			$page = $_GET["page"];
@@ -521,14 +528,14 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPressViews::dashboard_management($params);
 					break;
 				case 'gp-template':
--                                       wp_enqueue_script( 'gp-template', $plugin_url.'/js/template.js' , array("jquery") );
+                                        wp_enqueue_script( 'gp-template', $plugin_url.'/js/template.js' , array("jquery") );
 					GrabPressViews::template_management($params);
 					break;
 				}
 		}
 
-		static function grabpress_plugin_url(){
-			return plugin_dir_url( __FILE__ ) ;     
+		static function grabpress_plugin_url(){			
+                        return plugin_dir_url( __FILE__ ) ; 
 		}
 
 		static function enqueue_scripts($page) {

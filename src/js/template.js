@@ -60,6 +60,15 @@ var GrabPressTemplate = GrabPressTemplate || {
         document.getElementById("player_width").value = 640;
         GrabPressTemplate.updateHeightValue();
     },
+    setConfirmUnload : function(on) {
+        window.onbeforeunload = (on) ? GrabPressTemplate.unloadMessage : null;
+    },
+    unloadMessage : function() {
+        return 'You have entered new data on this page.' +
+        ' If you navigate away from this page without' +
+        ' first saving your data, the changes will be' +
+        ' lost.';
+    },
     /* initialization */
     init : function() {
         if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
@@ -94,6 +103,11 @@ var GrabPressTemplate = GrabPressTemplate || {
           GrabPressTemplate.updateHeightValue();
           jQuery("form input[name=width]").change(GrabPressTemplate.validateWidthValue);
  	  jQuery("form input[name=ratio]").change(GrabPressTemplate.validateWidthValue); 
+          //leave page with modified form pop-up
+          jQuery(':input', 'form').bind("change", function () {
+              GrabPressTemplate.setConfirmUnload(true);
+          });    
+          jQuery('.template-form').submit(function(){window.onbeforeunload = null;});
     }
 }
 

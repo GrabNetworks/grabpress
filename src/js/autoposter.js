@@ -73,6 +73,10 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             jQuery("#channel-select-preview").multiselect("destroy");
             jQuery("#provider-select-preview").multiselect("destroy");
             jQuery("#preview-modal").remove();
+            //leave page with modified form pop-up            
+            if (and || or || not|| phrase) { 
+                GrabPressAutoposter.setConfirmUnload(true);
+            }            
         }
     },
     /* Adds videos to the modal preview window by making an ajax request with the entered keywords */
@@ -335,12 +339,13 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         });
         jQuery('#reset-form').bind('click', function(e){
             var referer = jQuery("input[name=referer]").val();
+            window.onbeforeunload = null;
             if( referer == "create" ){
                 window.location = "admin.php?page=gp-autoposter";
             }else{
                 var id = jQuery("input[name=feed_id]").val();
                 window.location = "admin.php?page=gp-autoposter&action=edit-feed&feed_id="+id;
-            }
+            }            
         });
         jQuery("#form-create-feed input").keypress(function(e) {
             if(e.which == 13) {
@@ -553,6 +558,20 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
             jQuery(":input").attr('disabled', 'disabled');
         };
+        //leave page with modified form pop-up
+        jQuery(':input', 'form').bind("change", function () {
+            GrabPressAutoposter.setConfirmUnload(true);
+        });
+        jQuery('#form-create-feed').submit(function(){window.onbeforeunload = null;});
+    },
+    setConfirmUnload : function(on) {
+        window.onbeforeunload = (on) ? GrabPressAutoposter.unloadMessage : null;
+    },
+    unloadMessage : function() {
+        return 'You have entered new data on this page.' +
+        ' If you navigate away from this page without' +
+        ' first saving your data, the changes will be' +
+        ' lost.';
     }
 }
 //do form validation	
