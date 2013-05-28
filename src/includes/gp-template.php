@@ -52,10 +52,10 @@
 </div>
 </div>
 
-<div id="dialog_300" title="Dialog Title">
+<div id="dialog_300" title="Warning !">
 <p></p>
 </div>
 
-<div id="dialog_640" title="Dialog Title">
+<div id="dialog_640" title="Warning !">
 <p></p>
 </div>
