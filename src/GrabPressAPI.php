@@ -536,29 +536,44 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		}
 		// returns cached results after 1rst call
 		static function get_providers() {
+                    try{
 			if( isset(GrabPress::$providers) ){
 				return GrabPress::$providers;
 			}
 			$json_provider = GrabPressAPI::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1' );
 			$list = json_decode( $json_provider );
-			$list = array_filter( $list, array( "GrabPressAPI", "_filter_out_out_providers" ) );
-			uasort($list, array("GrabPressAPI", "_sort_providers"));
-			GrabPress::$providers = $list;
-			return $list;
+                        if ($list)
+                        {
+                            $list = array_filter( $list, array( "GrabPressAPI", "_filter_out_out_providers" ) );
+                            uasort($list, array("GrabPressAPI", "_sort_providers"));
+                            GrabPress::$providers = $list;	
+                        }
+                    } catch (Exception $e) {  
+                        $list = array();
+                        GrabPress::log('API call exception: '.$e->getMessage());
+                    }
+                        return $list;
 		}
 		///Alphabetically
 		static function _sort_channels($a, $b){
 			return strcasecmp($a->category->name, $b->category->name);
 		}
 		static function get_channels() {
+                    try{
 			if( isset(GrabPress::$channels) ){
 				return GrabPress::$channels;
 			}
 			$json_channel = GrabPressAPI::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );			
 			$list = json_decode( $json_channel );
-			uasort($list, array("GrabPressAPI", "_sort_channels"));
-			GrabPress::$channels = $list;
-			return $list;
+                        if ($list){
+                            uasort($list, array("GrabPressAPI", "_sort_channels"));
+                            GrabPress::$channels = $list;
+                        }			
+                    } catch (Exception $e) {  
+                        $list = array();
+                        GrabPress::log('API call exception: '.$e->getMessage());
+                    }
+                        return $list;
 		}
 		static function _sort_watchlist($a, $b){
 			$at = new DateTime($a->video->created_at);
