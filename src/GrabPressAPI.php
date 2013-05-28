@@ -30,7 +30,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                         }
                         $status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 			curl_close( $ch );
-                        if ($response) {   
+                        if ($response && $status < 400) {   
                             return $response;
                         } else {
                             throw new Exception('API get_json error with status = '. $status .' and response =' . $response);
@@ -85,12 +85,11 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                         }
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
                         curl_close( $ch );                        
-                        if ($response) {
+                        if ($response && $status < 400) {
                             GrabPress::log( 'status = ' . $status . ', response =' . $response );
                             return $response;
                         } else {
                             throw new Exception('API call error with status = ' . $status . ' and response =' . $response);
-                            //GrabPress::abort('API call error with status = ' . $status . ' and response =' . $response);
                         }			
 		}
 
@@ -321,13 +320,14 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				}
                             } catch (Exception $e) {
                                 GrabPress::$error = "There was an error connecting to the API! Please try again later!";
-                                GrabPress::log('API call exception: '.$e->getMessage());
+                                GrabPress::log('API call exception: '.$e->getMessage());                                
                             }
 			} else {
                             try {
 				return GrabPressAPI::create_connection();
                             } catch (Exception $e) {
-                                exit('API connection error! Please try again later!');
+                                GrabPress::$error = "There was an error connecting to the API! Please try again later!";
+                                GrabPress::log('API call exception: '.$e->getMessage());
                             }
 			}
 			return false;
@@ -477,7 +477,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$user_json = GrabPressAPI::call( "POST", '/user', $post_data );
 			$user_data = json_decode( $user_json );
 
-			$api_key = $user_data -> user -> access_key;
+                        $api_key = $user_data -> user -> access_key;
 			if ( $api_key ) {
 				update_option( 'grabpress_key', $api_key );//store api key
 			}
@@ -584,24 +584,31 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			if( isset(GrabPress::$watchlist) ){
 				return GrabPress::$watchlist;
 			}
-			$feeds = GrabPressAPI::get_feeds();
-			$watched = array();
+                        $watched = array();
+                        try {
+                            $feeds = GrabPressAPI::get_feeds();                            
 
-			foreach ($feeds as $feed) {
-				if($feed->feed->watchlist == true){
-					$json = GrabPressAPI::get_json($feed->feed->url);
-					$watched = array_merge($watched, json_decode($json)->results);
-				}
-			}
-			uasort($watched, array("GrabPressAPI", "_sort_watchlist"));
+                            foreach ($feeds as $feed) {
+                                    if($feed->feed->watchlist == true){
+                                            $json = GrabPressAPI::get_json($feed->feed->url);
+                                            $watched = array_merge($watched, json_decode($json)->results);
+                                    }
+                            }
+                        } catch (Exception $e){
+                            GrabPress::$error = "There was an error connecting to the API! Please try again later!";
+                            GrabPress::log('API call exception: '.$e->getMessage());
+                        }    
+                        uasort($watched, array("GrabPressAPI", "_sort_watchlist"));
 			return $watched;
 		}
 		static function watchlist_activity($feeds){
-			foreach ($feeds as $feed) {
-				$submissions = GrabPressAPI::get_items_from_last_submission($feed);
-				$feed->feed->feed_health = $submissions/$feed->feed->posts_per_update;
-				$feed->feed->submissions = $submissions;
-			}
+			if ($feeds) {
+                            foreach ($feeds as $feed) {
+                                    $submissions = GrabPressAPI::get_items_from_last_submission($feed);
+                                    $feed->feed->feed_health = $submissions/$feed->feed->posts_per_update;
+                                    $feed->feed->submissions = $submissions;
+                            }
+                        }
 			return $feeds;
 		}
 		static function get_items_from_last_submission($feed){
@@ -613,9 +620,8 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 					$last_submission = new DateTime($submissions[0]->submission->created_at);
 					if(
 						new DateTime($sub->submission->created_at) > 
-						$last_submission->sub(date_interval_create_from_date_string($feed->feed->update_frequency." seconds"))
+                                                $last_submission->modify("+ ".$feed->feed->update_frequency." seconds")
 					){
-
 						$count++;
 					}
 				}
@@ -635,7 +641,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                         }
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 			curl_close($ch);
-                        if ($xml) {
+                        if ($xml && $status < 400) {
                             $search = array('grab:', 'media:', 'type="flash"');
                             $replace = array('grab', 'media', '');
 
