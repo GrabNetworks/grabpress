@@ -409,7 +409,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 						"grabpress_version" => $gpv,
                                                 "php_version" => $php_version,
                                                 "php_conf" => $php_conf,
-                                                "os" => $os,
+                                                "operating_system" => $os,
                                                 "webserver" => $webserver,
                                                 "wordpress_plugins" => $wordpress_plugins
 					));
