@@ -84,8 +84,8 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                             GrabPress::abort( 'API call error: '.$e->getMessage());
                         }
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-                        curl_close( $ch );                        
-                        if ($response && $status < 400) {
+                        curl_close( $ch );                                                
+                        if ($response) {//should check for http status code less than 400 too
                             GrabPress::log( 'status = ' . $status . ', response =' . $response );
                             return $response;
                         } else {
