@@ -74,7 +74,7 @@
 		    $("input").keyup(doValidation);
 		    $("input").click(doValidation);
 		    $("select").change(doValidation);
-                    $(':text', 'form').bind("change", function () {
+                    $(':text,:password', 'form').bind("change", function () {
                         setConfirmUnload(true);
                     });
                     jQuery('#link-existing').submit(function(){
