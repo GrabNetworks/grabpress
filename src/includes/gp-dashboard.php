@@ -8,7 +8,7 @@
 			<div class="container-fluid">
 				<div class="row-fluid watchlist-wrap">                                    
 					<div class="span4 watchlist">
-                                            <img src="<?php echo plugin_dir_url( 'grabpress' ).'/grabpress/includes/images/logo.png' ?>"/>
+                                            <img src="<?php echo plugin_dir_url( __FILE__ ).'images/logo.png' ?>"/>
 						<div class="tabbable panel">
 							<ul class="nav nav-tabs">
 								<li class="active">

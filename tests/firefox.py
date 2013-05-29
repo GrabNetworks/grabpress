@@ -101,8 +101,8 @@ class CatalogTests(GrabPressAutomation):
     def test_CTLG_2_CreatePostFromCatalogSearch(self):
         driver = self.driver
         CatalogTests.test_CTLG_1_ExactPhraseSearch(self)
-        driver.find_element_by_id("btn-create-feed-single-4430298").click()
-        self.assertRegexpMatches(driver.find_element_by_id("content").text, r"grabpress_video guid=\"d811f4d7f6bd7de097b0e6dd09930411b44c0ab1\"")
+        driver.find_element_by_id("btn-create-feed-single-5078827").click()
+        self.assertRegexpMatches(driver.find_element_by_id("content").text, r"grabpress_video guid=\"31ce63f7618fb65025fb713c5042a33f43535120\"")
 
     def test_CTLG_2a_DeleteCreatedPost(self):
         driver = self.driver
@@ -130,12 +130,12 @@ class AccountTests(GrabPressAutomation):
         GrabPressAutomation.Login(self)
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
         driver.find_element_by_id("email").clear()
-        driver.find_element_by_id("email").send_keys(r"jpduquette00@gmail.com")
+        driver.find_element_by_id("email").send_keys(r"jduquette@grabnetworks.com")
         driver.find_element_by_id("password").clear()
-        driver.find_element_by_id("password").send_keys(r"dukey177")
+        driver.find_element_by_id("password").send_keys(r"test")
         driver.find_element_by_id("submit_button").click()
         # Warning: assertTextPresent may require manual changes
-        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"This installation is linked to jpduquette00@gmail.com")
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"This installation is linked to jduquette@grabnetworks.com")
 
     def test_ACCT_2_UnlinkAccount(self):
         driver = self.driver
