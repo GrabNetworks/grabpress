@@ -85,7 +85,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                         }
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
                         curl_close( $ch );                                                
-                        if ($response) {//should check for http status code less than 400 too
+                        if ($response && ($status < 400 || $status == 404)) {//should check for http status code less than 400 too
                             GrabPress::log( 'status = ' . $status . ', response =' . $response );
                             return $response;
                         } else {
