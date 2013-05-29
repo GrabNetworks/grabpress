@@ -654,7 +654,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 					$last_submission = new DateTime($submissions[0]->submission->created_at);
 					if(
 						new DateTime($sub->submission->created_at) > 
-                                                $last_submission->modify("+ ".$feed->feed->update_frequency." seconds")
+                                                $last_submission->modify("- ".$feed->feed->update_frequency." seconds")
 					){
 						$count++;
 					}
