@@ -61,14 +61,31 @@
 					}
 				}
 			}
+                        function setConfirmUnload(on) {
+                            window.onbeforeunload = (on) ? unloadMessage : null;
+                        }
+
+                        function unloadMessage() {
+                            return 'You have entered new data in this page.' +
+                            ' If you navigate away from this page without' +
+                            ' first saving your data, the changes will be' +
+                            ' lost.';
+                          }
 		    $("input").keyup(doValidation);
 		    $("input").click(doValidation);
 		    $("select").change(doValidation);
+                    $(':text,:password', 'form').bind("change", function () {
+                        setConfirmUnload(true);
+                    });
+                    jQuery('#link-existing').submit(function(){
+                        window.onbeforeunload = null;
+                    });
+                    
                     $(document).ready(function(){
                         //if we have an API connection error disable all inputs
                         if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
                             jQuery(":input").attr('disabled', 'disabled');
-                        }
+                        };                        
                     });
 			$('#cancel_button').click(function(e){
 				if(window.confirm('Are you sure you want to cancel linking?\n\n' +

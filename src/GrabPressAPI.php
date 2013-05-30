@@ -30,7 +30,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                         }
                         $status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 			curl_close( $ch );
-                        if ($response) {   
+                        if ($response && $status < 400) {   
                             return $response;
                         } else {
                             throw new Exception('API get_json error with status = '. $status .' and response =' . $response);
@@ -84,13 +84,12 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                             GrabPress::abort( 'API call error: '.$e->getMessage());
                         }
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-                        curl_close( $ch );                        
-                        if ($response) {
+                        curl_close( $ch );                                                
+                        if ($response && ($status < 400 || $status == 404)) {//should check for http status code less than 400 too
                             GrabPress::log( 'status = ' . $status . ', response =' . $response );
                             return $response;
                         } else {
                             throw new Exception('API call error with status = ' . $status . ' and response =' . $response);
-                            //GrabPress::abort('API call error with status = ' . $status . ' and response =' . $response);
                         }			
 		}
 
@@ -321,21 +320,51 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				}
                             } catch (Exception $e) {
                                 GrabPress::$error = "There was an error connecting to the API! Please try again later!";
-                                GrabPress::log('API call exception: '.$e->getMessage());
+                                GrabPress::log('API call exception: '.$e->getMessage());                                
                             }
 			} else {
                             try {
 				return GrabPressAPI::create_connection();
                             } catch (Exception $e) {
-                                exit('API connection error! Please try again later!');
+                                GrabPress::$error = "There was an error connecting to the API! Please try again later!";
+                                GrabPress::log('API call exception: '.$e->getMessage());
                             }
 			}
 			return false;
 		}
-
+                
+                static function getPhpConf() {
+                    // Create list of settings as array key 
+                    $php_conf = array (
+                            'display_errors' => ini_get('display_errors'),
+                            'magic_quotes_gpc' => ini_get('magic_quotes_gpc'),
+                            'magic_quotes_runtime' => ini_get('magic_quotes_runtime'),
+                            'magic_quotes_sybase' => ini_get('magic_quotes_sybase'),
+                            'log_errors' => ini_get('log_errors'),
+                            'error_log' => ini_get('error_log'),
+                            'error_reporting' => ini_get('error_reporting')
+                    );
+                    return serialize($php_conf);
+                }
+                
+                static function get_wordpress_plugins (){
+                    $plugins = get_option('active_plugins');
+                    $wordpress_plugins = '';
+                    foreach ($plugins as $key => $value) {
+                        $tmp = explode('/', $value);
+                        $wordpress_plugins .= $tmp[0].', ';
+                    }
+                    return $wordpress_plugins;
+                }
+                
 		static function report_versions($connector){
 			$gpv = GrabPress::$version;
  			$wpv = get_bloginfo("version");
+                        $os = php_uname("s").' '.php_uname("r").' '.php_uname("r");
+                        $php_version = phpversion();
+                        $php_conf = GrabPressAPI::getPhpConf();
+                        $webserver = $_SERVER['SERVER_SOFTWARE'];
+                        $wordpress_plugins = GrabPressAPI::get_wordpress_plugins();
 
 			if(GrabPressAPI::_needs_version_update($connector, $gpv, $wpv)){
 
@@ -343,7 +372,12 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 				GrabPressAPI::call("PUT", "/connectors/".$connector->id."?api_key=".GrabPress::$api_key, 
 					 array(
 						"wordpress_version" => $wpv,
-						"grabpress_version" => $gpv
+						"grabpress_version" => $gpv,
+                                                "php_version" => $php_version,
+                                                "php_conf" => $php_conf,
+                                                "operating_system" => $os,
+                                                "webserver" => $webserver,
+                                                "wordpress_plugins" => $wordpress_plugins
 					));
 			}
 		}
@@ -461,7 +495,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$user_login = $user_nicename;
 			$url_array = explode(  '/', $user_url );
 			$email_host =  substr( $url_array[ 2 ], 4, 13 );
-			$email_dir = $url_array[ 3 ];
+			$email_dir = isset($url_array[ 3 ])?$url_array[ 3 ]:'';
 			$user_email = md5( uniqid( rand(), TRUE ) ).'@grab.press';
 			$display_name = 'GrabPress';
 			$nickname  = 'GrabPress';
@@ -477,7 +511,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			$user_json = GrabPressAPI::call( "POST", '/user', $post_data );
 			$user_data = json_decode( $user_json );
 
-			$api_key = $user_data -> user -> access_key;
+                        $api_key = $user_data -> user -> access_key;
 			if ( $api_key ) {
 				update_option( 'grabpress_key', $api_key );//store api key
 			}
@@ -536,29 +570,44 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		}
 		// returns cached results after 1rst call
 		static function get_providers() {
+                    try{
 			if( isset(GrabPress::$providers) ){
 				return GrabPress::$providers;
 			}
 			$json_provider = GrabPressAPI::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/providers?limit=-1' );
 			$list = json_decode( $json_provider );
-			$list = array_filter( $list, array( "GrabPressAPI", "_filter_out_out_providers" ) );
-			uasort($list, array("GrabPressAPI", "_sort_providers"));
-			GrabPress::$providers = $list;
-			return $list;
+                        if ($list)
+                        {
+                            $list = array_filter( $list, array( "GrabPressAPI", "_filter_out_out_providers" ) );
+                            uasort($list, array("GrabPressAPI", "_sort_providers"));
+                            GrabPress::$providers = $list;	
+                        }
+                    } catch (Exception $e) {  
+                        $list = array();
+                        GrabPress::log('API call exception: '.$e->getMessage());
+                    }
+                        return $list;
 		}
 		///Alphabetically
 		static function _sort_channels($a, $b){
 			return strcasecmp($a->category->name, $b->category->name);
 		}
 		static function get_channels() {
+                    try{
 			if( isset(GrabPress::$channels) ){
 				return GrabPress::$channels;
 			}
 			$json_channel = GrabPressAPI::get_json( 'http://catalog.'.GrabPress::$environment.'.com/catalogs/1/categories' );			
 			$list = json_decode( $json_channel );
-			uasort($list, array("GrabPressAPI", "_sort_channels"));
-			GrabPress::$channels = $list;
-			return $list;
+                        if ($list){
+                            uasort($list, array("GrabPressAPI", "_sort_channels"));
+                            GrabPress::$channels = $list;
+                        }			
+                    } catch (Exception $e) {  
+                        $list = array();
+                        GrabPress::log('API call exception: '.$e->getMessage());
+                    }
+                        return $list;
 		}
 		static function _sort_watchlist($a, $b){
 			$at = new DateTime($a->video->created_at);
@@ -569,24 +618,31 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			if( isset(GrabPress::$watchlist) ){
 				return GrabPress::$watchlist;
 			}
-			$feeds = GrabPressAPI::get_feeds();
-			$watched = array();
+                        $watched = array();
+                        try {
+                            $feeds = GrabPressAPI::get_feeds();                            
 
-			foreach ($feeds as $feed) {
-				if($feed->feed->watchlist == true){
-					$json = GrabPressAPI::get_json($feed->feed->url);
-					$watched = array_merge($watched, json_decode($json)->results);
-				}
-			}
-			uasort($watched, array("GrabPressAPI", "_sort_watchlist"));
+                            foreach ($feeds as $feed) {
+                                    if($feed->feed->watchlist == true){
+                                            $json = GrabPressAPI::get_json($feed->feed->url);
+                                            $watched = array_merge($watched, json_decode($json)->results);
+                                    }
+                            }
+                        } catch (Exception $e){
+                            GrabPress::$error = "There was an error connecting to the API! Please try again later!";
+                            GrabPress::log('API call exception: '.$e->getMessage());
+                        }    
+                        uasort($watched, array("GrabPressAPI", "_sort_watchlist"));
 			return $watched;
 		}
 		static function watchlist_activity($feeds){
-			foreach ($feeds as $feed) {
-				$submissions = GrabPressAPI::get_items_from_last_submission($feed);
-				$feed->feed->feed_health = $submissions/$feed->feed->posts_per_update;
-				$feed->feed->submissions = $submissions;
-			}
+			if ($feeds) {
+                            foreach ($feeds as $feed) {
+                                    $submissions = GrabPressAPI::get_items_from_last_submission($feed);
+                                    $feed->feed->feed_health = $submissions/$feed->feed->posts_per_update;
+                                    $feed->feed->submissions = $submissions;
+                            }
+                        }
 			return $feeds;
 		}
 		static function get_items_from_last_submission($feed){
@@ -598,9 +654,8 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 					$last_submission = new DateTime($submissions[0]->submission->created_at);
 					if(
 						new DateTime($sub->submission->created_at) > 
-						$last_submission->sub(date_interval_create_from_date_string($feed->feed->update_frequency." seconds"))
+                                                $last_submission->modify("- ".$feed->feed->update_frequency." seconds")
 					){
-
 						$count++;
 					}
 				}
@@ -620,7 +675,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                         }
 			$status = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 			curl_close($ch);
-                        if ($xml) {
+                        if ($xml && $status < 400) {
                             $search = array('grab:', 'media:', 'type="flash"');
                             $replace = array('grab', 'media', '');
 

@@ -129,7 +129,17 @@
 						$( '#submit_button' ).bind('click');
 					}
 				}
-			}
+			};
+                        function setConfirmUnload(on) {
+                            window.onbeforeunload = (on) ? unloadMessage : null;
+                        }
+
+                        function unloadMessage() {
+                            return 'You have entered new data on this page.' +
+                            ' If you navigate away from this page without' +
+                            ' first saving your data, the changes will be' +
+                            ' lost.';
+                          }
 		    $("input").keyup(doValidation);
 		    $("input").click(doValidation);
 		    $("select").change(doValidation);
@@ -137,6 +147,12 @@
 				$('#register')[0].reset();
 		    	doValidation();
 		    });
+                    $('input:text, input:password, input:checkbox, select', 'form').bind("change", function () {
+                        setConfirmUnload(true);
+                    });                    
+                    jQuery('#register').submit(function(){
+                        window.onbeforeunload = null;
+                    });
                     $(document).ready(function(){
                         //if we have an API connection error disable all inputs
                         if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {

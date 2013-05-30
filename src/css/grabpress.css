@@ -648,7 +648,7 @@ line-height: 24px;
     box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.25);
     display: inline-block;
     height: 484px !important;
-    width: 468px !important;  
+    width: 460px !important;  
     float: right;  
     padding: 6px !important;
     margin: 8px !important;
@@ -1050,7 +1050,7 @@ line-height: 24px;
 }
 
 #t #b .right-pane{
-    width:752px !important;   
+    width:756px !important;   
     margin-left: -752px;
 }
 
@@ -1110,3 +1110,6 @@ line-height: 24px;
 /* white margins fix */
 /*#wpcontent {margin-left: 146px}*/
 .wrap{margin:0}
+/*dashboard changes */
+#t #b .watchlist, #t #b .right-pane {margin-top:16px}
+#t #b .watchlist{margin-left:8px !important}
