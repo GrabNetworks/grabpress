@@ -169,7 +169,7 @@
 						}
 						for ( $o = 0; $o < count( $times ); $o++ ) {
 							$time = $times[$o];
-							$value = $values[$o];
+							$value = $values[$o]*60;
 							if($value == $feed->update_frequency){
 								echo $time;
 							}									
