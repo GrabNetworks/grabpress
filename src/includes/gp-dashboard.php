@@ -351,7 +351,7 @@ for ( $n = 0; $n < $num_feeds; $n++ ) {
                 Publish Settings
         </p>
         <p>
-                Schedule: <?php echo $schedule?> (last update: <?php echo $feed->updated_at; ?>)<br />
+                Schedule: <?php echo isset($feed->update_frequency)?$times[$feed->update_frequency]:''; ?> (last update: <?php echo $feed->updated_at; ?>)<br />
                 Maximun Posts per update: <?php echo $feed->posts_per_update; ?><br />                                                                                                        
                 Post Categories:
                 <?php
