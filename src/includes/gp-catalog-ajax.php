@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$providers_total = count( $list_providers );
 	if(($providers_total == count($providers)) || in_array("", $providers)){
 		$provider_text = "All Providers";
@@ -134,7 +134,7 @@
 			foreach ($list_feeds["results"] as $result) {
 		?>
 		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
-		<div class="tile-left">
+		<div class="tile-left">                 
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72" width="123" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 		</div>
 		<div class="tile-right">			
@@ -147,7 +147,7 @@
 			<p class="video_date">
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
-			<span><?php echo $stamp; ?>&nbsp;&nbsp;</span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+			<span><?php echo $stamp; ?>&nbsp;&nbsp;</span> <span><?php echo GrabPressAPI::time_format_mm_ss($result['video']['duration']);?>&nbsp;&nbsp;</span> <span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
 			<?php if ($form['action'] == 'gp_get_catalog') { 
                                 if (isset($form['display']) && $form['display'] == 'Tab') {
                                     if(GrabPress::check_permissions_for("single-post")){ ?>
