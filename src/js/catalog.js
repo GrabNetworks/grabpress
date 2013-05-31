@@ -158,7 +158,7 @@ var GrabPressCatalog = {
             }
             jQuery("<div id='pagination'></div>").insertBefore(content);
             var top = '260px';
-            if (jQuery.browser.msie) { top = '275px';} 
+            if (jQuery.browser.msie) { top = '265px';} 
             if (action == 'gp_get_catalog_tab') {
                 top = '480px';
             }
@@ -172,6 +172,7 @@ var GrabPressCatalog = {
                 if (results.length) {
                     results.append("<div id='pagination-bottom'></div>");                                           
                     jQuery('#pagination-bottom').css('margin-top','10px');
+                    jQuery('#pagination-bottom').css('margin-bottom','15px');
                     jQuery("#pagination-bottom").addClass('light-theme');            
                     jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
                 }
