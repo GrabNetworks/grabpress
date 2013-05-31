@@ -1113,3 +1113,5 @@ line-height: 24px;
 /*dashboard changes */
 #t #b .watchlist, #t #b .right-pane {margin-top:16px}
 #t #b .watchlist{margin-left:8px !important}
+/* catalog tab space between Watch Video and Create Post buttons*/
+#form-catalog-page .button-primary {margin:0 2px}
