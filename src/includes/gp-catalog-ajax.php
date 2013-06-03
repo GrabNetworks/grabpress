@@ -32,7 +32,7 @@
             
 		<fieldset id="preview-feed">
 		<legend><?php if ($form['action'] == 'gp_get_preview') {
-                                    echo 'Preview or Modify Feed Search Criteria';
+                                    echo 'Preview Feed';
                                } elseif (isset($form['display']) && $form['display'] == 'Tab') {
                                    echo 'Search Criteria';
                                } else {
