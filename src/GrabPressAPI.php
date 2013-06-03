@@ -703,6 +703,9 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                     $seconds = $milisec/1000;
                     $m = intval($seconds/60);
                     $s = $seconds%60 ;
+                    if (1 == strlen($s)) {
+                        $s = '0'.$s;
+                    }
                     return  $m.':'.$s;
                 }
 	}
