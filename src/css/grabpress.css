@@ -231,7 +231,7 @@ cursor: pointer;
     text-align: left;
     z-index: 2;
     text-decoration: none;
-    width: 500px;
+    width: 390px;
 } 
 .grabpress-table .ui-multiselect{
     *height: 28px;
@@ -665,7 +665,7 @@ line-height: 24px;
     padding-left: 0;
     padding-right: 0;
     padding: 0;
-    height: 428px;
+    height: 428px;   
 }
 #t #b .feeds .table-hover{
      background: url("../images/inset.png") repeat-x scroll left bottom #FFFFFF;
