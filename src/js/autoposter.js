@@ -72,12 +72,13 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             jQuery("#provider-select").multiselect("refresh");
             jQuery("#channel-select-preview").multiselect("destroy");
             jQuery("#provider-select-preview").multiselect("destroy");
-            jQuery("#preview-modal").remove();
+            
             //leave page with modified form pop-up            
             if (and || or || not|| phrase) { 
                 GrabPressAutoposter.setConfirmUnload(true);
             } 
             */
+           jQuery("#preview-modal").remove();
         }
     },
     /* Adds videos to the modal preview window by making an ajax request with the entered keywords */
