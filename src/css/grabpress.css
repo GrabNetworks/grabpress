@@ -821,7 +821,7 @@ line-height: 24px;
 }
 .nano .content{
     margin:3px 10px 10px 10px;
-    right: -27px !important;
+    right: 0px !important;
 }
 .nano .pane{
     margin:4px;
@@ -1108,7 +1108,6 @@ line-height: 24px;
 /* Dashboard right-pane fixed position */
 #t #b .right-pane .span4 { width:auto }
 /* white margins fix */
-/*#wpcontent {margin-left: 146px}*/
 .wrap{margin:0}
 /*dashboard changes */
 #t #b .watchlist, #t #b .right-pane {margin-top:16px}

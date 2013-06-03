@@ -299,7 +299,11 @@ var GrabPressDashboard = GrabPressDashboard || {
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
-        jQuery(".nano").nanoScroller({"alwaysVisible":true});                        
+        jQuery('.nano').nanoScroller({
+            preventPageScrolling: true,
+            "alwaysVisible" : true
+        });        
+        
        
         jQuery("#message").hide();//hack        
         

@@ -138,7 +138,8 @@
 								</div>
 								<?php } ?>
 								<div id="publisher-account-status" value="Publisher Account Status" class="<?php echo $publisher_status ?>" ></div>
-								<div class="panel">
+								<div class="panel nano">
+                                                                    <div class="content">
 								<h3>Feed Activity (Latest Auto-post)</h3>
 								<a href="#" id="help">help</a>
 								<table class="table table-hover">
@@ -235,6 +236,7 @@
 									</tbody>
 								</table>
 								</div>
+                                                            </div>
 							</div>
 						</div>                                            
 						<div clas="row-fluid">
