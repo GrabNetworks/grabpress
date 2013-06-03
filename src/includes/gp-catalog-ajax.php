@@ -131,17 +131,16 @@
               <?php }
                ?>
 		 	<?php if($empty == "false"){ ?>
-		 	<div class="label-tile-one-column">
-				
+		 	<div class="label-tile-one-column" <?php if ($form['action'] == 'gp_get_preview') echo 'style="padding:0 10px 0 10px"'; ?> >				
 				<input type="hidden" id="feed_count" value="<?php echo ($list_feeds["total_count"]>400)?'400':$list_feeds["total_count"]; ?>" name="feed_count"/>
                                 <input type="hidden" id="page" value="0" name="page"/>
 			</div>
 			<?php }?>
 		<?php
                     if(!empty($list_feeds["results"])){
-			foreach ($list_feeds["results"] as $result) {
+			foreach ($list_feeds["results"] as $key => $result) {                            
 		?>
-		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
+		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile" <?php if ( $key === 0 && $form['action'] == 'gp_get_preview' ) echo 'style="border-top:none;"'; ?> >		
 		<div class="tile-left">
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72" width="123" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 		</div>
