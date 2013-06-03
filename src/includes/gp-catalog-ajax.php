@@ -38,7 +38,8 @@
                                } else {
                                    echo 'Insert Video'; 
                                }?>
-                </legend>		
+                </legend>
+               <?php if ($form['action'] != 'gp_get_preview') { ?>
 			<div class="label-tile-one-column">
 				<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords'] : '' ?>" maxlength="255" /></span>
 				<a href="#" id="help">help</a>
@@ -121,7 +122,14 @@
                                     <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                          <?php  }
                             } ?>
-		</div>	
+		</div>
+               <?php 
+               } 
+               else {
+                   ?>
+                   <input name="keywords" id="keywords" type="hidden" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords'] : '' ?>" maxlength="255" />
+              <?php }
+               ?>
 		 	<?php if($empty == "false"){ ?>
 		 	<div class="label-tile-one-column">
 				
