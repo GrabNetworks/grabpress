@@ -272,7 +272,10 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$list_feeds = json_decode($json_preview, true);	
                                 if(empty($list_feeds["results"])){
                                     GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+                                } else {
+                                    $list_feeds["results"] = GrabPressViews::emphasize_keywords($request["keywords"], $list_feeds["results"]);
                                 }
+                                
                                 $list_channels = GrabPressAPI::get_channels();
                                 $list_providers = GrabPressAPI::get_providers();
                             } catch (Exception $e) {  
@@ -345,7 +348,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 				if(empty($list_feeds["results"])){
                                     GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
-				}
+				} else { 
+                                    $list_feeds["results"] = GrabPressViews::emphasize_keywords($request["keywords"], $list_feeds["results"]);
+                                }
 
 				$empty = "false";
                             } catch (Exception $e) {
@@ -371,6 +376,15 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				));
 			die();
 		}
+                
+                static function emphasize_keywords($keywords, $results) {
+                    foreach ($results as $key=>$result) {
+                        $replace_keywords = substr($result['video']['summary'], stripos($result['video']['summary'], $keywords), strlen($keywords));
+                        $replace_keywords = '<strong>'.$replace_keywords.'</strong>';
+                        $results[$key]['video']['summary'] = str_ireplace($keywords, $replace_keywords, $result['video']['summary']);
+                    }
+                    return $results;
+                }
 
 		static function grabpress_preview_videos($request) {
                     GrabPress::log();
@@ -438,6 +452,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                         $list_feeds = json_decode($json_preview, true);
                         if(empty($list_feeds["results"])){
                             GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
+                        } else {
+                            $list_feeds["results"] = GrabPressViews::emphasize_keywords($request["keywords"], $list_feeds["results"]);
                         }
                     } catch(Exception $e) { 
                         $list_feeds = array();
