@@ -153,7 +153,7 @@
 			<p class="video_date">
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
-			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span> <span><?php echo GrabPressAPI::time_format_mm_ss($result['video']['duration']);?>&nbsp;&nbsp;</span> <span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
 			<?php if(GrabPress::check_permissions_for("single-post")){ ?>
 			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
 			<?php } ?>
