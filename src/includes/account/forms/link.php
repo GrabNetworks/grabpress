@@ -15,7 +15,7 @@
 				</td>
 			</tr>
 			<tr valign="bottom"><td class = "account-help">
-					<a href="http://www.grab-media.com/publisherAdmin/forgotpw" target="_blank">I don't remember my password</a>
+					<a href="http://www.grab-media.com/publisherAdmin/forgotpw" target="_blank">Forgot password?</a>
 					<input type="button" class="button-primary" disabled="disabled" id="submit_button" value="<?php _e( ($request[ 'action' ] == 'switch' ? 'Change' : 'Link').' Account') ?>"/>
 					
 					<input type="button" class="button-secondary" id="cancel_button" value="<?php _e('Cancel') ?>"/>
