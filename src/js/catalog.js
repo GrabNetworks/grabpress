@@ -162,10 +162,12 @@ var GrabPressCatalog = {
             if (action == 'gp_get_catalog_tab') {
                 top = '490px';
             }
-            jQuery('#pagination').css('position', 'relative');
+            var position = 'relative';
+            if (action == 'gp_get_preview') {position = 'static';}
+            jQuery('#pagination').css('position', position);
             jQuery('#pagination').css('top', top);
             jQuery('#pagination').css('left', '10px');            
-            GrabPressCatalog.pagination(action);
+            GrabPressCatalog.pagination(action);            
             var pagb = jQuery("#pagination-bottom");
             if (pagb.length == 0) {                
                 var results = jQuery(content).parent();
