@@ -228,6 +228,12 @@ var GrabPressDashboard = GrabPressDashboard || {
             if (jQuery.browser.msie && jQuery.browser.version == 8.0) {
                 left = "#t #b .watchlist";
                 topRight = '16px';
+                setTimeout(function(){
+                   jQuery('.nano').nanoScroller({
+                        preventPageScrolling: true,
+                        "alwaysVisible" : true
+                   },150); 
+                });                
             }            
             //hide watchlist if browser is resized under certain width
             if ( jQuery(window).width() < smallWidth ) {        
@@ -252,7 +258,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width()+8);
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
                 },150);
-            }              
+            }             
         }).resize();
     },
     /* Dashboard initializiations */
@@ -299,16 +305,18 @@ var GrabPressDashboard = GrabPressDashboard || {
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
-        jQuery(".nano").nanoScroller({"alwaysVisible":true});                        
+        jQuery('.nano').nanoScroller({
+            preventPageScrolling: true,
+            "alwaysVisible" : true
+        });        
+        
        
         jQuery("#message").hide();//hack        
         
         jQuery("#help").simpletip({
             content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
-            position: 'left',
-            offset: [-25, 0]
-        });
-        
+            position: [0,30]
+        });        
       /*  if ( jQuery("#adminmenuwrap").width() < 34 ) {           
             smallWidth = 1149;
         } 
@@ -324,5 +332,5 @@ var GrabPressDashboard = GrabPressDashboard || {
 }
 
 jQuery(document).ready(
-    GrabPressDashboard.init()
+    GrabPressDashboard.init()    
 ); 
