@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$providers_total = count( $list_providers );
 	if(($providers_total == count($providers)) || in_array("", $providers)){
 		$provider_text = "All Providers";
@@ -32,13 +32,14 @@
             
 		<fieldset id="preview-feed">
 		<legend><?php if ($form['action'] == 'gp_get_preview') {
-                                    echo 'Preview or Modify Feed Search Criteria';
+                                    echo 'Preview Feed';
                                } elseif (isset($form['display']) && $form['display'] == 'Tab') {
                                    echo 'Search Criteria';
                                } else {
                                    echo 'Insert Video'; 
                                }?>
-                </legend>		
+                </legend>
+               <?php if ($form['action'] != 'gp_get_preview') { ?>
 			<div class="label-tile-one-column">
 				<span class="preview-text-catalog"><b>Keywords: </b><input name="keywords" id="keywords" type="text" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords'] : '' ?>" maxlength="255" /></span>
 				<a href="#" id="help">help</a>
@@ -121,20 +122,26 @@
                                     <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                          <?php  }
                             } ?>
-		</div>	
+		</div>
+               <?php 
+               } 
+               else {
+                   ?>
+                   <input name="keywords" id="keywords" type="hidden" value="<?php echo $keywords = isset($form['keywords']) ? $form['keywords'] : '' ?>" maxlength="255" />
+              <?php }
+               ?>
 		 	<?php if($empty == "false"){ ?>
-		 	<div class="label-tile-one-column">
-				
+		 	<div class="label-tile-one-column" <?php if ($form['action'] == 'gp_get_preview') echo 'style="padding:0 10px 0 10px"'; ?> >				
 				<input type="hidden" id="feed_count" value="<?php echo ($list_feeds["total_count"]>400)?'400':$list_feeds["total_count"]; ?>" name="feed_count"/>
                                 <input type="hidden" id="page" value="0" name="page"/>
 			</div>
 			<?php }?>
 		<?php
                     if(!empty($list_feeds["results"])){
-			foreach ($list_feeds["results"] as $result) {
+			foreach ($list_feeds["results"] as $key => $result) {                            
 		?>
-		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile">		
-		<div class="tile-left">
+		<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile" <?php if ( $key === 0 && $form['action'] == 'gp_get_preview' ) echo 'style="border-top:none;"'; ?> >		
+		<div class="tile-left">                 
 			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72" width="123" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
 		</div>
 		<div class="tile-right">			
@@ -147,7 +154,7 @@
 			<p class="video_date">
 				<?php $date = new DateTime( $result["video"]["created_at"] );
 				$stamp = $date->format('m/d/Y') ?>
-			<span><?php echo $stamp; ?>&nbsp;&nbsp;</span><span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+			<span><?php echo $stamp; ?>&nbsp;&nbsp;</span> <span><?php echo GrabPressAPI::time_format_mm_ss($result['video']['duration']);?>&nbsp;&nbsp;</span> <span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
 			<?php if ($form['action'] == 'gp_get_catalog') { 
                                 if (isset($form['display']) && $form['display'] == 'Tab') {
                                     if(GrabPress::check_permissions_for("single-post")){ ?>
