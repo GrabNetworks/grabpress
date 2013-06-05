@@ -319,7 +319,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$empty = "true";
 			}else{
                             $adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
-var_dump($adv_search_params);//die();
+
                             if(isset($request['created_before']) && ($request['created_before'] != "")){
                                     $created_before_date = new DateTime( $request['created_before'] );	
                                     $created_before = $created_before_date->format('Ymd');
@@ -349,7 +349,7 @@ var_dump($adv_search_params);//die();
 
 				if(empty($list_feeds["results"])){
                                     GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
-				} else {                                    var_dump($adv_search_params);
+				} else {                                    
                                     $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);
                                 }
 
@@ -378,8 +378,8 @@ var_dump($adv_search_params);//die();
 			die();
 		}
                 
-                static function emphasize_keywords($params, $results) {     var_dump($params);               
-                    $keywords = GrabPressViews::get_keywords_from_params($params);var_dump($keywords);
+                static function emphasize_keywords($params, $results) {     
+                    $keywords = GrabPressViews::get_keywords_from_params($params);
                     foreach ($results as $key=>$result) {
                         $results[$key]['video']['summary'] = GrabPressViews::emphasize_result_keywords($keywords, $result['video']['summary']);                        
                     }
@@ -490,23 +490,8 @@ var_dump($adv_search_params);//die();
                         $list_feeds = json_decode($json_preview, true);
                         if(empty($list_feeds["results"])){
                             GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
-                        } else {
-                            //$keywords_to_emphasize = (isset($keywords_emphasize))?$keywords_emphasize:$request["keywords"];
-                            /*if (isset($keywords_emphasize)) {var_dump($keywords_emphasize);
-                                foreach ($keywords_emphasize as $key=>$keyword) {
-                                    $exact_phrase = false;
-                                    if ($key == 'keywords_phrase') {
-                                        $exact_phrase = true;
-                                        $keywords[] = $keyword;
-                                    } else {
-                                        $keywords = explode(' ', $keyword);
-                                    }                                  */
-                                    
-                               $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);
-                               /* }
-                            } else {
-                                $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);
-                            }*/
+                        } else {                            
+                            $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);                               
                         }
                     } catch(Exception $e) { 
                         $list_feeds = array();
