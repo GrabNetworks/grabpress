@@ -351,7 +351,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				$matched_or[] = str_replace(" OR "," ",stripslashes($result_or[0][$i]));
 			}
 
-			$sentence_without_or = preg_replace('/[p{Latin}0-9_]*\s+OR\s+[p{Latin}0-9_]*/', '', stripslashes($sentence));
+			$sentence_without_or = preg_replace('/[\p{Latin}0-9_]*\s+OR\s+[\p{Latin}0-9_]*/', '', stripslashes($sentence));
 
 			$keywords = preg_split("/\s+/", $sentence_without_or);
 
