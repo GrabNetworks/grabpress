@@ -78,6 +78,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                 GrabPressAutoposter.setConfirmUnload(true);
             } 
             */
+           GrabPressAutoposter.doValidation();
            jQuery("#preview-modal").remove();
         }
     },
