@@ -346,7 +346,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$sentence = preg_replace('/\"([^\"]*)\"/', '', stripslashes($adv_search));
 			
-			preg_match_all('/[p{Latin}0-9_]*\s+OR\s+[p{Latin}0-9_]*/', $sentence, $result_or, PREG_PATTERN_ORDER);
+			preg_match_all('/[\p{Latin}0-9_]*\s+OR\s+[\p{Latin}0-9_]*/', $sentence, $result_or, PREG_PATTERN_ORDER);
 			for ($i = 0; $i < count($result_or[0]); $i++) {
 				$matched_or[] = str_replace(" OR "," ",stripslashes($result_or[0][$i]));
 			}
