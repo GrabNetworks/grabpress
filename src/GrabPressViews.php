@@ -273,7 +273,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                                 if(empty($list_feeds["results"])){
                                     GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
                                 } else {
-                                    $list_feeds["results"] = GrabPressViews::emphasize_keywords($request["keywords"], $list_feeds["results"]);
+                                    $keywords = explode(' ', $request["keywords"]);
+                                    $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);
                                 }
                                 
                                 $list_channels = GrabPressAPI::get_channels();
@@ -318,7 +319,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$empty = "true";
 			}else{
                             $adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
-
+var_dump($adv_search_params);//die();
                             if(isset($request['created_before']) && ($request['created_before'] != "")){
                                     $created_before_date = new DateTime( $request['created_before'] );	
                                     $created_before = $created_before_date->format('Ymd');
@@ -348,8 +349,8 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 				if(empty($list_feeds["results"])){
                                     GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
-				} else { 
-                                    $list_feeds["results"] = GrabPressViews::emphasize_keywords($request["keywords"], $list_feeds["results"]);
+				} else {                                    var_dump($adv_search_params);
+                                    $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);
                                 }
 
 				$empty = "false";
@@ -377,16 +378,50 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die();
 		}
                 
-                static function emphasize_keywords($keywords, $results) {
+                static function emphasize_keywords($params, $results) {     var_dump($params);               
+                    $keywords = GrabPressViews::get_keywords_from_params($params);var_dump($keywords);
                     foreach ($results as $key=>$result) {
-                        $replace_keywords = substr($result['video']['summary'], stripos($result['video']['summary'], $keywords), strlen($keywords));
-                        $replace_keywords = '<strong>'.$replace_keywords.'</strong>';
-                        $results[$key]['video']['summary'] = str_ireplace($keywords, $replace_keywords, $result['video']['summary']);
+                        $results[$key]['video']['summary'] = GrabPressViews::emphasize_result_keywords($keywords, $result['video']['summary']);                        
                     }
                     return $results;
                 }
+                
+                static function emphasize_result_keywords($keywords, $result) {                    
+                    foreach ($keywords as $keyword) {
+                        $regex = '/\b'.$keyword.'/i';
+                        $replace_keywords = substr($result, stripos($result, $keyword), strlen($keyword));
+                        $replace_keywords = '<strong>'.$replace_keywords.'</strong>';
+                        //$result = str_ireplace($keyword, $replace_keywords, $result);
+                        $result = preg_replace($regex, $replace_keywords, $result);
+                    }   
+                    return $result;
+                }
+                
+                static function get_keywords_from_params($params) {
+                    $keywords = array();
+                    if (isset($params['keywords_phrase']) && !empty($params['keywords_phrase'])) {
+                        array_push($keywords, preg_replace("/[^\p{Latin}0-9-' ]/u", '', trim($params['keywords_phrase'])));
+                    }
+                    if (isset($params['keywords_and']) && !empty($params['keywords_and'])) {
+                        $keywords_and = explode(' ', trim($params['keywords_and']));
+                        foreach ($keywords_and as $key=>$value) {                            
+                            $keywords_and[$key] = preg_replace("/[^\p{Latin}0-9-' ]/u", '', trim($value));
+                            
+                        }
+                        $keywords = (!empty($keywords_and))?array_merge($keywords, $keywords_and):$keywords;
+                    }
+                    if (isset($params['keywords_or']) && !empty($params['keywords_or'])) {
+                        $keywords_or = explode(' ', trim($params['keywords_or']));
+                        foreach ($keywords_or as $key=>$value) {
+                            $keywords_or[$key] = preg_replace("/[^\p{Latin}0-9-' ]/u", '', trim($value));
+                        }
+                        $keywords = array_merge($keywords, $keywords_or);
+                    }
+                    
+                    return $keywords;
+                }
 
-		static function grabpress_preview_videos($request) {
+                static function grabpress_preview_videos($request) {
                     GrabPress::log();
                     $defaults = array(
                             "sort_by" => "created_at",
@@ -419,6 +454,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                     } else {
                         $adv_search_params = $request;
                         $request["keywords"] = Grabpress::generate_adv_search_string($adv_search_params);
+                        $keywords_emphasize['keywords_and'] = $request['keywords_and'];
+                        $keywords_emphasize['keywords_or'] = $request['keywords_or'];
+                        $keywords_emphasize['keywords_phrase'] = $request['keywords_phrase'];
                     }
 
                     if(isset($request['created_before']) && ($request['created_before'] != "")){
@@ -453,7 +491,22 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                         if(empty($list_feeds["results"])){
                             GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
                         } else {
-                            $list_feeds["results"] = GrabPressViews::emphasize_keywords($request["keywords"], $list_feeds["results"]);
+                            //$keywords_to_emphasize = (isset($keywords_emphasize))?$keywords_emphasize:$request["keywords"];
+                            /*if (isset($keywords_emphasize)) {var_dump($keywords_emphasize);
+                                foreach ($keywords_emphasize as $key=>$keyword) {
+                                    $exact_phrase = false;
+                                    if ($key == 'keywords_phrase') {
+                                        $exact_phrase = true;
+                                        $keywords[] = $keyword;
+                                    } else {
+                                        $keywords = explode(' ', $keyword);
+                                    }                                  */
+                                    
+                               $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);
+                               /* }
+                            } else {
+                                $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);
+                            }*/
                         }
                     } catch(Exception $e) { 
                         $list_feeds = array();
