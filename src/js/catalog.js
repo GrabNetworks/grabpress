@@ -142,9 +142,9 @@ var GrabPressCatalog = {
             }
             if (display != '') { 
                 jQuery("#preview-feed #btn-create-feed").css('position', 'relative');
-                jQuery("#preview-feed #btn-create-feed").css('top', '0px');
+                jQuery("#preview-feed #btn-create-feed").css('top', '-15px');
                 jQuery("#preview-feed #btn-create-feed").css('left', '170px');
-                jQuery("#pagination").css('top', '505px');
+                jQuery("#pagination").css('top', '480px');
             }
         });        
     },
@@ -158,20 +158,23 @@ var GrabPressCatalog = {
             }
             jQuery("<div id='pagination'></div>").insertBefore(content);
             var top = '260px';
-            if (jQuery.browser.msie) { top = '275px';} 
+            if (jQuery.browser.msie) { top = '265px';} 
             if (action == 'gp_get_catalog_tab') {
-                top = '490px';
+                top = '480px';
             }
-            jQuery('#pagination').css('position', 'relative');
+            var position = 'relative';
+            if (action == 'gp_get_preview') {position = 'static';}
+            jQuery('#pagination').css('position', position);
             jQuery('#pagination').css('top', top);
             jQuery('#pagination').css('left', '10px');            
-            GrabPressCatalog.pagination(action);
+            GrabPressCatalog.pagination(action);            
             var pagb = jQuery("#pagination-bottom");
             if (pagb.length == 0) {                
                 var results = jQuery(content).parent();
                 if (results.length) {
                     results.append("<div id='pagination-bottom'></div>");                                           
                     jQuery('#pagination-bottom').css('margin-top','10px');
+                    jQuery('#pagination-bottom').css('margin-bottom','15px');
                     jQuery("#pagination-bottom").addClass('light-theme');            
                     jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
                 }

@@ -19,12 +19,12 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         width:900,
         height:900,
         close: function(){
-            var and = [], or = [], phrase = [], not = [],
-            kwrds = jQuery("#keywords").val(),
-            regPhrase = /"[^"]*"/ig,                                
-            regAfterOR = /\sOR\s+[\w\S]*/ig,//regEx for keywords after OR
-            regBeforeOR = /[\w+(\?\:\-\w+)\S+]*\s+OR/;//regEx for keyword in front of OR
-
+            //var and = [], or = [], phrase = [], not = [],
+            //kwrds = jQuery("#keywords").val(),
+            //regPhrase = /"[^"]*"/ig,                                
+            //regAfterOR = /\sOR\s+[\w\S]*/ig,//regEx for keywords after OR
+            //regBeforeOR = /[\w+(\?\:\-\w+)\S+]*\s+OR/;//regEx for keyword in front of OR
+            /*
             phrase = regPhrase.exec(kwrds);
             if(!phrase){
                 phrase = [];
@@ -33,7 +33,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                     phrase[i] = phrase[i].replace(/"/g, "");
                 }; 
             }
-
+            
             kwrds = kwrds.replace(regPhrase, "");
 
             or = jQuery.trim(kwrds.match(regAfterOR));//match regex for all keywords after 'OR'
@@ -72,11 +72,14 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             jQuery("#provider-select").multiselect("refresh");
             jQuery("#channel-select-preview").multiselect("destroy");
             jQuery("#provider-select-preview").multiselect("destroy");
-            jQuery("#preview-modal").remove();
+            
             //leave page with modified form pop-up            
             if (and || or || not|| phrase) { 
                 GrabPressAutoposter.setConfirmUnload(true);
-            }            
+            } 
+            */
+           GrabPressAutoposter.doValidation();
+           jQuery("#preview-modal").remove();
         }
     },
     /* Adds videos to the modal preview window by making an ajax request with the entered keywords */
