@@ -273,13 +273,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPress::_escape_params_template($value);
 				}
 			}else{
-				$data = htmlentities(stripslashes($data), ENT_QUOTES);
+				$data = htmlentities(stripslashes($data), ENT_QUOTES, "UTF-8");
 			}
 		}
                 
                 static function fetch( $file = null, $data = array() ) {
-			GrabPress::_escape_params_template($data);
-						
+			GrabPress::_escape_params_template($data);			
 			GrabPress::log();
 			if ( !$file ) $file = $this->file;
 			extract( $data ); // Extract the vars to local namespace
@@ -346,12 +345,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			$sentence = preg_replace('/\"([^\"]*)\"/', '', stripslashes($adv_search));
 			
-			preg_match_all('/[\p{Latin}0-9_]*\s+OR\s+[\p{Latin}0-9_]*/', $sentence, $result_or, PREG_PATTERN_ORDER);
+			preg_match_all('/[\p{Latin}0-9_]*\s+OR\s+[\p{Latin}0-9_]*/u', $sentence, $result_or, PREG_PATTERN_ORDER);
 			for ($i = 0; $i < count($result_or[0]); $i++) {
 				$matched_or[] = str_replace(" OR "," ",stripslashes($result_or[0][$i]));
 			}
 
-			$sentence_without_or = preg_replace('/[\p{Latin}0-9_]*\s+OR\s+[\p{Latin}0-9_]*/', '', stripslashes($sentence));
+			$sentence_without_or = preg_replace('/[\p{Latin}0-9_]*\s+OR\s+[\p{Latin}0-9_]*/u', '', stripslashes($sentence));
 
 			$keywords = preg_split("/\s+/", $sentence_without_or);
 
