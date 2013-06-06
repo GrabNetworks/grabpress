@@ -243,7 +243,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			if(isset($request["keywords"])){
                             $adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
-
+ 
                             if(isset($request['created_before']) && ($request['created_before'] != "")){
                                     $created_before_date = new DateTime( $request['created_before'] );	
                                     $created_before = $created_before_date->format('Ymd');
@@ -390,8 +390,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                     foreach ($keywords as $keyword) {
                         $regex = '/\b'.$keyword.'/i';
                         $replace_keywords = substr($result, stripos($result, $keyword), strlen($keyword));
-                        $replace_keywords = '<strong>'.$replace_keywords.'</strong>';
-                        //$result = str_ireplace($keyword, $replace_keywords, $result);
+                        $replace_keywords = '<strong>'.$replace_keywords.'</strong>';                        
                         $result = preg_replace($regex, $replace_keywords, $result);
                     }   
                     return $result;
