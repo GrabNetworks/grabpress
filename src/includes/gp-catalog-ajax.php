@@ -191,8 +191,7 @@
                         var action = jQuery('#action-catalog');	    
                         action.val("catalog-search");            
                     });    
-                    jQuery(document).ready(function(){
-                        GrabPressCatalog.initSearchForm(); 
+                    jQuery(document).ready(function(){                        
                         GrabPressCatalog.tabSearchForm();    
                     });
                  <?php } else { ?>
@@ -208,11 +207,8 @@
                   jQuery(document).ready(function(){                    
                        GrabPressCatalog.previewSearchForm();
                   });
-        <?php } ?>
-            jQuery(window).load(function () {		                        
-                
-            });
-            jQuery(document).ready(function(){                    
+        <?php }  ?>
+             jQuery(document).ready(function(){                    
                 GrabPressCatalog.doValidation(1);
                 GrabPressCatalog.initSearchForm();
             });
