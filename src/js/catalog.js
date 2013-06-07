@@ -118,11 +118,25 @@ var GrabPressCatalog = {
             action = 'gp_get_catalog';
             display = 'Tab';
         }
+        var channel ='';
+        var provider = '';
+        if ( jQuery("#channel-select-preview").val() === undefined ) {
+            channel = jQuery("#channel-select").val();
+        }
+        else{
+            channel = jQuery("#channel-select-preview").val();
+        }
+        if ( jQuery("#provider-select-preview").val() === undefined ) {
+            provider = jQuery("#provider-select").val();
+        }
+        else{
+            provider = jQuery("#provider-select-preview").val();
+        }
         var data = {"action": action,
             "empty": false,
             "keywords": jQuery("#keywords").val(),
-            "providers": jQuery("#provider-select-preview").val(),
-            "channels": jQuery("#channel-select-preview").val(),
+            "providers": provider,
+            "channels": channel,
             "sort_by": jQuery('.sort_by:checked').val(),
             "created_before": jQuery("#created_before").val(),
             "created_after": jQuery("#created_after").val(),
