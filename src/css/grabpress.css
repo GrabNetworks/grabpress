@@ -1119,3 +1119,4 @@ line-height: 24px;
 /*accout page*/
 #account .button-secondary, #account #clear-form{margin-right:15px;}
 #wpadminbar {z-index: 1000 !important;}
+.ui-dialog {position: fixed; }
