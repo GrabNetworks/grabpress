@@ -243,7 +243,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 			if(isset($request["keywords"])){
                             $adv_search_params = GrabPress::parse_adv_search_string(isset($request["keywords"])?$request["keywords"]:"");
-
+ 
                             if(isset($request['created_before']) && ($request['created_before'] != "")){
                                     $created_before_date = new DateTime( $request['created_before'] );	
                                     $created_before = $created_before_date->format('Ymd');
@@ -272,8 +272,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				$list_feeds = json_decode($json_preview, true);	
                                 if(empty($list_feeds["results"])){
                                     GrabPress::$error = 'It appears we do not have any content matching your search criteria. Please modify your settings until you see the kind of videos you want in your feed';
-                                } else {
-                                    $keywords = explode(' ', $request["keywords"]);
+                                } else {                                    
                                     $list_feeds["results"] = GrabPressViews::emphasize_keywords($adv_search_params, $list_feeds["results"]);
                                 }
                                 
@@ -378,7 +377,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			die();
 		}
                 
-                static function emphasize_keywords($params, $results) {     
+                static function emphasize_keywords($params, $results) { 
                     $keywords = GrabPressViews::get_keywords_from_params($params);
                     foreach ($results as $key=>$result) {
                         $results[$key]['video']['summary'] = GrabPressViews::emphasize_result_keywords($keywords, $result['video']['summary']);                        
@@ -390,8 +389,7 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                     foreach ($keywords as $keyword) {
                         $regex = '/\b'.$keyword.'/i';
                         $replace_keywords = substr($result, stripos($result, $keyword), strlen($keyword));
-                        $replace_keywords = '<strong>'.$replace_keywords.'</strong>';
-                        //$result = str_ireplace($keyword, $replace_keywords, $result);
+                        $replace_keywords = '<strong>'.$replace_keywords.'</strong>';  
                         $result = preg_replace($regex, $replace_keywords, $result);
                     }   
                     return $result;
@@ -403,18 +401,24 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                         array_push($keywords, preg_replace("/[^\p{Latin}0-9-' ]/u", '', trim($params['keywords_phrase'])));
                     }
                     if (isset($params['keywords_and']) && !empty($params['keywords_and'])) {
-                        $keywords_and = explode(' ', trim($params['keywords_and']));
+                        $keys = trim($params['keywords_and']);
+                        $keywords_and = explode(' ', $keys);
                         foreach ($keywords_and as $key=>$value) {                            
-                            $keywords_and[$key] = preg_replace("/[^\p{Latin}0-9-' ]/u", '', trim($value));
-                            
+                            $keywords_and[$key] = preg_replace("/[^\p{Latin}0-9-' ]/u", '', trim($value));                            
                         }
                         $keywords = (!empty($keywords_and))?array_merge($keywords, $keywords_and):$keywords;
                     }
                     if (isset($params['keywords_or']) && !empty($params['keywords_or'])) {
-                        $keywords_or = explode(' ', trim($params['keywords_or']));
+                        $keys = trim($params['keywords_or']);
+                        $keywords_or = explode(' ', $keys);                         
                         foreach ($keywords_or as $key=>$value) {
-                            $keywords_or[$key] = preg_replace("/[^\p{Latin}0-9-' ]/u", '', trim($value));
+                            if (empty($value)) {
+                               unset($keywords_or[$key]);
+                               continue; 
+                            }
+                            $keywords_or[$key] = preg_replace("/[^\p{Latin}0-9-']/u", '', trim($value));
                         }
+                        
                         $keywords = array_merge($keywords, $keywords_or);
                     }
                     
