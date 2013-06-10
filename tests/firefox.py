@@ -429,7 +429,7 @@ class PermissionsTests(GrabPressAutomation):
         #suite = unittest.TestSuite(searchTestSuite)
         #unittest.TextTestRunner(verbosity=2).run(suite)
 
-class UserStoryTests(GrabPressAutomation):
+class UserStoryTests(CatalogTests):
     def test_Auto841_DisplayVideoDuration(self):
         driver = self.driver
         GrabPressAutomation.Login(self)
