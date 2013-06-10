@@ -428,5 +428,16 @@ class PermissionsTests(GrabPressAutomation):
         #searchTestSuite.addTest(PermissionsTests('test_PERM_4_ContributorRoleNoLinkToGrabPressTabs'))
         #suite = unittest.TestSuite(searchTestSuite)
         #unittest.TextTestRunner(verbosity=2).run(suite)
+
+class UserStoryTests(GrabPressAutomation):
+    def test_Auto863_DisplayVideoDuration(self):
+        driver = self.driver
+        GrabPressAutomation.Login(self)
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
+        driver.find_element_by_id("keywords").clear()
+        driver.find_element_by_id("keywords").send_keys("Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
+        driver.find_element_by_id("update-search").click()
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"01:10")
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
