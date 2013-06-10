@@ -1,29 +1,28 @@
-//http://jeffmartin.com/journal/2009/11/9/a-custom-ellipsis-plug-in-for-jquery.html
 //ellipsis plugin http://devongovett.wordpress.com/2009/04/06/text-overflow-ellipsis-for-firefox-via-jquery/ + comments + custom mods
 (function($) {
     $.fn.ellipsis = function(lines, enableUpdating, moreText, lessText) {
         return $(this).each(function() {
             var el = $(this);
             var resetDescription = function(height, originalText) {
-                el.html(originalText);
-                el.animate({ "height": height }, "normal", null, function() {
-                    el.ellipsis(true, true, moreText, lessText);
-                });
+            el.html(originalText);
+            el.animate({ "height": height }, "normal", null, function() {
+                el.ellipsis(true, true, moreText, lessText);
+          });
             };
-
-            if (el.css("overflow") == "hidden") {
  
+            if (el.css("overflow") == "hidden") {
+  
                 var originalText = el.html();
                 var availWidth = el.width();
                 var availHeight = el.height();
- 
+  
                 var MoreLessTag;
                 if (moreText) {
                     enableUpdating = true;
                     MoreLessTag = " <a class='MoreLessTag' href='#' >" + moreText + "</a>";
                 }
                 else MoreLessTag = "";
- 
+  
                 var t = $(this.cloneNode(true))
                     .hide()
                     .css({
@@ -36,9 +35,8 @@
                 else t.css("width", "auto");
                 el.after(t);
                 
- 
-                var fullHeight = t.height();
- 
+                var fullHeight = t.height() + 16;
+  
                 var avail = (lines) ? availHeight : availWidth;
                 var test = (lines) ? t.height() : t.width();
                 var foundMin = false, foundMax = false;
@@ -50,12 +48,12 @@
                         var trimLocation = (min + max) / 2;
                         var text = originalText.substr(0, trimLocation);
                         t.html(text + "&hellip;" + MoreLessTag);
- 
+  
                         test = (lines) ? t.height() : t.width();
                         if (test > avail) {
                             if (foundMax)
                                 foundMin = true;
- 
+  
                             max = trimLocation - 1;
                             if (min > max) {
                                 //If we would be ending decrement the min and regenerate the text so we don't end with a
@@ -77,22 +75,23 @@
                         }
                     }
                 }
- 
+  
                 el.html(t.html());
                 t.remove();
- 
- 
+  
+  
                 if (moreText) {
                     jQuery(".MoreLessTag", this).click(function(event) {
                         event.preventDefault();
-                        el.html(originalText);
-                        el.animate({ "height": fullHeight }, "normal", null, function() {
-                        });
-                        el.append(" <a class='MoreLessTag' href='#' >" + lessText + "</a>");
-                        jQuery(".MoreLessTag", el).click(function(event) {
-                            event.preventDefault();
-                            resetDescription(availHeight, originalText);
- 
+                        setTimeout(function(){el.html(originalText);},150);
+                        el.animate({ "height": fullHeight }, "1200", null, function() {
+                            setTimeout(function(){
+                                el.append(" <a class='MoreLessTag' href='#' >" + lessText + "</a>");
+                                jQuery(".MoreLessTag", el).click(function(event) {
+                                    event.preventDefault();
+                                    resetDescription(availHeight, originalText);
+                                });
+                            },150);                            
                         });
                     });
                 }
@@ -101,7 +100,7 @@
                     el.attr("alt", originalText.replace(replaceTags, ''));
                     el.attr("title", originalText.replace(replaceTags, ''));
                 }
- 
+  
                 if (enableUpdating == true) {
                     var oldW = el.width();
                     var oldH = el.height();
@@ -113,7 +112,7 @@
                     });
                 }
             }
- 
+  
         });
     };
-})(jQuery); 
+})(jQuery);

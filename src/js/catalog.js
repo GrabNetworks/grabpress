@@ -408,7 +408,7 @@ var GrabPressCatalog = {
           jQuery(":input").attr('disabled', 'disabled');
       };
       
-      jQuery(".video_summary").ellipsis(2, true, "more", "less");
+      jQuery(".video_summary").ellipsis(5, true, "more", "less");
       if(!window.grabModal){
             try{
                 var env = jQuery("#environment").val();
