@@ -403,8 +403,12 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                     if (isset($params['keywords_and']) && !empty($params['keywords_and'])) {
                         $keys = trim($params['keywords_and']);
                         $keywords_and = explode(' ', $keys);
-                        foreach ($keywords_and as $key=>$value) {                            
-                            $keywords_and[$key] = preg_replace("/[^\p{Latin}0-9-' ]/u", '', trim($value));                            
+                        foreach ($keywords_and as $key=>$value) { 
+                            $keywords_and[$key] = preg_replace("/[^\p{Latin}0-9' ]/u", '', trim($value));
+                            if (empty($keywords_and[$key])) {
+                               unset($keywords_and[$key]);
+                               continue; 
+                            }                                                        
                         }
                         $keywords = (!empty($keywords_and))?array_merge($keywords, $keywords_and):$keywords;
                     }
@@ -412,13 +416,12 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                         $keys = trim($params['keywords_or']);
                         $keywords_or = explode(' ', $keys);                         
                         foreach ($keywords_or as $key=>$value) {
-                            if (empty($value)) {
+                            $keywords_or[$key] = preg_replace("/[^\p{Latin}0-9']/u", '', trim($value));
+                            if (empty($keywords_or[$key])) {
                                unset($keywords_or[$key]);
                                continue; 
-                            }
-                            $keywords_or[$key] = preg_replace("/[^\p{Latin}0-9-']/u", '', trim($value));
-                        }
-                        
+                            }                            
+                        }                        
                         $keywords = array_merge($keywords, $keywords_or);
                     }
                     
