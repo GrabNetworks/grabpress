@@ -192,7 +192,7 @@
                         action.val("catalog-search");            
                     });    
                     jQuery(document).ready(function(){                        
-                        GrabPressCatalog.tabSearchForm();    
+                        GrabPressCatalog.tabSearchForm('gp_get_catalog');                        
                     });
                  <?php } else { ?>
                      ( function ( global, $ ) {

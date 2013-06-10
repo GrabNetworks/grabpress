@@ -63,7 +63,7 @@ var GrabPressCatalog = {
         }
     },
     /* Initialization specific to Catalog tab template page */
-    tabSearchForm : function(){
+    tabSearchForm : function(action){
         jQuery(".close-preview").click(function() {		  
 	  var form = jQuery('#preview-feed');	
 	  var action = jQuery('#action-preview-feed');
@@ -94,6 +94,14 @@ var GrabPressCatalog = {
        });
        jQuery('#clear-search').bind('click', function(e){
            window.location = "admin.php?page=gp-catalog";		    
+       });
+       jQuery(".sort_by").change(function(e){           
+           if (action != 'gp_get_catalog') {
+               var form = jQuery('#form-catalog-page');
+               form.submit();
+           } else {
+               GrabPressCatalog.submitSearch('gp_get_catalog');
+           }
        });
        GrabPressCatalog.setupPagination('gp_get_catalog_tab');
        if(!window.grabModal){
@@ -209,7 +217,7 @@ var GrabPressCatalog = {
                                 if (bottomChildren.length) {
                                     bottomChildren.remove();
                                 }                                
-                                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
+                                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");                                
                             }
                         });  
         /* don't show pagination buttons when there is just one page */
@@ -398,10 +406,10 @@ var GrabPressCatalog = {
       if(jQuery("#channel-select-preview")) { preview = 1; };      
       jQuery("#form-catalog-page").change(GrabPressCatalog.doValidation(preview));      
       
-      jQuery(".sort_by").change(function(e){
+      /*jQuery(".sort_by").change(function(e){
            var form = jQuery('#form-catalog-page');
            form.submit();
-      });
+      });*/
      
       //if we have an API connection error disable all inputs
       if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
