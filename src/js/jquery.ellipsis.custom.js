@@ -83,17 +83,15 @@
                 if (moreText) {
                     jQuery(".MoreLessTag", this).click(function(event) {
                         event.preventDefault();
-                        el.html(originalText);
-                        el.animate({ "height": fullHeight }, "normal", null, function() {
-                        setTimeout(function(){
-                            el.append(" <a class='MoreLessTag' href='#' >" + lessText + "</a>");
-                            jQuery(".MoreLessTag", el).click(function(event) {
-                                event.preventDefault();
-                                resetDescription(availHeight, originalText);
-
-                            });
-                        },150);
-                            
+                        setTimeout(function(){el.html(originalText);},150);
+                        el.animate({ "height": fullHeight }, "1200", null, function() {
+                            setTimeout(function(){
+                                el.append(" <a class='MoreLessTag' href='#' >" + lessText + "</a>");
+                                jQuery(".MoreLessTag", el).click(function(event) {
+                                    event.preventDefault();
+                                    resetDescription(availHeight, originalText);
+                                });
+                            },150);                            
                         });
                     });
                 }
