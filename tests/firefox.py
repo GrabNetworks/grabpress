@@ -437,7 +437,7 @@ class UserStoryTests(GrabPressAutomation):
         driver.find_element_by_id("keywords").clear()
         driver.find_element_by_id("keywords").send_keys("Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
         driver.find_element_by_id("update-search").click()
-        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"11:11")
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"01:10")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
