@@ -328,7 +328,7 @@ class PermissionsTests(GrabPressAutomation):
         # Account Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-account")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"GrabPress: Earn money with a Grab Publisher Account")
-    # Dashboard Tab
+        # Dashboard Tab
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-dashboard")
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"Watchlist")
         # Autoposter Tab
@@ -430,7 +430,7 @@ class PermissionsTests(GrabPressAutomation):
         #unittest.TextTestRunner(verbosity=2).run(suite)
 
 class UserStoryTests(GrabPressAutomation):
-    def test_Auto863_DisplayVideoDuration(self):
+    def test_Auto841_DisplayVideoDuration(self):
         driver = self.driver
         GrabPressAutomation.Login(self)
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-catalog")
@@ -438,6 +438,12 @@ class UserStoryTests(GrabPressAutomation):
         driver.find_element_by_id("keywords").send_keys("Spam Fries, Bacon Taco and Other Wacky Stadium Foods")
         driver.find_element_by_id("update-search").click()
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"01:10")
+    
+    def test_Auto867_FeedShceduleShowsInManageFeeds(self):
+        driver = self.driver
+        CatalogTests.test_CTLG_1_ExactPhraseSearch(self)
+        driver.find_element_by_id("btn-create-feed").click()
+        self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"15 mins")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
