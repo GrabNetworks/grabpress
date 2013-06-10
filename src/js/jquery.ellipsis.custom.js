@@ -35,7 +35,7 @@
                 else t.css("width", "auto");
                 el.after(t);
                 
-                var fullHeight = t.height();
+                var fullHeight = t.height() + 16;
   
                 var avail = (lines) ? availHeight : availWidth;
                 var test = (lines) ? t.height() : t.width();
