@@ -18,6 +18,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         modal: true,
         width:900,
         height:900,
+        draggable: false,
         close: function(){
             //var and = [], or = [], phrase = [], not = [],
             //kwrds = jQuery("#keywords").val(),
