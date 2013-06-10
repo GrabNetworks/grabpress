@@ -15,7 +15,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
                     $connector_id = GrabPressAPI::get_connector_id();
                 } catch(Exception $e) {
                     GrabPress::log('API call exception: '.$e->getMessage());
-                }
+                } 
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
