@@ -17,7 +17,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
     previewdialogConf : {
         modal: true,
         width:910,
-        height:900,
+        height:jQuery(window).height(),
         draggable: false,
         close: function(){
             //var and = [], or = [], phrase = [], not = [],
