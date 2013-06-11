@@ -161,7 +161,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                         }}, 100);
                     });
                     openPanels.slideUp(400,'linear', function(){
-                        active_video.destroy();
+                        if(active_video){ active_video.destroy();}
                         jQuery(this).toggleClass("collapse");
                         monitor++;
                     });
@@ -246,7 +246,7 @@ var GrabPressDashboard = GrabPressDashboard || {
             //hide watchlist if browser is resized under certain width
             if ( jQuery(window).width() < smallWidth ) {        
                 jQuery(left).hide();
-                active_video.pauseVideo();
+                if(typeof active_video !== 'undefined') { active_video.pauseVideo(); }
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '8px');
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', topRight);
@@ -255,14 +255,16 @@ var GrabPressDashboard = GrabPressDashboard || {
                 if ( ((jQuery.browser.msie && jQuery.browser.version > 8.0) || jQuery.browser.chrome 
                        || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
                        && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
-                jQuery(left).show();active_video.playVideo();
+                jQuery(left).show();
+                if(typeof active_video !== 'undefined') { active_video.playVideo(); }
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width() + 8 );
                     var wTop = -jQuery("#t #b .watchlist").height();
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', wTop);
                 }, 150);                
             } else {                
-                jQuery(left).show();active_video.playVideo();
+                jQuery(left).show();
+                if(typeof active_video !== 'undefined') { active_video.playVideo(); }
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width()+8);
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
