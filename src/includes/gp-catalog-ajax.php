@@ -117,7 +117,7 @@
 			?>
 			<input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
 			<input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
-                        <?php if (isset($form['display']) && $form['display'] == 'Tab') {
+                        <?php if (isset($form['display']) && $form['display'] == 'Tab') {var_dump('aaaa');
                                 if(!empty($list_feeds["results"]) && GrabPress::check_permissions_for("gp-autopost")){ ?>
                                     <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                          <?php  }
@@ -188,8 +188,8 @@
                  <?php if (isset($form['display']) && $form['display'] == 'Tab' ) { ?>
                      jQuery(window).load(function () {
                         GrabPressCatalog.doValidation();
-                        var action = jQuery('#action-catalog');	    
-                        action.val("catalog-search");            
+                        /*var action = jQuery('#action-catalog');	    
+                        action.val("catalog-search");     */       
                     });    
                     jQuery(document).ready(function(){                        
                         GrabPressCatalog.tabSearchForm('gp_get_catalog');                        

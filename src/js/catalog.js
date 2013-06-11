@@ -100,7 +100,7 @@ var GrabPressCatalog = {
                var form = jQuery('#form-catalog-page');
                form.submit();
            } else {
-               GrabPressCatalog.submitSearch('gp_get_catalog');
+               GrabPressCatalog.submitSearch('gp_get_catalog_tab');
            }
        });
        GrabPressCatalog.setupPagination('gp_get_catalog_tab');
