@@ -188,11 +188,11 @@
                  <?php if (isset($form['display']) && $form['display'] == 'Tab' ) { ?>
                      jQuery(window).load(function () {
                         GrabPressCatalog.doValidation();
-                        var action = jQuery('#action-catalog');	    
-                        action.val("catalog-search");            
+                        /*var action = jQuery('#action-catalog');	    
+                        action.val("catalog-search");     */       
                     });    
                     jQuery(document).ready(function(){                        
-                        GrabPressCatalog.tabSearchForm();    
+                        GrabPressCatalog.tabSearchForm('gp_get_catalog');                        
                     });
                  <?php } else { ?>
                      ( function ( global, $ ) {
