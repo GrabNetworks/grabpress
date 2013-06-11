@@ -1120,7 +1120,7 @@ line-height: 24px;
 #account .button-secondary, #account #clear-form{margin-right:15px;}
 #wpadminbar {z-index: 1000 !important;}
 .ui-dialog {position: fixed; }
-.feeds .nano .content{
-    right: 3px !important;
-}
-.feeds .tooltip{width:420px}
+
+/* feed activity style */
+.feeds .nano .content { right:4px !important}
+.feeds .tooltip {width: 420px !important}
