@@ -16,7 +16,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
     /* Modal preview window definition and its closing behavior  */
     previewdialogConf : {
         modal: true,
-        width:900,
+        width:910,
         height:jQuery(window).height(),
         draggable: false,
         close: function(){
