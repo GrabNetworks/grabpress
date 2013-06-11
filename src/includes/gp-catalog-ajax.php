@@ -117,7 +117,7 @@
 			?>
 			<input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
 			<input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance<br>
-                        <?php if (isset($form['display']) && $form['display'] == 'Tab') {var_dump('aaaa');
+                        <?php if (isset($form['display']) && $form['display'] == 'Tab') {
                                 if(!empty($list_feeds["results"]) && GrabPress::check_permissions_for("gp-autopost")){ ?>
                                     <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                          <?php  }

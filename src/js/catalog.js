@@ -211,7 +211,10 @@ var GrabPressCatalog = {
                             itemsOnPage: 20,
                             cssStyle: 'light-theme',
                             displayedPages:10,
-                            onPageClick: function(pagenumber , event){                                                                                       
+                            onPageClick: function(pagenumber , event){ 
+                                if (jQuery("#btn-create-feed").is(':visible')) {
+                                    action = 'gp_get_catalog_tab';
+                                }
                                 GrabPressCatalog.submitSearch(action, pagenumber);
                                 var bottomChildren = jQuery("#pagination-bottom").children();
                                 if (bottomChildren.length) {
