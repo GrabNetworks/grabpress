@@ -38,7 +38,13 @@ var GrabPressCatalog = {
 					jQuery( '#update-search' ).unbind('click');
 				}
 				jQuery('.hide').hide();
-			}			
+			}
+                        //add a maxlength for providers filter
+                        jQuery(':input').each(function(){
+                            if(jQuery(this).attr('placeholder') == 'Enter keywords')
+                                jQuery(this).attr('maxlength','32');
+
+                        });
 		},
     /* Channels multiselect definition */
     multiSelectOptionsChannels : {
