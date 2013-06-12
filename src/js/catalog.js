@@ -38,7 +38,13 @@ var GrabPressCatalog = {
 					jQuery( '#update-search' ).unbind('click');
 				}
 				jQuery('.hide').hide();
-			}			
+			}
+                        //add a maxlength for providers filter
+                        jQuery(':input').each(function(){
+                            if(jQuery(this).attr('placeholder') == 'Enter keywords')
+                                jQuery(this).attr('maxlength','32');
+
+                        });
 		},
     /* Channels multiselect definition */
     multiSelectOptionsChannels : {
@@ -63,7 +69,7 @@ var GrabPressCatalog = {
         }
     },
     /* Initialization specific to Catalog tab template page */
-    tabSearchForm : function(){
+    tabSearchForm : function(action){
         jQuery(".close-preview").click(function() {		  
 	  var form = jQuery('#preview-feed');	
 	  var action = jQuery('#action-preview-feed');
@@ -95,6 +101,14 @@ var GrabPressCatalog = {
        jQuery('#clear-search').bind('click', function(e){
            window.location = "admin.php?page=gp-catalog";		    
        });
+       jQuery(".sort_by").change(function(e){           
+           if (action != 'gp_get_catalog') {
+               var form = jQuery('#form-catalog-page');
+               form.submit();
+           } else {
+               GrabPressCatalog.submitSearch('gp_get_catalog_tab');
+           }
+       });
        GrabPressCatalog.setupPagination('gp_get_catalog_tab');
        if(!window.grabModal){
            try{
@@ -118,11 +132,25 @@ var GrabPressCatalog = {
             action = 'gp_get_catalog';
             display = 'Tab';
         }
+        var channel ='';
+        var provider = '';
+        if ( jQuery("#channel-select-preview").val() === undefined ) {
+            channel = jQuery("#channel-select").val();
+        }
+        else{
+            channel = jQuery("#channel-select-preview").val();
+        }
+        if ( jQuery("#provider-select-preview").val() === undefined ) {
+            provider = jQuery("#provider-select").val();
+        }
+        else{
+            provider = jQuery("#provider-select-preview").val();
+        }
         var data = {"action": action,
             "empty": false,
             "keywords": jQuery("#keywords").val(),
-            "providers": jQuery("#provider-select-preview").val(),
-            "channels": jQuery("#channel-select-preview").val(),
+            "providers": provider,
+            "channels": channel,
             "sort_by": jQuery('.sort_by:checked').val(),
             "created_before": jQuery("#created_before").val(),
             "created_after": jQuery("#created_after").val(),
@@ -142,9 +170,9 @@ var GrabPressCatalog = {
             }
             if (display != '') { 
                 jQuery("#preview-feed #btn-create-feed").css('position', 'relative');
-                jQuery("#preview-feed #btn-create-feed").css('top', '0px');
+                jQuery("#preview-feed #btn-create-feed").css('top', '-15px');
                 jQuery("#preview-feed #btn-create-feed").css('left', '170px');
-                jQuery("#pagination").css('top', '505px');
+                jQuery("#pagination").css('top', '480px');
             }
         });        
     },
@@ -158,20 +186,23 @@ var GrabPressCatalog = {
             }
             jQuery("<div id='pagination'></div>").insertBefore(content);
             var top = '260px';
-            if (jQuery.browser.msie) { top = '275px';} 
+            if (jQuery.browser.msie) { top = '265px';} 
             if (action == 'gp_get_catalog_tab') {
-                top = '490px';
+                top = '480px';
             }
-            jQuery('#pagination').css('position', 'relative');
+            var position = 'relative';
+            if (action == 'gp_get_preview') {position = 'static';}
+            jQuery('#pagination').css('position', position);
             jQuery('#pagination').css('top', top);
             jQuery('#pagination').css('left', '10px');            
-            GrabPressCatalog.pagination(action);
+            GrabPressCatalog.pagination(action);            
             var pagb = jQuery("#pagination-bottom");
             if (pagb.length == 0) {                
                 var results = jQuery(content).parent();
                 if (results.length) {
                     results.append("<div id='pagination-bottom'></div>");                                           
                     jQuery('#pagination-bottom').css('margin-top','10px');
+                    jQuery('#pagination-bottom').css('margin-bottom','15px');
                     jQuery("#pagination-bottom").addClass('light-theme');            
                     jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
                 }
@@ -186,13 +217,16 @@ var GrabPressCatalog = {
                             itemsOnPage: 20,
                             cssStyle: 'light-theme',
                             displayedPages:10,
-                            onPageClick: function(pagenumber , event){                                                                                       
+                            onPageClick: function(pagenumber , event){ 
+                                if (jQuery("#btn-create-feed").is(':visible') && jQuery("#keywords").is(':visible')) {
+                                    action = 'gp_get_catalog_tab';
+                                }
                                 GrabPressCatalog.submitSearch(action, pagenumber);
                                 var bottomChildren = jQuery("#pagination-bottom").children();
                                 if (bottomChildren.length) {
                                     bottomChildren.remove();
                                 }                                
-                                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
+                                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");                                
                             }
                         });  
         /* don't show pagination buttons when there is just one page */
@@ -381,17 +415,17 @@ var GrabPressCatalog = {
       if(jQuery("#channel-select-preview")) { preview = 1; };      
       jQuery("#form-catalog-page").change(GrabPressCatalog.doValidation(preview));      
       
-      jQuery(".sort_by").change(function(e){
+      /*jQuery(".sort_by").change(function(e){
            var form = jQuery('#form-catalog-page');
            form.submit();
-      });
+      });*/
      
       //if we have an API connection error disable all inputs
       if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
           jQuery(":input").attr('disabled', 'disabled');
       };
       
-      jQuery(".video_summary").ellipsis(2, true, "more", "less");
+      jQuery(".video_summary").ellipsis(5, true, "more", "less");
       if(!window.grabModal){
             try{
                 var env = jQuery("#environment").val();

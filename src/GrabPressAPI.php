@@ -695,5 +695,21 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
                         }
 
                 }
+                /* 
+                 * Input: time in miliseconds
+                 * Return: time in format MM:SS ,If duration is greater than 1 hour, the MM:SS format is still use
+                 */
+                static function time_format_mm_ss($milisec) {  
+                    $seconds = $milisec/1000;
+                    $m = intval($seconds/60);
+                    $s = $seconds%60 ;
+                    if (1 === strlen($s)) {
+                        $s = '0'.$s;
+                    }
+                    if (1 === strlen($m)) {
+                        $m = '0'.$m;
+                    }
+                    return  $m.':'.$s;
+                }
 	}
 }

@@ -15,7 +15,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
                     $connector_id = GrabPressAPI::get_connector_id();
                 } catch(Exception $e) {
                     GrabPress::log('API call exception: '.$e->getMessage());
-                }
+                } 
 	?>
 	<form method="post" action="" id="form-create-feed">
 		<?php 
@@ -25,7 +25,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 			<input type="hidden"  name="feed_id" value="<?php echo $feed_id; ?>" />
 		<?php
 			}
-		?>
+		?> 
 		<?php 
 			if(isset($form["active"])) {
 				$active = $form["active"];
@@ -206,28 +206,34 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 				<tr valign="bottom">
 					<th scope="row">Max Results<span class="asterisk">*</span></th>
         		           	<td>
-						<select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
-							<?php 
-								for ( $o = 1; $o < 6; $o++ ) {
-									$selected = ((isset($form["limit"])) && ( $o == $form["limit"] )) ?'selected="selected"':"";
-									echo "<option value = \"$o\" $selected>$o</option>\n";
-								} 
-							?>
-						</select>
-						<span class="description">Indicate the maximum number of videos to grab at a time</span>
+                                            <select name="limit" id="limit-select" class="limit-select" style="width:60px;" >
+                                                <?php 
+                                                    for ( $o = 1; $o < 6; $o++ ) {
+                                                        $selected = ((isset($form["limit"])) && ( $o == $form["limit"] )) ?'selected="selected"':"";
+                                                        echo "<option value = \"$o\" $selected>$o</option>\n";
+                                                    } 
+                                                ?>
+                                            </select>
+                                            <span class="description">Indicate the maximum number of videos to grab at a time</span>
 					</td>
 				</tr>
 				<tr valign="bottom">
-						<th scope="row">Post Categories</th>
-						<td>
-							<?php
-								$selected = isset($form['category'][0])?$form['category'][0]:'';
-								$select_cats = wp_dropdown_categories  ( array( 'echo' => 0, 'taxonomy' => 'category', 'hide_empty' => 0 , 'selected' => $selected) );
-								$select_cats = str_replace( "name='cat' id=", "name='category[]' multiple='multiple' id=", $select_cats );
-								echo $select_cats;
-							?>
-							<span class="description">If no selection is made, your default category '<?php echo get_cat_name("1") ?>' will be used.</span>
-						</td>
+                                    <th scope="row">Post Categories</th>
+                                    <td> 
+                                        <select name="category[]" id="cat" class="postform" multiple="multiple" >
+                                            <?php
+                                                $cat_ids = get_all_category_ids();
+                                                $feed_categories = is_array($form['category'])?$form['category']:array($form['category']);
+                                                foreach ($cat_ids as $cat_id) {
+                                                    $cat_selected = '';                                                                                                        
+                                                    if (in_array($cat_id, $feed_categories)) {
+                                                        $cat_selected = 'selected="selected"';
+                                                    } ?>
+                                                <option class="level-0" value="<?php echo $cat_id;?>" <?php echo $cat_selected;?> > <?php echo get_cat_name($cat_id); ?></option>                                                        
+                                               <?php }?>
+                                        </select>                                        
+                                        <span class="description">If no selection is made, your default category '<?php echo get_cat_name("1") ?>' will be used.</span>
+                                    </td>
 				</tr>
 				<tr valign="bottom">
 						<th scope="row">Post Author<span class="asterisk">*</span></th>

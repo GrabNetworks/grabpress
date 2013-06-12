@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.3.2
+Version: 2.3.3
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.3.2';
+		static $version = '2.3.3';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabnetworks';
@@ -273,13 +273,12 @@ if ( ! class_exists( 'GrabPress' ) ) {
 					GrabPress::_escape_params_template($value);
 				}
 			}else{
-				$data = htmlentities(stripslashes($data), ENT_QUOTES);
+				$data = htmlentities(stripslashes($data), ENT_QUOTES, "UTF-8");
 			}
 		}
                 
                 static function fetch( $file = null, $data = array() ) {
-			GrabPress::_escape_params_template($data);
-						
+			GrabPress::_escape_params_template($data);			
 			GrabPress::log();
 			if ( !$file ) $file = $this->file;
 			extract( $data ); // Extract the vars to local namespace
@@ -338,36 +337,37 @@ if ( ! class_exists( 'GrabPress' ) ) {
 		
 		static function parse_adv_search_string($adv_search ){
 
-			preg_match_all('/"([^"]*)"/', $adv_search, $result_exact_phrase, PREG_PATTERN_ORDER);
+			$adv_search = trim($adv_search);
+                        preg_match_all('/"([^"]*)"/', trim($adv_search), $result_exact_phrase, PREG_PATTERN_ORDER);
 			for ($i = 0; $i < count($result_exact_phrase[0]); $i++) {
 				$matched_exact_phrase[] = str_replace("\"","",stripslashes($result_exact_phrase[0][$i]));
 			}
 
 			$sentence = preg_replace('/\"([^\"]*)\"/', '', stripslashes($adv_search));
 			
-			preg_match_all('/[a-zA-Z0-9_]*\s+OR\s+[a-zA-Z0-9_]*/', $sentence, $result_or, PREG_PATTERN_ORDER);
+			preg_match_all('/[\p{Latin}0-9_]*\s+OR\s+[\p{Latin}0-9_]*/u', $sentence, $result_or, PREG_PATTERN_ORDER);
 			for ($i = 0; $i < count($result_or[0]); $i++) {
 				$matched_or[] = str_replace(" OR "," ",stripslashes($result_or[0][$i]));
 			}
 
-			$sentence_without_or = preg_replace('/[a-zA-Z0-9_]*\s+OR\s+[a-zA-Z0-9_]*/', '', stripslashes($sentence));
+			$sentence_without_or = preg_replace('/[\p{Latin}0-9_]*\s+OR\s+[\p{Latin}0-9_]*/u', '', stripslashes($sentence));
 
 			$keywords = preg_split("/\s+/", $sentence_without_or);
 
 			for ($i = 0; $i < count($keywords); $i++) {
-				if (preg_match("/^-/", $keywords[$i])) { 
-				  $temp_not = str_replace('-', '', $keywords[$i]);
-				  $keywords_not[] = $temp_not;	          
-				}else{
-					$keywords_and[] = $keywords[$i];
-				}
+                            if (preg_match("/^-/", $keywords[$i])) { 
+                                $temp_not = str_replace('-', '', $keywords[$i]);
+                                $keywords_not[] = $temp_not;	          
+                            }else{                                
+                                $keywords_and[] = $keywords[$i];                                                                    
+                            }
 			}
 
 			$keywords_phrase = isset($matched_exact_phrase) ? implode(" ", $matched_exact_phrase) : "";
 			$keywords_phrase = $keywords_phrase;
-			$keywords_and = isset($keywords_and) ? implode(" ", $keywords_and) : "";
-			$keywords_not = isset($keywords_not) ? implode(" ", $keywords_not) : "";
-			$keywords_or = isset($matched_or) ? implode(" ", $matched_or) : "";
+			$keywords_and = isset($keywords_and) && !empty($keywords_and) ? implode(" ", $keywords_and) : "";
+			$keywords_not = isset($keywords_not) && !empty($keywords_not) ? implode(" ", $keywords_not) : "";
+			$keywords_or = isset($matched_or) && !empty($matched_or) ? implode(" ", $matched_or) : "";
 
 			return array(
 				"keywords_phrase" => $keywords_phrase,
@@ -402,7 +402,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 				
 				$or = preg_split("/\s+/", $or_keywords);
 				if(count($or) == 1){					
-                                    $string .= $or[0];				
+                                    $string .= ' '.$or[0];				
 				}elseif(count($or) > 1){
 					if(!$string){
 						$string .= join(" OR ", $or);

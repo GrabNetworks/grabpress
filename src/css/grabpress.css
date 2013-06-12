@@ -1113,3 +1113,14 @@ line-height: 24px;
 /*dashboard changes */
 #t #b .watchlist, #t #b .right-pane {margin-top:16px}
 #t #b .watchlist{margin-left:8px !important}
+/* catalog tab space between Watch Video and Create Post buttons*/
+#form-catalog-page .button-primary {margin:0 2px}
+
+/*accout page*/
+#account .button-secondary, #account #clear-form{margin-right:15px;}
+#wpadminbar {z-index: 1000 !important;}
+.ui-dialog {position: fixed; }
+
+/* feed activity style */
+.feeds .nano .content { right:4px !important}
+.feeds .tooltip {width: 420px !important}
