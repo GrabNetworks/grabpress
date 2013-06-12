@@ -212,7 +212,7 @@ var GrabPressCatalog = {
                             cssStyle: 'light-theme',
                             displayedPages:10,
                             onPageClick: function(pagenumber , event){ 
-                                if (jQuery("#btn-create-feed").is(':visible')) {
+                                if (jQuery("#btn-create-feed").is(':visible') && jQuery("#keywords").is(':visible')) {
                                     action = 'gp_get_catalog_tab';
                                 }
                                 GrabPressCatalog.submitSearch(action, pagenumber);
