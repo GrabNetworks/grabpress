@@ -161,6 +161,12 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             }				
             jQuery('.hide').hide();
         }
+        //add a maxlength for providers filter
+        jQuery(':input').each(function(){
+            if(jQuery(this).attr('placeholder') == 'Enter keywords')
+                jQuery(this).attr('maxlength','32');
+
+        });
     },
     /* Get the existing feeds keywords */
     getKeywords : function() {        
@@ -580,7 +586,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
 }
 //do form validation	
 jQuery(window).load(function () {
-    GrabPressAutoposter.doValidation();
+    GrabPressAutoposter.doValidation();    
 });
 //initialize form
 jQuery(document).ready(
