@@ -38,7 +38,13 @@ var GrabPressCatalog = {
 					jQuery( '#update-search' ).unbind('click');
 				}
 				jQuery('.hide').hide();
-			}			
+			}
+                        //add a maxlength for providers filter
+                        jQuery(':input').each(function(){
+                            if(jQuery(this).attr('placeholder') == 'Enter keywords')
+                                jQuery(this).attr('maxlength','32');
+
+                        });
 		},
     /* Channels multiselect definition */
     multiSelectOptionsChannels : {
@@ -63,7 +69,7 @@ var GrabPressCatalog = {
         }
     },
     /* Initialization specific to Catalog tab template page */
-    tabSearchForm : function(){
+    tabSearchForm : function(action){
         jQuery(".close-preview").click(function() {		  
 	  var form = jQuery('#preview-feed');	
 	  var action = jQuery('#action-preview-feed');
@@ -94,6 +100,14 @@ var GrabPressCatalog = {
        });
        jQuery('#clear-search').bind('click', function(e){
            window.location = "admin.php?page=gp-catalog";		    
+       });
+       jQuery(".sort_by").change(function(e){           
+           if (action != 'gp_get_catalog') {
+               var form = jQuery('#form-catalog-page');
+               form.submit();
+           } else {
+               GrabPressCatalog.submitSearch('gp_get_catalog_tab');
+           }
        });
        GrabPressCatalog.setupPagination('gp_get_catalog_tab');
        if(!window.grabModal){
@@ -203,13 +217,16 @@ var GrabPressCatalog = {
                             itemsOnPage: 20,
                             cssStyle: 'light-theme',
                             displayedPages:10,
-                            onPageClick: function(pagenumber , event){                                                                                       
+                            onPageClick: function(pagenumber , event){ 
+                                if (jQuery("#btn-create-feed").is(':visible') && jQuery("#keywords").is(':visible')) {
+                                    action = 'gp_get_catalog_tab';
+                                }
                                 GrabPressCatalog.submitSearch(action, pagenumber);
                                 var bottomChildren = jQuery("#pagination-bottom").children();
                                 if (bottomChildren.length) {
                                     bottomChildren.remove();
                                 }                                
-                                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");
+                                jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");                                
                             }
                         });  
         /* don't show pagination buttons when there is just one page */
@@ -398,10 +415,10 @@ var GrabPressCatalog = {
       if(jQuery("#channel-select-preview")) { preview = 1; };      
       jQuery("#form-catalog-page").change(GrabPressCatalog.doValidation(preview));      
       
-      jQuery(".sort_by").change(function(e){
+      /*jQuery(".sort_by").change(function(e){
            var form = jQuery('#form-catalog-page');
            form.submit();
-      });
+      });*/
      
       //if we have an API connection error disable all inputs
       if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {

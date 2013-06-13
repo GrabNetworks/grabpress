@@ -795,7 +795,7 @@ line-height: 24px;
 #t #b .accordion-heading a.accordion-toggle {    
     padding: 4px 15px;
     height: 25px;  
-    line-height: 24px;
+    line-height: 25px;
 }
 #t #b .collapse {
     overflow: hidden;
@@ -1120,3 +1120,7 @@ line-height: 24px;
 #account .button-secondary, #account #clear-form{margin-right:15px;}
 #wpadminbar {z-index: 1000 !important;}
 .ui-dialog {position: fixed; }
+
+/* feed activity style */
+.feeds .nano .content { right:4px !important}
+.feeds .tooltip {width: 420px !important}

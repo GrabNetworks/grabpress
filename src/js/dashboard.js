@@ -20,7 +20,7 @@ var GrabPressDashboard = GrabPressDashboard || {
             "content": anchor.data("guid"),
             "autoPlay": false
         });
-        active_video.showEmbed();
+       
         jQuery("#collapse1").toggleClass("collapse");
     },
     /* Watchlist button binding to display/hide videos */
@@ -74,7 +74,6 @@ var GrabPressDashboard = GrabPressDashboard || {
                         }
                   }
                   jQuery('#accordion2').html(accordion);
-                  jQuery(".feed_title").ellipsis(0, true, "", "");
                   active_video = new com.grabnetworks.Player({
                       "id": embed_id,
                       "width": "100%",
@@ -148,12 +147,20 @@ var GrabPressDashboard = GrabPressDashboard || {
                     slideDownCurrent(panel, function(){
                         setTimeout(function(){
                             if(monitor == 2){
-                                active_video.loadNewVideo(anchor.data("guid"));
+                                  embed = jQuery("#gcontainer"+embed_id).append('<div id="grabDiv'+embed_id+'"></div>');
+                                  active_video = new com.grabnetworks.Player({
+                                        "target": embed,
+                                        "id": embed_id,
+                                        "width": "100%",
+                                        "height": "100%",
+                                        "content": anchor.data("guid"),
+                                        "autoPlay": true
+                                    });
                                 accordion_lock = false;
                         }}, 100);
                     });
                     openPanels.slideUp(400,'linear', function(){
-                        active_video.hideEmbed();
+                        if(active_video){ active_video.destroy();}
                         jQuery(this).toggleClass("collapse");
                         monitor++;
                     });
@@ -238,6 +245,7 @@ var GrabPressDashboard = GrabPressDashboard || {
             //hide watchlist if browser is resized under certain width
             if ( jQuery(window).width() < smallWidth ) {        
                 jQuery(left).hide();
+                if(typeof active_video !== 'undefined') { active_video.pauseVideo(); }
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '8px');
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', topRight);
@@ -247,6 +255,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                        || jQuery.browser.safari || jQuery.browser.opera) && jQuery(window).width() < 1283 
                        && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
                 jQuery(left).show();
+                if(typeof active_video !== 'undefined') { active_video.playVideo(); }
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width() + 8 );
                     var wTop = -jQuery("#t #b .watchlist").height();
@@ -254,6 +263,7 @@ var GrabPressDashboard = GrabPressDashboard || {
                 }, 150);                
             } else {                
                 jQuery(left).show();
+                if(typeof active_video !== 'undefined') { active_video.playVideo(); }
                 setTimeout(function(){
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width()+8);
                     jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
@@ -293,39 +303,26 @@ var GrabPressDashboard = GrabPressDashboard || {
             jQuery("#t #b #btn-account-settings .accordion-right").css('top','0');
         } else if ( jQuery.browser.version != 7.0) {
             jQuery("#t #b .watchlist .accordion-right").css("right", "-1px");
-            jQuery("#t #b .watchlist .accordion-center").css("height", "auto");
-            
-            /*setTimeout(function() {
-                if ( jQuery(window).width() < 1283 && jQuery("#t #b .watchlist-wrap .right-pane").position().top != 0) {
-                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width());
-                    jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', -jQuery("#t #b .watchlist").height());
-                }
-            }, 300);        */    
+            jQuery("#t #b .watchlist .accordion-center").css("height", "auto");        
         }
+        
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
         jQuery('.nano').nanoScroller({
             preventPageScrolling: true,
             "alwaysVisible" : true
-        });        
-        
-       
+        });                
+        jQuery(".feed_title").ellipsis(0, true, "", "");
+        //remove the titles from watchlist so we can desable tooltips
+        jQuery('.feed_title').removeAttr("title");
         jQuery("#message").hide();//hack        
         
         jQuery("#help").simpletip({
             content: 'Health displays “results/max results” per the latest feed update. <br/> Feeds in danger of not producing updates display in red or orange, feeds at risk of not producing updates display in yellow, and healthy feeds display in green.  <br /><br />', 
             position: [0,30]
         });        
-      /*  if ( jQuery("#adminmenuwrap").width() < 34 ) {           
-            smallWidth = 1149;
-        } 
-        if ( jQuery(window).width() < smallWidth ) {
-                jQuery("#t #b .watchlist").hide();
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '0');
-                jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', '0');
-            }  
-        jQuery(".feed_title").ellipsis(0, true, "", ""); */
+      
         GrabPressDashboard.resize_browser_init();
         GrabPressDashboard.collapse_menu();
     }
