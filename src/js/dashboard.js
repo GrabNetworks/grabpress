@@ -74,7 +74,6 @@ var GrabPressDashboard = GrabPressDashboard || {
                         }
                   }
                   jQuery('#accordion2').html(accordion);
-                  jQuery(".feed_title").ellipsis(0, true, "", "");
                   active_video = new com.grabnetworks.Player({
                       "id": embed_id,
                       "width": "100%",
@@ -314,7 +313,9 @@ var GrabPressDashboard = GrabPressDashboard || {
             preventPageScrolling: true,
             "alwaysVisible" : true
         });                
-       
+        jQuery(".feed_title").ellipsis(0, true, "", "");
+        //remove the titles from watchlist so we can desable tooltips
+        jQuery('.feed_title').removeAttr("title");
         jQuery("#message").hide();//hack        
         
         jQuery("#help").simpletip({
