@@ -3,7 +3,7 @@ Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.4   
 Tested up to: 3.5  
-Stable tag: 2.2.2
+Stable tag: 2.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,7 +79,7 @@ www.grab-media.com
 Grab can provide you automated, daily data exports that enable you to perform your own performance analyses.  Contact us and we can provide you the data that you need. 
 
 
-**Creating Auto Posting Feeds...**
+**Creating Auto Posting Feeds**
 
 = I have installed the plug-in and set up my account.  Now what? =
 
@@ -108,7 +108,7 @@ Grab can provide you automated, daily data exports that enable you to perform yo
 = How many feeds can I create? =
  There is no limit on the number of feeds you can create.
 
-**General Questions...**
+**General Questions**
 
 = Why is there a tabbed index for GrabPress in my site dashboard? =
  GrabPress is built to scale. That means we have many more features and ways of delivering monetized video intended for the future. This includes, but is not limited to, single video embed insertion via your post editor, post promotion, and layout editing. As features such as these become available through GrabPress updates, they will appear as additional tabs within GrabPress.
@@ -140,6 +140,30 @@ We hope to allow users to edit the layout / posting template in future updates o
  
  GrabPress automates delivery of topical content to your site. This cuts down the footwork needed to optimize revenue potential for individual posts on your site, as well as keeping your site up to date with hot topics being talked about now.  Not only does GrabPress deliver monetized multimedia posts based on your criteria, but it is built to be leveraged by teams large and small as a tool for editors to stay in touch with news, gossip, and highlights that are happening now.
 
+**Permissions** 
+
+= Do all users see the same information in my GrabPress installation? =
+
+ No. GrabPress leverages the user roles already in place within WordPress. In order to make sure you have all necessary functions available to you through GrabPress please set your user roles in your dashboard as needed. 
+
+= What does each user role enable me to do through GrabPress? =
+
+ All user roles are able to search our catalog for a video and create a post including that video and associated metadata, as well as insert single video embeds into previously created posts. 
+ Additionally, editors have the ability to create content feeds from the Autoposter tab, edit feeds, and adjust templating options for the size of the embed. Editors have access to all functions and tabs, excluding the Account tab and account settings.
+ Finally, as an admin all functions and tabs, including the Account tab, are available at all times. Once GrabPress is installed, the admin should link the install to their Grab Media account through the account tab, as no other user is able to link accounts.
+
+= Can I set authors to be able to edit feeds or edit my account information? =
+
+ To adjust what a user is able to do in GrabPress you must change their WordPress user role to enable the required functions. 
+
+= As an editor, am I safe to link on a website with multiple editors? =
+ Yes. Leveraging user role permissions will keep your install brand safe, allowing you to link your account and manage feeds without concern that these settings will be changed by someone with a less powerful user role, such as author, accidentally. 
+
+= Can all users still view and post articles delivered through GrabPress? =
+ Yes. All users can view the GrabPress dashboard to stay aware of editorial changes, and edit any post they have access to through the WordPress dashboard. 
+
+= Can authors see my account information? =
+ No. All users are provided pertinent information for debugging and support purposes, such as user email and API key. However, these users are not given access to personal information located in your account.
 
 == Screenshots ==  
 
@@ -150,6 +174,53 @@ We hope to allow users to edit the layout / posting template in future updates o
 5. Video results are automatically posted to your Blog.
 
 == Changelog ==  
+
+= 2.3.4 =
+*Features:*
+
+*Bug Fixes:*
+
+= 2.3.3 =
+*Features:*
+
+ * AUTO-833: As a WordPress Publisher, I want the duration displayed for all videos in the Catalog and AutoPoster tabs, so that I can determine if I want to use a particular video or not.
+ * AUTO-831: As a WordPress Publisher, when creating a feed I want to perform all search functions on the AutoPoster page, instead of having redundant search options on the preview page.
+ * AUTO-791: As a WordPress publisher, I want my keywords emphasized in the video descriptions, so that I know why videos are returned in the result set.
+ * Various UI/UX tweaks
+
+= 2.3.2 =
+
+ * AUTO-660: As a WordPress Publisher, I want the player in the dashboard to be visible between a minimum of 320px and a maximum of 640px width.
+ * AUTO-802: As a Grab Media Developer, I want to know more about our user environments, so we can better develop, test and debug against user environments.
+ * Added support for PHP 5.2.4 call DateTime::modify, replacing DateTime::sub (The DateTime::Sub() error should no longer appear).
+ * Addes support for PHP 5.2.4 call to check if PHP is configured with MagicQuotes for json_encode() call.
+
+= 2.3.1.1 =
+ * Turned debugging off by default.  (Thanks goes to @optimalpatrick)
+
+= 2.3.1 =
+*Features:*
+
+ * AUTO-571: As a WordPress Publisher, I want to be warned when I create a feed that uses a keyword that has already been used in an existing feed.
+ * Various bug fixes
+
+= 2.3.0 =
+*Features:*
+
+ * AUTO-665: As a WordPress Publisher, I want to page through the search results from a search when inserting into a post, so that I have more results to view.
+ * AUTO-654: As a WordPress Publisher, I want to click on a link in the Feed Activity section of the Dashboard, so that I may see each feeds settings and configuration information.
+ * AUTO-652: As a WordPress Administrator, I want to limit access to creating feeds in the Catalog tab to WP users/roles with 'edit_others_posts' AND 'publish_posts' capabilities, so that only editors may create feeds.
+ * AUTO-651: As a WordPress Administrator, I want to limit access to the Template tab to users/roles with the 'edit_others_posts' capability, so others cannot change my template settings.
+ * AUTO-650: As a WordPress Administrator, I want to limit access to the Autoposter tab to WP users/roles with 'edit_others_posts' AND 'publish_posts' capabilities, so that only editors may create/edit feeds.
+ * AUTO-649: As a WordPress Administrator, I want to limit access to the Account tab to WP users/roles with 'edit_plugins' capabilities, so that only administrators may link my grabpress instance to a GrabMedia account.
+ * AUTO-641: As a WordPress Publisher, I want to page through the search results from a search on the catalog tab, so that I have more results to view.
+ * AUTO-607: As a WordPress Editor, I want to see a rollover treatment on the Title in the watchlist, so I know I can click on it.
+
+*Bug Fixes:*
+
+ * AUTO-685: Posts created from the catalog tab are using the thumbnail image as the featured image, and in the posting, instead of the preview image.
+ * AUTO-684: Selected categories and providers are reset to "ALL" after running a search on the catalog tab.
+ * AUTO-648: Shortcode is using the click-to-play embed_id value for posts made from a feed that are set to use the autoplay embed_id.
 
 = 2.2.2 =
  * Various bux fixes.
@@ -209,29 +280,8 @@ We hope to allow users to edit the layout / posting template in future updates o
  * AUTO-250: As a WordPress publisher, I want to post a single video to my blog from the Video Catalog search results page.
  * AUTO-252: As an editor, I want to save my search results as a new feed using a 'Save as Feed' button on the Video Catalog page.
  
-
 *Bug Fixes:*
 
  * AUTO-408: When I create a feed using a category with spaces, I do not reveieve any posts.
  * AUTO-405: After installing the GrabPress plug-in, my media tab from the admin menu disappears.
 
-= 1.0.1 =
-*Features:*
- 
- * AUTO-134: The 'grabpress' user is not removed from the WordPress database after the plugin is manually deactivated and deleted.
- * AUTO-173: As a publisher, I want to select more than 1 video channel when creating or editing a feed.
- * AUTO-175: As a publisher, I want to exclude keywords from search parameters, to better refine my results.
- * AUTO-311: As a publisher, I want to name my feeds, so I can easily identify what I am using the feed for.
-
-*Bug Fixes:*
-
- * AUTO-263: Create Feed page is displayed when user tries to open 'preview feed' page in new tab.
- * AUTO-308: Creating a new account with an existing account e-mail address does not display appropriate warning.
-  
-= 1.0.0 = 
- * Public Beta
-
-== Upgrade Notice ==
-
-= 1.0.0 =
- * Initial release
