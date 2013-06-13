@@ -795,7 +795,7 @@ line-height: 24px;
 #t #b .accordion-heading a.accordion-toggle {    
     padding: 4px 15px;
     height: 25px;  
-    line-height: 24px;
+    line-height: 25px;
 }
 #t #b .collapse {
     overflow: hidden;
