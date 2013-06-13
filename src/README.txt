@@ -178,7 +178,17 @@ We hope to allow users to edit the layout / posting template in future updates o
 = 2.3.4 =
 *Features:*
 
+ * AUTO-899: As a WordPress Publisher, I want to be alerted when any of feeds have produced an error, so they can be resolved.
+ * AUTO-898: As a GrabPress user, I want to provide a list of tags for each feed I create so the feed-specific tags will apply to all posts for that feed
+ * AUTO-897: As a WordPress Publisher, I want to provide a list of tags to exclude from my feed, so my tag library is not bombarded. 
+ * AUTO-835: As a WordPress Publisher, I want to be notified if I'm not using the current version of the GrabPress Plug-in, so I know when I need to update my plugin.
+ * Various UI/UX tweaks
+
 *Bug Fixes:*
+
+ * AUTO-880: Spacing between pagination link and first video increases after using pagination.
+ * AUTO-694: Watchlist rolled-over titles have unaesthetically pleasing tooltips.
+ * AUTO-559: Secondary mouse button works as primary in the manage feeds section.
 
 = 2.3.3 =
 *Features:*
