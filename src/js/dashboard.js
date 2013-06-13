@@ -314,6 +314,8 @@ var GrabPressDashboard = GrabPressDashboard || {
             "alwaysVisible" : true
         });                
         jQuery(".feed_title").ellipsis(0, true, "", "");
+        //remove the titles from watchlist so we can desable tooltips
+        jQuery('.feed_title').removeAttr("title");
         jQuery("#message").hide();//hack        
         
         jQuery("#help").simpletip({
