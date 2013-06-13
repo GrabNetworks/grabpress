@@ -3,7 +3,7 @@ Contributors: grabmedia
 Tags: video, grab, autoposter, grab press, grab media, grab-media, grab networks, video catalog, media, video feed, video player, video content, professional video, ad revenue
 Requires at least: 3.4   
 Tested up to: 3.5  
-Stable tag: 2.3.1
+Stable tag: 2.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,6 +175,24 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Changelog ==  
 
+= 2.3.3 =
+*Features:*
+
+ * AUTO-833: As a WordPress Publisher, I want the duration displayed for all videos in the Catalog and AutoPoster tabs, so that I can determine if I want to use a particular video or not.
+ * AUTO-831: As a WordPress Publisher, when creating a feed I want to perform all search functions on the AutoPoster page, instead of having redundant search options on the preview page.
+ * AUTO-791: As a WordPress publisher, I want my keywords emphasized in the video descriptions, so that I know why videos are returned in the result set.
+ * Various UI/UX tweaks
+
+= 2.3.2 =
+
+ * AUTO-660: As a WordPress Publisher, I want the player in the dashboard to be visible between a minimum of 320px and a maximum of 640px width.
+ * AUTO-802: As a Grab Media Developer, I want to know more about our user environments, so we can better develop, test and debug against user environments.
+ * Added support for PHP 5.2.4 call DateTime::modify, replacing DateTime::sub (The DateTime::Sub() error should no longer appear).
+ * Addes support for PHP 5.2.4 call to check if PHP is configured with MagicQuotes for json_encode() call.
+
+= 2.3.1.1 =
+ * Turned debugging off by default.  (Thanks goes to @optimalpatrick)
+
 = 2.3.1 =
 *Features:*
 
@@ -262,23 +280,3 @@ We hope to allow users to edit the layout / posting template in future updates o
  * AUTO-408: When I create a feed using a category with spaces, I do not reveieve any posts.
  * AUTO-405: After installing the GrabPress plug-in, my media tab from the admin menu disappears.
 
-= 1.0.1 =
-*Features:*
- 
- * AUTO-134: The 'grabpress' user is not removed from the WordPress database after the plugin is manually deactivated and deleted.
- * AUTO-173: As a publisher, I want to select more than 1 video channel when creating or editing a feed.
- * AUTO-175: As a publisher, I want to exclude keywords from search parameters, to better refine my results.
- * AUTO-311: As a publisher, I want to name my feeds, so I can easily identify what I am using the feed for.
-
-*Bug Fixes:*
-
- * AUTO-263: Create Feed page is displayed when user tries to open 'preview feed' page in new tab.
- * AUTO-308: Creating a new account with an existing account e-mail address does not display appropriate warning.
-  
-= 1.0.0 = 
- * Public Beta
-
-== Upgrade Notice ==
-
-= 1.0.0 =
- * Initial release
