@@ -175,6 +175,11 @@ We hope to allow users to edit the layout / posting template in future updates o
 
 == Changelog ==  
 
+= 2.3.4 =
+*Features:*
+
+*Bug Fixes:*
+
 = 2.3.3 =
 *Features:*
 
