@@ -557,13 +557,14 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             GrabPressAutoposter.editFeed(id);
             return false;
         });
-
+        //right click behavior - comment this line to fix auto559 - right click acting like left click
+        /*
         jQuery('.btn-update-feed').bind("contextmenu",function(e){
             id = this.id.replace('btn-update-','');
             GrabPressAutoposter.editFeed(id);
             return false;
         });   
-        
+        */
         //if we have an API connection error disable all inputs
         if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
             jQuery(":input").attr('disabled', 'disabled');
