@@ -317,6 +317,7 @@ input[ type="button" ]/*, #account input[ type="checkbox"], select*/{
 	/*margin: 0 5px;*/
 	display: inline;
 	float: right;
+        margin-top: -6px;
 }
 #link-existing input[type='text'], #link-existing input[type='password']{
 	width:250px;
@@ -457,7 +458,7 @@ line-height: 24px;
     /*height: 135px;*/
     overflow: hidden;
     padding: 10px 10px;
-    width: 800px;
+    width: 830px;
 }
 #form-catalog-page .tile-left {
     float: left;
