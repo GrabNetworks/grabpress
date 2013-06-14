@@ -494,6 +494,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         });
         jQuery('#cancel-editing').bind('click', function(e){ 
              if (formChanged) {
+                window.onbeforeunload = null;
                 var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
                 if(answer){				
                        window.location = "admin.php?page=gp-autoposter";
