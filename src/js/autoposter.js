@@ -487,15 +487,22 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                   jQuery('#autoposter-status').text(autoposter_status);
                   jQuery('#feeds-status').text(feeds_status);
               });
-        });	  
-
-         jQuery('#cancel-editing').bind('click', function(e){ 
-              var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
-              if(answer){				
-                    window.location = "admin.php?page=gp-autoposter";
-              } else{				
-                    return false;
-              }
+        });
+        var formChanged = false;
+        jQuery(':input', 'form').bind("change", function () {
+            formChanged = true;
+        });
+        jQuery('#cancel-editing').bind('click', function(e){ 
+             if (formChanged) {
+                var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
+                if(answer){				
+                       window.location = "admin.php?page=gp-autoposter";
+                 } else{				
+                       return false;
+                 }
+             } else {
+                 window.location = "admin.php?page=gp-autoposter";
+             }
         });
 
         jQuery(".ui-selectmenu").click(function(){
