@@ -1,3 +1,16 @@
+<!--[if IE]>
+   
+   <style type="text/css">
+
+   .reveal-modal-bg { 
+       background:transparent;
+       filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#70000000,endColorstr=#70000000); 
+       zoom: 1;
+    } 
+
+    </style>
+
+<![endif]-->
 <form method="post" action="" id="form-dashboard">
 <input type="hidden" name="environment" value="<?php echo Grabpress::$environment;?>" id ="environment"/>
 <input type="hidden" name="embed_id" value="<?php echo $embed_id;?>" id ="embed_id"/>
