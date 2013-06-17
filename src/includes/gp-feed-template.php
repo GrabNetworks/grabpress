@@ -287,7 +287,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 						</td>
 				</tr>
                                 <tr valign="bottom">
-                                    <th scope="row">Exclude Tags<span class="asterisk">*</span></th>
+                                    <th scope="row">Exclude Tags</th>
                                     <td>
                                         <input type="text" maxlength="255" name="exclude_tags" id="exclude_tags" value="<?php echo (isset($form['exclude_tags']))?$form['exclude_tags']:'';?>"/>
                                         <span class="description">Enter tags you want to exclude from each post for this feed, separated by commas</span>
@@ -296,7 +296,7 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
                                 <tr valign="bottom">
                                     <th scope="row">Feed Tags</th>
                                     <td>
-                                        <input type="text" name="include_tags" id="include_tags" value="<?php echo (isset($form['include_tags']))?$form['include_tags']:'';?>"/>
+                                        <input type="text" maxlength="255" name="include_tags" id="include_tags" value="<?php echo (isset($form['include_tags']))?$form['include_tags']:'';?>"/>
                                         <span class="description">Enter tags you want add to each post for this feed, separated by commas</span>
                                     </td>
                                 </tr>
