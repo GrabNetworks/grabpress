@@ -169,10 +169,10 @@ var GrabPressCatalog = {
                 jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");                
             }
             if (display != '') { 
-                jQuery("#preview-feed #btn-create-feed").css('position', 'relative');
-                jQuery("#preview-feed #btn-create-feed").css('top', '-15px');
-                jQuery("#preview-feed #btn-create-feed").css('left', '170px');
-                jQuery("#pagination").css('top', '480px');
+                //jQuery("#preview-feed #btn-create-feed").css('position', 'relative');
+                //jQuery("#preview-feed #btn-create-feed").css('top', '-15px');
+                //jQuery("#preview-feed #btn-create-feed").css('left', '170px');
+                jQuery("#pagination").css('top', '500px');
             }
         });        
     },
@@ -188,7 +188,7 @@ var GrabPressCatalog = {
             var top = '260px';
             if (jQuery.browser.msie) { top = '265px';} 
             if (action == 'gp_get_catalog_tab') {
-                top = '480px';
+                top = '500px';
             }
             var position = 'relative';
             if (action == 'gp_get_preview') {position = 'static';}
