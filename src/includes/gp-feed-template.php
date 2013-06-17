@@ -293,6 +293,13 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
                                         <span class="description">Enter tags you want to exclude from each post for this feed, separated by commas</span>
                                     </td>
                                 </tr>
+                                <tr valign="bottom">
+                                    <th scope="row">Feed Tags</th>
+                                    <td>
+                                        <input type="text" name="include_tags" id="include_tags" value="<?php echo (isset($form['include_tags']))?$form['include_tags']:'';?>"/>
+                                        <span class="description">Enter tags you want add to each post for this feed, separated by commas</span>
+                                    </td>
+                                </tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
 						<?php $click = ( $is_edit ) ? 'onclick="GrabPressAutoposter.validateKeywords(\'update\');"' : 'onclick="GrabPressAutoposter.validateKeywords();"' ?>
