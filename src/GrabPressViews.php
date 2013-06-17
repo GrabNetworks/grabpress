@@ -44,7 +44,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                                                     "click_to_play" => $params["click_to_play"],
                                                     "author" => $params["author"],
                                                     "providers" => $params["providers"],
-                                                    "category" => $params["category"]								   
+                                                    "category" => $params["category"],
+                                                    "exclude_tags" => $feed->feed->exclude_tags,
+                                                    "include_tags" => $feed->feed->include_tags
                                                 ),
                                 "list_providers" => $list_providers,
                                 "providers_total" => $providers_total,
