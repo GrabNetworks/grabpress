@@ -643,9 +643,12 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=2");
 			$resources_json = GrabPressAPI::call( "GET",
 				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=3");
+                        $alerts_json = GrabPressAPI::call( "GET",
+				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=1");
 			$messages = json_decode($broadcast_json);
 			$pills = json_decode($pills_json);
 			$resources = json_decode($resources_json);
+                        $alerts = json_decode($alerts_json);
 
 			$watchlist = GrabpressAPI::get_watchlist();
 			$feeds = GrabPressAPI::get_feeds();
@@ -660,13 +663,14 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                         
                         $list_providers = GrabPressAPI::get_providers();
                     } catch (Exception $e) {
-                        $messages = $pills = $resources = $feeds = $watchlist = $list_providers = array();
+                        $messages = $pills = $resources = $feeds = $watchlist = $list_providers = $alerts = array();
                         $publisher_status = "account-unlinked";
                         $embed_id = "";
                         GrabPress::log('API call exception: '.$e->getMessage());
                     }
                     print GrabPress::fetch( 'includes/gp-dashboard.php' , array(
                             "messages" => $messages,
+                            "alerts" => $alerts,
                             "pills" => $pills,
                             "resources" => $resources,
                             "feeds" => $feeds,

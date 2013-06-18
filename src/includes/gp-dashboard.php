@@ -84,10 +84,16 @@
 											<ul class="nav nav-tabs">
                                                                                             <li >
                                                                                                 <a href="#messages-tab1">Messages</a>
-                                                                                            </li>
+                                                                                            </li>                                                                                            
+                                                                                            <?php
+                                                                                            if (!empty($alerts)){
+                                                                                            ?>
                                                                                             <li>
                                                                                                 <a href="#messages-tab2">Alerts</a>
                                                                                             </li>
+                                                                                            <?php
+                                                                                            }
+                                                                                            ?>                                                                                            
 											</ul>
 											<!--<div class="tab-content">-->
 												<div class="tab-pane active nano" id="messages-tab1">
@@ -101,11 +107,16 @@
 												</div>
                                                                                                 <div class="tab-pane active nano" id="messages-tab2">
 													<div class="content">
-														<?php foreach($messages as $msg){ ?>
+                                                                                                        <?php
+                                                                                                        if (!empty($alerts)){
+                                                                                                            foreach($alerts as $alrt){ ?>
 														<p>
-															<?php echo html_entity_decode("LOREM IPSUM SIT DOLOR"); ?>
-                                                                                                                </p><span><a href="#">delete</a></span>
-														<?php }?>
+                                                                                                                    <?php //print_r($alrt);?>
+                                                                                                                    <?php echo html_entity_decode($alrt->message->body); ?>
+                                                                                                                    <span style="float:right;"><a id="<?php echo $alrt->message->id; ?>" href="#">delete</a></span>
+                                                                                                                </p>
+													<?php }
+                                                                                                        }?>
 													</div>
 												</div>
 											<!--</div>-->
