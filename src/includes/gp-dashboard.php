@@ -80,13 +80,16 @@
 							<div class="span4">
 								<div class="row-fluid">
 									<div class="span12 messages">
-										<div class="tabbable panel">
+										<div class="tabbable panel" id="messages-tabs">
 											<ul class="nav nav-tabs">
-													<li class="active">
-														<a href="#messages-tab1" data-toggle="tab">Messages</a>
-													</li>
+                                                                                            <li >
+                                                                                                <a href="#messages-tab1">Messages</a>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <a href="#messages-tab2">Alerts</a>
+                                                                                            </li>
 											</ul>
-											<div class="tab-content">
+											<!--<div class="tab-content">-->
 												<div class="tab-pane active nano" id="messages-tab1">
 													<div class="content">
 														<?php foreach($messages as $msg){ ?>
@@ -96,7 +99,16 @@
 														<?php }?>
 													</div>
 												</div>
-											</div>
+                                                                                                <div class="tab-pane active nano" id="messages-tab2">
+													<div class="content">
+														<?php foreach($messages as $msg){ ?>
+														<p>
+															<?php echo html_entity_decode("LOREM IPSUM SIT DOLOR"); ?>
+                                                                                                                </p><span><a href="#">delete</a></span>
+														<?php }?>
+													</div>
+												</div>
+											<!--</div>-->
 										</div>
 									</div>										
 								</div>

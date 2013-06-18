@@ -325,6 +325,7 @@ var GrabPressDashboard = GrabPressDashboard || {
       
         GrabPressDashboard.resize_browser_init();
         GrabPressDashboard.collapse_menu();
+        jQuery( "#messages-tabs" ).tabs();
     }
 }
 
