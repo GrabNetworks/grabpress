@@ -86,7 +86,7 @@
                                                                                                 <a href="#messages-tab1">Messages</a>
                                                                                             </li>                                                                                            
                                                                                             <?php
-                                                                                            if (!empty($alerts)){
+                                                                                            if (!empty($alerts) || !empty($errors)){
                                                                                             ?>
                                                                                             <li>
                                                                                                 <a href="#messages-tab2">Alerts</a>
@@ -110,10 +110,18 @@
                                                                                                         <?php
                                                                                                         if (!empty($alerts)){
                                                                                                             foreach($alerts as $alrt){ ?>
-														<p>
-                                                                                                                    <?php //print_r($alrt);?>
+														<p>                                                                                                                   
                                                                                                                     <?php echo html_entity_decode($alrt->message->body); ?>
                                                                                                                     <span style="float:right;"><a id="<?php echo $alrt->message->id; ?>" href="#">delete</a></span>
+                                                                                                                </p>
+													<?php }
+                                                                                                        }?>
+                                                                                                                <?php
+                                                                                                        if (!empty($errors)){
+                                                                                                            foreach($errors as $err){ ?>
+														<p>
+                                                                                                                    <?php echo html_entity_decode($err->message->body); ?>
+                                                                                                                    <span style="float:right;"><a id="<?php echo $err->message->id; ?>" href="#">delete</a></span>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>
