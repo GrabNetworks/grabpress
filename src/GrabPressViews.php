@@ -80,7 +80,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
                                                             "click_to_play" => $feed->feed->auto_play,
                                                             "author" => $feed->feed->custom_options->author_id,
                                                             "providers" => $providers,
-                                                            "category" => $cats
+                                                            "category" => $cats,
+                                                            "exclude_tags" => $feed->feed->exclude_tags,
+                                                            "include_tags" => $feed->feed->include_tags
                                                             ),
                                             "list_providers" => $list_providers,
                                             "providers_total" => $providers_total,
