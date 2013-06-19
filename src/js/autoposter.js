@@ -592,7 +592,7 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         ' first saving your data, the changes will be' +
         ' lost.';
     },
-}
+} 
 //do form validation	
 jQuery(window).load(function () {
     GrabPressAutoposter.doValidation();    
