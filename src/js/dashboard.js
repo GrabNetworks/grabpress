@@ -192,22 +192,24 @@ var GrabPressDashboard = GrabPressDashboard || {
         //show or hide the watchlist if it's the case when collapsing or expanding the wordpress menu
         jQuery("#collapse-menu").click(function(){
                 var smallWidth = 1265;
+                var left = "#t #b .watchlist .panel:first";
                 setTimeout(function() {
                     if ( jQuery("#adminmenuwrap").width() < 34 ) {                
                         smallWidth = 1147;
                     }
                     var topRight = '-122px';
                     if (jQuery.browser.msie && jQuery.browser.version == 8.0) {                    
-                        topRight = '16px';
+                        topRight = '16px';                
+                        left = "#t #b .watchlist";
                     }  
                     if ( jQuery(window).width() < smallWidth ) {                
-                        jQuery("#t #b .watchlist .panel:first").hide();
+                        jQuery(left).hide();
                         setTimeout(function(){
                             jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', '8px');
                             jQuery("#t #b .watchlist-wrap .right-pane").css('margin-top', topRight);
                         }, 150);
                     } else {                        
-                        jQuery("#t #b .watchlist .panel:first").show();
+                        jQuery(left).show();
                         setTimeout(function(){                            
                             GrabPressDashboard.resize_accordion();
                             jQuery("#t #b .watchlist-wrap .right-pane").css('margin-left', jQuery("#t #b .watchlist").width() + 8);
@@ -309,10 +311,12 @@ var GrabPressDashboard = GrabPressDashboard || {
         GrabPressDashboard.watchlist_binding(jQuery("#embed_id").val());
         GrabPressDashboard.accordion_binding(jQuery("#environment").val(), jQuery("#embed_id").val());
         GrabPressDashboard.onload_openvideo(jQuery("#embed_id").val());
-        jQuery('.nano').nanoScroller({
-            preventPageScrolling: true,
-            "alwaysVisible" : true
-        });                
+        setTimeout(function(){
+            jQuery('.nano').nanoScroller({
+                preventPageScrolling: true,
+                "alwaysVisible" : true            
+            });
+        },150);                
         jQuery(".feed_title").ellipsis(0, true, "", "");
         //remove the titles from watchlist so we can desable tooltips
         jQuery('.feed_title').removeAttr("title");
