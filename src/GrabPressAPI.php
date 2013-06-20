@@ -42,7 +42,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			if(isset($auth) && isset($data['user']) && isset($data['pass'])){
 				GrabPress::log("HTTP AUTH <> ". $data['user'] . ":" . $data['pass']);
 			}
-			$json = json_encode( $data );
+			$json = json_encode( $data );var_dump($json);
 			$apiLocation = GrabPressAPI::get_location();
 			$location = 'http://'.$apiLocation.$resource;
 			$ch = curl_init();
@@ -284,8 +284,8 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 						'update_frequency' => $params[ 'schedule' ] ,
 						'auto_play' => $auto_play,
 						'watchlist' => $watchlist,
-                                                'exclude_tags' => $params['exclude_tags'],
-                                                'include_tags' => $params['include_tags'],
+                                                'exclude_tags' => stripslashes($params['exclude_tags']),
+                                                'include_tags' => stripslashes($params['include_tags']),
 					)
 				);
 				$response_json = GrabPressAPI::call( 'POST', '/connectors/' . $connector_id . '/feeds/?api_key='.GrabPress::$api_key, $post_data );
@@ -484,8 +484,8 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 					),
 					'update_frequency' => $request['schedule'],
 					'auto_play' => $auto_play,
-                                        'exclude_tags' => $request['exclude_tags'],
-                                        'include_tags' => $request['include_tags'],
+                                        'exclude_tags' => stripslashes($request['exclude_tags']),
+                                        'include_tags' => stripslashes($request['include_tags']),
 				)
 			);
 			$response = GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );
