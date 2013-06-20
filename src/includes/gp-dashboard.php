@@ -113,6 +113,7 @@
 														<p id="<?php echo $alrt->message->id; ?>">                                                                                                                 
                                                                                                                     <?php echo html_entity_decode($alrt->message->body); ?>
                                                                                                                     <a onclick="GrabPressDashboard.deleteAlert(<?php echo $alrt->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <span style="clear:both; display: block"></span>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>
@@ -122,6 +123,7 @@
 														<p id="<?php echo $err->message->id; ?>">
                                                                                                                     <?php echo html_entity_decode($err->message->body); ?>
                                                                                                                     <a onclick="GrabPressDashboard.deleteAlert(<?php echo $err->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <span style="clear:both; display: block"></span>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>
