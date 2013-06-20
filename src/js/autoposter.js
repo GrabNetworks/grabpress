@@ -591,8 +591,8 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         ' If you navigate away from this page without' +
         ' first saving your data, the changes will be' +
         ' lost.';
-    }
-}
+    },
+} 
 //do form validation	
 jQuery(window).load(function () {
     GrabPressAutoposter.doValidation();    
