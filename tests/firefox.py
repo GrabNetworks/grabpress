@@ -445,5 +445,48 @@ class UserStoryTests(CatalogTests):
         driver.find_element_by_id("btn-create-feed").click()
         self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"15 mins")
 
+class UITests(CatalogTests):
+    def test_AutoPosterElements(self):
+	    AutoPosterPageTextContent=['Feed your blog with fresh video content.', 
+        'Create Feed',
+        'Plug-in Version & Build Number',
+        'API Key',
+        'Search Criteria',
+        'Feed Name',
+        'A unique name of 6-14 characters. We encourage customizing it.',
+        'Grab Video Categories*',
+        'Add or remove specific video categories from this feed',
+        'Keywords',
+        'Default search setting is \'all of these words\'',
+        'Exclude these keywords',
+        'Any of the keywords',
+        'Exact phrase',
+        'Content Providers',
+        'Add or remove specific providers content from this feed',
+        'Click here to sample the kinds of videos that will be auto posted by this feed in the future.',
+        'Preview Feed',
+        'Publish Settings',
+        'Schedule*',
+        'Determine how often to search (posts created only if new matching videos have been added Grab\'s catalog)',
+        'Max Results*',
+        'Indicate the maximum number of videos to grab at a time',
+        'Post Categories',
+        'If no selection is made, your default category \'Uncategorized\' will be used.',
+        'Post Author*',
+        'Select the default WordPress user to credit as author of the posts from this feed',
+        'Player Mode*',
+        'Auto-Play',
+        'Click-to-Play (this is likely to result in fewer ad impressions',
+        ' learn more',
+        'Delivery Mode*',
+        'Create Drafts to be moderated and published manually',
+        'Publish Posts Automatically',
+        'items marked with an asterisk * are required.',
+        'reset form']
+	    driver = self.driver
+        GrabPressAutomation.Login(self)
+        driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
+		for textEntry in AutoPosterPageTextContent:
+            self.assertTrue(driver.getPageSource().contains(textEntry));
 if __name__ == "__main__":
     unittest.main(verbosity=2)
