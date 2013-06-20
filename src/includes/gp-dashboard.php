@@ -112,7 +112,7 @@
                                                                                                             foreach($alerts as $alrt){ ?>
 														<p id="<?php echo $alrt->message->id; ?>">                                                                                                                 
                                                                                                                     <?php echo html_entity_decode($alrt->message->body); ?>
-                                                                                                                    <a href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $alrt->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>
@@ -121,7 +121,7 @@
                                                                                                             foreach($errors as $err){ ?>
 														<p id="<?php echo $err->message->id; ?>">
                                                                                                                     <?php echo html_entity_decode($err->message->body); ?>
-                                                                                                                    <a href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $err->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>

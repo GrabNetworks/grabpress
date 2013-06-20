@@ -1148,7 +1148,7 @@ line-height: 24px;
 
 #t #b #messages-tab2 .content p {
     width: auto !important;
-    padding: 5px 0 5px 0;
-    margin-right: 22px;
+    padding: 5px 0 5px 7px;
+    margin-right: 32px;
     border-bottom: 1px solid #818181;
 }
