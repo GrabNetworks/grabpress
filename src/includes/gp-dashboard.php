@@ -110,18 +110,18 @@
                                                                                                         <?php
                                                                                                         if (!empty($alerts)){
                                                                                                             foreach($alerts as $alrt){ ?>
-														<p>                                                                                                                 
+														<p id="<?php echo $alrt->message->id; ?>">                                                                                                                 
                                                                                                                     <?php echo html_entity_decode($alrt->message->body); ?>
-                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $alrt->message->id; ?>);" id="<?php echo $alrt->message->id; ?>" href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $alrt->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>
                                                                                                          <?php
                                                                                                         if (!empty($errors)){
                                                                                                             foreach($errors as $err){ ?>
-														<p>
+														<p id="<?php echo $err->message->id; ?>">
                                                                                                                     <?php echo html_entity_decode($err->message->body); ?>
-                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $err->message->id; ?>);" id="<?php echo $err->message->id; ?>" href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $err->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>

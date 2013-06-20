@@ -720,7 +720,6 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 
 		static function delete_feed_callback() {
                     global $wpdb; // this is how you get access to the database
-
                     $feed_id = intval( $_REQUEST['feed_id'] );	
                     try{ 
                         $connector_id = GrabPressAPI::get_connector_id();
@@ -838,6 +837,19 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			}	
                     } catch(Exception $e) {
 			GrabPressViews::feed_management();
+                    }
+                    die(); // this is required to return a proper result
+		}
+                
+                static function delete_alert_callback() {
+                    global $wpdb; // this is how you get access to the database
+                    
+                    $alert_id = intval( $_REQUEST['$alert_id'] );	
+                    try{ 
+                        $connector_id = GrabPressAPI::get_connector_id();
+                        //GrabPressAPI::call( 'DELETE', '/connectors/' . $connector_id . '/feeds/'.$alert_id.'?api_key='.GrabPress::$api_key, $alert_id );
+                    } catch (Exception $e) {                        
+                        GrabPress::log('API call exception: '.$e->getMessage());
                     }
                     die(); // this is required to return a proper result
 		}

@@ -274,13 +274,13 @@ var GrabPressDashboard = GrabPressDashboard || {
     /* Delete alert or error message from alerts tab in dashboard */
     deleteAlert : function(id){
         var answer = confirm('Are you sure you want to delete this alert? ');
-        if(answer){					
+        if(answer){
             var data = {
                 action: 'gp_delete_alert',
                 alert_id: id
             };
             jQuery.post(ajaxurl, data, function(response) {
-                    window.location = "admin.php?page=gp-dashboard";
+                jQuery("#t #b #messages-tab2 .content #"+id).css('visibility', 'hidden');
             });
         } else{
             return false;
