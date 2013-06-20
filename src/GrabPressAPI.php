@@ -42,7 +42,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 			if(isset($auth) && isset($data['user']) && isset($data['pass'])){
 				GrabPress::log("HTTP AUTH <> ". $data['user'] . ":" . $data['pass']);
 			}
-			$json = json_encode( $data );var_dump($json);
+			$json = json_encode( $data );
 			$apiLocation = GrabPressAPI::get_location();
 			$location = 'http://'.$apiLocation.$resource;
 			$ch = curl_init();
