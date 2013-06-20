@@ -486,7 +486,8 @@ class UITests(CatalogTests):
         'Create Drafts to be moderated and published manually',
         'Publish Posts Automatically',
         'items marked with an asterisk * are required.',
-        'reset form']
+        'reset form',
+        'nowayinhelljosethisisanywhereonpage']
         driver = self.driver
         GrabPressAutomation.Login(self)
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
