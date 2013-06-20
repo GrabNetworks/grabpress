@@ -1139,3 +1139,10 @@ line-height: 24px;
 .messages .ui-tabs ul a, .messages .ui-tabs .ui-state-active a { color:#FFFFFF !important}
 .messages .ui-widget-content {border:none}
 #t #b .topbar div > ul a, #t #b .nav a {padding:5px 10px}
+
+#t #b #messages-tab2 .content p {
+    width: auto !important;
+    padding: 5px 0 5px 0;
+    margin-right: 22px;
+    border-bottom: 1px solid #818181;
+}
