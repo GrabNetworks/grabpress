@@ -1140,6 +1140,12 @@ line-height: 24px;
 .messages .ui-widget-content {border:none}
 #t #b .topbar div > ul a, #t #b .nav a {padding:5px 10px}
 
+#messages-tab2 .delete_alert {
+    width: 16px;
+    background: url('../images/icons/green/Cancel.png') top left no-repeat;
+    float:right;
+}
+
 #t #b #messages-tab2 .content p {
     width: auto !important;
     padding: 5px 0 5px 0;
