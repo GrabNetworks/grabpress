@@ -116,7 +116,7 @@
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>
-                                                                                                                <?php
+                                                                                                         <?php
                                                                                                         if (!empty($errors)){
                                                                                                             foreach($errors as $err){ ?>
 														<p>

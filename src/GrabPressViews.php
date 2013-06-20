@@ -644,9 +644,9 @@ if ( ! class_exists( 'GrabPressViews' ) ) {
 			$resources_json = GrabPressAPI::call( "GET",
 				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=3");
                         $alerts_json = GrabPressAPI::call( "GET",
-				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=4");
+				 '/connectors/'.GrabPressAPI::get_connector_id().'/messages/?api_key='.GrabPress::$api_key."&message_type_id=4");
                         $errors_json = GrabPressAPI::call( "GET",
-				 '/messages/?api_key='.GrabPress::$api_key."&message_type_id=5");
+				 '/connectors/'.GrabPressAPI::get_connector_id().'/messages/?api_key='.GrabPress::$api_key."&message_type_id=5");
 			$messages = json_decode($broadcast_json);
 			$pills = json_decode($pills_json);
 			$resources = json_decode($resources_json);
