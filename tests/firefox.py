@@ -491,6 +491,6 @@ class UITests(CatalogTests):
         GrabPressAutomation.Login(self)
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
         for textEntry in AutoPosterPageTextContent:
-            GrabPressAutomation.is_text_present(textEntry)
+            GrabPressAutomation.is_text_present(self,textEntry)
 if __name__ == "__main__":
     unittest.main(verbosity=2)
