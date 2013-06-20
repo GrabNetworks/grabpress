@@ -110,9 +110,9 @@
                                                                                                         <?php
                                                                                                         if (!empty($alerts)){
                                                                                                             foreach($alerts as $alrt){ ?>
-														<p>                                                                                                                   
+														<p>                                                                                                                 
                                                                                                                     <?php echo html_entity_decode($alrt->message->body); ?>
-                                                                                                                    <span style="float:right;"><a id="<?php echo $alrt->message->id; ?>" href="#">delete</a></span>
+                                                                                                                    <a id="<?php echo $alrt->message->id; ?>" href="#"><span class="delete_alert">&nbsp;</span></a>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>
@@ -121,7 +121,7 @@
                                                                                                             foreach($errors as $err){ ?>
 														<p>
                                                                                                                     <?php echo html_entity_decode($err->message->body); ?>
-                                                                                                                    <span style="float:right;"><a id="<?php echo $err->message->id; ?>" href="#">delete</a></span>
+                                                                                                                    <a id="<?php echo $err->message->id; ?>" href="#"><span class="delete_alert">&nbsp;</span></a>
                                                                                                                 </p>
 													<?php }
                                                                                                         }?>
