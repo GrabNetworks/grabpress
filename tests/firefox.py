@@ -447,7 +447,7 @@ class UserStoryTests(CatalogTests):
 
 class UITests(CatalogTests):
     def test_AutoPosterElements(self):
-	    AutoPosterPageTextContent=['Feed your blog with fresh video content.', 
+        AutoPosterPageTextContent=['Feed your blog with fresh video content.', 
         'Create Feed',
         'Plug-in Version & Build Number',
         'API Key',
@@ -483,10 +483,10 @@ class UITests(CatalogTests):
         'Publish Posts Automatically',
         'items marked with an asterisk * are required.',
         'reset form']
-	    driver = self.driver
+        driver = self.driver
         GrabPressAutomation.Login(self)
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
-		for textEntry in AutoPosterPageTextContent:
+        for textEntry in AutoPosterPageTextContent:
             self.assertTrue(driver.getPageSource().contains(textEntry));
 if __name__ == "__main__":
     unittest.main(verbosity=2)
