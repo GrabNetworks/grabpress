@@ -84,10 +84,16 @@
 											<ul class="nav nav-tabs">
                                                                                             <li >
                                                                                                 <a href="#messages-tab1">Messages</a>
-                                                                                            </li>
+                                                                                            </li>                                                                                            
+                                                                                            <?php
+                                                                                            if (!empty($alerts) || !empty($errors)){
+                                                                                            ?>
                                                                                             <li>
                                                                                                 <a href="#messages-tab2">Alerts</a>
                                                                                             </li>
+                                                                                            <?php
+                                                                                            }
+                                                                                            ?>                                                                                            
 											</ul>
 											<!--<div class="tab-content">-->
 												<div class="tab-pane active nano" id="messages-tab1">
@@ -101,11 +107,26 @@
 												</div>
                                                                                                 <div class="tab-pane active nano" id="messages-tab2">
 													<div class="content">
-														<?php foreach($messages as $msg){ ?>
-														<p>
-															<?php echo html_entity_decode("LOREM IPSUM SIT DOLOR"); ?>
-                                                                                                                </p><span><a href="#">delete</a></span>
-														<?php }?>
+                                                                                                        <?php
+                                                                                                        if (!empty($alerts)){
+                                                                                                            foreach($alerts as $alrt){ ?>
+														<p id="<?php echo $alrt->message->id; ?>">                                                                                                                 
+                                                                                                                    <?php echo html_entity_decode($alrt->message->body); ?>
+                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $alrt->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <span style="clear:both; display: block"></span>
+                                                                                                                </p>
+													<?php }
+                                                                                                        }?>
+                                                                                                         <?php
+                                                                                                        if (!empty($errors)){
+                                                                                                            foreach($errors as $err){ ?>
+														<p id="<?php echo $err->message->id; ?>">
+                                                                                                                    <?php echo html_entity_decode($err->message->body); ?>
+                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $err->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <span style="clear:both; display: block"></span>
+                                                                                                                </p>
+													<?php }
+                                                                                                        }?>
 													</div>
 												</div>
 											<!--</div>-->
