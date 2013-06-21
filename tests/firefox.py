@@ -95,7 +95,7 @@ class GrabPressAutomation(unittest.TestCase):
         else: return False
 
     def verifyTextPresent(self, string):
-        try: self.assertTrue(self.is_text_present(self, string))
+        try: self.assertTrue(self.is_text_present(string))
         except AssertionError as e: self.verificationErrors.append(str(e))
 
 class CatalogTests(GrabPressAutomation):
