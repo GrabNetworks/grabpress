@@ -94,7 +94,7 @@ class GrabPressAutomation(unittest.TestCase):
         if str(string) in self.driver.page_source: return True
         else: return False
 
-	def verifyTextPresent(self, string):
+    def verifyTextPresent(self, string):
         try: self.assertTrue(self.is_text_present(self, string))
         except AssertionError as e: self.verificationErrors.append(str(e))
 
