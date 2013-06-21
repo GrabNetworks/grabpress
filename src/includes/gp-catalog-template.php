@@ -128,7 +128,7 @@
                            <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
                       <?php } ?>
                 </div>
-                <div class="label-tile-one-column">            
+                <div>            
                     <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>400?400:$list_feeds["total_count"]; ?>" name="feed_count"/>
                     <input id="page" type="hidden" name="page" value="0">
                 </div>
