@@ -271,6 +271,21 @@ var GrabPressDashboard = GrabPressDashboard || {
             }             
         }).resize();
     },
+    /* Delete alert or error message from alerts tab in dashboard */
+    deleteAlert : function(id){
+        var answer = confirm('Are you sure you want to delete this alert? ');
+        if(answer){
+            var data = {
+                action: 'gp_delete_alert',
+                alert_id: id
+            };
+            jQuery.post(ajaxurl, data, function(response) {
+                jQuery("#t #b #messages-tab2 .content #"+id).css('visibility', 'hidden');
+            });
+        } else{
+            return false;
+        }
+    },
     /* Dashboard initializiations */
     init : function(){
          //fix for watchlist min-width and max-width for ie9 and ie10
