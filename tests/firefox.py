@@ -87,9 +87,8 @@ class GrabPressAutomation(unittest.TestCase):
         finally: self.accept_next_alert = True
 
     def is_text_present(self, text):
-        try: el = self.driver.find_element_by_tag_name("body")
+        try: driver.findElement(By.tagName("body")).getText().contains(text);
         except NoSuchElementException, e: return False
-        return text in el.text
 
 class CatalogTests(GrabPressAutomation):
     def test_CTLG_1_ExactPhraseSearch(self):
@@ -491,7 +490,6 @@ class UITests(CatalogTests):
         GrabPressAutomation.Login(self)
         driver.get(self.base_url + "wordpress/wp-admin/admin.php?page=gp-autoposter")
         for textEntry in AutoPosterPageTextContent:
-            text_found = re.search(textEntry, driver.page_source)
-            self.assertNotEqual(text_found, None)
+            GrabPressAutomation.is_text_present(self,textEntry)
 if __name__ == "__main__":
     unittest.main(verbosity=2)
