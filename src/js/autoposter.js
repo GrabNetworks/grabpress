@@ -581,6 +581,13 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         jQuery(':input', 'form').bind("change", function () {
             GrabPressAutoposter.setConfirmUnload(true);
         });
+        //set on the leave page warning if form is filled from the catalog tab
+        if ((jQuery('input[name="referer"]').val() == 'create') && 
+                ((jQuery('#keywords_and').val() != '') || (jQuery('#keywords_not').val() != '') || 
+                 (jQuery('#keywords_or').val() != '') || (jQuery('#keywords_phrase').val() != ''))) {
+            
+            GrabPressAutoposter.setConfirmUnload(true);
+        };
         jQuery('#form-create-feed').submit(function(){window.onbeforeunload = null;});
     },
     setConfirmUnload : function(on) {
