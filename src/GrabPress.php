@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.3.4.1-06202013
+Version: 2.3.4.1-06212013
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.3.4.1-06202013';
+		static $version = '2.3.4.1-06212013';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabqa';
@@ -682,6 +682,7 @@ if( is_admin() ){
 	add_action( 'wp_ajax_gp_toggle_feed', array( 'GrabPressViews', 'toggle_feed_callback' ));
 	add_action( 'wp_ajax_gp_delete_feed', array( 'GrabPressViews', 'delete_feed_callback' ));
 	add_action( 'wp_ajax_gp_feed_name_unique', array( 'GrabPressViews', 'feed_name_unique_callback' ));
+        add_action( 'wp_ajax_gp_delete_alert', array( 'GrabPressViews', 'delete_alert_callback' ));
 	add_action( 'wp_ajax_gp_insert_video', array( 'GrabPressViews', 'insert_video_callback' ));
 	add_action( 'wp_ajax_gp_get_catalog', array( 'GrabPressViews', 'get_catalog_callback' ));
 	add_action( 'wp_ajax_gp_get_preview', array( 'GrabPressViews', 'get_preview_callback' ));
