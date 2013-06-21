@@ -477,6 +477,8 @@ line-height: 24px;
 #catalog-page .result-tile h2.video_title {
     height: 28px;
 }
+#form-catalog-page .modalBoxDialog .result-tile{width: 672px !important;}
+#form-catalog-page .modalBoxDialog .tile-right{width: 514px !important;}
 #form-catalog-page .label-tile {
     float: left;
     height: 25px;

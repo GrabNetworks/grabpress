@@ -30,7 +30,7 @@
             <input type="hidden" name="player_id" value="<?php echo $player_id; ?>"  id="player_id" />
             <input type="hidden" name="environment" value="<?php echo GrabPress::$environment; ?>"  id="environment" />
             
-		<fieldset id="preview-feed">
+		<fieldset id="preview-feed" class="modalBoxDialog">
 		<legend><?php if ($form['action'] == 'gp_get_preview') {
                                     echo 'Preview Feed';
                                } elseif (isset($form['display']) && $form['display'] == 'Tab') {
@@ -130,7 +130,7 @@
                <?php } ?>
                    
                 <?php if($empty == "false"){ ?>
-                <div class="label-tile-one-column" >				
+                <div>				
                         <input type="hidden" id="feed_count" value="<?php echo ($list_feeds["total_count"]>400)?'400':$list_feeds["total_count"]; ?>" name="feed_count"/>
                         <input type="hidden" id="page" value="0" name="page"/>
                 </div>

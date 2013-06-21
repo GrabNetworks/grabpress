@@ -16,8 +16,8 @@ var GrabPressAutoposter = GrabPressAutoposter || {
     /* Modal preview window definition and its closing behavior  */
     previewdialogConf : {
         modal: true,
-        width:910,
-        height:jQuery(window).height(),
+        width:752,
+        height:jQuery(window).height()-32,
         draggable: false,
         close: function(){
             //var and = [], or = [], phrase = [], not = [],
