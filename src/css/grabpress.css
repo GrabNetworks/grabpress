@@ -469,8 +469,9 @@ line-height: 24px;
     float: right;
     /*height: 155px;*/
     overflow: hidden;
-    width: 514px;
+    width: 670px;
 }
+#form-catalog-page .modalBox .tile-right { width: 514px !important; }
 #form-catalog-page .result-tile .tile-right p.video_summary{
     height: 2em;
     overflow: hidden;
