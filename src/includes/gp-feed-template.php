@@ -286,6 +286,20 @@ $is_edit = $form["action"] == "edit-feed" || $form["action"] == "modify" ;
 							<input type="radio" name="publish" value="1" <?php echo $publish_checked_automatic; ?> /> Publish Posts Automatically
 						</td>
 				</tr>
+                                <tr valign="bottom">
+                                    <th scope="row">Exclude Tags</th>
+                                    <td>
+                                        <input type="text" maxlength="255" name="exclude_tags" id="exclude_tags" value="<?php echo (isset($form['exclude_tags']))?$form['exclude_tags']:'';?>"/>
+                                        <span class="description">Enter tags you want to exclude from each post for this feed, separated by commas</span>
+                                    </td>
+                                </tr>
+                                <tr valign="bottom">
+                                    <th scope="row">Feed Tags</th>
+                                    <td>
+                                        <input type="text" maxlength="255" name="include_tags" id="include_tags" value="<?php echo (isset($form['include_tags']))?$form['include_tags']:'';?>"/>
+                                        <span class="description">Enter tags you want add to each post for this feed, separated by commas</span>
+                                    </td>
+                                </tr>
 				<tr valign="bottom">					
 					<td class="button-tip" colspan="2">						
 						<?php $click = ( $is_edit ) ? 'onclick="GrabPressAutoposter.validateKeywords(\'update\');"' : 'onclick="GrabPressAutoposter.validateKeywords();"' ?>
