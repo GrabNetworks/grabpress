@@ -458,7 +458,7 @@ line-height: 24px;
     /*height: 135px;*/
     overflow: hidden;
     padding: 10px 10px;
-    width: 830px;
+    width: 672px;
 }
 #form-catalog-page .tile-left {
     float: left;
@@ -468,7 +468,7 @@ line-height: 24px;
     float: right;
     /*height: 155px;*/
     overflow: hidden;
-    width: 670px;
+    width: 514px;
 }
 #form-catalog-page .result-tile .tile-right p.video_summary{
     height: 2em;
