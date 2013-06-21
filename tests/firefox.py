@@ -87,7 +87,7 @@ class GrabPressAutomation(unittest.TestCase):
         finally: self.accept_next_alert = True
 
     def is_text_present(self, text):
-        try: driver.findElement(By.tagName("body")).getText().contains(text);
+        try: findElement(By.tagName("body")).getText().contains(text);
         except NoSuchElementException, e: return False
 
 class CatalogTests(GrabPressAutomation):
