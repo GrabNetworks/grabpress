@@ -105,6 +105,9 @@
 														<?php }?>
 													</div>
 												</div>
+<?php
+ if (!empty($alerts) || !empty($errors)){
+?>
                                                                                                 <div class="tab-pane active nano" id="messages-tab2">
 													<div class="content">
                                                                                                         <?php
@@ -129,6 +132,7 @@
                                                                                                         }?>
 													</div>
 												</div>
+ <?php } ?>
 											<!--</div>-->
 										</div>
 									</div>										
