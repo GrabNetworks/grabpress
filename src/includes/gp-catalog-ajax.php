@@ -130,7 +130,7 @@
                <?php } ?>
                    
                 <?php if($empty == "false"){ ?>
-                <div>				
+                <div>	 			
                         <input type="hidden" id="feed_count" value="<?php echo ($list_feeds["total_count"]>400)?'400':$list_feeds["total_count"]; ?>" name="feed_count"/>
                         <input type="hidden" id="page" value="0" name="page"/>
                 </div>
