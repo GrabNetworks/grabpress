@@ -113,11 +113,11 @@ var GrabPressCatalog = {
        if(!window.grabModal){
            try{
                 var env = jQuery("#environment").val();
-                if (env == 'grabqa') {
-                    modalId = '1000014775';
-                } else {
+                //if (env == 'grabqa') {
+                //    modalId = '1000014775';
+                //} else {
                     modalId = '1720202';
-                }
+                //}
                 window.grabModal = new com.grabnetworks.Modal({id: modalId, tgt: env, width: 800, height: 450});
                 window.grabModal.hide();
            }catch(err){
@@ -429,11 +429,11 @@ var GrabPressCatalog = {
       if(!window.grabModal){
             try{
                 var env = jQuery("#environment").val();
-                if (env == 'grabqa') {
-                    modalId = '1000014775';               
-                } else {
+                //if (env == 'grabqa') {
+                //    modalId = '1000014775';               
+                //} else {
                     modalId = '1720202';                
-                }
+                //}
                 window.grabModal = new com.grabnetworks.Modal( { id : modalId , tgt: env, width: 1100, height: 450 } );
                 window.grabModal.hide();
             }catch(err){
