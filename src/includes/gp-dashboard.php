@@ -1,3 +1,16 @@
+<!--[if IE]>
+   
+   <style type="text/css">
+
+   .reveal-modal-bg { 
+       background:transparent;
+       filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#70000000,endColorstr=#70000000); 
+       zoom: 1;
+    } 
+
+    </style>
+
+<![endif]-->
 <form method="post" action="" id="form-dashboard">
 <input type="hidden" name="environment" value="<?php echo Grabpress::$environment;?>" id ="environment"/>
 <input type="hidden" name="embed_id" value="<?php echo $embed_id;?>" id ="embed_id"/>
@@ -67,13 +80,22 @@
 							<div class="span4">
 								<div class="row-fluid">
 									<div class="span12 messages">
-										<div class="tabbable panel">
+										<div class="tabbable panel" id="messages-tabs">
 											<ul class="nav nav-tabs">
-													<li class="active">
-														<a href="#messages-tab1" data-toggle="tab">Messages</a>
-													</li>
+                                                                                            <li >
+                                                                                                <a href="#messages-tab1">Messages</a>
+                                                                                            </li>                                                                                            
+                                                                                            <?php
+                                                                                            if (!empty($alerts) || !empty($errors)){
+                                                                                            ?>
+                                                                                            <li>
+                                                                                                <a href="#messages-tab2">Alerts</a>
+                                                                                            </li>
+                                                                                            <?php
+                                                                                            }
+                                                                                            ?>                                                                                            
 											</ul>
-											<div class="tab-content">
+											<!--<div class="tab-content">-->
 												<div class="tab-pane active nano" id="messages-tab1">
 													<div class="content">
 														<?php foreach($messages as $msg){ ?>
@@ -83,7 +105,35 @@
 														<?php }?>
 													</div>
 												</div>
-											</div>
+<?php
+ if (!empty($alerts) || !empty($errors)){
+?>
+                                                                                                <div class="tab-pane active nano" id="messages-tab2">
+													<div class="content">
+                                                                                                        <?php
+                                                                                                        if (!empty($alerts)){
+                                                                                                            foreach($alerts as $alrt){ ?>
+														<p id="<?php echo $alrt->message->id; ?>">                                                                                                                 
+                                                                                                                    <?php echo html_entity_decode($alrt->message->body); ?>
+                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $alrt->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <span style="clear:both; display: block"></span>
+                                                                                                                </p>
+													<?php }
+                                                                                                        }?>
+                                                                                                         <?php
+                                                                                                        if (!empty($errors)){
+                                                                                                            foreach($errors as $err){ ?>
+														<p id="<?php echo $err->message->id; ?>">
+                                                                                                                    <?php echo html_entity_decode($err->message->body); ?>
+                                                                                                                    <a onclick="GrabPressDashboard.deleteAlert(<?php echo $err->message->id; ?>);" href="#"><span class="delete_alert">&nbsp;</span></a>
+                                                                                                                    <span style="clear:both; display: block"></span>
+                                                                                                                </p>
+													<?php }
+                                                                                                        }?>
+													</div>
+												</div>
+ <?php } ?>
+											<!--</div>-->
 										</div>
 									</div>										
 								</div>

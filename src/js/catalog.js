@@ -113,11 +113,11 @@ var GrabPressCatalog = {
        if(!window.grabModal){
            try{
                 var env = jQuery("#environment").val();
-                if (env == 'grabqa') {
-                    modalId = '1000014775';
-                } else {
+                //if (env == 'grabqa') {
+                //    modalId = '1000014775';
+                //} else {
                     modalId = '1720202';
-                }
+                //}
                 window.grabModal = new com.grabnetworks.Modal({id: modalId, tgt: env, width: 800, height: 450});
                 window.grabModal.hide();
            }catch(err){
@@ -169,10 +169,10 @@ var GrabPressCatalog = {
                 jQuery("#pagination").children().clone(true).appendTo("#pagination-bottom");                
             }
             if (display != '') { 
-                jQuery("#preview-feed #btn-create-feed").css('position', 'relative');
-                jQuery("#preview-feed #btn-create-feed").css('top', '-15px');
-                jQuery("#preview-feed #btn-create-feed").css('left', '170px');
-                jQuery("#pagination").css('top', '480px');
+                //jQuery("#preview-feed #btn-create-feed").css('position', 'relative');
+                //jQuery("#preview-feed #btn-create-feed").css('top', '-15px');
+                //jQuery("#preview-feed #btn-create-feed").css('left', '170px');
+                jQuery("#pagination").css('top', '500px');
             }
         });        
     },
@@ -188,7 +188,7 @@ var GrabPressCatalog = {
             var top = '260px';
             if (jQuery.browser.msie) { top = '265px';} 
             if (action == 'gp_get_catalog_tab') {
-                top = '480px';
+                top = '500px';
             }
             var position = 'relative';
             if (action == 'gp_get_preview') {position = 'static';}
@@ -429,11 +429,11 @@ var GrabPressCatalog = {
       if(!window.grabModal){
             try{
                 var env = jQuery("#environment").val();
-                if (env == 'grabqa') {
-                    modalId = '1000014775';               
-                } else {
+                //if (env == 'grabqa') {
+                //    modalId = '1000014775';               
+                //} else {
                     modalId = '1720202';                
-                }
+                //}
                 window.grabModal = new com.grabnetworks.Modal( { id : modalId , tgt: env, width: 1100, height: 450 } );
                 window.grabModal.hide();
             }catch(err){

@@ -268,7 +268,7 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 		          $watchlist = 1;
 		        }else{
 		          $watchlist = 0;	    
-		        }  				
+		        } 
 		        $submission_template_id = GrabPressAPI::get_shortcode_template_id();
 				$post_data = array(
 					'feed' => array(
@@ -284,7 +284,8 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 						'update_frequency' => $params[ 'schedule' ] ,
 						'auto_play' => $auto_play,
 						'watchlist' => $watchlist,
-
+                                                'exclude_tags' => stripslashes($params['exclude_tags']),
+                                                'include_tags' => stripslashes($params['include_tags']),
 					)
 				);
 				$response_json = GrabPressAPI::call( 'POST', '/connectors/' . $connector_id . '/feeds/?api_key='.GrabPress::$api_key, $post_data );
@@ -482,7 +483,9 @@ if ( ! class_exists( 'GrabPressAPI' ) ) {
 						'author_id' => $author_id
 					),
 					'update_frequency' => $request['schedule'],
-					'auto_play' => $auto_play
+					'auto_play' => $auto_play,
+                                        'exclude_tags' => stripslashes($request['exclude_tags']),
+                                        'include_tags' => stripslashes($request['include_tags']),
 				)
 			);
 			$response = GrabPressAPI::call( 'PUT', '/connectors/' . $connector_id . '/feeds/' . $feed_id . '?api_key=' . GrabPress::$api_key, $post_data );

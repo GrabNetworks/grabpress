@@ -487,15 +487,23 @@ var GrabPressAutoposter = GrabPressAutoposter || {
                   jQuery('#autoposter-status').text(autoposter_status);
                   jQuery('#feeds-status').text(feeds_status);
               });
-        });	  
-
-         jQuery('#cancel-editing').bind('click', function(e){ 
-              var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
-              if(answer){				
-                    window.location = "admin.php?page=gp-autoposter";
-              } else{				
-                    return false;
-              }
+        });
+        var formChanged = false;
+        jQuery(':input', 'form').bind("change", function () {
+            formChanged = true;
+        });
+        jQuery('#cancel-editing').bind('click', function(e){ 
+             if (formChanged) {
+                window.onbeforeunload = null;
+                var answer = confirm('Are you sure you want to cancel editing? You will continue to receive videos based on its settings. All of your changes will be lost.');
+                if(answer){				
+                       window.location = "admin.php?page=gp-autoposter";
+                 } else{				
+                       return false;
+                 }
+             } else {
+                 window.location = "admin.php?page=gp-autoposter";
+             }
         });
 
         jQuery(".ui-selectmenu").click(function(){
@@ -557,13 +565,14 @@ var GrabPressAutoposter = GrabPressAutoposter || {
             GrabPressAutoposter.editFeed(id);
             return false;
         });
-
+        //right click behavior - comment this line to fix auto559 - right click acting like left click
+        /*
         jQuery('.btn-update-feed').bind("contextmenu",function(e){
             id = this.id.replace('btn-update-','');
             GrabPressAutoposter.editFeed(id);
             return false;
         });   
-        
+        */
         //if we have an API connection error disable all inputs
         if (jQuery("#message p").text() == "There was an error connecting to the API! Please try again later!") {
             jQuery(":input").attr('disabled', 'disabled');
@@ -572,6 +581,13 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         jQuery(':input', 'form').bind("change", function () {
             GrabPressAutoposter.setConfirmUnload(true);
         });
+        //set on the leave page warning if form is filled from the catalog tab
+        if ((jQuery('input[name="referer"]').val() == 'create') && 
+                ((jQuery('#keywords_and').val() != '') || (jQuery('#keywords_not').val() != '') || 
+                 (jQuery('#keywords_or').val() != '') || (jQuery('#keywords_phrase').val() != ''))) {
+            
+            GrabPressAutoposter.setConfirmUnload(true);
+        };
         jQuery('#form-create-feed').submit(function(){window.onbeforeunload = null;});
     },
     setConfirmUnload : function(on) {
@@ -582,8 +598,8 @@ var GrabPressAutoposter = GrabPressAutoposter || {
         ' If you navigate away from this page without' +
         ' first saving your data, the changes will be' +
         ' lost.';
-    }
-}
+    },
+} 
 //do form validation	
 jQuery(window).load(function () {
     GrabPressAutoposter.doValidation();    

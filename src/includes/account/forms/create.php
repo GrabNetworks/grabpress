@@ -106,14 +106,21 @@
 			$('#submit-button').click(function(){
 				$('#register').submit();
 			});
-
+                        var formChanged = false;
+                        jQuery(':input', 'form').bind("change", function () {
+                            formChanged = true;
+                        });    
 			$('#cancel-button').click(function(){
+                            if (formChanged) {
 				var confirm = window.confirm('Are you sure you want to cancel creation?\n\nAds played due to this plug-in will continue to not earn you any money, and your changes to this form will be lost.')
-				if( confirm){
+				if(confirm){
 					$('#register')[0].reset();
 					$('#id_action').val('default');
 					$('#register').submit();
 				}
+                            } else {
+                                window.location = "admin.php?page=gp-account";
+                            }
 			});
 			function doValidation(){
 		    	 //console.log( 'valid?');

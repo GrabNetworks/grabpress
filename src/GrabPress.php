@@ -5,7 +5,7 @@ require_once dirname(__FILE__)."/GrabPressAPI.php";
 Plugin Name: GrabPress
 Plugin URI: http://www.grab-media.com/publisher/grabpress
 Description: Configure Grab's AutoPoster software to deliver fresh video direct to your Blog. Link a Grab Media Publisher account to get paid!
-Version: 2.3.3
+Version: 2.3.4
 Author: Grab Media
 Author URI: http://www.grab-media.com
 License: GPL2
@@ -27,7 +27,7 @@ License: GPL2
 */
 if ( ! class_exists( 'GrabPress' ) ) {
 	class GrabPress {
-		static $version = '2.3.3';
+		static $version = '2.3.4';
 		static $api_key;
 		static $invalid = false;
 		static $environment =  'grabnetworks';
@@ -550,7 +550,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 
 			// jQuery files
 
-			wp_enqueue_script( 'jquery' );
+			wp_enqueue_script( 'jquery' );                       
 			wp_enqueue_script( 'jquery-ui-core' );
 			wp_enqueue_script( 'jquery-ui-widget' );
 			wp_enqueue_script( 'jquery-ui-position' );
@@ -564,7 +564,7 @@ if ( ! class_exists( 'GrabPress' ) ) {
 			wp_enqueue_script( 'jquery-simpletip', $plugin_url.'/js/jquery.simpletip.min.js' , array("jquery"));
 			wp_enqueue_script( 'jquery-dotdotdot', $plugin_url.'/js/jquery.ellipsis.custom.js' , array("jquery") );
 			wp_enqueue_script( 'gp-nanoscroller', $plugin_url.'/js/nanoscroller.js' , array("jquery") );
-
+                        wp_enqueue_script('jquery-ui', 'http://code.jquery.com/ui/1.10.3/jquery-ui.js', array('jquery'));    
 			wp_enqueue_script( 'jquery-simplePagination', $plugin_url.'/js/jquery.simplePagination.js' , array("jquery") );
                         
                         wp_enqueue_script( 'jquery-reveal', $plugin_url.'/js/ui/jquery.reveal.js' , array("jquery") );
@@ -589,7 +589,8 @@ if ( ! class_exists( 'GrabPress' ) ) {
                         wp_enqueue_style( 'jquery-reveal', $plugin_url.'/css/reveal.css');
 			
 			wp_enqueue_style( 'gp-fonts', "http://static.grab-media.com/fonts/font-face.css");
-			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' );
+			wp_enqueue_style( 'gp-bootstrap-responsive', $plugin_url.'/css/bootstrap-responsive.css' ); 
+                       
 		}
 
 		static function content_by_request( $content, $post )
@@ -681,6 +682,7 @@ if( is_admin() ){
 	add_action( 'wp_ajax_gp_toggle_feed', array( 'GrabPressViews', 'toggle_feed_callback' ));
 	add_action( 'wp_ajax_gp_delete_feed', array( 'GrabPressViews', 'delete_feed_callback' ));
 	add_action( 'wp_ajax_gp_feed_name_unique', array( 'GrabPressViews', 'feed_name_unique_callback' ));
+        add_action( 'wp_ajax_gp_delete_alert', array( 'GrabPressViews', 'delete_alert_callback' ));
 	add_action( 'wp_ajax_gp_insert_video', array( 'GrabPressViews', 'insert_video_callback' ));
 	add_action( 'wp_ajax_gp_get_catalog', array( 'GrabPressViews', 'get_catalog_callback' ));
 	add_action( 'wp_ajax_gp_get_preview', array( 'GrabPressViews', 'get_preview_callback' ));

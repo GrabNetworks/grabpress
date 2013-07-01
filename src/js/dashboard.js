@@ -74,7 +74,6 @@ var GrabPressDashboard = GrabPressDashboard || {
                         }
                   }
                   jQuery('#accordion2').html(accordion);
-                  jQuery(".feed_title").ellipsis(0, true, "", "");
                   active_video = new com.grabnetworks.Player({
                       "id": embed_id,
                       "width": "100%",
@@ -272,6 +271,21 @@ var GrabPressDashboard = GrabPressDashboard || {
             }             
         }).resize();
     },
+    /* Delete alert or error message from alerts tab in dashboard */
+    deleteAlert : function(id){
+        var answer = confirm('Are you sure you want to delete this alert? ');
+        if(answer){
+            var data = {
+                action: 'gp_delete_alert',
+                alert_id: id
+            };
+            jQuery.post(ajaxurl, data, function(response) {
+                jQuery("#t #b #messages-tab2 .content #"+id).css('visibility', 'hidden');
+            });
+        } else{
+            return false;
+        }
+    },
     /* Dashboard initializiations */
     init : function(){
          //fix for watchlist min-width and max-width for ie9 and ie10
@@ -314,7 +328,9 @@ var GrabPressDashboard = GrabPressDashboard || {
             preventPageScrolling: true,
             "alwaysVisible" : true
         });                
-       
+        jQuery(".feed_title").ellipsis(0, true, "", "");
+        //remove the titles from watchlist so we can desable tooltips
+        jQuery('.feed_title').removeAttr("title");
         jQuery("#message").hide();//hack        
         
         jQuery("#help").simpletip({
@@ -324,6 +340,7 @@ var GrabPressDashboard = GrabPressDashboard || {
       
         GrabPressDashboard.resize_browser_init();
         GrabPressDashboard.collapse_menu();
+        jQuery( "#messages-tabs" ).tabs();
     }
 }
 

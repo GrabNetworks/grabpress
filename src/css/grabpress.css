@@ -317,6 +317,7 @@ input[ type="button" ]/*, #account input[ type="checkbox"], select*/{
 	/*margin: 0 5px;*/
 	display: inline;
 	float: right;
+        margin-top: -6px;
 }
 #link-existing input[type='text'], #link-existing input[type='password']{
 	width:250px;
@@ -457,7 +458,7 @@ line-height: 24px;
     /*height: 135px;*/
     overflow: hidden;
     padding: 10px 10px;
-    width: 800px;
+    width: 830px;
 }
 #form-catalog-page .tile-left {
     float: left;
@@ -795,7 +796,7 @@ line-height: 24px;
 #t #b .accordion-heading a.accordion-toggle {    
     padding: 4px 15px;
     height: 25px;  
-    line-height: 24px;
+    line-height: 25px;
 }
 #t #b .collapse {
     overflow: hidden;
@@ -1124,3 +1125,30 @@ line-height: 24px;
 /* feed activity style */
 .feeds .nano .content { right:4px !important}
 .feeds .tooltip {width: 420px !important}
+
+/* Dashboard messages tabs style */
+#messages-tab1, #messages-tab2 {
+    clear:both;
+    background: #FFF url( '../images/inset.png' ) repeat-x left bottom;
+    box-shadow: 0 0 5px 2px rgb(0,0,0) inset, 0 0px 0 0 rgba(255, 255,255,0.25);
+}
+#messages-tabs .nano {height:172px !important;width:auto !important}
+.messages .ui-tabs .ui-widget-header { background: none; }
+.messages .ui-tabs .ui-state-default { background-image:none; background-color: #201C1E ; border: 1px solid #2B2B2B !important; }
+.messages .ui-tabs .ui-state-active { background-color: #111111}
+.messages .ui-tabs ul a, .messages .ui-tabs .ui-state-active a { color:#FFFFFF !important}
+.messages .ui-widget-content {border:none}
+#t #b .topbar div > ul a, #t #b .nav a {padding:5px 10px}
+
+#messages-tab2 .delete_alert {
+    width: 16px;
+    background: url('../images/icons/green/Cancel.png') top left no-repeat;
+    float:right;
+}
+
+#t #b #messages-tab2 .content p {
+    width: auto !important;
+    padding: 5px 0 5px 7px;
+    margin-right: 34px;
+    border-bottom: 1px solid #818181;
+}

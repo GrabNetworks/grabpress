@@ -87,28 +87,34 @@
                             jQuery(":input").attr('disabled', 'disabled');
                         };                        
                     });
-			$('#cancel_button').click(function(e){
-				if(window.confirm('Are you sure you want to cancel linking?\n\n' +
-					<?php 
-                                        try {    
-                                            $user = GrabPressAPI::get_user();
-                                        } catch(Exception $e) {
-                                            GrabPress::log('API call exception: '.$e->getMessage());
-                                        }
-					$linked = isset( $user->email );
-					if( $linked ){?>
-						'Money earned with this installation will continue to be credited to the account associated with the email address <?php echo $user->email; ?>.'
-					<?php }else{ ?>
-						'Ads played due to this plug-in installation will not earn you any money.'
-					<?php } ?>
-					)){
-						
-					$('#link-existing')[0].reset()
-					//$('#action').attr('value', 'default');
-					$('#action-link-user').val('default');
-					$('#link-existing').submit();
-				}
-			});
+                    var formChanged = false;
+                    jQuery(':input', 'form').bind("change", function () {
+                        formChanged = true;
+                    });
+                    $('#cancel_button').click(function(e){
+                        if (formChanged) {
+                            if(window.confirm('Are you sure you want to cancel linking?\n\n' +
+                                <?php 
+                                try {    
+                                    $user = GrabPressAPI::get_user();
+                                } catch(Exception $e) {
+                                    GrabPress::log('API call exception: '.$e->getMessage());
+                                }
+                                $linked = isset( $user->email );
+                                if( $linked ){?>
+                                        'Money earned with this installation will continue to be credited to the account associated with the email address <?php echo $user->email; ?>.'
+                                <?php }else{ ?>
+                                        'Ads played due to this plug-in installation will not earn you any money.'
+                                <?php } ?>
+                                )){
+
+                                $('#link-existing')[0].reset()
+                                //$('#action').attr('value', 'default');
+                                $('#action-link-user').val('default');
+                                $('#link-existing').submit();
+                            }
+                        }                          
+                    });
 		})( jQuery )
                 
 </script>

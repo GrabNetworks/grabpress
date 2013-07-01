@@ -73,7 +73,6 @@
 				</select>
 			</div>			
 		</div>
-		
 		<div class="label-tile">
 			<div class="tile-left">
 				<input type="hidden" name="providers_total" value="<?php echo $providers_total; ?>" class="providers_total" id="providers_total" />
@@ -93,7 +92,6 @@
 				</select>
 			</div>			
 		</div>
-
 		<div class="clear"></div>
 
 		<div class="label-tile">
@@ -104,7 +102,7 @@
 				From<input type="text" readonly="true" value="<?php echo $created_after = isset($form['created_after']) ? $form['created_after'] : ''; ?>" maxlength="8" id="created_after" name="created_after" class="datepicker" />
 				To<input type="text" readonly="true" value="<?php echo $created_before = isset($form['created_before']) ? $form['created_before'] : ''; ?>" maxlength="8" id="created_before" name="created_before" class="datepicker" />
                         </div>
-		</div>	
+		</div>
 		<div class="label-tile">
                         <div class="tile-left">
                             <input type="button" value="Clear Dates " id="clearDates" style="float:left" >
@@ -114,59 +112,56 @@
 				<input type="submit" value=" Search " class="update-search" id="update-search" >
 			</div>
 		</div>
-		<br/><br/>	
-		
-
-	<?php
-		if(isset($form["keywords"])){
-	?>
-	 <div class="label-tile-one-column">
-               Sort by: 
-               <?php  
-                       $created_checked = ((isset($form["sort_by"])) && ($form["sort_by"]!="relevance")) ? 'checked="checked";':"";
-                       $relevance_checked = ((isset($form["sort_by"])) &&($form["sort_by"]=="relevance")) ?'checked="checked";':"";
-               ?>
-               <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
-               <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance
-               <?php if(!empty($list_feeds["results"]) && GrabPress::check_permissions_for("gp-autopost")){ ?>
-                    <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
-               <?php } ?>
-       </div>
-        <div class="label-tile-one-column">            
-            <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>400?400:$list_feeds["total_count"]; ?>" name="feed_count"/>
-        </div>
-	<?php
-            if(!empty($list_feeds["results"])){
-			foreach ($list_feeds["results"] as $result) {
-	?>
-	<div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile" id="video-<?php echo $result['video']['id']; ?>">		
-		<div class="tile-left">
-			<img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
-		</div>
-		<div class="tile-right">
-			<h2 class="video_title" id="video-title-<?php echo $result['video']['id']; ?>">
-			<?php echo html_entity_decode($result["video"]["title"], ENT_QUOTES, 'UTF-8'); ?>	
-			</h2>
-			<p class="video_summary">		
-				<?php echo html_entity_decode($result["video"]["summary"], ENT_QUOTES, 'UTF-8');?>			
-			</p>
-			<p class="video_date">
-				<?php $date = new DateTime( $result["video"]["created_at"] );
-				$stamp = $date->format('m/d/Y') ?>
-			<span><?php echo $stamp; ?>&nbsp;&nbsp;<span> <span><?php echo GrabPressAPI::time_format_mm_ss($result['video']['duration']);?>&nbsp;&nbsp;</span> <span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
-			<?php if(GrabPress::check_permissions_for("single-post")){ ?>
-			<input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
-			<?php } ?>
-			<input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>
-			
-		</div>
-	</div>
-	<?php
+                <div class="clear"></div>
+                <?php
+                if(isset($form["keywords"])){
+                ?>
+                <div class="label-tile-one-column">
+                      Sort by: 
+                      <?php  
+                              $created_checked = ((isset($form["sort_by"])) && ($form["sort_by"]!="relevance")) ? 'checked="checked"':"";
+                              $relevance_checked = ((isset($form["sort_by"])) &&($form["sort_by"]=="relevance")) ? 'checked="checked"':"";
+                      ?>
+                      <input type="radio" class="sort_by" name="sort_by" value="created_at" <?php echo $created_checked;?> /> Date
+                      <input type="radio" class="sort_by" name="sort_by" value="relevance" <?php echo $relevance_checked;?> /> Relevance
+                      <?php if(!empty($list_feeds["results"]) && GrabPress::check_permissions_for("gp-autopost")){ ?>
+                           <input type="button" id="btn-create-feed" class="button-primary" value="<?php _e( 'Create Feed' ) ?>" />
+                      <?php } ?>
+                </div>
+                <div class="label-tile-one-column">            
+                    <input type="hidden" id="feed_count" value="<?php echo $list_feeds["total_count"]>400?400:$list_feeds["total_count"]; ?>" name="feed_count"/>
+                    <input id="page" type="hidden" name="page" value="0">
+                </div>
+                <?php
+                    if(!empty($list_feeds["results"])){
+                        foreach ($list_feeds["results"] as $result) {
+                ?>
+                        <div data-id="<?php echo $result['video']['video_product_id']; ?>" class="result-tile" id="video-<?php echo $result['video']['id']; ?>">		
+                            <div class="tile-left">
+                                    <img src="<?php echo $result['video']['media_assets'][0]['url']; ?>" height="72px" width="123px" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')">
+                            </div>
+                            <div class="tile-right">
+                                <h2 class="video_title" id="video-title-<?php echo $result['video']['id']; ?>">
+                                <?php echo html_entity_decode($result["video"]["title"], ENT_QUOTES, 'UTF-8'); ?>	
+                                </h2>
+                                <p class="video_summary">		
+                                        <?php echo html_entity_decode($result["video"]["summary"], ENT_QUOTES, 'UTF-8');?>			
+                                </p>
+                                <p class="video_date">
+                                        <?php $date = new DateTime( $result["video"]["created_at"] );
+                                        $stamp = $date->format('m/d/Y') ?>
+                                <span><?php echo $stamp; ?>&nbsp;&nbsp;<span> <span><?php echo GrabPressAPI::time_format_mm_ss($result['video']['duration']);?>&nbsp;&nbsp;</span> <span>SOURCE: <?php echo $result["video"]["provider"]["name"]; ?></span>
+                                <?php if(GrabPress::check_permissions_for("single-post")){ ?>
+                                <input type="button" class="button-primary btn-create-feed-single" value="<?php _e( 'Create Post' ) ?>" id="btn-create-feed-single-<?php echo $result['video']['id']; ?>" />
+                                <?php } ?>
+                                <input type="button" class="button-primary" onclick="grabModal.play('<?php echo $result["video"]["guid"]; ?>')" value="Watch Video" /></p>			
+                            </div>
+                        </div>
+                 <?php
 			} // end foreach
-            }//end if !empty
-	} // end if	
-	?>
-	
+                    }//end if !empty
+                } // end if	
+                ?>	
 	</fieldset>
 </div>
 </form>
