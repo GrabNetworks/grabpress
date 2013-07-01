@@ -172,6 +172,7 @@ We hope to allow users to edit the layout / posting template in future updates o
 3. Preview the results of your configured feed(s).
 4. Create a publisher account to link you embeds, so you can get paid!
 5. Video results are automatically posted to your Blog.
+6. Quickly view videos and feed status on the Dashboard.
 
 == Changelog ==  
 
